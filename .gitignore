@@ -12,3 +12,9 @@ gen/
 bin/
 libs/
 *.png
+project.properties
+proguard-project.txt
+AndroidManifest.xml
+.project
+.classpath
+.settings/
