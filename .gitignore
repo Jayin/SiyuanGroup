@@ -4,3 +4,11 @@
 *.jar
 *.war
 *.ear
+
+# android file ingnore
+res/
+assets/
+gen/
+bin/
+libs/
+*.png
