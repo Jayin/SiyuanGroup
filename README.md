@@ -7,5 +7,5 @@ Members:
 ---
 * Fritz Lium 
 * Jayin Ton
-* Jianwei Zhang
-* Ruichang Wong
+* 张剑伟
+* huangruichang
