@@ -13,13 +13,7 @@ Members:
 
 Code Rules
 ---
- com.sina.weibo.sdk.codestyle.CodingRuler
-
-
-@SuppressWarnings(value={"unused"})
-
 类的大体描述放在这里。 
-
 NOTE：以下部分为一个简要的编码规范，更多规范请参考 ORACLE 官方文档。
 地址：http://www.oracle.com/technetwork/java/codeconventions-150003.pdf
 另外，请使用 UTF-8 格式来查看代码，避免出现中文乱码。
@@ -47,32 +41,28 @@ NOTE：以下部分为一个简要的编码规范，更多规范请参考 ORACLE
  * 2.3.2. 常量全部大写，在词与词之前用下划线连接，如 MAX_NUMBER。 
  * 2.3.3. 代码中禁止使用硬编码，把一些数字或字符串定义成常用量。 
  * 2.3.4. 对于废弃不用的函数，为了保持兼容性，通常添加 @Deprecated，如 doSomething() 
-3. 注释
-请参考 SampleCode 类的注释。 
-3.1. 常量注释，参见 ACTION_MAIN 
-3.2. 变量注释，参见 mObject0 
-3.3. 函数注释，参见 doSomething(int, float, String) 
-4. Class 内部顺序和逻辑
-4.1. 每个 class 都应该按照一定的逻辑结构来排列基成员变量、方法、内部类等， 从而达到良好的可读性。 
-4.2. 总体上来说，要按照先 public, 后 protected, 最后 private, 函数的排布 也应该有一个逻辑的先后顺序，由重到轻。 
-4.3. 以下顺序可供参考： 定义TAG，一般为 private（可选）
-定义 public 常量
-定义 private 常量、内部类
-定义 private 变量
-定义 public 方法
-定义 protected 方法
-定义 private 方法
+* 3. 注释
+ * 3.1. 常量注释，参见 ACTION_MAIN 
+ * 3.2. 变量注释，参见 mObject0 
+ * 3.3. 函数注释，参见 doSomething(int, float, String) 
+* 4. Class 内部顺序和逻辑
+ * 4.1. 每个 class 都应该按照一定的逻辑结构来排列基成员变量、方法、内部类等， 从而达到良好的可读性。 
+ * 4.2. 总体上来说，要按照先 public, 后 protected, 最后 private, 函数的排布 也应该有一个逻辑的先后顺序，由重到轻。 
+ * 4.3. 以下顺序可供参考： 定义TAG，一般为 private（可选）
+ * 定义 public 常量
+ * 定义 private 常量、内部类
+ * 定义 private 变量
+ * 定义 public 方法
+ * 定义 protected 方法
+ * 定义 private 方法
 
-5. 表达式与语句
-5.1. 基本原则：采用紧凑型风格来编写代码
-5.2. 细则
-5.2.1. 条件表示式，参见 conditionFun(boolean) 
-5.2.2. switch 语句，参见 switchFun(int) 
-5.2.3. 循环语句，参见 circulationFun(boolean) 
-5.2.4. 错误与异常，参见 exceptionFun() 
-5.2.5. 杂项，参见 otherFun() 
-5.2.6. 批注，参见 doSomething(int, float, String) 
-Since:
-2013-XX-XX
-Author:
-作者名
+* 5. 表达式与语句
+ * 5.1. 基本原则：采用紧凑型风格来编写代码
+ * 5.2. 细则
+ * 5.2.1. 条件表示式，参见 conditionFun(boolean) 
+ * 5.2.2. switch 语句，参见 switchFun(int) 
+ * .2.3. 循环语句，参见 circulationFun(boolean) 
+ * 5.2.4. 错误与异常，参见 exceptionFun() 
+ * 5.2.5. 杂项，参见 otherFun() 
+ * 5.2.6. 批注，参见 doSomething(int, float, String) 
+ 
