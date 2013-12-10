@@ -5,16 +5,3 @@
 *.war
 *.ear
 
-# android file ingnore
-res/
-assets/
-gen/
-bin/
-libs/
-*.png
-project.properties
-proguard-project.txt
-AndroidManifest.xml
-.project
-.classpath
-.settings/

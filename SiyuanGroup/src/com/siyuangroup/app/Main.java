@@ -1,4 +1,4 @@
-package org.meizhuo.siyuangroup;
+package com.siyuangroup.app;
 
 import android.os.Bundle;
 import android.app.Activity;
