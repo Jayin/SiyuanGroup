@@ -7,7 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
-
+/**
+ * 所有Activity的基类
+ * @author Jayin Ton
+ *
+ */
 public abstract class BaseActivity extends Activity implements OnClickListener {
 	 
 	protected abstract void initData();
