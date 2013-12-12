@@ -5,10 +5,10 @@ SiyuanGroup is committed to create a new social space for the alumni .
 
 Members:
 ---
-* Fritz Lium 
-* Jayin Ton
-* 张剑伟
-* huangruichang
+* [Fritz Lium](https://github.com/Fritz-Lium) 
+* [Jayin Ton](https://github.com/Jayin) 
+* [张剑伟](https://github.com/ade951)
+* [huangruichang](https://github.com/huangruichang)
 
 
 Code Rules
