@@ -6,5 +6,5 @@ app.get('/', function(req, res){
 });
 
 app.listen(8088, function(){
-	console.log('server started');
+	console.log('server started\n');
 });
