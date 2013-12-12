@@ -1,0 +1,9 @@
+#  IDE #
+.project
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# Backup #
+*.bak
+*~
