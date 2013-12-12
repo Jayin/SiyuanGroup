@@ -1,4 +1,6 @@
-#  IDE #
+.DS_Store
+
+# IDE #
 .project
 .idea
 *.sublime-project
