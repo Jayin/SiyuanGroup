@@ -8,7 +8,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
 import android.view.Menu;
-
+/**
+ * 启动页面
+ * @author Jayin Ton
+ *
+ */
 public class AppStart extends BaseActivity  {
 
 	@Override
@@ -20,6 +24,7 @@ public class AppStart extends BaseActivity  {
 			@Override
 			public void run() {
 				openActivity(Main.class);
+				closeActivity();
 				
 			}
 		}, 3000);
