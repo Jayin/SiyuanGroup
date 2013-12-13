@@ -1,7 +1,11 @@
-*.class
+.DS_Store
 
-# Package Files #
-*.jar
-*.war
-*.ear
+# IDE #
+.project
+.idea
+*.sublime-project
+*.sublime-workspace
 
+# Backup #
+*.bak
+*~
