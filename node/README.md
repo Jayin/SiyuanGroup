@@ -12,10 +12,10 @@ $ npm install -d
 
 ```
 $ cd setup
-$ mysql -u &lt;dbuser&gt; -p
-$ &lt;dbpwd&gt;
+$ mysql -u <dbuser> -p
+$ <dbpwd>
 $ source init.sql
-$ source &lt;*.sql&gt;
+$ source <*.sql>
 $ ...
 $ cd ..
 ```
