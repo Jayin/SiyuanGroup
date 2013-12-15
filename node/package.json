@@ -2,18 +2,21 @@
 	"name": "siyuan",
 	"description": "Server side of the SiyuanGroup project, based on Node",
 	"version": "0.0.1",
+	"private": true,
 	"main": "./app.js",
 	"dependencies": {
 		"underscore": "1.5.2",
 		"request": "2.29.0",
 		"express": "3.4.7",
-		"mysql": "2.0.0-rc2"
+		"mysql": "2.0.0-rc2",
+		"jade": "0.35.0",
+		"less-middleware": "0.1.14"
 	},
-	"dependencies": {
+	"devDependencies": {
 		"mocha": "1.15.1"
 	},
 	"scripts": {
 		"start": "node .",
-		"test": "./node_modules/mocha/bin/mocha"
+		"test": "./node_modules/mocha/bin/mocha -R spec"
 	}
 }
