@@ -1,11 +1,12 @@
-.DS_Store
-
 # IDE #
 .project
 .idea
 *.sublime-project
 *.sublime-workspace
 
-# Backup #
+# System #
+.DS_Store
 *.bak
 *~
+*.lnk
+*.desktop
