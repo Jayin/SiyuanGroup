@@ -1,11 +1,11 @@
 var path = require('path');
 
-var rootDir = process.cwd();
-var viewDir = path.resolve(rootDir, 'views');
-var publicDir = path.resolve(rootDir, 'public');
-var imgDir = path.resolve(publicDir, 'img');
-var cssDir = path.resolve(publicDir, 'css');
-var jsDir = path.resolve(publicDir, 'js');
+var rootDir = process.cwd(),
+	viewDir = path.resolve(rootDir, 'views'),
+	publicDir = path.resolve(rootDir, 'public'),
+	imgDir = path.resolve(publicDir, 'img'),
+	cssDir = path.resolve(publicDir, 'css'),
+	jsDir = path.resolve(publicDir, 'js');
 
 module.exports = {
 	viewDir: viewDir,
