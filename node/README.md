@@ -11,7 +11,8 @@ $ npm install -d
 ```
 
 ```
-$ cd setup
+$ cd config
+$ cd sql
 $ mysql -u <dbuser> -p
 $ <dbpwd>
 $ source init.sql
