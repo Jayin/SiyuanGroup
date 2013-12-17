@@ -8,6 +8,7 @@ var rootDir = process.cwd(),
 	jsDir = path.resolve(publicDir, 'js');
 
 module.exports = {
+	rootDir: rootDir,
 	viewDir: viewDir,
 	publicDir: publicDir,
 	imgDir: imgDir,
@@ -20,5 +21,6 @@ module.exports = {
 		host: 'localhost',
 		user: 'root',
 		password: 'root'
+		// `charset: "utf8"` removed
 	}
 }

@@ -14,7 +14,8 @@
 		"less-middleware": "0.1.14"
 	},
 	"devDependencies": {
-		"mocha": "1.15.1"
+		"mocha": "1.15.1",
+		"chance": "0.5.3"
 	},
 	"scripts": {
 		"start": "node .",
