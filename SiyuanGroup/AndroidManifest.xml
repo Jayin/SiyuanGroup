@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.siyuangroup.app"
+    package="com.alumnigroup.app"
     android:versionCode="1"
     android:versionName="1.0" >
 
@@ -9,18 +9,25 @@
         android:targetSdkVersion="17" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/ActivityTheme_base" >
         <activity
-            android:name="com.siyuangroup.app.Main"
-            android:label="@string/app_name" >
+            android:name="com.alumnigroup.app.AppStart"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AcivityTheme_start" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".acty.Main"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

@@ -1,11 +1,35 @@
-SiyuanGroup
-===========
+# siyuan
 
-SiyuanGroup is committed to create a new social space for the alumni .
+Server side of the SiyuanGroup project, based on Node
 
-Members:
----
-* Fritz Lium 
-* Jayin Ton
-* 张剑伟
-* huangruichang
+
+## Installation
+
+```
+$ cd node
+$ npm install -d
+```
+
+```
+$ cd setup
+$ mysql -u <dbuser> -p
+$ <dbpwd>
+$ source init.sql
+$ source <*.sql>
+$ ...
+$ cd ..
+```
+
+
+## Running
+
+```
+$ npm start
+```
+
+
+## Testing
+
+```
+$ npm test
+```
