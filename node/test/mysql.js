@@ -8,7 +8,7 @@ describe('mysql', function() {
 		connection.connect();
 		connection.query('SELECT 1 + 1 AS solution', function(err, rows, fields) {
 			assert.equal(err, null);
-			assert.strictEqual(rows[0].solution, 1 + 1);
+			assert.equal(rows[0].solution, 1 + 1);
 			done();
 		});
 		connection.end();

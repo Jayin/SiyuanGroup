@@ -7,12 +7,7 @@ var assert = require('assert'),
 
 describe('bookshelf', function() {
 	describe('mysql', function() {
-		var MySql = Bookshelf.initialize({
-			client: 'mysql',
-			connection: _.extend(dbConfig, {
-				database: 'siyuan_test'
-			})
-		});
+		var MySql = Bookshelf.initialize(dbConfig);
 
 		describe('model', function() {
 			var User = MySql.Model.extend({
@@ -23,6 +18,11 @@ describe('bookshelf', function() {
 			var name1 = '中文 ' + chance.integer();
 			var user1 = new User({
 				username: name1,
+				password: '1234',
+				email: chance.email()
+			});
+			var user2 = new User({
+				username: '中文 ' + chance.integer(),
 				password: '1234',
 				email: chance.email()
 			});
@@ -39,7 +39,10 @@ describe('bookshelf', function() {
 				user1.save().then(function() {
 					assert.notEqual(user1.id, null);
 					id1 = user1.id;
-					done();
+					user2.save().then(function() {
+						assert.notEqual(user2.id, null);
+						done();
+					});
 				});
 			});
 
@@ -58,7 +61,7 @@ describe('bookshelf', function() {
 					var user3 = new User({
 						username: name1
 					});
-					user3.fetch().then(function(){
+					user3.fetch().then(function() {
 						assert.equal(user3.id, null);
 						done();
 					});
