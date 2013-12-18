@@ -8,17 +8,18 @@
 		"underscore": "1.5.2",
 		"request": "2.29.0",
 		"express": "3.4.7",
+		"chance": "0.5.3",
 		"mysql": "2.0.0-rc2",
+		"bluebird": "0.11.5-1",
 		"bookshelf": "0.6.1",
 		"jade": "0.35.0",
 		"less-middleware": "0.1.14"
 	},
 	"devDependencies": {
-		"mocha": "1.15.1",
-		"chance": "0.5.3"
+		"mocha": "1.15.1"
 	},
 	"scripts": {
 		"start": "node .",
-		"test": "./node_modules/mocha/bin/mocha -R spec"
+		"test": "./node_modules/mocha/bin/mocha test/index -R spec"
 	}
 }
