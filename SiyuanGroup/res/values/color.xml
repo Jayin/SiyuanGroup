@@ -31,5 +31,6 @@
     <color name="red_pure">#CC0000</color>
     <color name="blue_main_item">#02bbf3</color>
     <!--  008ED9--> 
+    <color name="bg_frame_main">#D02CA7EA</color>
 
 </resources>

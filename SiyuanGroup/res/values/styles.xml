@@ -8,12 +8,44 @@
 
     <style name="ActivityTheme_base" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animations.activity</item>
-        <!-- <item name="android:launchMode">singleTask</item> -->
     </style>
 
     <style name="AcivityTheme_start">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="LinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="RelativeLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="RelativeLayout.frame_main_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@drawable/round_corner</item>
+    </style>
+
+    <style name="ImageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextView" />
+
+    <style name="TextView.base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">nice</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
     </style>
 
     <style name="Animations" />
