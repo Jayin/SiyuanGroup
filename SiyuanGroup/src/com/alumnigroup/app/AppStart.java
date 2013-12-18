@@ -27,7 +27,7 @@ public class AppStart extends BaseActivity  {
 				closeActivity();
 				
 			}
-		}, 3000);
+		}, 2000);
 	}
 
 	@Override
