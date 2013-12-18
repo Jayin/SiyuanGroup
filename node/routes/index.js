@@ -1,9 +1,11 @@
-/*
- * GET home page.
- */
+module.exports = function(app) {
+	// api users
+	require('./users')(app);
 
-exports.index = function(req, res) {
-	res.render('index', {
-		title: 'Express'
+	// home page
+	app.get('/', function(req, res) {
+		res.render('index', {
+			title: 'Express'
+		});
 	});
-};
+}
