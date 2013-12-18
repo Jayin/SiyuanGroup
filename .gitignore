@@ -8,6 +8,7 @@
 .DS_Store
 *.bak
 *~
+~*
 *.desktop
 *.lnk
 *.ini
