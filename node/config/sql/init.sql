@@ -303,3 +303,16 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Data for table `siyuan`.`source_types`
+-- -----------------------------------------------------
+START TRANSACTION;
+USE `siyuan`;
+INSERT INTO `siyuan`.`source_types` (`id`, `name`) VALUES (3, 'tweets');
+INSERT INTO `siyuan`.`source_types` (`id`, `name`) VALUES (1, 'photos');
+INSERT INTO `siyuan`.`source_types` (`id`, `name`) VALUES (2, 'posts');
+INSERT INTO `siyuan`.`source_types` (`id`, `name`) VALUES (0, 'activities');
+
+COMMIT;
+

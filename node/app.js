@@ -2,18 +2,18 @@
  * Module dependencies.
  */
 
-var path = require('path');
-var express = require('express');
-var lessMiddleware = require('less-middleware');
-var routes = require('./routes');
-var users = require('./routes/users');
-var app = express();
+var path = require('path'),
+	express = require('express'),
+	lessMiddleware = require('less-middleware'),
+	routes = require('./routes'),
+	users = require('./routes/users'),
+	app = express();
 
-var config = require('./config/');
-var port = config.port;
-var secret = config.secret;
-var viewDir = config.viewDir;
-var publicDir = config.publicDir;
+var config = require('./config/'),
+	port = config.port,
+	secret = config.secret,
+	viewDir = config.viewDir,
+	publicDir = config.publicDir;
 
 // all environments
 app.set('views', viewDir);
@@ -26,6 +26,7 @@ app.use(express.methodOverride());
 app.use(express.cookieParser(secret));
 app.use(express.session());
 app.use(app.router);
+
 app.use(lessMiddleware({
 	src: publicDir
 }));
@@ -36,7 +37,7 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
-// routers
+// routes
 app.get('/', routes.index);
 app.get('/users', users.list);
 

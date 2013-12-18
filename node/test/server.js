@@ -1,6 +1,7 @@
 var assert = require('assert'),
 	request = require('request'),
-	host = 'http://localhost:8088';
+	config = require('../config/'),
+	host = 'http://localhost:' + config.port;
 
 describe('server', function() {
 	it('routes to index', function(done) {
