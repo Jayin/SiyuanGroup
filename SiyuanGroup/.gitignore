@@ -6,6 +6,11 @@
 *.ear
 
 #android
+bin/
+gen/
+.settings/
+ic_launcher-web.png
+
 
 
 

@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        style="@style/LinearLayout"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_allmember"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv1"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_frame_main_allmember" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv1"
+                android:layout_centerHorizontal="true"
+                android:text="全站会员" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_allactivity"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv2"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_frame_main_allactivity" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv2"
+                android:layout_centerHorizontal="true"
+                android:text="全站动态" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_discuss"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv3"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_frame_main_discuss" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv3"
+                android:layout_centerHorizontal="true"
+                android:text="校友交流" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearLayout"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_myspace"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv4"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_frame_main_myspace" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv4"
+                android:layout_centerHorizontal="true"
+                android:text="个人空间" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_activity"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv5"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_frame_main_activity" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv5"
+                android:layout_centerHorizontal="true"
+                android:text="活动" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_group"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv6"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_frame_main_group" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv6"
+                android:layout_centerHorizontal="true"
+                android:text="圈子" />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/LinearLayout"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal" >
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_business"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv7"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:background="@drawable/ic_frame_main_allmember" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv7"
+                android:layout_centerHorizontal="true"
+                android:text="商务合作" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_message"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv8"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_frame_main_allactivity" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv8"
+                android:layout_centerHorizontal="true"
+                android:text="消息" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/frame_main_one_setting"
+            style="@style/RelativeLayout.frame_main_item" >
+
+            <ImageView
+                android:id="@+id/frame_main_one_iv9"
+                style="@style/ImageView"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/ic_frame_main_discuss" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_below="@+id/frame_main_one_iv9"
+                android:layout_centerHorizontal="true"
+                android:text="设置" />
+        </RelativeLayout>
+    </LinearLayout>
+
+</LinearLayout>

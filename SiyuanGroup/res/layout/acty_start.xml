@@ -2,15 +2,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
- 
+    android:background="@color/blue_lv_one"
     tools:context=".AppStart" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+       android:layout_centerInParent="true"
+        android:layout_marginTop="131dp"
+        android:background="@drawable/icon" />
 
     <TextView
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="42dp"
-        android:text="TextView" />
+        android:layout_below="@+id/imageView1"
+        android:layout_centerHorizontal="true"
+        android:text="校友群"
+        android:textColor="@color/white"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>
