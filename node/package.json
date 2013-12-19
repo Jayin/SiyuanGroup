@@ -1,7 +1,7 @@
 {
 	"name": "siyuan",
 	"description": "Server side of the SiyuanGroup project, based on Node",
-	"version": "0.0.1",
+	"version": "0.0.2",
 	"private": true,
 	"main": "./app.js",
 	"dependencies": {
@@ -10,16 +10,13 @@
 		"express": "3.4.7",
 		"chance": "0.5.3",
 		"mysql": "2.0.0-rc2",
-		"bluebird": "0.11.5-1",
 		"bookshelf": "0.6.1",
 		"jade": "0.35.0",
-		"less-middleware": "0.1.14"
-	},
-	"devDependencies": {
-		"mocha": "1.15.1"
+		"less-middleware": "0.1.14",
+		"xerror": "0.0.3"
 	},
 	"scripts": {
 		"start": "node .",
-		"test": "./node_modules/mocha/bin/mocha test/index -R spec"
+		"test": "mocha test/index -R spec"
 	}
 }

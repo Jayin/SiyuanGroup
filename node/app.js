@@ -5,10 +5,10 @@
 var path = require('path'),
 	express = require('express'),
 	lessMiddleware = require('less-middleware'),
-	routes = require('./routes'),
-	// overwrite the `Error` to `XError` 
-	Error = global.Error = require('./lib/XError'),
+	// overwrite `Error` to `XError`
+	Error = global.Error = require('xerror'),
 	apiErrSender = require('./lib/api-err-sender'),
+	routes = require('./routes'),
 	config = require('./config/'),
 	port = config.port,
 	secret = config.secret,

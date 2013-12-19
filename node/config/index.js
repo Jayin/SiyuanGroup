@@ -1,6 +1,5 @@
-var path = require('path');
-
-var rootDir = process.cwd(),
+var path = require('path'),
+	rootDir = path.resolve(__dirname, '..'),
 	viewDir = path.resolve(rootDir, 'views'),
 	publicDir = path.resolve(rootDir, 'public'),
 	imgDir = path.resolve(publicDir, 'img'),
