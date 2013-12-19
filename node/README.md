@@ -5,32 +5,36 @@ Server side of the SiyuanGroup project, based on Node
 
 ## Installation
 
-```
-$ cd node
-$ npm install -d
+```shell
+cd node
+npm install -d
 ```
 
-```
-$ cd config
-$ cd sql
-$ mysql -u <dbuser> -p
-$ <dbpwd>
-$ source init.sql
-$ source <*.sql>
-$ ...
-$ cd ..
+```shell
+cd config
+cd sql
+mysql -u <dbuser> -p
+<dbpwd>
+source init.sql
+source <*.sql>
+...
+cd ..
 ```
 
 
 ## Running
 
-```
-$ npm start
+```shell
+npm start
 ```
 
 
 ## Testing
 
+```shell
+npm install -g mocha
 ```
-$ npm test
+
+```shell
+npm test
 ```

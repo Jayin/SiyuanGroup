@@ -5,15 +5,16 @@
 var path = require('path'),
 	express = require('express'),
 	lessMiddleware = require('less-middleware'),
+	// overwrite `Error` to `XError`
+	Error = global.Error = require('xerror'),
+	apiErrSender = require('./lib/api-err-sender'),
 	routes = require('./routes'),
-	users = require('./routes/users'),
-	app = express();
-
-var config = require('./config/'),
+	config = require('./config/'),
 	port = config.port,
 	secret = config.secret,
 	viewDir = config.viewDir,
-	publicDir = config.publicDir;
+	publicDir = config.publicDir,
+	app = express();
 
 // all environments
 app.set('views', viewDir);
@@ -25,8 +26,6 @@ app.use(express.urlencoded());
 app.use(express.methodOverride());
 app.use(express.cookieParser(secret));
 app.use(express.session());
-app.use(app.router);
-
 app.use(lessMiddleware({
 	src: publicDir
 }));
@@ -37,9 +36,10 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
+// error sending with api
+app.use('/api', apiErrSender);
 // routes
-app.get('/', routes.index);
-app.get('/users', users.list);
+routes(app);
 
 // listen on port
 app.listen(port, function() {
