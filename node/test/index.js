@@ -20,5 +20,5 @@ describe('server', function() {
 	});
 
 	require('./models');
-	require('./api');
+	//require('./api');
 });

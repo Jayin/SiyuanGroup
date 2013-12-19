@@ -1,22 +1,21 @@
 var assert = require('assert'),
 	_ = require('underscore'),
 	chance = new(require('chance'))(),
-	Promise = require('bluebird'),
 	Users = require('../models/users'),
 	User = Users.model;
 
 describe('models', function() {
 	describe('users', function() {
-		var numUsers = 30,
+		var numUsers = 100,
 			firstId,
 			users;
 
 		it('saves', function(done) {
 			users = Users.forge();
 			_.times(numUsers, function(i) {
-				users.add(randomUser());
+				users.add(User.random());
 			});
-			Promise.all(users.invoke('save')).then(function() {
+			users.invokeThen('save').then(function() {
 				assert.ok(_.every(users.models, function(m) {
 					return m.id;
 				}));
@@ -32,7 +31,7 @@ describe('models', function() {
 					id: firstId + i
 				}));
 			});
-			Promise.all(users1.invoke('fetch')).then(function() {
+			users1.invokeThen('fetch').then(function() {
 				assert.ok(_.every(users1.models, function(m) {
 					return m.get('username');
 				}));
@@ -41,20 +40,12 @@ describe('models', function() {
 		});
 
 		it('destroys', function(done) {
-			Promise.all(users.invoke('destroy')).then(function() {
+			users.invokeThen('destroy').then(function() {
 				assert.ok(_.every(users.models, function(m) {
-					return ! m.id;
+					return !m.id;
 				}));
 				done();
 			});
 		});
 	});
 });
-
-function randomUser() {
-	return User.forge({
-		username: chance.name(),
-		password: chance.word(),
-		email: chance.email()
-	});
-}
