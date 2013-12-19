@@ -1,7 +1,7 @@
 {
 	"name": "siyuan",
 	"description": "Server side of the SiyuanGroup project, based on Node",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"private": true,
 	"main": "./app.js",
 	"dependencies": {
@@ -15,8 +15,11 @@
 		"less-middleware": "0.1.14",
 		"xerror": "0.0.3"
 	},
+	"devDependencies": {
+		"mocha": "1.15.1"
+	},
 	"scripts": {
 		"start": "node .",
-		"test": "mocha test/index -R spec"
+		"test": "./node_modules/mocha/bin/mocha -R spec"
 	}
 }
