@@ -22,7 +22,7 @@
             android:name="com.alumnigroup.app.AppStart"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AcivityTheme_start" >
+            android:theme="@style/AcivityTheme_start">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
