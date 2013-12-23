@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LinearLayout.allmember_footer"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/acty_allmenber_btn_allmember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="58dp"
+            android:background="#00ffffff"
+            android:src="@drawable/ic_frame_main_allmember" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <ImageButton
+            android:id="@+id/acty_allmenber_btn_friendmember"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="58dp"
+            android:background="#00ffffff"
+            android:src="@drawable/ic_frame_main_allmember" />
+    </RelativeLayout>
+
+</LinearLayout>
