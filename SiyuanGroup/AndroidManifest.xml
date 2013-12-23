@@ -31,6 +31,10 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".acty.Allmember"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".acty.Main"
             android:screenOrientation="portrait" >
         </activity>
