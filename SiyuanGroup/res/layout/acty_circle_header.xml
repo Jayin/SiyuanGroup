@@ -12,7 +12,7 @@
             android:id="@+id/acty_head_iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="2dp"
             android:src="@drawable/ic_acty_head_back_small" />
     </RelativeLayout>
@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Vector Huang" />
+            android:text="圈子" />
     </RelativeLayout>
 
     <ImageView
@@ -52,10 +52,9 @@
             android:id="@+id/acty_head_iv_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_acty_head_select" />
+            android:src="@drawable/ic_acty_head_iv_plus" />
     </RelativeLayout>
 
 </LinearLayout>
