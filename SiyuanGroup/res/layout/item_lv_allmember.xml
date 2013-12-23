@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="60dp"
-    android:layout_margin="7dp"
+    android:layout_margin="4dp"
     android:background="#ff0000"
     android:orientation="horizontal" >
 
@@ -17,5 +17,28 @@
             android:layout_centerVertical="true"
             android:src="@drawable/test_use_head" />
     </RelativeLayout>
+    
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="match_parent" 
+        android:layout_marginLeft="4dp">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/textView1"
+            android:text="TextView" />
+        
+    </RelativeLayout>
+
+</LinearLayout> 
