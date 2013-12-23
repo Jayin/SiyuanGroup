@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/LinearLayout.allmember_header"
@@ -76,4 +77,84 @@
             android:textColor="@color/white" />
     </RelativeLayout>
 
+=======
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LinearLayout.allmember_header"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/acty_head_btn_back"
+        style="@style/RelativeLayout.allmember_header_btn"
+        android:clickable="true" >
+
+        <ImageView
+            android:id="@+id/acty_head_iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_acty_head_back_small" />
+
+        <TextView
+            android:id="@+id/acty_head_tv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/acty_head_iv_back"
+            android:text="返回"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/acty_head_iv_hr"
+        android:layout_width="2px"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_acty_head_hr" />
+
+    <RelativeLayout
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="4" >
+
+        <TextView
+            android:id="@+id/acty_head_tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Vector Huang"
+           style="@style/navigtion_head_title" />
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/acty_head_iv_hr2"
+        android:layout_width="2px"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_acty_head_hr" />
+
+   <RelativeLayout
+        android:id="@+id/acty_head_btn_back"
+        style="@style/RelativeLayout.allmember_header_btn"
+        android:clickable="true" >
+
+        <ImageView
+            android:id="@+id/acty_head_iv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="2dp"
+            android:src="@drawable/ic_acty_head_select" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/acty_head_iv_login"
+            android:text="登录"
+            android:textColor="@color/white" />
+    </RelativeLayout>
+
+>>>>>>> 7dd78f275bf731f4f7d136d2ca6f545a97d65161
 </LinearLayout>
