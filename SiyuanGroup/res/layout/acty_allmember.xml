@@ -4,9 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
     <include 
-<<<<<<< HEAD
-        layout="@layout/acty_allmember_header"/>  
-=======
+ 
         layout="@layout/acty_allmember_header"/>
     
      <ListView
@@ -20,6 +18,6 @@
     
      <include 
         layout="@layout/acty_allmember_footer"/>
->>>>>>> d9ce19ae48aa00d2d8665f6924052b1c9785dfb8
+ 
 
 </LinearLayout>

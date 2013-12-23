@@ -64,7 +64,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/acty_head_select" />
+            android:src="@drawable/ic_acty_head_select" />
 
         <TextView
             android:id="@+id/textView1"
