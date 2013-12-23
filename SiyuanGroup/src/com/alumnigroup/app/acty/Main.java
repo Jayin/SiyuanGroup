@@ -42,7 +42,6 @@ public class Main extends BaseActivity implements OnClickListener {
 	protected void initData() {
 		width = AndroidUtils.getScreenSize(getContext())[0];
 		height = AndroidUtils.getScreenSize(getContext())[1];
-		L.i(width + "");
 	}
 
 	@Override
@@ -54,7 +53,7 @@ public class Main extends BaseActivity implements OnClickListener {
 				"http://img.szhome.com/images/sznews/2012/11/20121102144231234.JPG",
 				"http://www.carnews.com/Files/Editor_Files/image/Lee/minor5.jpg.pagespeed.ce.XG7AxB1en9.jpg" };
 		adview.setURL(urls);
-		adview.displayAD();
+		adview.display();
 
 	}
 

@@ -357,7 +357,7 @@ public class FileUtils {
 
 	public static void main(String[] args) {
 		String filePath = "D:\\e.txt";
-		System.out.println(writeFile(filePath, "你妹！！", false));
+		System.out.println(writeFile(filePath, "浣犲锛侊紒", false));
 	}
 
 	/**
@@ -394,6 +394,35 @@ public class FileUtils {
 			}
 		}
 		return file.delete();
+	}
+	/**
+	 * delete all the files in directory
+	 * @param folderPath
+	 * @return
+	 */
+	public static boolean deleteFilesInFolder(String folderPath){
+		if (folderPath == null || folderPath.trim().length() == 0) {
+			return true;
+		}
+
+		File file = new File(folderPath);
+		if (!file.exists()) {
+			return true;
+		}
+		if (file.isFile()) {
+			return file.delete();
+		}
+		if (!file.isDirectory()) {
+			return false;
+		}
+		for (File f : file.listFiles()) {
+			if (f.isFile()) {
+				f.delete();
+			} else if (f.isDirectory()) {
+				deleteFile(f.getAbsolutePath());
+			}
+		}
+		return true;
 	}
 
 	/**

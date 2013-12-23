@@ -15,15 +15,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="2dp"
             android:src="@drawable/ic_acty_head_back_small" />
-
-        <TextView
-            android:id="@+id/acty_head_tv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/acty_head_iv_back"
-            android:text="返回"
-            android:textColor="@color/white" />
     </RelativeLayout>
 
     <ImageView
@@ -39,11 +30,11 @@
 
         <TextView
             android:id="@+id/acty_head_tv_title"
+            style="@style/navigtion_head_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Vector Huang"
-           style="@style/navigtion_head_title" />
+            android:text="Vector Huang" />
     </RelativeLayout>
 
     <ImageView
@@ -52,7 +43,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/ic_acty_head_hr" />
 
-   <RelativeLayout
+    <RelativeLayout
         android:id="@+id/acty_head_btn_back"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
@@ -65,15 +56,6 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="2dp"
             android:src="@drawable/ic_acty_head_select" />
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toRightOf="@+id/acty_head_iv_login"
-            android:text="登录"
-            android:textColor="@color/white" />
     </RelativeLayout>
 
 </LinearLayout>
