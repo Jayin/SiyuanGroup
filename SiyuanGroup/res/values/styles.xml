@@ -77,11 +77,19 @@
 	    <item name="android:layout_width">match_parent</item>
 	</style>
 	
+	<style name="LinearLayout.allmember_footer" parent="navigtion_head">
+	    <item name="android:layout_width">match_parent</item>
+	</style>
+	
 	<style name="RelativeLayout.allmember_header_btn" parent="navigtion_head">
 	    <item name="android:layout_width">60dp</item>
 	    <item name="android:background">@drawable/btn_acty_head_selected</item>
 	</style>
 	
-	<style name="portrait"></style>
+	<!-- alldynamic -->
+	<style name="LinearLayout.alldynamic_header" parent="navigtion_head">
+	    <item name="android:layout_width">match_parent</item>
+	</style>
+	
 	
 </resources>
