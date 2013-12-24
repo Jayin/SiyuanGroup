@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:layout_margin="4dp"
+    android:background="#ffffff"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/item_lv_alldynamic_iv_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/test_use_head" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="220dp"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="4dp" >
+
+        <TextView
+            android:id="@+id/item_lv_alldynamic_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
+            android:text="黄廉温"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/item_lv_alldynamic_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/item_lv_alldynamic_tv_name"
+            android:layout_marginTop="6dp"
+            android:text="更新了空间信息" />
+    </RelativeLayout>
+
+
+</LinearLayout>

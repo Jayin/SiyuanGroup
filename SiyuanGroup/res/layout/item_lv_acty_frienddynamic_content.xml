@@ -4,16 +4,12 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical" >
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
-
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="wrap_content"
+    
+    <ListView 
+        android:id="@+id/item_lv_frienddynamic_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/aa_main_screent" />
+        android:layout_width="match_parent">
+        
+    </ListView>
 
 </LinearLayout>
