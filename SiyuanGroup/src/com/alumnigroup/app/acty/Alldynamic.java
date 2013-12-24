@@ -17,10 +17,13 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alumnigroup.adapter.DynamicAdapter;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Tweet;
 
 /**
  * 全部动态界面
@@ -66,7 +69,23 @@ public class Alldynamic extends BaseActivity implements OnClickListener{
 	/**
 	 * 要显示的页卡
 	 */
-	private ArrayList<View> DynamicList;
+	private ArrayList<View> alDynamicView;
+	
+	
+	/**
+	 * 页卡的listview
+	 */
+	private ListView lvAllDynamic,lvFriendDynamic;
+	/**
+	 * 页卡的数据 -- listview
+	 */
+	private ArrayList<Tweet> alAllDynamicContent,alFriendDynamicContent;
+	
+	/**
+	 * 页卡的数据适配器
+	 */
+	private DynamicAdapter aptAllDynamic,aptFriendDynamic;
+	
 	/**
 	 * 页卡的适配器
 	 */
@@ -82,7 +101,26 @@ public class Alldynamic extends BaseActivity implements OnClickListener{
 
 	@Override
 	protected void initData() {
-
+		
+		//这里模拟一些数据
+		alAllDynamicContent = new ArrayList<Tweet>(){{
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+		}}; 
+		alFriendDynamicContent = new ArrayList<Tweet>(){{
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+		}}; 
 	}
 
 	@Override
@@ -94,8 +132,17 @@ public class Alldynamic extends BaseActivity implements OnClickListener{
 		initCursor();
 		initDynamicName();
 		initViewPager();
+		initDynamicDate();
 	}
 	
+	private void initDynamicDate() {
+		aptAllDynamic = new DynamicAdapter(alAllDynamicContent, this);
+		aptFriendDynamic = new DynamicAdapter(alFriendDynamicContent, this);
+		
+		lvAllDynamic.setAdapter(aptAllDynamic);
+		lvFriendDynamic.setAdapter(aptFriendDynamic);
+	}
+
 	/**
 	 * 初始化头部控件
 	 */
@@ -135,14 +182,25 @@ public class Alldynamic extends BaseActivity implements OnClickListener{
 	 * 初始化ViewPager
 	 */
 	private void initViewPager() {
+		
 		vpDynamicContent = (ViewPager) _getView(R.id.acty_alldynamic_vp_content);
-		DynamicList = new ArrayList<View>();
+		alDynamicView = new ArrayList<View>();
+		/**
+		 * alldynamic and listview
+		 */
 		LayoutInflater inflater = getLayoutInflater();
-		allDynamic = inflater.inflate(R.layout.item_acty_alldynamic_content, null);
-		friendDynamic = inflater.inflate(R.layout.item_acty_frienddynamic_content, null);
-		DynamicList.add(allDynamic);
-		DynamicList.add(friendDynamic);
-		viewAdapter = new DynamicViewPagerAdapter(DynamicList);
+		allDynamic = inflater.inflate(R.layout.item_lv_acty_alldynamic_content, null);
+		lvAllDynamic = (ListView) allDynamic.findViewById(R.id.item_lv_alldynamic_content);
+		
+		/**
+		 * frienddynamic and listview
+		 */
+		friendDynamic = inflater.inflate(R.layout.item_lv_acty_frienddynamic_content, null);
+		lvFriendDynamic = (ListView) friendDynamic.findViewById(R.id.item_lv_frienddynamic_content);
+		
+		alDynamicView.add(allDynamic);
+		alDynamicView.add(friendDynamic);
+		viewAdapter = new DynamicViewPagerAdapter(alDynamicView);
 		vpDynamicContent.setAdapter(viewAdapter);
 		vpDynamicContent.setCurrentItem(0);
 		// 需要监听页卡改变事件
