@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="圈子信息"
-            android:textColor="@color/green_lv_one"
+            android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
 
