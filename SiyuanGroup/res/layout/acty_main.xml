@@ -5,32 +5,21 @@
     android:background="@drawable/aa_main_screent"
     android:orientation="vertical" >
 
-    <FrameLayout
+    <com.alumnigroup.widget.ADView
+        android:id="@+id/acty_main_adview"
         android:layout_width="match_parent"
-        android:layout_height="80dp" >
-
-        <RelativeLayout
-           android:id="@+id/guanggao"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <TextView
-                style="@style/TextView.base"
-                android:text="广告" 
-                android:textColor="@color/black"/>
-        </RelativeLayout>
-    </FrameLayout>
+        android:layout_height="100dp" >
+    </com.alumnigroup.widget.ADView>
 
     <RelativeLayout
+        android:id="@+id/acty_main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="8dp" >
 
         <include
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
+            android:id="@+id/acty_main_content_one"
             layout="@layout/frame_main_one" />
-
     </RelativeLayout>
 
 </LinearLayout>

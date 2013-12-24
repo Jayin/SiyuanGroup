@@ -2,12 +2,10 @@ package com.alumnigroup.app;
 
  
 
-import com.alumnigroup.app.acty.Main;
-
 import android.os.Bundle;
 import android.os.Handler;
-import android.app.Activity;
-import android.view.Menu;
+
+import com.alumnigroup.app.acty.Alldynamic;
 /**
  * 启动页面
  * @author Jayin Ton
@@ -23,7 +21,7 @@ public class AppStart extends BaseActivity  {
 			
 			@Override
 			public void run() {
-				openActivity(Main.class);
+				openActivity(Alldynamic.class);
 				closeActivity();
 				
 			}
