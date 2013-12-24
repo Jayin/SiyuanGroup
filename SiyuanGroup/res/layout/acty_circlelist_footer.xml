@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LinearLayout.allmember_footer"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/acty_circlelist_footer_allgroup"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="全部圈子"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/acty_circlelist_footer_joined"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="我参与的"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/acty_circlelist_footer_created"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="我创建的"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</LinearLayout>
