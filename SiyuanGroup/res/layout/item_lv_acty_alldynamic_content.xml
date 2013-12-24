@@ -2,12 +2,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/lucency_white"
+    android:background="#ffffff"
     android:orientation="vertical" >
 
-    <ImageView
-        android:id="@+id/item_adview_iv"
+    <ListView
+        android:id="@+id/item_lv_alldynamic_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" >
+    </ListView>
 
 </LinearLayout>

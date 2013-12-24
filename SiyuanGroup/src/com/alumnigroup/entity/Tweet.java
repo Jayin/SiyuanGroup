@@ -7,4 +7,11 @@ package com.alumnigroup.entity;
  */
 public class Tweet {
 
+	
+	
+	public int getType() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }
