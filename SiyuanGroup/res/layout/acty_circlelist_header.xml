@@ -9,16 +9,14 @@
         android:clickable="true" >
 
         <ImageView
-            android:id="@+id/acty_head_iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_acty_head_back_small" />
+            android:src="@drawable/ic_acty_head_back_big" />
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/acty_head_iv_hr"
         android:layout_width="2px"
         android:layout_height="match_parent"
         android:background="@drawable/ic_acty_head_hr" />
@@ -34,27 +32,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="圈子" />
+            android:text="圈子列表" />
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/acty_head_iv_hr2"
         android:layout_width="2px"
         android:layout_height="match_parent"
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:id="@+id/acty_head_btn_create"
+        android:id="@+id/acty_head_btn_setting"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
 
-        <TextView
-            style="@style/TextView.navigtion_head_base"
-          android:layout_centerInParent="true"
-            android:text="创建" 
-            android:textSize="14sp"
-            android:textStyle="bold"/>
-
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_acty_head_overflow" />
     </RelativeLayout>
 
 </LinearLayout>

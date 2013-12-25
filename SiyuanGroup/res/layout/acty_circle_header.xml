@@ -13,8 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_acty_head_back_small" />
+            android:src="@drawable/ic_acty_head_back_big" />
     </RelativeLayout>
 
     <ImageView
@@ -35,7 +34,6 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="圈子" />
-
     </RelativeLayout>
 
     <ImageView
@@ -45,7 +43,7 @@
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:id="@+id/acty_head_btn_join"
+        android:id="@+id/acty_head_btn_compose"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
 
@@ -54,8 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:layout_marginLeft="2dp"
-            android:src="@drawable/ic_acty_head_iv_plus" />
+            android:src="@drawable/ic_acty_head_compose" />
     </RelativeLayout>
 
 </LinearLayout>
