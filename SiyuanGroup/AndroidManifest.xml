@@ -35,6 +35,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".acty.Login"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".acty.Circle"
             android:screenOrientation="portrait" >
         </activity>
@@ -42,7 +46,6 @@
             android:name=".acty.Main"
             android:screenOrientation="portrait" >
         </activity>
- 
         <activity
             android:name=".acty.Alldynamic"
             android:screenOrientation="portrait" >
