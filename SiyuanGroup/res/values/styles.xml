@@ -47,8 +47,8 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
     </style>
-    
-        <style name="TextView.navigtion_head_base">
+
+    <style name="TextView.navigtion_head_base">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
@@ -78,7 +78,13 @@
         <item name="android:textSize">18sp</item>
     </style>
 
+    <style name="ProgressBar"></style>
 
+    <style name="ProgressBar.common">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_style_one</item>
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">40dp</item>
+    </style>
 
     <!-- allmember -->
 
