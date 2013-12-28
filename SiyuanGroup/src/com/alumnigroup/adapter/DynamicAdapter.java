@@ -3,13 +3,18 @@ package com.alumnigroup.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Tweet;
+import com.alumnigroup.utils.ImageUtils;
 
 /**
  * 动态页面，ListView 的适配器
@@ -24,11 +29,24 @@ public class DynamicAdapter extends BaseAdapter {
 	 */
 	private List<Tweet> Dynamic;
 	private Context context;
+	
+	/**
+	 * 对应布局文件的控件
+	 */
+	private ImageView ivAlldynamicPortrait;
 
 	/**
-	 * 动态的不同类型
+	 *  更新空间类型
 	 */
-	public static final int TYPE_UPDATE_SPATIAL = 0;
+	public static final int TYPE_UPDATE_SPATIAL = 0; 
+	/**
+	 *  转发微博
+	 */
+	public static final int TYPE_TRANSPOND_TWEET = 1; 
+	/**
+	 *  转发微博
+	 */
+	public static final int TYPE_RELEASE_TWEET = 2; 
 
 	/**
 	 * 用来反射布局文件的
@@ -65,7 +83,18 @@ public class DynamicAdapter extends BaseAdapter {
 			convertView = inflater.inflate(
 					R.layout.item_lv_alldynamic_update_spatial, null);
 			break;
-
+			
+		case TYPE_TRANSPOND_TWEET:
+			convertView = inflater.inflate(
+					R.layout.item_lv_alldynamic, null);
+			break;
+			
+			
+		case TYPE_RELEASE_TWEET:
+			convertView = inflater.inflate(
+					R.layout.item_lv_alldynamic_release_tweet, null);
+			break;
+			
 		default:
 			break;
 		}
@@ -100,4 +129,5 @@ public class DynamicAdapter extends BaseAdapter {
 	public int getViewTypeCount() {
 		return 1;
 	}
+	
 }

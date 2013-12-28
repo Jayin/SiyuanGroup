@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="4dp"
+    android:layout_height="wrap_content"
     android:background="#ffffff"
-    android:orientation="horizontal" >
+    android:orientation="horizontal"
+    android:padding="6dp" >
 
     <RelativeLayout
-        android:layout_width="60dp"
-        android:layout_height="match_parent" >
+        android:layout_width="42dp"
+        android:layout_height="42dp" >
 
         <ImageView
             android:id="@+id/item_lv_alldynamic_iv_portrait"
@@ -19,9 +19,10 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="220dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginLeft="4dp" >
+        android:layout_marginLeft="3dp"
+        android:layout_weight="1" >
 
         <TextView
             android:id="@+id/item_lv_alldynamic_tv_name"
@@ -31,7 +32,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="4dp"
             android:text="黄廉温"
-            android:textSize="16dp" />
+            android:textColor="@color/blue_lv_two"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/item_lv_alldynamic_tv_content"
@@ -39,9 +41,20 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/item_lv_alldynamic_tv_name"
-            android:layout_marginTop="6dp"
-            android:text="更新了空间信息" />
-    </RelativeLayout>
+            android:layout_marginTop="3dp"
+            android:text="更新了空间信息"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
 
+        <TextView
+            android:id="@+id/item_lv_alldynamic_tv_datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="2013-12-28 13:42"
+            android:textColor="@color/grey_lv_two"
+            android:textSize="11sp" />
+    </RelativeLayout>
 
 </LinearLayout>
