@@ -6,7 +6,7 @@
 
     <uses-sdk
         android:minSdkVersion="15"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="8" />
 
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -35,6 +35,10 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name=".acty.Login"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".acty.Circle"
             android:screenOrientation="portrait" >
         </activity>
@@ -45,6 +49,8 @@
         <activity
             android:name=".acty.Alldynamic"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity android:name=".acty.CircleList" >
         </activity>
     </application>
 

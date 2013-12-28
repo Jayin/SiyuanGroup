@@ -43,9 +43,16 @@
     <style name="TextView.base">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:text">nice</item>
+        <item name="android:text">null</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextView.navigtion_head_base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
     </style>
 
     <style name="Animations" />
@@ -56,40 +63,47 @@
         <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
         <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
     </style>
-    
+
     <!-- navigation -->
-    
+
     <style name="navigtion"></style>
-    
+
     <style name="navigtion_head" parent="navigtion">
         <item name="android:layout_height">40dp</item>
         <item name="android:background">@drawable/ic_acty_head_gb</item>
     </style>
-    
+
     <style name="navigtion_head_title" parent="navigtion">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
     </style>
-    
-	<!-- allmember -->
-	
-	<style name="LinearLayout.allmember_header" parent="navigtion_head">
-	    <item name="android:layout_width">match_parent</item>
-	</style>
-	
-	<style name="LinearLayout.allmember_footer" parent="navigtion_head">
-	    <item name="android:layout_width">match_parent</item>
-	</style>
-	
-	<style name="RelativeLayout.allmember_header_btn" parent="navigtion_head">
-	    <item name="android:layout_width">60dp</item>
-	    <item name="android:background">@drawable/btn_acty_head_selected</item>
-	</style>
-	
-	<!-- alldynamic -->
-	<style name="LinearLayout.alldynamic_header" parent="navigtion_head">
-	    <item name="android:layout_width">match_parent</item>
-	</style>
-	
-	
+
+    <style name="ProgressBar"></style>
+
+    <style name="ProgressBar.common">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_style_one</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <!-- allmember -->
+
+    <style name="LinearLayout.allmember_header" parent="navigtion_head">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="LinearLayout.allmember_footer" parent="navigtion_head">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="RelativeLayout.allmember_header_btn" parent="navigtion_head">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:background">@drawable/btn_acty_head_selected</item>
+    </style>
+
+    <!-- alldynamic -->
+    <style name="LinearLayout.alldynamic_header" parent="navigtion_head">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
 </resources>
