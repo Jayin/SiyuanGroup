@@ -111,8 +111,16 @@ public class Alldynamic extends BaseActivity implements OnClickListener{
 			add(new Tweet());
 			add(new Tweet());
 			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
 		}}; 
 		alFriendDynamicContent = new ArrayList<Tweet>(){{
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
 			add(new Tweet());
 			add(new Tweet());
 			add(new Tweet());
