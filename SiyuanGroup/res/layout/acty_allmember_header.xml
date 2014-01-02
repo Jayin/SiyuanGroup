@@ -39,11 +39,16 @@
 
         <TextView
             android:id="@+id/acty_head_tv_title"
+            style="@style/navigtion_head_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="Vector Huang"
-           style="@style/navigtion_head_title" />
+            android:text="全站会员" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/RelativeLayout.allmember_header_btn"
+        android:clickable="true" >
     </RelativeLayout>
 
 </LinearLayout>

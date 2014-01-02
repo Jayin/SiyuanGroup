@@ -45,7 +45,7 @@
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="46dp"
-            android:text="Vector Huang" />
+            android:text="全站动态" />
 
     </RelativeLayout>
 

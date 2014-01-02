@@ -28,7 +28,7 @@
             android:layout_margin="2dp"
             android:layout_marginTop="2dp"
             android:gravity="center_horizontal"
-            android:text="土豪俱乐部"
+            android:text="高尔夫"
             android:textColor="@color/black" />
 
         <LinearLayout
@@ -154,7 +154,7 @@
                 android:layout_weight="1"
                 android:gravity="left"
                 android:padding="6dp"
-                android:text="1.拒绝一切的炫富行为！\n2.入圈请先交一百万保护费!\n3.银行存款少于1亿请绕道"
+                android:text="1.拒绝一切的打酱油分享！\n2.入圈请先先联系XXX!\n3.每日要冒泡"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
         </LinearLayout>
