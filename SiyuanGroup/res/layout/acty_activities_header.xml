@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="title" />
+            android:text="活动" />
     </RelativeLayout>
 
     <ImageView
@@ -43,7 +43,7 @@
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:id="@+id/acty_head_btn_compose"
+        android:id="@+id/acty_head_btn_createActy"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
 
@@ -52,7 +52,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
+            android:visibility="gone"
             android:src="@drawable/ic_acty_head_compose" />
+         <TextView
+            style="@style/TextView.navigtion_head_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="发起"  />
     </RelativeLayout>
 
 </LinearLayout>

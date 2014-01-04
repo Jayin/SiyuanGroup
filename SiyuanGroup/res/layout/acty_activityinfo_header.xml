@@ -33,14 +33,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="title" />
+            android:text="活动详情" />
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/acty_head_iv_hr2"
         android:layout_width="2px"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_acty_head_hr" />
+        android:background="@drawable/ic_acty_head_hr"  android:visibility="gone"/>
 
     <RelativeLayout
         android:id="@+id/acty_head_btn_compose"
@@ -52,7 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_acty_head_compose" />
+            android:src="@drawable/ic_acty_head_compose"
+            android:visibility="gone" />
     </RelativeLayout>
 
 </LinearLayout>
