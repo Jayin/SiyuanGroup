@@ -52,6 +52,7 @@
         </activity>
         <activity android:name=".acty.CircleList" >
         </activity>
+      
     </application>
 
 </manifest>

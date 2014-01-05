@@ -15,8 +15,6 @@
         <include
             android:id="@+id/acty_circle_groupInfo"
             layout="@layout/frame_acty_activityinfo_introduce" />
-
-      
     </LinearLayout>
 
     <include layout="@layout/acty_activityinfo_foot" />

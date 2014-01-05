@@ -15,7 +15,7 @@ import com.loopj.android.http.RequestParams;
  *
  */
 public class RestClient {
-	private static final String BASE_URL = "http://api.siyuan.com/1/";
+	private static final String BASE_URL = "http://10.10.65.165:8088";
 	private static final int HTTP_Timeout = 20*1000;
 	public static CookieStore cookieStore;
     
