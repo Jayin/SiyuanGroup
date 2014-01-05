@@ -1,0 +1,17 @@
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+#android
+bin/
+gen/
+.settings/
+ic_launcher-web.png
+
+
+
+
+
