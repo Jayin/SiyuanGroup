@@ -9,6 +9,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.api.RestClient;
+import com.api.UserAPI;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.utils.L;
@@ -31,7 +32,20 @@ public class TestMainActivity extends Activity {
 			public void onClick(View v) {
 				//register();
 				// find();
-				login();
+				//login();
+				getAll();
+			}
+		});
+	}
+	
+	public void getAll() {
+		UserAPI api = new UserAPI();
+		api.getAllMember(1, new AsyncHttpResponseHandler() {
+
+			@Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+		       L.i(new String(arg2));
+		       tv.setText(new String(arg2));
 			}
 		});
 	}

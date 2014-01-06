@@ -4,6 +4,7 @@
     android:orientation="horizontal" >
 
     <RelativeLayout
+        android:id="@+id/acty_allmember_footer_allmember"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -19,6 +20,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/acty_allmember_footer_myfriend"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >

@@ -1,4 +1,4 @@
-package com.alumnigroup.api;
+package com.api;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
