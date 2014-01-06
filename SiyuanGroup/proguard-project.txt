@@ -106,4 +106,9 @@
 -dontwarn com.loopj.android.http.**  
 -keep class com.loopj.android.http.** { *; }
 -keep interface com.loopj.android.http.** { *; }
+
+#google gson
+-libraryjars libs/gson-2.2.4.jar
+-keep class com.google.gson.** {*;}
+-keep interface com.google.gson.** { *; }
  

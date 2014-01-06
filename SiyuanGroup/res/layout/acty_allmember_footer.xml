@@ -8,15 +8,14 @@
         android:layout_height="match_parent"
         android:layout_weight="1" >
 
-        <ImageButton
-            android:id="@+id/acty_allmenber_btn_allmember"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="58dp"
-            android:background="#00ffffff"
-            android:src="@drawable/ic_frame_main_allmember" />
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="全站会员"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -24,15 +23,14 @@
         android:layout_height="match_parent"
         android:layout_weight="1" >
 
-        <ImageButton
-            android:id="@+id/acty_allmenber_btn_friendmember"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="58dp"
-            android:background="#00ffffff"
-            android:src="@drawable/ic_frame_main_allmember" />
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="我的好友"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </LinearLayout>

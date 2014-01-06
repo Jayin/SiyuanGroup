@@ -105,6 +105,150 @@ public class User implements Serializable{
 	 * 会员简介
 	 */
 	private String  intro;
+
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public String getPassworrd() {
+		return passworrd;
+	}
+
+	public void setPassworrd(String passworrd) {
+		this.passworrd = passworrd;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public boolean isEmailVerified() {
+		return isEmailVerified;
+	}
+
+	public void setEmailVerified(boolean isEmailVerified) {
+		this.isEmailVerified = isEmailVerified;
+	}
+
+	public boolean isOnline() {
+		return isOnline;
+	}
+
+	public void setOnline(boolean isOnline) {
+		this.isOnline = isOnline;
+	}
+
+	public String getRegIp() {
+		return regIp;
+	}
+
+	public void setRegIp(String regIp) {
+		this.regIp = regIp;
+	}
+
+	public Date getRegDate() {
+		return regDate;
+	}
+
+	public void setRegDate(Date regDate) {
+		this.regDate = regDate;
+	}
+
+	public int getGender() {
+		return gender;
+	}
+
+	public void setGender(int gender) {
+		this.gender = gender;
+	}
+
+	public Date getBrithday() {
+		return brithday;
+	}
+
+	public void setBrithday(Date brithday) {
+		this.brithday = brithday;
+	}
+
+	public String getSignature() {
+		return signature;
+	}
+
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
+
+	public String getTags() {
+		return tags;
+	}
+
+	public void setTags(String tags) {
+		this.tags = tags;
+	}
+
+	public List<Groups> getGroups() {
+		return groups;
+	}
+
+	public void setGroups(List<Groups> groups) {
+		this.groups = groups;
+	}
+
+	public Album getAlbum() {
+		return album;
+	}
+
+	public void setAlbum(Album album) {
+		this.album = album;
+	}
+
+	public List<Tweet> getTweets() {
+		return tweets;
+	}
+
+	public void setTweets(List<Tweet> tweets) {
+		this.tweets = tweets;
+	}
+
+	public Post getPost() {
+		return post;
+	}
+
+	public void setPost(Post post) {
+		this.post = post;
+	}
+
+	public List<MActivity> getmActivitys() {
+		return mActivitys;
+	}
+
+	public void setmActivitys(List<MActivity> mActivitys) {
+		this.mActivitys = mActivitys;
+	}
+
+	public String getPortraitPath() {
+		return portraitPath;
+	}
+
+	public void setPortraitPath(String portraitPath) {
+		this.portraitPath = portraitPath;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
+	}
 	
 	
 	
