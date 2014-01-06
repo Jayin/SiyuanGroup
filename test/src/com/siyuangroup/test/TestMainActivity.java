@@ -31,7 +31,7 @@ public class TestMainActivity extends Activity {
 			public void onClick(View v) {
 				//register();
 				// find();
-				//login();
+				login();
 			}
 		});
 	}

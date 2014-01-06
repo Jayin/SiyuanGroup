@@ -18,7 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alumnigroup.app.R;
-
+/**
+ * 下拉刷新 ListView
+ * @author Jayin Ton
+ *
+ */
 public class PullToRefreshListView extends ListView implements OnScrollListener {
 
 	private static final int TAP_TO_REFRESH = 1;

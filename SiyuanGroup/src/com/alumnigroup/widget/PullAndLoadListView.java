@@ -10,7 +10,11 @@ import android.widget.TextView;
 
 import com.alumnigroup.app.R;
 
-
+/**
+ * 下拉刷新 上推刷新
+ * @author Jayin Ton
+ *
+ */
 public class PullAndLoadListView extends PullToRefreshListView {
 
 	private TextView mLabLoadMore;

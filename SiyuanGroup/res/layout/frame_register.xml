@@ -183,7 +183,7 @@
                 android:layout_height="40dp"
                 android:layout_marginTop="18dp"
                 android:background="@drawable/btn_common_blue_transparent"
-                android:text="注  册"
+                android:text="确 认"
                 android:textColor="@color/white"
                 android:textSize="18sp" />
 

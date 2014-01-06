@@ -64,6 +64,11 @@
         <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
     </style>
 
+    <style name="Animations.dialog">
+        <item name="@android:windowEnterAnimation">@anim/zoom_in</item>
+        <item name="@android:windowExitAnimation">@anim/zoom_out</item>
+    </style>
+
     <!-- navigation -->
 
     <style name="navigtion"></style>
@@ -84,6 +89,19 @@
         <item name="android:indeterminateDrawable">@drawable/progressbar_style_one</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+    </style>
+
+   
+
+    <style name="Dialog"></style>
+
+    <style name="Dialog.Theme.BaseDialog" parent="@android:Theme.Dialog">
+        <item name="android:windowBackground">@color/lucency_white</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animations.dialog</item>
     </style>
 
     <!-- allmember -->
