@@ -1,19 +1,80 @@
 package com.alumnigroup.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.google.gson.JsonObject;
 
 import android.widget.ImageView;
 
 /**
- * 封装一个用户 的属性
- * 
- * @author vector
+ * 封装一个用户 的属性<br>
+ * <li>加入两个静态方法创建一个User实例和List< User > 
+ * @author vector  /Jayin Ton
  * @version 1
  * @since 2013-12-20 10:56:22
  */
-public class User implements Serializable{
+public class User implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+    /**
+     * 解析单个用户
+     * @param json 单个用户的json字符串
+     * @return User
+     */
+	public static User create_by_json(String json){
+		User user = new User();
+		JSONObject obj = null;
+		try {
+		     obj = new JSONObject(json);
+		     user.setUsername(obj.getString("username"));
+		     user.setRegTime(obj.getString("regtime"));
+		     user.setOnline(obj.getInt("isonline")==0?false:true);
+		     user.setAvatar(obj.getString("avatar"));
+		} catch (Exception e) {
+			 e.printStackTrace();
+			 user = null;
+		} 
+		return user;
+	}
+	/**
+	 * 解析一个用户列表的列表
+	 * @param jsonarray 用户列表json字符串
+	 * @return List<User>
+	 */
+	public static List<User> create_by_jsonarray(String jsonarray){
+		List<User> list = new ArrayList<User>();
+		JSONObject obj = null;
+		JSONArray array = null;
+		try {
+			array =obj.getJSONArray("users");
+			for(int i=0;i<array.length();i++){
+	             list.add(create_by_json(array.getJSONObject(i).toString()));			
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+			list = null;
+		}
+		
+		return list;
+	}
+
+	public User() {
+
+	}
+
+	/** 用户的头像相对url **/
+	private String avatar;
+
 	/**
 	 * 用户名
 	 */
@@ -38,73 +99,68 @@ public class User implements Serializable{
 	 * 注册的ip
 	 */
 	private String regIp;
-	
+
 	/**
 	 * 注册的日期
 	 */
-	private Date regDate;
-	
+	private String regTime;
+
 	/**
 	 * 性别
 	 */
 	private int gender;
-	
+
 	/**
 	 * 生日
 	 */
-	private Date brithday;
-	
+	private String brithday;
+
 	/**
 	 * 空间签名
 	 */
 	private String signature;
-	
+
 	/**
 	 * 空间标签
 	 */
 	private String tags;
-	
+
 	/**
-	 * 用户参加的讨论组 
+	 * 用户参加的讨论组
 	 */
 	private List<Groups> groups;
-	
+
 	/**
 	 * 用户的相册
 	 */
 	private Album album;
-	
+
 	/**
 	 * 用户发的微博
 	 */
 	private List<Tweet> tweets;
-	
+
 	/**
 	 * 评论？
 	 */
-//	private Comment comments;
-	
+	// private Comment comments;
+
 	/**
 	 * 用户的职位
 	 */
 	private Post post;
-	
+
 	/**
 	 * 用户参与的活动
 	 */
 	private List<MActivity> mActivitys;
-	
-	//--------------------------------
-	
-	/**
-	 * 用户的头像地址
-	 */
-	private String  portraitPath;
-	
+
+	// --------------------------------
+
 	/**
 	 * 会员简介
 	 */
-	private String  intro;
+	private String intro;
 
 	public String getUsername() {
 		return username;
@@ -154,14 +210,6 @@ public class User implements Serializable{
 		this.regIp = regIp;
 	}
 
-	public Date getRegDate() {
-		return regDate;
-	}
-
-	public void setRegDate(Date regDate) {
-		this.regDate = regDate;
-	}
-
 	public int getGender() {
 		return gender;
 	}
@@ -170,14 +218,7 @@ public class User implements Serializable{
 		this.gender = gender;
 	}
 
-	public Date getBrithday() {
-		return brithday;
-	}
-
-	public void setBrithday(Date brithday) {
-		this.brithday = brithday;
-	}
-
+	 
 	public String getSignature() {
 		return signature;
 	}
@@ -234,14 +275,6 @@ public class User implements Serializable{
 		this.mActivitys = mActivitys;
 	}
 
-	public String getPortraitPath() {
-		return portraitPath;
-	}
-
-	public void setPortraitPath(String portraitPath) {
-		this.portraitPath = portraitPath;
-	}
-
 	public String getIntro() {
 		return intro;
 	}
@@ -249,8 +282,29 @@ public class User implements Serializable{
 	public void setIntro(String intro) {
 		this.intro = intro;
 	}
-	
-	
-	
-	
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
+
+	public String getRegTime() {
+		return regTime;
+	}
+
+	public void setRegTime(String regTime) {
+		this.regTime = regTime;
+	}
+
+	public String getBrithday() {
+		return brithday;
+	}
+
+	public void setBrithday(String brithday) {
+		this.brithday = brithday;
+	}
+ 
 }
