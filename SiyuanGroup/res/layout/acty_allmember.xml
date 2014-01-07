@@ -20,7 +20,7 @@
                 android:id="@+id/acty_allmember_lv_allmember"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/green_lv_one" >
+                android:background="@color/white" >
             </com.alumnigroup.widget.PullAndLoadListView>
         </LinearLayout>
 
@@ -32,7 +32,7 @@
                 android:id="@+id/acty_allmember_lv_myfriend"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/grey" >
+                android:background="@color/white" >
             </com.alumnigroup.widget.PullAndLoadListView>
         </LinearLayout>
     </ViewFlipper>

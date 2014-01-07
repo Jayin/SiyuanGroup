@@ -6,12 +6,15 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
 
+import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
@@ -21,6 +24,7 @@ import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 
@@ -37,6 +41,7 @@ public class Allmember extends BaseActivity {
 	private UserAPI api;
 	private int page = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
+	private int currentStatus = 0; //0代表从底部左边数起第一个处于显示状态
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,9 +67,16 @@ public class Allmember extends BaseActivity {
 		btn_myfriend = _getView(R.id.acty_allmember_footer_myfriend);
 		lv_allmember = (PullAndLoadListView) _getView(R.id.acty_allmember_lv_allmember);
 		lv_myfriend = (PullAndLoadListView) _getView(R.id.acty_allmember_lv_myfriend);
-
+        
+		btn_back.setOnClickListener(this);
+		btn_allmenmber.setOnClickListener(this);
+		btn_myfriend.setOnClickListener(this);
+		
 		adapter_allmember = new MemberAdapter(data_allmember);
 		adapter_myfriend = new MemberAdapter(data_myfriend);
+        
+		lv_allmember.setAdapter(adapter_allmember);
+		lv_myfriend.setAdapter(adapter_myfriend);
 		
 		lv_allmember.setOnRefreshListener(new OnRefreshListener() {
 
@@ -75,8 +87,10 @@ public class Allmember extends BaseActivity {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable arg3) {
+							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
+						if(data!=null)L.i(new String(data));
+						if(err!=null)L.i(err.toString());
 						lv_allmember.onRefreshComplete();
 					}
 
@@ -101,11 +115,14 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
+				L.i("load more!!!!");
 				api.getAllMember(page + 1, new AsyncHttpResponseHandler() {
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable arg3) {
+							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
+						if(data!=null)L.i(new String(data));
+						if(err!=null)L.i(err.toString());
 						lv_allmember.onLoadMoreComplete();
 					}
 
@@ -114,9 +131,11 @@ public class Allmember extends BaseActivity {
 							byte[] data) {
 						page++;
 						// L.i(new String(data));
-						String json = new String(data);// jsonarray
+						String json = new String(data);// json array
 						List<User> newData_allmember = User
 								.create_by_jsonarray(json);
+						data_allmember.addAll(newData_allmember);
+						adapter_allmember.notifyDataSetChanged();
 						lv_allmember.onLoadMoreComplete();
 					}
 				});
@@ -131,16 +150,14 @@ public class Allmember extends BaseActivity {
 			}
 		});
 
-		lv_allmember.setOnLoadMoreListener(new OnLoadMoreListener() {
+		lv_myfriend.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
 
 			}
 		});
-		btn_back.setOnClickListener(this);
-		btn_allmenmber.setOnClickListener(this);
-		btn_myfriend.setOnClickListener(this);
+	
 	}
 
 	private void initFlipper() {
@@ -156,8 +173,16 @@ public class Allmember extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_allmember_footer_allmember:
+			if(currentStatus==0)return;
+			tv_title.setText("全站会员");
+			flipper.showPrevious();
+			currentStatus = 0;
 			break;
 		case R.id.acty_allmember_footer_myfriend:
+			if(currentStatus==1)return;
+			tv_title.setText("我的好友");
+			flipper.showNext();
+			currentStatus = 1;
 			break;
 		default:
 			break;
@@ -181,7 +206,7 @@ public class Allmember extends BaseActivity {
 
 		@Override
 		public Object getItem(int position) {
-			return  data.get(position);
+			return data.get(position);
 		}
 
 		@Override
@@ -191,8 +216,44 @@ public class Allmember extends BaseActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			
-			return null;
+			ViewHolder h;
+			if (convertView == null) {
+				convertView = LayoutInflater.from(getContext()).inflate(
+						R.layout.item_lv_allmember, null);
+				h = new ViewHolder();
+				
+				h.avatar = (ImageView) convertView
+						.findViewById(R.id.item_lv_allmember_avatar);
+				h.online = (ImageView) convertView
+						.findViewById(R.id.item_lv_allmember_online);
+				h.grade = (TextView) convertView
+						.findViewById(R.id.item_lv_allmemeber_grade);
+				h.name = (TextView) convertView
+						.findViewById(R.id.item_lv_allmemeber_name);
+				h.major = (TextView) convertView
+						.findViewById(R.id.item_lv_allmemeber_major);
+                convertView.setTag(h);
+			} else {
+                   h = (ViewHolder)convertView.getTag();
+			}
+			User u = data.get(position);
+			ImageLoader loader = ImageLoader.getInstance();
+			loader.displayImage(RestClient.BASE_URL+u.getAvatar(), h.avatar);
+			h.grade.setText(u.getGrade()+"");
+			h.name.setText(u.getName());
+			h.major.setText(u.getMajor());
+			if(u.isOnline()){
+				h.online.setVisibility(View.VISIBLE);
+			}else{
+				h.online.setVisibility(View.INVISIBLE);
+			}		
+			return convertView;
+		}
+
+		class ViewHolder {
+			ImageView avatar, online;
+			TextView name, grade, major;
+			ImageLoader loader;
 		}
 
 	}

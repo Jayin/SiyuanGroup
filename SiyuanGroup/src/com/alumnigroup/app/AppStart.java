@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.alumnigroup.app.acty.Allmember;
+import com.alumnigroup.app.acty.Login;
 /**
  * 启动页面
  * @author Jayin Ton

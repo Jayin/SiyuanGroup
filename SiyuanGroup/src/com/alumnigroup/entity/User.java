@@ -15,8 +15,9 @@ import android.widget.ImageView;
 
 /**
  * 封装一个用户 的属性<br>
- * <li>加入两个静态方法创建一个User实例和List< User > 
- * @author vector  /Jayin Ton
+ * <li>加入两个静态方法创建一个User实例和List< User > username,name,nickname分别为：用户名，真实姓名，昵称
+ * 
+ * @author vector /Jayin Ton
  * @version 1
  * @since 2013-12-20 10:56:22
  */
@@ -26,45 +27,64 @@ public class User implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-    /**
-     * 解析单个用户
-     * @param json 单个用户的json字符串
-     * @return User
-     */
-	public static User create_by_json(String json){
+
+	/**
+	 * 解析单个用户
+	 * 
+	 * @param json
+	 *            单个用户的json字符串
+	 * @return User
+	 */
+	public static User create_by_json(String json) {
 		User user = new User();
 		JSONObject obj = null;
+		JSONObject profile = null;
 		try {
-		     obj = new JSONObject(json);
-		     user.setUsername(obj.getString("username"));
-		     user.setRegTime(obj.getString("regtime"));
-		     user.setOnline(obj.getInt("isonline")==0?false:true);
-		     user.setAvatar(obj.getString("avatar"));
+			obj = new JSONObject(json);
+			user.setId(obj.getString("id"));
+			user.setUsername(obj.getString("username"));
+			user.setRegTime(obj.getString("regtime"));
+			user.setOnline(obj.getInt("isonline") == 0 ? false : true);
+			user.setAvatar(obj.getString("avatar"));
+			// parse profile
+			profile = obj.getJSONObject("profile");
+			user.setEmail(profile.getString("email"));
+			user.setNickname(profile.getString("nickname"));
+			user.setName(profile.getString("name"));
+			user.setGender(profile.getString("gender"));
+			user.setAge(profile.getInt("age"));
+			user.setGrade(profile.getInt("grade"));
+			user.setUniversity(profile.getString("university"));
+			user.setMajor(profile.getString("major"));
 		} catch (Exception e) {
-			 e.printStackTrace();
-			 user = null;
-		} 
+			e.printStackTrace();
+			user = null;
+		}
 		return user;
 	}
+
 	/**
 	 * 解析一个用户列表的列表
-	 * @param jsonarray 用户列表json字符串
+	 * 
+	 * @param jsonarray
+	 *            用户列表json字符串
 	 * @return List<User>
 	 */
-	public static List<User> create_by_jsonarray(String jsonarray){
+	public static List<User> create_by_jsonarray(String jsonarray) {
 		List<User> list = new ArrayList<User>();
 		JSONObject obj = null;
 		JSONArray array = null;
 		try {
-			array =obj.getJSONArray("users");
-			for(int i=0;i<array.length();i++){
-	             list.add(create_by_json(array.getJSONObject(i).toString()));			
+			obj = new JSONObject(jsonarray);
+			array = obj.getJSONArray("users");
+			for (int i = 0; i < array.length(); i++) {
+				list.add(create_by_json(array.getJSONObject(i).toString()));
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();
 			list = null;
 		}
-		
+
 		return list;
 	}
 
@@ -106,9 +126,10 @@ public class User implements Serializable {
 	private String regTime;
 
 	/**
-	 * 性别
+	 * 性别<br>
+	 * <li>m = man ;f = female
 	 */
-	private int gender;
+	private String gender;
 
 	/**
 	 * 生日
@@ -156,11 +177,60 @@ public class User implements Serializable {
 	private List<MActivity> mActivitys;
 
 	// --------------------------------
-
+	/** 用戶名字 **/
+	private String name;
+	/** 专业 **/
+	private String major;
+	/** 用户id **/
+	private String id;
 	/**
 	 * 会员简介
 	 */
 	private String intro;
+	/** 毕业届数 (年份) **/
+	private int grade;
+	/** 大学 **/
+	private String university;
+	/** 昵称 **/
+	private String nickname;
+
+	public int getGrade() {
+		return grade;
+	}
+
+	public void setGrade(int grade) {
+		this.grade = grade;
+	}
+
+	public String getUniversity() {
+		return university;
+	}
+
+	public void setUniversity(String university) {
+		this.university = university;
+	}
+
+	public String getNickname() {
+		return nickname;
+	}
+
+	public void setNickname(String nickname) {
+		this.nickname = nickname;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	private int age;
 
 	public String getUsername() {
 		return username;
@@ -210,15 +280,14 @@ public class User implements Serializable {
 		this.regIp = regIp;
 	}
 
-	public int getGender() {
+	public String getGender() {
 		return gender;
 	}
 
-	public void setGender(int gender) {
+	public void setGender(String gender) {
 		this.gender = gender;
 	}
 
-	 
 	public String getSignature() {
 		return signature;
 	}
@@ -306,5 +375,29 @@ public class User implements Serializable {
 	public void setBrithday(String brithday) {
 		this.brithday = brithday;
 	}
- 
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMajor() {
+		return major;
+	}
+
+	public void setMajor(String major) {
+		this.major = major;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
 }

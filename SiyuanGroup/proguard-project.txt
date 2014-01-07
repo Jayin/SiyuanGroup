@@ -111,4 +111,6 @@
 -libraryjars libs/gson-2.2.4.jar
 -keep class com.google.gson.** {*;}
 -keep interface com.google.gson.** { *; }
+
+ 
  
