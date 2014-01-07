@@ -6,36 +6,12 @@
 
     <include layout="@layout/acty_allmember_header" />
 
-    <ViewFlipper
+    <android.support.v4.view.ViewPager
         android:id="@+id/acty_allmember_content"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <com.alumnigroup.widget.PullAndLoadListView
-                android:id="@+id/acty_allmember_lv_allmember"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white" >
-            </com.alumnigroup.widget.PullAndLoadListView>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" >
-
-            <com.alumnigroup.widget.PullAndLoadListView
-                android:id="@+id/acty_allmember_lv_myfriend"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white" >
-            </com.alumnigroup.widget.PullAndLoadListView>
-        </LinearLayout>
-    </ViewFlipper>
+    </android.support.v4.view.ViewPager>
 
     <include layout="@layout/acty_allmember_footer" />
 

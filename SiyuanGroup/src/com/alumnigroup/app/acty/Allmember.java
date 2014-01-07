@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.os.Bundle;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,14 +37,16 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class Allmember extends BaseActivity {
 	private TextView tv_title;
+
 	private View btn_back, btn_allmenmber, btn_myfriend;
 	private PullAndLoadListView lv_allmember, lv_myfriend;
 	private List<User> data_allmember = null, data_myfriend = null;
-	private ViewFlipper flipper;
+	private ViewPager viewpager;
+	private List<View> views = new ArrayList<View>();
 	private UserAPI api;
 	private int page = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
-	private int currentStatus = 0; //0代表从底部左边数起第一个处于显示状态
+	private int currentStatus = 0; // 0代表从底部左边数起第一个处于显示状态
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,24 +65,22 @@ public class Allmember extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		initFlipper();
+		initViewPager();
 		tv_title = (TextView) _getView(R.id.acty_head_tv_title);
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_allmenmber = _getView(R.id.acty_allmember_footer_allmember);
 		btn_myfriend = _getView(R.id.acty_allmember_footer_myfriend);
-		lv_allmember = (PullAndLoadListView) _getView(R.id.acty_allmember_lv_allmember);
-		lv_myfriend = (PullAndLoadListView) _getView(R.id.acty_allmember_lv_myfriend);
-        
+
 		btn_back.setOnClickListener(this);
 		btn_allmenmber.setOnClickListener(this);
 		btn_myfriend.setOnClickListener(this);
-		
+
 		adapter_allmember = new MemberAdapter(data_allmember);
 		adapter_myfriend = new MemberAdapter(data_myfriend);
-        
+
 		lv_allmember.setAdapter(adapter_allmember);
 		lv_myfriend.setAdapter(adapter_myfriend);
-		
+
 		lv_allmember.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -89,8 +92,10 @@ public class Allmember extends BaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
-						if(data!=null)L.i(new String(data));
-						if(err!=null)L.i(err.toString());
+						if (data != null)
+							L.i(new String(data));
+						if (err != null)
+							L.i(err.toString());
 						lv_allmember.onRefreshComplete();
 					}
 
@@ -121,8 +126,10 @@ public class Allmember extends BaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
-						if(data!=null)L.i(new String(data));
-						if(err!=null)L.i(err.toString());
+						if (data != null)
+							L.i(new String(data));
+						if (err != null)
+							L.i(err.toString());
 						lv_allmember.onLoadMoreComplete();
 					}
 
@@ -157,13 +164,30 @@ public class Allmember extends BaseActivity {
 
 			}
 		});
-	
+
 	}
 
-	private void initFlipper() {
-		flipper = (ViewFlipper) _getView(R.id.acty_allmember_content);
-		flipper.setInAnimation(getContext(), R.anim.push_right_in);
-		flipper.setOutAnimation(getContext(), R.anim.push_right_out);
+	private void initViewPager() {
+		viewpager = (ViewPager) _getView(R.id.acty_allmember_content);
+		View allmember = getLayoutInflater().inflate(
+				R.layout.frame_acty_allmember_allmember, null);
+		View myfriend = getLayoutInflater().inflate(
+				R.layout.frame_acty_allmember_myfriend, null);
+
+		lv_allmember = (PullAndLoadListView) allmember
+				.findViewById(R.id.acty_allmember_lv_allmember);
+		lv_myfriend = (PullAndLoadListView) myfriend
+				.findViewById(R.id.acty_allmember_lv_myfriend);
+
+		views.add(allmember);
+		views.add(myfriend);
+
+		viewpager.setAdapter(new MyPagerAdapter(views));
+		viewpager.setCurrentItem(0);
+
+		viewpager.setOnPageChangeListener(new MyOnPageChangeListener());
+		// viewpager.setInAnimation(getContext(), R.anim.push_right_in);
+		// viewpager.setOutAnimation(getContext(), R.anim.push_right_out);
 	}
 
 	@Override
@@ -173,15 +197,15 @@ public class Allmember extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_allmember_footer_allmember:
-			if(currentStatus==0)return;
+			viewpager.setCurrentItem(0);
 			tv_title.setText("全站会员");
-			flipper.showPrevious();
+			// flipper.showPrevious();
 			currentStatus = 0;
 			break;
 		case R.id.acty_allmember_footer_myfriend:
-			if(currentStatus==1)return;
+			viewpager.setCurrentItem(1);
 			tv_title.setText("我的好友");
-			flipper.showNext();
+			// flipper.showNext();
 			currentStatus = 1;
 			break;
 		default:
@@ -221,7 +245,7 @@ public class Allmember extends BaseActivity {
 				convertView = LayoutInflater.from(getContext()).inflate(
 						R.layout.item_lv_allmember, null);
 				h = new ViewHolder();
-				
+
 				h.avatar = (ImageView) convertView
 						.findViewById(R.id.item_lv_allmember_avatar);
 				h.online = (ImageView) convertView
@@ -232,21 +256,21 @@ public class Allmember extends BaseActivity {
 						.findViewById(R.id.item_lv_allmemeber_name);
 				h.major = (TextView) convertView
 						.findViewById(R.id.item_lv_allmemeber_major);
-                convertView.setTag(h);
+				convertView.setTag(h);
 			} else {
-                   h = (ViewHolder)convertView.getTag();
+				h = (ViewHolder) convertView.getTag();
 			}
 			User u = data.get(position);
 			ImageLoader loader = ImageLoader.getInstance();
-			loader.displayImage(RestClient.BASE_URL+u.getAvatar(), h.avatar);
-			h.grade.setText(u.getGrade()+"");
+			loader.displayImage(RestClient.BASE_URL + u.getAvatar(), h.avatar);
+			h.grade.setText(u.getGrade() + "");
 			h.name.setText(u.getName());
 			h.major.setText(u.getMajor());
-			if(u.isOnline()){
+			if (u.isOnline()) {
 				h.online.setVisibility(View.VISIBLE);
-			}else{
+			} else {
 				h.online.setVisibility(View.INVISIBLE);
-			}		
+			}
 			return convertView;
 		}
 
@@ -254,6 +278,58 @@ public class Allmember extends BaseActivity {
 			ImageView avatar, online;
 			TextView name, grade, major;
 			ImageLoader loader;
+		}
+	}
+
+	class MyPagerAdapter extends PagerAdapter {
+		private List<View> views;
+
+		public MyPagerAdapter(List<View> views) {
+			this.views = views;
+		}
+
+		@Override
+		public int getCount() {
+			return views.size();
+		}
+
+		@Override
+		public boolean isViewFromObject(View arg0, Object arg1) {
+			return arg0 == arg1;
+		}
+
+		// 删除卡片
+		@Override
+		public void destroyItem(ViewGroup container, int position, Object object) {
+			container.removeView(views.get(position));
+		}
+
+		// 实例化卡片
+		@Override
+		public Object instantiateItem(ViewGroup container, int position) {
+			container.addView(views.get(position));
+			return views.get(position);
+		}
+	}
+
+	class MyOnPageChangeListener implements OnPageChangeListener {
+
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+
+		}
+
+		@Override
+		public void onPageSelected(int position) {
+			if (position == 0)
+				tv_title.setText("全站会员");
+			if (position == 1)
+				tv_title.setText("我的好友");
 		}
 
 	}
