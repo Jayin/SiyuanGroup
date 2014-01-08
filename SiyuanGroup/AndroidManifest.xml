@@ -50,9 +50,18 @@
             android:name=".acty.Alldynamic"
             android:screenOrientation="portrait" >
         </activity>
-        <activity android:name=".acty.CircleList" >
+        <activity
+            android:name=".acty.CircleList"
+            android:screenOrientation="portrait" >
         </activity>
-      
+        <activity
+            android:name=".acty.Business"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.BusinessDetail"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

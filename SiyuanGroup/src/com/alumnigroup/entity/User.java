@@ -68,7 +68,7 @@ public class User implements Serializable {
 	 * 
 	 * @param jsonarray
 	 *            用户列表json字符串
-	 * @return List<User>
+	 * @return List<User> return null if parse faild
 	 */
 	public static List<User> create_by_jsonarray(String jsonarray) {
 		List<User> list = new ArrayList<User>();

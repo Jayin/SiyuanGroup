@@ -15,8 +15,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.ViewFlipper;
-
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
@@ -30,6 +28,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
+ * 全站会员
  * 
  * @author create by vector<br>
  *         coded by Jayin Ton
@@ -86,6 +85,7 @@ public class Allmember extends BaseActivity {
 			@Override
 			public void onRefresh() {
 				// page=1?
+				L.i("onRefresh--->load page=" + page + " load 1  ");
 				api.getAllMember(1, new AsyncHttpResponseHandler() {
 
 					@Override
@@ -97,6 +97,8 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onRefreshComplete();
+						L.i("Finish Faild : onRefresh--->load page=" + page
+								+ " load 1  ");
 					}
 
 					// page=1?
@@ -111,6 +113,8 @@ public class Allmember extends BaseActivity {
 						data_allmember.addAll(newData_allmember);
 						adapter_allmember.notifyDataSetChanged();
 						lv_allmember.onRefreshComplete();
+						L.i("Finish success! : onRefresh--->load page=" + page
+								+ " load 1  ");
 					}
 				});
 			}
@@ -120,8 +124,11 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
-				L.i("load more!!!!");
+				L.i("load more--->load page=" + page + "  page+1 ="
+						+ (page + 1));
 				api.getAllMember(page + 1, new AsyncHttpResponseHandler() {
+					
+					 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
@@ -131,19 +138,36 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onLoadMoreComplete();
+						L.i("Finish Faild:load more  --->load page=" + page
+								+ "  page+1 =" + (page + 1));
 					}
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						page++;
+
 						// L.i(new String(data));
 						String json = new String(data);// json array
 						List<User> newData_allmember = User
 								.create_by_jsonarray(json);
-						data_allmember.addAll(newData_allmember);
-						adapter_allmember.notifyDataSetChanged();
+						if (newData_allmember != null
+								&& newData_allmember.size() > 0) {
+							page++;
+							data_allmember.addAll(newData_allmember);
+							adapter_allmember.notifyDataSetChanged();
+
+						} else {
+							if (newData_allmember == null) {
+								toast("网络异常,解析错误");
+							}
+							if (newData_allmember.size() == 0) {
+								toast("没有更多了!");
+							}
+						}
+						L.i("Finish :load more--->load page=" + page
+								+ "  page+1 =" + (page + 1));
 						lv_allmember.onLoadMoreComplete();
+
 					}
 				});
 			}
@@ -186,8 +210,6 @@ public class Allmember extends BaseActivity {
 		viewpager.setCurrentItem(0);
 
 		viewpager.setOnPageChangeListener(new MyOnPageChangeListener());
-		// viewpager.setInAnimation(getContext(), R.anim.push_right_in);
-		// viewpager.setOutAnimation(getContext(), R.anim.push_right_out);
 	}
 
 	@Override
