@@ -62,6 +62,10 @@
             android:name=".acty.BusinessDetail"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.Communication"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
