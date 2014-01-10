@@ -38,7 +38,7 @@ import com.alumnigroup.utils.SDCardUtils;
  * 2.display()如果有缓存在先显示后下载 ,下载并显示广告 gone -> visable<br>
  * (已分离，每次都下载更新) 2.1.注意,这里默认是如果存在对应的缓存(根据文件名来判断)。就不去下载 <br>
  * 2.2.可以用 cleanCachePic()清楚缓存<br>
- * <strong>一般建议</strong><br>
+ * <strong>一般建议</strong><br> 
  * <strong><li>一般建议,设置3附图片</strong><br>
  * <strong><li>1.urls 从web获取,确定有新的时候，删除缓存再下载(操作比较麻烦)</strong><br>
  * <strong><li>2.urls固定死，每次先显示缓存

@@ -1,20 +1,15 @@
 package com.alumnigroup.app.acty;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.RemoteViews;
 
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.ADView;
 
 /**
@@ -29,6 +24,11 @@ public class Main extends BaseActivity implements OnClickListener {
 	private LinearLayout content;
 	private RelativeLayout parent_content;
 	private int width = 0, height = 0;;
+	
+	/**
+	 * 个人空间
+	 */
+	private View btnOneSpace;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +54,9 @@ public class Main extends BaseActivity implements OnClickListener {
 				"http://www.carnews.com/Files/Editor_Files/image/Lee/minor5.jpg.pagespeed.ce.XG7AxB1en9.jpg" };
 		adview.setURL(urls);
 		adview.display();
+		
+		btnOneSpace = _getView(R.id.frame_main_one_myspace);
+		btnOneSpace.setOnClickListener(this);
 
 	}
 
@@ -74,7 +77,19 @@ public class Main extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
+		int id = v.getId();
+		
+		Intent intent = new Intent();
+		
+		switch (id) {
+		case R.id.frame_main_one_myspace:
+			intent.setClass(Main.this, SpacePersonal.class);
+			startActivity(intent);
+			break;
 
+		default:
+			break;
+		}
 	}
 
 }

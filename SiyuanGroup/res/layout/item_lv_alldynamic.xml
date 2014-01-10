@@ -2,27 +2,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="6dp"
-    android:background="#ffffff"
-    android:orientation="horizontal" >
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="6dp" >
 
     <RelativeLayout
-        android:layout_width="42dp"
-        android:layout_height="42dp" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
 
         <ImageView
             android:id="@+id/item_lv_alldynamic_iv_portrait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
             android:layout_centerInParent="true"
+            android:scaleType="centerCrop"
             android:src="@drawable/aa_po" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:layout_width="220dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
-        android:layout_weight="0.79" >
+        android:layout_weight="1" >
 
         <TextView
             android:id="@+id/item_lv_alldynamic_tv_name"
@@ -42,7 +43,7 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/item_lv_alldynamic_tv_name"
             android:layout_marginTop="3dp"
-            android:text="有点深奥 //@小人物楚森:长姿势"
+            android:text="有点深奥 //@小人物楚森:长姿势有点深奥 //@小人物楚森:长姿势有点深奥 //@小人物楚森:长姿势有点深奥 //@小人物楚森:长姿势"
             android:textColor="@color/grey_lv_third"
             android:textSize="16sp" />
 
@@ -81,6 +82,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/item_lv_alldynamic_tv_transpond_content"
                 android:layout_marginTop="1dp"
+                android:scaleType="centerCrop"
                 android:src="@drawable/a_dynamic_1" />
 
             <ImageView
@@ -88,7 +90,9 @@
                 android:layout_width="70dp"
                 android:layout_height="50dp"
                 android:layout_alignTop="@+id/item_lv_alldynamic_iv_append1"
+                android:layout_marginLeft="2dp"
                 android:layout_toRightOf="@+id/item_lv_alldynamic_iv_append1"
+                android:scaleType="centerCrop"
                 android:src="@drawable/a_dynamic_1" />
 
             <ImageView
@@ -96,7 +100,9 @@
                 android:layout_width="70dp"
                 android:layout_height="50dp"
                 android:layout_alignTop="@+id/item_lv_alldynamic_iv_append2"
+                android:layout_marginLeft="2dp"
                 android:layout_toRightOf="@+id/item_lv_alldynamic_iv_append2"
+                android:scaleType="centerCrop"
                 android:src="@drawable/a_dynamic_1" />
         </RelativeLayout>
 

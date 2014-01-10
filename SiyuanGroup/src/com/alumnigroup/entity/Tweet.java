@@ -6,10 +6,14 @@ package com.alumnigroup.entity;
  *
  */
 public class Tweet {
-
+	int type = 2;
 	
 	
 	public int getType() {
+		return type;
+	}
+	
+	public int getType1() {
 		int i = 3;
 		
 		double random = Math.random();

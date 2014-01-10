@@ -100,6 +100,7 @@
 -keep interface android.support.v4.app.** { *; }
 -keep public class * extends android.support.v4.**
 -keep public class * extends android.app.Fragment
+ 
 
 # async-http
 -libraryjars   libs/android-async-http-1.4.4.jar
@@ -110,7 +111,4 @@
 #google gson
 -libraryjars libs/gson-2.2.4.jar
 -keep class com.google.gson.** {*;}
--keep interface com.google.gson.** { *; }
-
- 
- 
+-keep interface com.google.gson.** { *; } 

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/item_space_other_visitor_iv_portrait"
+        android:layout_width="55dp"
+        android:layout_height="55dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/aa_po" />
+
+    <TextView
+        android:id="@+id/item_space_other_visitor_tv_name"
+        android:paddingTop="7dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:text="黄廉温" />
+
+</LinearLayout>

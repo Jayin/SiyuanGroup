@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import com.alumnigroup.app.acty.Allmember;
 import com.alumnigroup.app.acty.Login;
+ 
 /**
  * 启动页面
  * @author Jayin Ton
@@ -24,8 +25,8 @@ public class AppStart extends BaseActivity  {
 			public void run() {
 				openActivity(Allmember.class);
 				closeActivity();
-				
 			}
+ 
 		}, 1000);
 	}
 

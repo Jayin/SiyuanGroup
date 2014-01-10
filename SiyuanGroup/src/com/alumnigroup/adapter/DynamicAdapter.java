@@ -27,7 +27,7 @@ public class DynamicAdapter extends BaseAdapter {
 	/**
 	 * 要适配的数据
 	 */
-	private List<Tweet> Dynamic;
+	private List<Tweet> dynamic;
 	private Context context;
 	
 	/**
@@ -54,18 +54,18 @@ public class DynamicAdapter extends BaseAdapter {
 	private LayoutInflater inflater = null;
 
 	public DynamicAdapter(List<Tweet> Dynamic, Context context) {
-		this.Dynamic = Dynamic;
+		this.dynamic = Dynamic;
 		this.context = context;
 		inflater = LayoutInflater.from(this.context);
 	}
 
 	public int getCount() {
-		return Dynamic.size();
+		return dynamic.size();
 	}
 
 	// 返回一个数据实体
 	public Object getItem(int position) {
-		return Dynamic.get(position);
+		return dynamic.get(position);
 	}
 
 	public long getItemId(int position) {
@@ -116,7 +116,7 @@ public class DynamicAdapter extends BaseAdapter {
 	@Override
 	public int getItemViewType(int position) {
 
-		Tweet tweet = Dynamic.get(position);
+		Tweet tweet = dynamic.get(position);
 		int type = tweet.getType();
 		return type;
 	}

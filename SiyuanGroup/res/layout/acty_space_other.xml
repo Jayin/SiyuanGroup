@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/acty_space_other_header" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbarStyle="outsideOverlay" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <include
+                android:id="@+id/acty_space_other_top"
+                layout="@layout/frame_acty_space_other_top" />
+
+            <include
+                android:id="@+id/acty_space_other_personaldata"
+                layout="@layout/frame_acty_space_other_personaldata" />
+
+            <include
+                android:id="@+id/acty_space_other_keyword"
+                layout="@layout/frame_acty_space_other_keyword" />
+
+            <include
+                android:id="@+id/acty_space_other_album"
+                layout="@layout/frame_acty_space_other_album" />
+
+            <include
+                android:id="@+id/acty_space_other_new_dynamic"
+                layout="@layout/frame_acty_space_other_new_dynamic" />
+            
+            <include
+                android:id="@+id/acty_space_other_visitor"
+                layout="@layout/frame_acty_space_other_visitor" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
