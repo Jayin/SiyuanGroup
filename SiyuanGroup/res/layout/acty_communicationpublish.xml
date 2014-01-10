@@ -52,7 +52,7 @@
                 <TextView
                     style="@style/TextView.black"
                     android:padding="6dp"
-                    android:text="分享到" />
+                    android:text="权限" />
 
                 <TextView
                     style="@style/TextView.base"
