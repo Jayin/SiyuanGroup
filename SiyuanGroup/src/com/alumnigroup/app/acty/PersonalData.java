@@ -23,9 +23,10 @@ public class PersonalData extends BaseActivity {
 	private ListView lvContent;
 	private View btnBack;
 	private TextView tvTitle;
-	
+
 	private ArrayList<SpaceOtherPersonalDataAdapter.PersonalData> personalDatas;
 	private SpaceOtherPersonalDataAdapter adapterPersonalData;
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_personaldata);
@@ -34,28 +35,39 @@ public class PersonalData extends BaseActivity {
 	}
 
 	protected void initData() {
-		personalDatas = new ArrayList<SpaceOtherPersonalDataAdapter.PersonalData>(){{
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-			add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校", "五邑大学"));
-		}};
+		personalDatas = new ArrayList<SpaceOtherPersonalDataAdapter.PersonalData>() {
+			{
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+				add(new SpaceOtherPersonalDataAdapter.PersonalData("毕业学校",
+						"五邑大学"));
+			}
+		};
 	}
 
 	protected void initLayout() {
 		lvContent = (ListView) _getView(R.id.acty_personaldata_lv_content);
-		adapterPersonalData = new SpaceOtherPersonalDataAdapter(personalDatas, this);
+		adapterPersonalData = new SpaceOtherPersonalDataAdapter(personalDatas,
+				this);
 		lvContent.setAdapter(adapterPersonalData);
-		
+
 		btnBack = _getView(R.id.acty_head_btn_back);
 		btnBack.setOnClickListener(this);
-		
+
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		finish();
