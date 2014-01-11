@@ -97,6 +97,7 @@ public class IssuesAPI {
 	public void updateIssue(int issueId, String title, String body,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
+		params.add("id", issueId+"");
 		if (title != null)
 			params.add("title", title);
 		if (body != null)
@@ -110,7 +111,7 @@ public class IssuesAPI {
 	 */
 	public void deleteIssue(int issueid,AsyncHttpResponseHandler responseHandler){
 		RequestParams params = new RequestParams();
-		params.add("Id", issueid+"");
+		params.add("id", issueid+"");
 		RestClient.post("/api/issues/delete", params, responseHandler);
 	}
 }

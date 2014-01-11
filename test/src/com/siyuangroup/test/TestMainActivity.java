@@ -92,7 +92,7 @@ public class TestMainActivity extends Activity {
 
 	public void delete() {
 		IssuesAPI api = new IssuesAPI();
-		api.deleteIssue(16, new AsyncHttpResponseHandler() {
+		api.deleteIssue(604, new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 				tv.setText(new String(arg2));
@@ -102,7 +102,7 @@ public class TestMainActivity extends Activity {
 
 	public void update() {
 		IssuesAPI api = new IssuesAPI();
-		api.updateIssue(16, "你妹！", "nice", new AsyncHttpResponseHandler() {
+		api.updateIssue(604, "你妹！", "nice", new AsyncHttpResponseHandler() {
 			@Override
 			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
 				tv.setText(new String(arg2));
