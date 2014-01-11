@@ -14,8 +14,8 @@ import com.api.UserAPI;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.utils.L;
-
-public class TestMainActivity extends Activity {
+//test issue
+public class IssueTest extends Activity {
 
 	private View test1, test2, test3;
 	private TextView tv;
@@ -29,39 +29,8 @@ public class TestMainActivity extends Activity {
 		test2 = findViewById(R.id.button2);
 		test3 = findViewById(R.id.button3);
 		tv = (TextView) findViewById(R.id.textview1);
-		final UserAPI _api = new UserAPI();
-		_api.regist("test1", "12345678", "jayinton", "g@py.com",
-				new AsyncHttpResponseHandler() {
-					@Override
-					public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-						L.i("regist ok!");
-						_api.login("test1", "12345678",
-								new AsyncHttpResponseHandler() {
-									@Override
-									public void onSuccess(int arg0,
-											Header[] arg1, byte[] arg2) {
-										L.i("login success!");
-									}
-									
-									@Override
-									public void onFailure(int arg0,
-											Header[] arg1, byte[] arg2,
-											Throwable arg3) {
-										L.i("login Failure!");
-									}
-								});
-						
-						
-						 
-					}
-
-					@Override
-					public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-							Throwable arg3) {
-						L.i("regist Failure!");
-					}
-				});
-
+		
+        login();
 		test1.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -139,6 +108,39 @@ public class TestMainActivity extends Activity {
 				tv.setText(new String(arg2));
 			}
 		});
+	}
+	
+	private void login(){
+		final UserAPI _api = new UserAPI();
+		_api.regist("test1", "12345678", "jayinton", "g@py.com",
+				new AsyncHttpResponseHandler() {
+					@Override
+					public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+						L.i("regist ok!");
+						_api.login("test1", "12345678",
+								new AsyncHttpResponseHandler() {
+									@Override
+									public void onSuccess(int arg0,
+											Header[] arg1, byte[] arg2) {
+										L.i("login success!");
+									}
+
+									@Override
+									public void onFailure(int arg0,
+											Header[] arg1, byte[] arg2,
+											Throwable arg3) {
+										L.i("login Failure!");
+									}
+								});
+
+					}
+
+					@Override
+					public void onFailure(int arg0, Header[] arg1, byte[] arg2,
+							Throwable arg3) {
+						L.i("regist Failure!");
+					}
+				});
 	}
 
 }
