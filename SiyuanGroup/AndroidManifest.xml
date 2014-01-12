@@ -74,6 +74,45 @@
             android:name=".acty.CommunicationDetail"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.Setting"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.Introduce"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.Tickling"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.About"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.Message"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.PersonalData"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.AlbumDisplay"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.SpacePersonal"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.AddFriend"
+            android:screenOrientation="portrait"
+            android:theme="@style/Translucent_NoTitle" >
+        </activity>
+        <activity android:name=".acty.SpaceOther" >
+        </activity>
     </application>
 
 </manifest>

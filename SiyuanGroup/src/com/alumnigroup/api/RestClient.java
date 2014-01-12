@@ -18,6 +18,8 @@ public class RestClient {
 	public static final String BASE_URL = "http://10.10.65.165:8088";
 	private static final int HTTP_Timeout = 6*1000; //链接超时
 	public static CookieStore cookieStore;
+	
+	private RestClient(){}
     
 	private static AsyncHttpClient client = new AsyncHttpClient();
     /**

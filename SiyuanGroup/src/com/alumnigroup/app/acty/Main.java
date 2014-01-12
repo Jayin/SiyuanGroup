@@ -24,11 +24,21 @@ public class Main extends BaseActivity implements OnClickListener {
 	private LinearLayout content;
 	private RelativeLayout parent_content;
 	private int width = 0, height = 0;;
-	
+
 	/**
 	 * 个人空间
 	 */
 	private View btnOneSpace;
+
+	/**
+	 * 设置
+	 */
+	private View btnSetting;
+	
+	/**
+	 * 消息
+	 */
+	private View btnMessage;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +64,15 @@ public class Main extends BaseActivity implements OnClickListener {
 				"http://www.carnews.com/Files/Editor_Files/image/Lee/minor5.jpg.pagespeed.ce.XG7AxB1en9.jpg" };
 		adview.setURL(urls);
 		adview.display();
-		
+
 		btnOneSpace = _getView(R.id.frame_main_one_myspace);
 		btnOneSpace.setOnClickListener(this);
+		
+		btnSetting = _getView(R.id.frame_main_one_setting);
+		btnSetting.setOnClickListener(this);
+		
+		btnMessage = _getView(R.id.frame_main_one_message);
+		btnMessage.setOnClickListener(this);
 
 	}
 
@@ -78,12 +94,22 @@ public class Main extends BaseActivity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
-		
+
 		Intent intent = new Intent();
-		
+
 		switch (id) {
 		case R.id.frame_main_one_myspace:
 			intent.setClass(Main.this, SpacePersonal.class);
+			startActivity(intent);
+			break;
+			
+		case R.id.frame_main_one_setting:
+			intent.setClass(Main.this, Setting.class);
+			startActivity(intent);
+			break;
+			
+		case R.id.frame_main_one_message:
+			intent.setClass(Main.this, Message.class);
 			startActivity(intent);
 			break;
 
