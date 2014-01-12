@@ -5,8 +5,7 @@ package com.alumnigroup.app;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.alumnigroup.app.acty.Allmember;
-import com.alumnigroup.app.acty.Login;
+import com.alumnigroup.app.acty.Main;
  
 /**
  * 启动页面
@@ -23,7 +22,7 @@ public class AppStart extends BaseActivity  {
 			
 			@Override
 			public void run() {
-				openActivity(Allmember.class);
+				openActivity(Main.class);
 				closeActivity();
 			}
  
