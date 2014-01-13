@@ -34,11 +34,12 @@ public class Main extends BaseActivity implements OnClickListener {
 	 * 设置
 	 */
 	private View btnSetting;
-	
+
 	/**
 	 * 消息
 	 */
 	private View btnMessage;
+	private View btn_allMember;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +68,15 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		btnOneSpace = _getView(R.id.frame_main_one_myspace);
 		btnOneSpace.setOnClickListener(this);
-		
+
 		btnSetting = _getView(R.id.frame_main_one_setting);
 		btnSetting.setOnClickListener(this);
-		
+
 		btnMessage = _getView(R.id.frame_main_one_message);
 		btnMessage.setOnClickListener(this);
+
+		btn_allMember = _getView(R.id.frame_main_one_allmember);
+		btn_allMember.setOnClickListener(this);
 
 	}
 
@@ -102,15 +106,18 @@ public class Main extends BaseActivity implements OnClickListener {
 			intent.setClass(Main.this, SpacePersonal.class);
 			startActivity(intent);
 			break;
-			
+
 		case R.id.frame_main_one_setting:
 			intent.setClass(Main.this, Setting.class);
 			startActivity(intent);
 			break;
-			
+
 		case R.id.frame_main_one_message:
 			intent.setClass(Main.this, Message.class);
 			startActivity(intent);
+			break;
+		case R.id.frame_main_one_allmember:
+			openActivity(Allmember.class);
 			break;
 
 		default:
