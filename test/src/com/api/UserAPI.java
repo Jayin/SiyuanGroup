@@ -68,6 +68,24 @@ public class UserAPI {
 	}
 
 	/**
+	 * 重置密码
+	 * 
+	 * @param oldpsw
+	 *            旧密码
+	 * @param newpsw
+	 *            新密码
+	 * @param responseHandler
+	 *            处理器
+	 */
+	public void resetPassword(String oldpsw, String newpsw,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("password", oldpsw);
+		params.add("new-password", newpsw);
+		RestClient.post("/api/users/password/reset", params, responseHandler);
+	}
+
+	/**
 	 * 精确查找用户<br>
 	 * id int 用户id <br>
 	 * username string 用户名 <br>
@@ -99,4 +117,5 @@ public class UserAPI {
 			page = 1;
 		find(new RequestParams("page", page + ""), responseHandler);
 	}
+
 }

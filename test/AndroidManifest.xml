@@ -31,6 +31,8 @@
         <activity android:name=".GroupTest" >
         </activity>
         <activity android:name=".ActivityTest" >
+        </activity>
+        <activity android:name=".UserAPITest" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
