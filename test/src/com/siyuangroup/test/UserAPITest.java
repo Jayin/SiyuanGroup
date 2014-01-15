@@ -57,18 +57,7 @@ public class UserAPITest extends BaseTestActivity {
 
 	@Override
 	public void onInit() {
-		
-		String json = "{\"test\":NULL}";
-		JSONObject obj;
-		try {
-			obj = new JSONObject(json);
-			 L.i("json -->"+obj.toString());
-			 L.i("jsonOjb -->"+json);
-			  L.i("isNull() -->"+obj.isNull("go"));
-			  L.i("get()--->"+obj.get("go"));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	 
       
 	}
 
