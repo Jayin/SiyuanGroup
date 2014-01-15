@@ -162,6 +162,7 @@ public class Allmember extends BaseActivity {
                                                         }
                                                         if (newData_allmember.size() == 0) {
                                                                 toast("没有更多了!");
+                                                                lv_allmember.canLoadMore(false);
                                                         }
                                                 }
                                                 L.i("Finish :load more--->load page=" + page
@@ -283,7 +284,14 @@ public class Allmember extends BaseActivity {
                                 h = (ViewHolder) convertView.getTag();
                         }
                         User u = data.get(position);
+                        if(u==null)L.i(position+"u is null");
                         ImageLoader loader = ImageLoader.getInstance();
+                        if( u.getAvatar()==null)L.i(" u.getAvatar() is null");
+                        else{
+                        	L.i(" u.getAvatar() is  "+u.getAvatar());
+                        }
+                        if(h.avatar==null)L.i("h.avatar");
+                        if(loader==null)L.i("loader is null");
                         loader.displayImage(RestClient.BASE_URL + u.getAvatar(), h.avatar);
                         h.grade.setText(u.getGrade() + "");
                         h.name.setText(u.getName());
