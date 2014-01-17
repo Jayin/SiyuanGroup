@@ -8,8 +8,8 @@ import com.loopj.android.http.RequestParams;
 /**
  * 活动系统API
  * 
- * @author Jayin Ton 疑问：1.find() id都大于0?
- *                       2.加入后无任何东西返回太不科学了= =
+ * @author Jayin Ton 
+ *                      
  */
 public class ActivityAPI {
 	public ActivityAPI() {
@@ -70,7 +70,9 @@ public class ActivityAPI {
 		RestClient.post("/api/activities/join", params, responseHandler);
 	}
 	
-	
+	public void accept(){
+		
+	}
 	
 	
 	

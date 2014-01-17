@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -89,4 +90,8 @@ public abstract class BaseTestActivity extends Activity {
 	public abstract void onInit();
 
 	public abstract String setTitle();
+	
+	public void toast(String text){
+		Toast.makeText(this, text, 1).show();
+	}
 }
