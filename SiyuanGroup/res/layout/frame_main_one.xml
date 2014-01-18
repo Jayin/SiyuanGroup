@@ -46,7 +46,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/frame_main_one_discuss"
+            android:id="@+id/frame_main_one_communication"
             style="@style/RelativeLayout.frame_main_item" >
 
             <ImageView

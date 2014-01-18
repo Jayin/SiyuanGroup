@@ -39,7 +39,8 @@ public class Main extends BaseActivity implements OnClickListener {
 	 * 消息
 	 */
 	private View btnMessage;
-	private View btn_allMember;
+	private View btn_allMember,btn_communication;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -77,6 +78,9 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		btn_allMember = _getView(R.id.frame_main_one_allmember);
 		btn_allMember.setOnClickListener(this);
+		
+		btn_communication =_getView(R.id.frame_main_one_communication);
+		btn_communication.setOnClickListener(this);
 
 	}
 
@@ -119,7 +123,9 @@ public class Main extends BaseActivity implements OnClickListener {
 		case R.id.frame_main_one_allmember:
 			openActivity(Allmember.class);
 			break;
-
+		case R.id.frame_main_one_communication:
+			openActivity(Communication.class);
+			break;
 		default:
 			break;
 		}

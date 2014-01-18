@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
@@ -37,12 +39,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class Allmember extends BaseActivity {
 	private TextView tv_title;
-
-	private View btn_back, btn_allmenmber, btn_myfriend;
+	private View btn_back, btn_allmenmber, btn_myfriend,btn_pressed;
 	private PullAndLoadListView lv_allmember, lv_myfriend;
 	private List<User> data_allmember = null, data_myfriend = null;
 	private ViewPager viewpager;
-	private List<View> views = new ArrayList<View>();
 	private UserAPI api;
 	private int page = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
@@ -54,33 +54,10 @@ public class Allmember extends BaseActivity {
 		setContentView(R.layout.acty_allmember);
 		initData();
 		initLayout();
+		initController();
 	}
 
-	@Override
-	protected void initData() {
-		api = new UserAPI();
-		data_allmember = new ArrayList<User>();
-		data_myfriend = new ArrayList<User>();
-	}
-
-	@Override
-	protected void initLayout() {
-		initViewPager();
-		tv_title = (TextView) _getView(R.id.acty_head_tv_title);
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_allmenmber = _getView(R.id.acty_allmember_footer_allmember);
-		btn_myfriend = _getView(R.id.acty_allmember_footer_myfriend);
-
-		btn_back.setOnClickListener(this);
-		btn_allmenmber.setOnClickListener(this);
-		btn_myfriend.setOnClickListener(this);
-
-		adapter_allmember = new MemberAdapter(data_allmember);
-		adapter_myfriend = new MemberAdapter(data_myfriend);
-
-		lv_allmember.setAdapter(adapter_allmember);
-		lv_myfriend.setAdapter(adapter_myfriend);
-
+	private void initController() {
 		lv_allmember.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -194,7 +171,34 @@ public class Allmember extends BaseActivity {
 
 			}
 		});
+	}
 
+	@Override
+	protected void initData() {
+		api = new UserAPI();
+		data_allmember = new ArrayList<User>();
+		data_myfriend = new ArrayList<User>();
+	}
+
+	@Override
+	protected void initLayout() {
+		initViewPager();
+		tv_title = (TextView) _getView(R.id.acty_head_tv_title);
+		btn_back = _getView(R.id.acty_head_btn_back);
+		btn_allmenmber = _getView(R.id.acty_allmember_footer_allmember);
+		btn_myfriend = _getView(R.id.acty_allmember_footer_myfriend);
+		
+		btn_pressed = btn_allmenmber;
+
+		btn_back.setOnClickListener(this);
+		btn_allmenmber.setOnClickListener(this);
+		btn_myfriend.setOnClickListener(this);
+
+		adapter_allmember = new MemberAdapter(data_allmember);
+		adapter_myfriend = new MemberAdapter(data_myfriend);
+
+		lv_allmember.setAdapter(adapter_allmember);
+		lv_myfriend.setAdapter(adapter_myfriend);
 	}
 
 	private void initViewPager() {
@@ -208,11 +212,11 @@ public class Allmember extends BaseActivity {
 				.findViewById(R.id.acty_allmember_lv_allmember);
 		lv_myfriend = (PullAndLoadListView) myfriend
 				.findViewById(R.id.acty_allmember_lv_myfriend);
-
+		List<View> views = new ArrayList<View>();
 		views.add(allmember);
 		views.add(myfriend);
 
-		viewpager.setAdapter(new MyPagerAdapter(views));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views));
 		viewpager.setCurrentItem(0);
 
 		viewpager.setOnPageChangeListener(new MyOnPageChangeListener());
@@ -318,36 +322,7 @@ public class Allmember extends BaseActivity {
 		}
 	}
 
-	class MyPagerAdapter extends PagerAdapter {
-		private List<View> views;
-
-		public MyPagerAdapter(List<View> views) {
-			this.views = views;
-		}
-
-		@Override
-		public int getCount() {
-			return views.size();
-		}
-
-		@Override
-		public boolean isViewFromObject(View arg0, Object arg1) {
-			return arg0 == arg1;
-		}
-
-		// 删除卡片
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView(views.get(position));
-		}
-
-		// 实例化卡片
-		@Override
-		public Object instantiateItem(ViewGroup container, int position) {
-			container.addView(views.get(position));
-			return views.get(position);
-		}
-	}
+	
 
 	class MyOnPageChangeListener implements OnPageChangeListener {
 
@@ -376,6 +351,5 @@ public class Allmember extends BaseActivity {
 			}
 			
 		}
-
 	}
 }
