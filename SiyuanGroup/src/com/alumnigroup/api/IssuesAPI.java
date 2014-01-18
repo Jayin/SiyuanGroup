@@ -110,7 +110,7 @@ public class IssuesAPI {
 	}
 	/**
 	 * 话题详情
-	 * @param id issueid h
+	 * @param id issueid 
 	 * @param responseHandler 处理器
 	 */
 	public void commentIssue(int id,String body,AsyncHttpResponseHandler responseHandler){
