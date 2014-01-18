@@ -25,12 +25,16 @@
         <uses-library android:name="android.test.runner" />
 
         <activity
-            android:name="com.siyuangroup.test.IssueTest"
+            android:name="com.siyuangroup.test.IssueTest1"
             android:label="@string/app_name" >
         </activity>
         <activity android:name=".GroupTest" >
         </activity>
         <activity android:name=".ActivityTest" >
+        </activity>
+        <activity android:name=".UserAPITest" >
+        </activity>
+        <activity android:name=".IssueTest" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

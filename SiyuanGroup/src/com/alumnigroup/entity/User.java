@@ -10,6 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.gson.JsonObject;
+import com.alumnigroup.utils.JsonUtils;
+
 
 import android.widget.ImageView;
 
@@ -40,12 +42,25 @@ public class User implements Serializable {
                 JSONObject obj = null;
                 JSONObject profile = null;
                 try {
+                try {   
+                	    JsonUtils j = new JsonUtils();
                         obj = new JSONObject(json);
                         user.setId(obj.getString("id"));
                         user.setUsername(obj.getString("username"));
                         user.setRegTime(obj.getString("regtime"));
                         user.setOnline(obj.getInt("isonline") == 0 ? false : true);
                         user.setAvatar(obj.getString("avatar"));
+//                        user.setId(obj.getString("id"));
+//                        user.setUsername(obj.getString("username"));
+//                        user.setRegTime(obj.getString("regtime"));
+//                        user.setOnline(obj.getInt("isonline") == 0 ? false : true);
+//                        user.setAvatar(obj.getString("avatar"));
+                        
+                        user.setId(j.getString(obj,"id"));
+                        user.setUsername(j.getString(obj,"username"));
+                        user.setRegTime(j.getString(obj,"regtime"));
+                        user.setOnline(j.getInt(obj,"isonline") == 0 ? false : true);
+                        user.setAvatar(j.getString(obj,"avatar"));
                         // parse profile
                         profile = obj.getJSONObject("profile");
                         user.setEmail(profile.getString("email"));
@@ -56,6 +71,22 @@ public class User implements Serializable {
                         user.setGrade(profile.getInt("grade"));
                         user.setUniversity(profile.getString("university"));
                         user.setMajor(profile.getString("major"));
+//                        user.setEmail(profile.getString("email"));
+//                        user.setNickname(profile.getString("nickname"));
+//                        user.setName(profile.getString("name"));
+//                        user.setGender(profile.getString("gender"));
+//                        user.setAge(profile.getInt("age"));
+//                        user.setGrade(profile.getInt("grade"));
+//                        user.setUniversity(profile.getString("university"));
+//                        user.setMajor(profile.getString("major"));
+                        user.setEmail(j.getString(profile,"email"));
+                        user.setNickname(j.getString(profile,"nickname"));
+                        user.setName(j.getString(profile,"name"));
+                        user.setGender(j.getString(profile,"gender"));
+                        user.setAge(j.getInt(profile,"age"));
+                        user.setGrade(j.getInt(profile,"grade"));
+                        user.setUniversity(j.getString(profile,"university"));
+                        user.setMajor(j.getString(profile,"major"));
                 } catch (Exception e) {
                         e.printStackTrace();
                         user = null;

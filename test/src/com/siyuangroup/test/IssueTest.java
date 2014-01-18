@@ -2,145 +2,130 @@ package com.siyuangroup.test;
 
 import org.apache.http.Header;
 
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.TextView;
-
 import com.api.IssuesAPI;
-import com.api.RestClient;
-import com.api.UserAPI;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.utils.L;
-//test issue
-public class IssueTest extends Activity {
+import com.utils.JsonUtils;
+import com.utils.TempLogin;
 
-	private View test1, test2, test3;
-	private TextView tv;
+public class IssueTest extends BaseTestActivity {
+  private int page=1;
+	@Override
+	public void test1Click() {
+         //post();
+		 //search("好饿了啊！！！",null);
+		 view(106);
+	}
+
+	private void view(int id) {
+		 IssuesAPI api = new IssuesAPI();
+		 api.view(id, new AsyncHttpResponseHandler(){
+			 @Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			    String json = new String(arg2);
+			    if(JsonUtils.isOK(json)){
+			    	print(new String(arg2));
+			    }
+			    else{
+			    	print("error:\n"+JsonUtils.getErrorString(json));
+			    }
+			}
+		 });
+	}
+
+	private void post() {
+		   IssuesAPI api = new IssuesAPI();
+	       String title="我好饿啊！";
+	       String body = "RT";
+	       api.postIssue(title, body, new Response());
+		
+	}
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_test_main);
+	public void test2Click() {
+		  
 
-		test1 = findViewById(R.id.button1);
-		test2 = findViewById(R.id.button2);
-		test3 = findViewById(R.id.button3);
-		tv = (TextView) findViewById(R.id.textview1);
+		//   getIssueList();
+		update(106,"好饿了啊！！！","let's go");
+		   
+	}
+  
+
+	private void update(int issueId, String title, String body) {
+		IssuesAPI api = new IssuesAPI();
+		api.updateIssue(issueId, title, body, new Response());
+	    
+	}
+
+	private void getIssueList() {
+		 IssuesAPI api = new IssuesAPI();
+		 api.getIssueList(page++, new Response());
 		
-        login();
-		test1.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-
-				// getIssueList();
-				// search(1, null, "ni");
-				post();
-
-			}
-		});
-
-		test2.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				update();
-			}
-		});
-		test3.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				delete();
-			}
-		});
 	}
 
-	public void delete() {
+	@Override
+	public void test3Click() {
+           //search("我好饿啊！",null);
+		comment(106,"要一起去吃饭？");
+	}
+
+	private void comment(int issueid, String content) {
+		 IssuesAPI api = new IssuesAPI();
+		 api.commentIssue(issueid, content, new Response());
+		
+	}
+    
+	private void search(String title, String body) {
+		 IssuesAPI api = new IssuesAPI();
+         api.search(1, title, body,  new Response());		
+	}
+
+	@Override
+	public void test4Click() {
+//     Login();
 		IssuesAPI api = new IssuesAPI();
-		api.deleteIssue(604, new AsyncHttpResponseHandler() {
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				tv.setText(new String(arg2));
-			}
-		});
+		api.deleteIssue(106, new Response());
 	}
 
-	public void update() {
-		IssuesAPI api = new IssuesAPI();
-		api.updateIssue(604, "你妹！", "nice", new AsyncHttpResponseHandler() {
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				tv.setText(new String(arg2));
-			}
-		});
+	private void Login() {
+		//TempLogin.register();
+		 TempLogin.login();
+		
 	}
 
-	public void post() {
-		IssuesAPI api = new IssuesAPI();
-		api.postIssue("jayint", "碉堡了是不？", new AsyncHttpResponseHandler() {
+	@Override
+	public void onInit() {
 
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				tv.setText(new String(arg2));
-			}
-		});
 	}
 
-	protected void search(int page, String title, String body) {
-		IssuesAPI api = new IssuesAPI();
-		api.search(page, title, body, new AsyncHttpResponseHandler() {
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				tv.setText(new String(arg2));
-			}
-		});
+	@Override
+	public String setTitle() {
+		return "Issue api test";
 	}
 
-	public void getIssueList() {
-		IssuesAPI api = new IssuesAPI();
-		api.getIssueList(1, new AsyncHttpResponseHandler() {
-			@Override
-			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-				tv.setText(new String(arg2));
-			}
-		});
+	@Override
+	public String test1Title() {
+		//return "发布";
+		return "查看帖子";
 	}
-	
-	private void login(){
-		final UserAPI _api = new UserAPI();
-		_api.regist("test1", "12345678", "jayinton", "g@py.com",
-				new AsyncHttpResponseHandler() {
-					@Override
-					public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
-						L.i("regist ok!");
-						_api.login("test1", "12345678",
-								new AsyncHttpResponseHandler() {
-									@Override
-									public void onSuccess(int arg0,
-											Header[] arg1, byte[] arg2) {
-										L.i("login success!");
-									}
 
-									@Override
-									public void onFailure(int arg0,
-											Header[] arg1, byte[] arg2,
-											Throwable arg3) {
-										L.i("login Failure!");
-									}
-								});
-
-					}
-
-					@Override
-					public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-							Throwable arg3) {
-						L.i("regist Failure!");
-					}
-				});
+	@Override
+	public String test2Title() {
+		return "更新";
+		//return "getIssueList";
 	}
+
+	@Override
+	public String test3Title() {
+		return "评论";
+		//return "search";
+	}
+
+	@Override
+	public String test4Title() {
+		 return "删除";
+		//return "Login";
+	}
+
+ 
 
 }

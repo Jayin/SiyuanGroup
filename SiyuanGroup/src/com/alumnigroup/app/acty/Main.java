@@ -16,6 +16,7 @@ import com.alumnigroup.widget.ADView;
  * 主界面
  * 
  * @author Jayin Ton
+ * @since 2013.12.11;
  * @since 2013.12.11
  * 
  */
@@ -39,6 +40,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	 * 消息
 	 */
 	private View btnMessage;
+
 	/**
 	 * 全站会员
 	 */

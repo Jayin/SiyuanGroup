@@ -195,6 +195,8 @@ public class Allmember extends BaseActivity {
                 
                 lv_allmember.setOnItemClickListener(new OnItemClickListener() {
 
+        }
+
 					@Override
 					/**
 					 * 单击事件，传递整个对象
