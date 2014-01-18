@@ -62,6 +62,10 @@ public abstract class BaseTestActivity extends Activity {
 		_setTitle(test4, test4Title());
 		
 	}
+	
+	public void print(String content){
+		tv.setText(content);
+	}
 
 	public void _setTitle(String title) {
 		if (title != null)

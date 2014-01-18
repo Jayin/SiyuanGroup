@@ -109,4 +109,30 @@ public class GroupTest extends BaseTestActivity {
 		return "GroupAPI test";
 	}
 
+	@Override
+	public String test1Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String test2Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String test3Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String test4Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	 
+
 }

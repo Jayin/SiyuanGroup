@@ -1,12 +1,7 @@
 package com.siyuangroup.test;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.api.UserAPI;
-import com.google.gson.JsonObject;
-import com.utils.L;
 
 public class UserAPITest extends BaseTestActivity {
 	private String username = "test11";
@@ -65,6 +60,32 @@ public class UserAPITest extends BaseTestActivity {
 	public String setTitle() {
 		return "UserApiTest";
 	}
+
+	@Override
+	public String test1Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String test2Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String test3Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String test4Title() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+ 
 
 	
 

@@ -1,20 +1,35 @@
 package com.siyuangroup.test;
 
+import org.apache.http.Header;
+
 import com.api.IssuesAPI;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.utils.JsonUtils;
 import com.utils.TempLogin;
 
 public class IssueTest extends BaseTestActivity {
   private int page=1;
 	@Override
 	public void test1Click() {
-       // post();
-		//search("好饿了啊！！！",null);
-		view(106);
+         //post();
+		 //search("好饿了啊！！！",null);
+		 view(106);
 	}
 
 	private void view(int id) {
 		 IssuesAPI api = new IssuesAPI();
-		 api.view(id, new Response());
+		 api.view(id, new AsyncHttpResponseHandler(){
+			 @Override
+			public void onSuccess(int arg0, Header[] arg1, byte[] arg2) {
+			    String json = new String(arg2);
+			    if(JsonUtils.isOK(json)){
+			    	print(new String(arg2));
+			    }
+			    else{
+			    	print("error:\n"+JsonUtils.getErrorString(json));
+			    }
+			}
+		 });
 	}
 
 	private void post() {
@@ -58,7 +73,7 @@ public class IssueTest extends BaseTestActivity {
 		 api.commentIssue(issueid, content, new Response());
 		
 	}
-
+    
 	private void search(String title, String body) {
 		 IssuesAPI api = new IssuesAPI();
          api.search(1, title, body,  new Response());		
@@ -66,9 +81,9 @@ public class IssueTest extends BaseTestActivity {
 
 	@Override
 	public void test4Click() {
-      //  Login();
+//     Login();
 		IssuesAPI api = new IssuesAPI();
-		api.deleteIssue(107, new Response());
+		api.deleteIssue(106, new Response());
 	}
 
 	private void Login() {
@@ -107,7 +122,7 @@ public class IssueTest extends BaseTestActivity {
 
 	@Override
 	public String test4Title() {
-		return "删除";
+		 return "删除";
 		//return "Login";
 	}
 
