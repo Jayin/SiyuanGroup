@@ -78,10 +78,12 @@ public class GroupTest extends BaseTestActivity {
 	@Override
 	public void test4Click() {
 //        toast("login");
-       TempLogin.register();
-        TempLogin.login();
-		joinGroup(8);
-		joinGroup(9);
+//       TempLogin.register();
+//        TempLogin.login();
+//		joinGroup(8);
+//		joinGroup(9);
+		toast("exit");
+		exitGroup(8);
 	}
 
 	private void joinGroup(int groupid) {
@@ -89,6 +91,13 @@ public class GroupTest extends BaseTestActivity {
 		 api.join(groupid, new Response());
 		
 	}
+	
+	private void exitGroup(int groupid){
+		GroupAPI api = new GroupAPI();
+		api.exit(groupid, new Response());
+
+	}
+	
 
 	@Override
 	public void onInit() {
