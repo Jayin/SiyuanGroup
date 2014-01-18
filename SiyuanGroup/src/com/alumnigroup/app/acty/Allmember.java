@@ -106,6 +106,7 @@ public class Allmember extends BaseActivity {
                                         public void onSuccess(int statusCode, Header[] headers,
                                                         byte[] data) {
                                                 page = 1;
+                                                //还要判断是否有error_code
                                                 String json = new String(data);// jsonarray
                                                 List<User> newData_allmember = User
                                                                 .create_by_jsonarray(json);
