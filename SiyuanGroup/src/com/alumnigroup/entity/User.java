@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.JsonObject;
 import com.alumnigroup.utils.JsonUtils;
 
 
@@ -40,9 +41,15 @@ public class User implements Serializable {
                 User user = new User();
                 JSONObject obj = null;
                 JSONObject profile = null;
+                try {
                 try {   
                 	    JsonUtils j = new JsonUtils();
                         obj = new JSONObject(json);
+                        user.setId(obj.getString("id"));
+                        user.setUsername(obj.getString("username"));
+                        user.setRegTime(obj.getString("regtime"));
+                        user.setOnline(obj.getInt("isonline") == 0 ? false : true);
+                        user.setAvatar(obj.getString("avatar"));
 //                        user.setId(obj.getString("id"));
 //                        user.setUsername(obj.getString("username"));
 //                        user.setRegTime(obj.getString("regtime"));
@@ -56,6 +63,14 @@ public class User implements Serializable {
                         user.setAvatar(j.getString(obj,"avatar"));
                         // parse profile
                         profile = obj.getJSONObject("profile");
+                        user.setEmail(profile.getString("email"));
+                        user.setNickname(profile.getString("nickname"));
+                        user.setName(profile.getString("name"));
+                        user.setGender(profile.getString("gender"));
+                        user.setAge(profile.getInt("age"));
+                        user.setGrade(profile.getInt("grade"));
+                        user.setUniversity(profile.getString("university"));
+                        user.setMajor(profile.getString("major"));
 //                        user.setEmail(profile.getString("email"));
 //                        user.setNickname(profile.getString("nickname"));
 //                        user.setName(profile.getString("name"));

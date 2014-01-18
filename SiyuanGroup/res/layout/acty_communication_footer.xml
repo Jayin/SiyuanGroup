@@ -6,6 +6,7 @@
     <RelativeLayout
         android:layout_width="1dp"
         android:layout_height="match_parent"
+        android:layout_weight="1" >
         android:layout_weight="1"
         android:background="@color/blue_nav_bg_press" >
 
@@ -15,6 +16,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="所有"
+            android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
 

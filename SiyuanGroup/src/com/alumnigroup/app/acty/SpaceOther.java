@@ -5,11 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 
 /**
@@ -20,15 +22,25 @@ import com.alumnigroup.widget.OutoLinefeedLayout;
  */
 public class SpaceOther extends BaseActivity {
 
-	private View btnAddfriend;
+	/**
+	 * 用户数据
+	 */
+	private User user;
 
-	
 	/**
 	 * header
 	 */
-	private View btnBack,btnMore;
+	private View btnBack, btnMore;
 	private TextView tvHeaderTitle;
-	
+
+	/**
+	 * top
+	 */
+	private View btnAddfriend;
+	private ImageView ivPortrait, ivBackgroupImage;
+	private TextView tvLeave2Visitor;
+	private TextView tvName;
+
 	/**
 	 * 个人资料
 	 */
@@ -75,18 +87,23 @@ public class SpaceOther extends BaseActivity {
 
 	@Override
 	protected void initData() {
-
+		user = (User) getIntent().getSerializableExtra("user");
+		if (user == null) {
+			toast("出错了");
+			finish();
+		}
 	}
 
 	@Override
 	protected void initLayout() {
-		
+
 		/**
 		 * header
 		 */
 		btnBack = _getView(R.id.acty_head_btn_back);
 		btnBack.setOnClickListener(this);
-		
+		tvHeaderTitle = (TextView) _getView(R.id.acty_head_tv_title);
+		tvHeaderTitle.setText(user.getName() + "的空间");
 		/**
 		 * 个人资料
 		 */
@@ -117,8 +134,15 @@ public class SpaceOther extends BaseActivity {
 		 */
 		llNewDynamic = (LinearLayout) _getView(R.id.acty_space_other_new_dynamica_ll_content);
 
+		/**
+		 * top
+		 */
 		btnAddfriend = _getView(R.id.acty_space_other_top_btn_add_friend);
 		btnAddfriend.setOnClickListener(this);
+		tvLeave2Visitor = (TextView) _getView(R.id.acty_space_other_top_tv_leave2visitor);
+		tvLeave2Visitor.setText(user.getSignature());
+		tvName = (TextView) _getView(R.id.acty_space_other_top_tv_name);
+		tvName.setText(user.getName());
 	}
 
 	/**

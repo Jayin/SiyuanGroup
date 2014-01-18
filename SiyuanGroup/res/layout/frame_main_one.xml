@@ -28,7 +28,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/frame_main_one_allactivity"
+            android:id="@+id/frame_main_one_alldynamic"
             style="@style/RelativeLayout.frame_main_item" >
 
             <ImageView
@@ -106,7 +106,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/frame_main_one_group"
+            android:id="@+id/frame_main_one_circle"
             style="@style/RelativeLayout.frame_main_item" >
 
             <ImageView

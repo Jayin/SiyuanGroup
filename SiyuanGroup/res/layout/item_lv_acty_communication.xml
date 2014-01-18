@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:paddingLeft="10px"
+    android:paddingRight="10px"
+    android:paddingTop="3px" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50px"
+        android:paddingBottom="5px"
+        android:paddingTop="5px" >
+
+        <ImageView
+            android:id="@+id/iv_listviewitem_head"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:scaleType="centerInside"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:src="@drawable/aa_po2" />
+
+        <TextView
+            android:id="@+id/iv_listviewitem_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/iv_listviewitem_head"
+            android:layout_toRightOf="@+id/iv_listviewitem_head"
+            android:paddingBottom="5px"
+            android:paddingLeft="5px"
+            android:text="黄廉温"
+            android:textColor="#0099cc" />
+
+        <TextView
+            android:id="@+id/iv_listviewitem_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/iv_listviewitem_name"
+            android:layout_alignBottom="@+id/iv_listviewitem_name"
+            android:layout_alignParentRight="true"
+            android:text="2013-10-12 09:20"
+            android:textColor="#666666"
+            android:textSize="12px" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_listView_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5px"
+            android:text="我是标题，我是用来测试的，"
+            android:textColor="#0099cc" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5px"
+            android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
+            android:textColor="@color/black" />
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="30px"
+        android:paddingBottom="5px" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:text="评论(20)"
+            android:textSize="14px" />
+
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_marginLeft="5dp"
+            android:layout_alignTop="@+id/textView1"
+            android:layout_toLeftOf="@+id/textView1"
+            android:src="@drawable/ic_btn_comment" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/imageView1"
+            android:layout_toLeftOf="@+id/imageView1"
+            android:text="查看(100)"
+            android:textSize="14px" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="18px"
+            android:layout_alignParentBottom="true"
+            android:layout_toLeftOf="@+id/textView2"
+            android:src="@drawable/ic_btn_look" />
+    </RelativeLayout>
+
+</LinearLayout>
