@@ -56,11 +56,22 @@ public abstract class BaseTestActivity extends Activity {
 		});
 		onInit();
 		_setTitle(setTitle());
+		_setTitle(test1, test1Title());
+		_setTitle(test2, test2Title());
+		_setTitle(test3, test3Title());
+		_setTitle(test4, test4Title());
+		
 	}
 
 	public void _setTitle(String title) {
 		if (title != null)
 			this.setTitle(title);
+	}
+	
+	public void _setTitle(TextView tv,String title){
+		if(tv!=null && title!=null){
+			tv.setText(title);
+		}
 	}
 
 	class Response extends AsyncHttpResponseHandler {
@@ -86,6 +97,14 @@ public abstract class BaseTestActivity extends Activity {
 	public abstract void test3Click();
 
 	public abstract void test4Click();
+	
+	public abstract String test1Title();
+
+	public abstract String test2Title();
+
+	public abstract String test3Title();
+
+	public abstract String test4Title();
 
 	public abstract void onInit();
 
