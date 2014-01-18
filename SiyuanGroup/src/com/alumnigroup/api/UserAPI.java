@@ -6,7 +6,7 @@ import com.loopj.android.http.RequestParams;
 /**
  * 用户系统接口
  * 
- * @author Jayin Ton
+ * @author Jayin Ton 
  * 
  */
 public class UserAPI {
