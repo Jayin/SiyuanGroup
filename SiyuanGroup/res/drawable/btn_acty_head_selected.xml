@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@drawable/ic_acty_head_selected_gb" android:state_pressed="true"/>
-    <item android:drawable="@drawable/ic_acty_head_gb" android:state_pressed="false"/>
-
-</selector>
