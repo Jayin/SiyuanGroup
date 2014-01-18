@@ -3,7 +3,6 @@ package com.utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.JsonObject;
 
 /**
  * JSON工具类 <li>复写所有get方法，对于基本类型,即使数据返回是null 会有自动默认值 <li>引用类型，数据返回null or NULL
