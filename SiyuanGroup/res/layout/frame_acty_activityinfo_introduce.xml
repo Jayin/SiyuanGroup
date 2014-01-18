@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:background="@color/grey_lv_two" />
+
+        <TextView
+            android:id="@+id/frame_acty_activityinfo_introduce_name"
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:gravity="center_horizontal"
+            android:text="Goft"
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/frame_acty_circle_groupinfo_btn_starttime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/btn_preference_sigle"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="活动时间"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_starttime"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="6dp"
+                android:text="2014-1-27"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frame_acty_circle_groupinfo_btn_deadline"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/btn_preference_sigle"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="报名截止"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_deadline"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="6dp"
+                android:text="null"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frame_acty_circle_groupinfo_btn_cost"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/btn_preference_sigle"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="活动费用"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_cost"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="6dp"
+                android:text="699"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frame_acty_circle_groupinfo_btn_count"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/btn_preference_sigle"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="报名人数"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_count"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="6dp"
+                android:text="10/80"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frame_acty_circle_groupinfo_btn_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/btn_preference_sigle"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="活动地点"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_address"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="6dp"
+                android:text="广州数码港国际酒店"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/frame_acty_circle_groupinfo_btn_contact"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/btn_preference_sigle"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="联系方式"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_contact"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="right"
+                android:padding="6dp"
+                android:text="150545135"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_preference_first_normal"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="活动说明"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/ic_preference_last_normal"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/frame_acty_circle_groupinfo_tv_description"
+                style="@style/TextView.base"
+                android:layout_weight="1"
+                android:gravity="left"
+                android:padding="6dp"
+                android:text="1.必须报名 \n2.自备工具\n3.有问题请联系活动发起人"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_joingroup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/btn_common_green" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:layout_centerInParent="true"
+                    android:text="参加活动" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_editactivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/btn_common_green" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:layout_centerInParent="true"
+                    android:text="编辑活动" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_collect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/btn_common_green" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:layout_centerInParent="true"
+                    android:text="收藏活动" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_exitactivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/btn_common_red" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:layout_centerInParent="true"
+                    android:text="退出活动" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_deleteactivity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/btn_common_red" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:layout_centerInParent="true"
+                    android:text="取消活动" />
+            </RelativeLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+</ScrollView>

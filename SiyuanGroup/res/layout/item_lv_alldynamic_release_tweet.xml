@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="4dp"
+    android:background="#ffffff"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <ImageView
+            android:id="@+id/item_lv_alldynamic_iv_portrait"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/aa_po2" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginLeft="4dp">
+
+        <TextView
+            android:id="@+id/item_lv_alldynamic_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="4dp"
+            android:text="黄廉温"
+            android:textColor="@color/blue_lv_two"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/item_lv_alldynamic_tv_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/item_lv_alldynamic_tv_name"
+            android:layout_marginTop="3dp"
+            android:text="天龙八部开始上映了。好像很好看的样子，我真的很想去看看..."
+            android:textColor="@color/grey_lv_third"
+            android:textSize="16sp" />
+
+        <RelativeLayout
+            android:id="@+id/item_lv_alldynamic_rl_transpond_all_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/item_lv_alldynamic_tv_content" >
+
+            <ImageView
+                android:id="@+id/item_lv_alldynamic_iv_append1"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/item_lv_alldynamic_tv_transpond_content"
+                android:layout_marginTop="3dp"
+                android:src="@drawable/a_dynamic_1" />
+
+            <ImageView
+                android:id="@+id/item_lv_alldynamic_iv_append2"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_alignTop="@+id/item_lv_alldynamic_iv_append1"
+                android:layout_toRightOf="@+id/item_lv_alldynamic_iv_append1"
+                android:src="@drawable/a_dynamic_1" />
+
+            <ImageView
+                android:id="@+id/item_lv_alldynamic_iv_append3"
+                android:layout_width="70dp"
+                android:layout_height="50dp"
+                android:layout_alignTop="@+id/item_lv_alldynamic_iv_append2"
+                android:layout_toRightOf="@+id/item_lv_alldynamic_iv_append2"
+                android:src="@drawable/a_dynamic_1" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/item_lv_alldynamic_tv_datetime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:text="2013-12-28 13:42"
+            android:textColor="@color/grey_lv_two"
+            android:textSize="11sp" />
+    </RelativeLayout>
+
+</LinearLayout>

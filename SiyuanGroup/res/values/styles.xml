@@ -1,0 +1,149 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="android:Theme.Light"></style>
+
+    <style name="AppTheme" parent="AppBaseTheme">
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="ActivityTheme_base" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/Animations.activity</item>
+    </style>
+
+    <style name="AcivityTheme_start">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="LinearLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="RelativeLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="RelativeLayout.frame_main_item">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_margin">3dp</item>
+        <item name="android:background">@drawable/round_corner</item>
+    </style>
+
+    <style name="ImageView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="TextView" />
+
+    <style name="TextView.base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:text">null</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextView.black" parent="TextView.base">
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="TextView.navigtion_head_base">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="EditText"></style>
+
+    <style name="EditText.base">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:gravity">top|left</item>
+        <item name="android:minLines">2</item>
+        <item name="android:background">@drawable/ic_edittext_normal_2</item>
+    </style>
+
+    <style name="Animations" />
+
+    <style name="Animations.activity">
+        <item name="android:activityOpenEnterAnimation">@anim/push_left_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/push_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/push_right_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/push_right_out</item>
+    </style>
+
+    <style name="Animations.dialog">
+        <item name="@android:windowEnterAnimation">@anim/zoom_in</item>
+        <item name="@android:windowExitAnimation">@anim/zoom_out</item>
+    </style>
+
+    <!-- navigation -->
+
+    <style name="navigtion"></style>
+
+    <style name="navigtion_head" parent="navigtion">
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/ic_acty_head_gb</item>
+    </style>
+
+    <style name="navigtion_head_title" parent="navigtion">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="ProgressBar"></style>
+
+    <style name="ProgressBar.common">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_style_one</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
+    <style name="Dialog"></style>
+
+    <style name="Dialog.Theme.BaseDialog" parent="@android:Theme.Dialog">
+        <item name="android:windowBackground">@color/lucency_white</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowAnimationStyle">@style/Animations.dialog</item>
+    </style>
+
+    <!-- allmember -->
+
+    <style name="LinearLayout.allmember_header" parent="navigtion_head">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="LinearLayout.allmember_footer" parent="navigtion_head">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="RelativeLayout.allmember_header_btn" parent="navigtion_head">
+        <item name="android:layout_width">60dp</item>
+        <item name="android:background">@drawable/btn_acty_head_selected</item>
+    </style>
+
+    <!-- alldynamic -->
+    <style name="LinearLayout.alldynamic_header" parent="navigtion_head">
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <style name="Translucent_NoTitle" parent="android:style/Theme.Dialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
+
+</resources>

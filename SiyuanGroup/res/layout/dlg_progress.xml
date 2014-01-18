@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_bg_dlg"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/dlg_progress_iv_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="60dp"
+        android:layout_marginTop="30dp"
+        android:src="@drawable/ic_progress" />
+
+    <TextView
+        android:id="@+id/dlg_progress_tv_updateinfo"
+        style="@style/TextView.base"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:text="加载中" />
+
+</LinearLayout>

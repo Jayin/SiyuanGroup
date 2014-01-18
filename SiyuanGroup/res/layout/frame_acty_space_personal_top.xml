@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey"
+    android:focusable="true"
+    android:focusableInTouchMode="true" >
+
+    <ImageView
+        android:id="@+id/acty_space_personal_top_tv_modify"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/aa_space_theme" />
+
+    <EditText
+        android:id="@+id/acty_space_personal_top_et_leave2visitor"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dp"
+        android:background="@drawable/bg_space_other_top_leave_content"
+        android:hint="为访客留点什么吧！！"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+
+    <ImageView
+        android:id="@+id/acty_space_personal_top_iv_portrait"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignLeft="@+id/acty_space_personal_top_et_leave2visitor"
+        android:layout_below="@+id/acty_space_personal_top_tv_modify"
+        android:layout_marginTop="-40dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/aa_po" />
+
+    <TextView
+        android:id="@+id/acty_space_personal_top_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/acty_space_personal_top_tv_modify"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/acty_space_personal_top_iv_portrait"
+        android:text="黄廉温"
+        android:textColor="@color/white"
+        android:textSize="16dp" />
+
+</RelativeLayout>

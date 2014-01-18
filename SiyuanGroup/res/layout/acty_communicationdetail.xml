@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include layout="@layout/acty_communicationdetail_header" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="4dp" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/item_lv_acty_business_iv_avater"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_image_load_loading" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="6dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical" >
+
+                        <TextView
+                            android:id="@+id/item_lv_acty_business_tv_name"
+                            style="@style/TextView.base"
+                            android:gravity="left"
+                            android:text="marchen"
+                            android:textColor="@color/blue_lv_third"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/item_lv_acty_business_tv_time"
+                            style="@style/TextView.base"
+                            android:layout_marginTop="4dp"
+                            android:text="2013-11-30 21:00:00"
+                            android:textColor="@color/grey_lv_third"
+                            android:textSize="12sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/ic_item_toright_blue" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/grey_lv_two" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="6dp"
+                android:orientation="vertical" >
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:layout_marginTop="4dp"
+                    android:text="按照您的领取劳务的金额，提供领取劳务人的身份证，正反面照片或者扫描件，需要将一个人的身份证正反面放在一个word文档中，不能所有人照片散放在一起。
+单人领取劳务金额不能超过800元，如果你是2700元，那么需要至少4个身份证，凑够签署即可。" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_image_load_loading" />
+            </LinearLayout>
+
+            <com.alumnigroup.widget.PullAndLoadListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="6dp" >
+            </com.alumnigroup.widget.PullAndLoadListView>
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/acty_communicationdetail_footer" />
+
+</LinearLayout>
