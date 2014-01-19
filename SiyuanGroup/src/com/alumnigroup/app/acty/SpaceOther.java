@@ -15,7 +15,7 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 
 /**
- * 查看别人的空间
+ * 查看别人的空间,跳转到这个页面要带一个user 对象
  * 
  * @author vector
  * 
@@ -152,7 +152,7 @@ public class SpaceOther extends BaseActivity {
 		for (int i = 0; i < 1; i++) {
 			addKeyWord("大是字          sdf", i / 2);
 		}
-	}
+	} 
 
 	/**
 	 * 初始化最新动态
@@ -237,7 +237,7 @@ public class SpaceOther extends BaseActivity {
 		View convertView = null;
 
 		convertView = inflater.inflate(
-				R.layout.item_space_other_album_gv_image, null);
+				R.layout.item_acty_space_other_ly_image, null);
 
 		/**
 		 * 加入新的关键字

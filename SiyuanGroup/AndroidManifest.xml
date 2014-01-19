@@ -115,6 +115,18 @@
             android:name=".acty.Activitys"
             android:screenOrientation="portrait">
         </activity>
+        <activity
+            android:name=".acty.EditPersonalData"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".acty.EditKeyword"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name=".acty.EditAlbum"
+            android:screenOrientation="portrait">
+        </activity>
         <activity android:name=".acty.SpaceOther" >
         </activity>
     </application>

@@ -4,10 +4,10 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_space_keyword_green"
-    android:paddingBottom="25dp"
+    android:paddingBottom="15dp"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
-    android:paddingTop="25dp"
+    android:paddingTop="15dp"
     android:textColor="#45b97c"
     android:text="sdfsdfsd"
     android:textSize="18dp" />

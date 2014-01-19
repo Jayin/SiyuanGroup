@@ -2,17 +2,13 @@ package com.alumnigroup.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.gson.JsonObject;
 import com.alumnigroup.utils.JsonUtils;
-
-import android.widget.ImageView;
 
 /**
  * 封装一个用户 的属性<br>
@@ -36,6 +32,7 @@ public class User implements Serializable {
 	 *            单个用户的json字符串
 	 * @return User
 	 */
+	@SuppressWarnings("static-access")
 	public static User create_by_json(String json) {
 		User user = new User();
 		JSONObject obj = null;
