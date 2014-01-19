@@ -1,72 +1,80 @@
 package com.alumnigroup.api;
 
-import org.apache.http.client.CookieStore;
-
+import android.content.Context;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.PersistentCookieStore;
 import com.loopj.android.http.RequestParams;
+
 /**
  * Restful api 客户端<br>
- * 请求前要初始化,设置cookie,timeout
- * problem left: 没有自动保存cookie的 后面封装api时用到
- * PersistentCookieStore myCookieStore = new PersistentCookieStore(context);
-   myClient.setCookieStore(myCookieStore);
+ * 请求前要初始化,设置cookie,timeout problem
+ * 
  * @author Jayin Ton
- *
+ * 
  */
 public class RestClient {
 	public static final String BASE_URL = "http://192.168.1.106:8888";
-	private static final int HTTP_Timeout = 6*1000; //链接超时
-	public static CookieStore cookieStore;
-	
-	private RestClient(){}
-    
+	private static int HTTP_Timeout = 6 * 1000;
+	public static Context context;
+
 	private static AsyncHttpClient client = new AsyncHttpClient();
-    /**
-     * get method
-     * @param url  相对的url
-     * @param params
-     * @param responseHandler 
-     */
+
+	/**
+	 * 初始化:如果需要调用登录验证记录session的函数前，必须调用这个方法，否则请求失败
+	 * 
+	 * @param context
+	 *            Activity or Application context
+	 */
+	public static void init(Context context) {
+		RestClient.context = context;
+	}
+
+	/**
+	 * get method
+	 * 
+	 * @param url
+	 *            相对的url
+	 * @param params
+	 * @param responseHandler
+	 */
 	public static void get(String url, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
-		initClient(); 
+		initClient();
 		client.get(getAbsoluteUrl(url), params, responseHandler);
 	}
-    /**
-     * post method
-     * @param url
-     * @param params
-     * @param responseHandler
-     */
+
+	/**
+	 * post method
+	 * 
+	 * @param url
+	 * @param params
+	 * @param responseHandler
+	 */
 	public static void post(String url, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
-		initClient(); 
+		initClient();
 		client.post(getAbsoluteUrl(url), params, responseHandler);
 
 	}
-    /** 
-     * 初始化
-     */
+
+	/**
+	 * 请求前初始化<br>
+	 * 必须在请求之前初始化，不然cookie失效<br>
+	 * context不为空时带着cookie去访问<br>
+	 */
 	private static void initClient() {
-		
-		if (cookieStore != null)
-			client.setCookieStore(cookieStore);
+		if (context != null)
+			client.setCookieStore(new PersistentCookieStore(context));
 		client.setTimeout(HTTP_Timeout);
-		
 	}
-    /**
-     * set CookieStore
-     * @param cookieStore
-     */
-	public static void setCookieStore(CookieStore cookieStore) {
-		RestClient.cookieStore = cookieStore;
-	}
-    /**
-     * 获得绝对url
-     * @param relativeUrl
-     * @return
-     */
+
+	/**
+	 * 获得绝对url
+	 * 
+	 * @param relativeUrl
+	 * @return
+	 */
 	private static String getAbsoluteUrl(String relativeUrl) {
 		return BASE_URL + relativeUrl;
 	}
