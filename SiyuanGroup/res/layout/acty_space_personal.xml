@@ -41,6 +41,9 @@
             <include
                 android:id="@+id/acty_space_personal_visitor"
                 layout="@layout/frame_acty_space_personal_visitor" />
+            <include
+                android:id="@+id/acty_space_personal_look_leave_message"
+                layout="@layout/frame_acty_space_personal_look_leave_message" />
         </LinearLayout>
     </ScrollView>
 

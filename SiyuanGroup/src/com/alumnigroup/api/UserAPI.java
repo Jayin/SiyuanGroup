@@ -56,6 +56,7 @@ public class UserAPI {
 		RestClient.post("/api/users/login", params, responseHandler);
 	}
 
+ 
 	/**
 	 * 登出账号
 	 * 
@@ -65,24 +66,6 @@ public class UserAPI {
 	public void logout(AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		RestClient.post("/api/users/logout", params, responseHandler);
-	}
-
-	/**
-	 * 重置密码
-	 * 
-	 * @param oldpsw
-	 *            旧密码
-	 * @param newpsw
-	 *            新密码
-	 * @param responseHandler
-	 *            处理器
-	 */
-	public void resetPassword(String oldpsw, String newpsw,
-			AsyncHttpResponseHandler responseHandler) {
-		RequestParams params = new RequestParams();
-		params.add("password", oldpsw);
-		params.add("new-password", newpsw);
-		RestClient.post("/api/users/password/reset", params, responseHandler);
 	}
 
 	/**
@@ -105,6 +88,24 @@ public class UserAPI {
 	}
 
 	/**
+	 * 重置密码
+	 * 
+	 * @param oldpsw
+	 *            旧密码
+	 * @param newpsw
+	 *            新密码
+	 * @param responseHandler
+	 *            处理器
+	 */
+	public void resetPassword(String oldpsw, String newpsw,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("password", oldpsw);
+		params.add("new-password", newpsw);
+		RestClient.post("/api/users/password/reset", params, responseHandler);
+	}
+
+	/**
 	 * 获取全站会员信息<br>
 	 * 根据给的你给的页数 page<br>
 	 * 
@@ -117,5 +118,7 @@ public class UserAPI {
 			page = 1;
 		find(new RequestParams("page", page + ""), responseHandler);
 	}
+
+
 
 }

@@ -17,7 +17,9 @@ import com.alumnigroup.app.R;
  * 
  */
 public class PullAndLoadListView extends PullToRefreshListView {
-	// this params is design to use when then data you cannot load more,set this to false and it won't called listener.loadmore() and updata the UI(progressbar)
+	// this params is design to use when then data you cannot load more,set this
+	// to false and it won't called listener.loadmore() and updata the
+	// UI(progressbar)
 	private boolean _canLoadMore = true;
 	private TextView mLabLoadMore;
 

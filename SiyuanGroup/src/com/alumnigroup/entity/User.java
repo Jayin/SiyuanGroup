@@ -2,24 +2,14 @@ package com.alumnigroup.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.JsonUtils;
 
 
-import android.widget.ImageView;
-
-/**
- * 封装一个用户 的属性<br>
- * <li>加入两个静态方法创建一个User实例和List< User > username,name,nickname分别为：用户名，真实姓名，昵称
- * 
- * @author vector /Jayin Ton
- */
 public class User implements Serializable {
 
         /**

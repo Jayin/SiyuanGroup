@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.http.Header;
 
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
@@ -39,12 +38,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class Allmember extends BaseActivity {
 	private TextView tv_title;
-	private View btn_back, btn_allmenmber, btn_myfriend,btn_pressed;
+	private View btn_back, btn_allmenmber, btn_myfriend, btn_pressed;
 	private PullAndLoadListView lv_allmember, lv_myfriend;
 	private List<User> data_allmember = null, data_myfriend = null;
 	private ViewPager viewpager;
 	private UserAPI api;
-	private int page_allmember = 1,page_myfriend = 1;
+	private int page_allmember = 1, page_myfriend = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
 	private int currentStatus = 0; // 0代表从底部左边数起第一个处于显示状态
 
@@ -75,8 +74,8 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onRefreshComplete();
-						L.i("Finish Faild : onRefresh--->load page=" + page_allmember
-								+ " load 1  ");
+						L.i("Finish Faild : onRefresh--->load page="
+								+ page_allmember + " load 1  ");
 					}
 
 					// page=1?
@@ -94,8 +93,8 @@ public class Allmember extends BaseActivity {
 							adapter_allmember.notifyDataSetChanged();
 							L.i("Finish success! : onRefresh--->load page="
 									+ page_allmember + " load 1  ");
-						}else{
-							toast("Error:"+JsonUtils.getErrorString(json));
+						} else {
+							toast("Error:" + JsonUtils.getErrorString(json));
 						}
 						lv_allmember.onRefreshComplete();
 					}
@@ -109,53 +108,59 @@ public class Allmember extends BaseActivity {
 			public void onLoadMore() {
 				L.i("load more--->load page=" + page_allmember + "  page+1 ="
 						+ (page_allmember + 1));
-				api.getAllMember(page_allmember + 1, new AsyncHttpResponseHandler() {
+				api.getAllMember(page_allmember + 1,
+						new AsyncHttpResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
-						lv_allmember.onLoadMoreComplete();
-						L.i("Finish Faild:load more  --->load page=" + page_allmember
-								+ "  page+1 =" + (page_allmember + 1));
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-
-						// L.i(new String(data));
-						String json = new String(data);// json array
-						if (JsonUtils.isOK(json)){
-							List<User> newData_allmember = User
-									.create_by_jsonarray(json);
-							if (newData_allmember != null
-									&& newData_allmember.size() > 0) {
-								page_allmember++;
-								data_allmember.addAll(newData_allmember);
-								adapter_allmember.notifyDataSetChanged();
-							} else {
-								if (newData_allmember == null) {
-									toast("网络异常,解析错误");
-								}
-								if (newData_allmember.size() == 0) {
-									toast("没有更多了!");
-									lv_allmember.canLoadMore(false);
-								}
+							@Override
+							public void onFailure(int statusCode,
+									Header[] headers, byte[] data, Throwable err) {
+								toast("网络异常 错误码:" + statusCode);
+								if (data != null)
+									L.i(new String(data));
+								if (err != null)
+									L.i(err.toString());
+								lv_allmember.onLoadMoreComplete();
+								L.i("Finish Faild:load more  --->load page="
+										+ page_allmember + "  page+1 ="
+										+ (page_allmember + 1));
 							}
-						}else{
-							toast("Error:"+JsonUtils.getErrorString(json));
-						}
-						L.i("Finish :load more--->load page=" + page_allmember
-								+ "  page+1 =" + (page_allmember + 1));
-						lv_allmember.onLoadMoreComplete();
 
-					}
-				});
+							@Override
+							public void onSuccess(int statusCode,
+									Header[] headers, byte[] data) {
+
+								// L.i(new String(data));
+								String json = new String(data);// json array
+								if (JsonUtils.isOK(json)) {
+									List<User> newData_allmember = User
+											.create_by_jsonarray(json);
+									if (newData_allmember != null
+											&& newData_allmember.size() > 0) {
+										page_allmember++;
+										data_allmember
+												.addAll(newData_allmember);
+										adapter_allmember
+												.notifyDataSetChanged();
+									} else {
+										if (newData_allmember == null) {
+											toast("网络异常,解析错误");
+										}
+										if (newData_allmember.size() == 0) {
+											toast("没有更多了!");
+											lv_allmember.canLoadMore(false);
+										}
+									}
+								} else {
+									toast("Error:"
+											+ JsonUtils.getErrorString(json));
+								}
+								L.i("Finish :load more--->load page="
+										+ page_allmember + "  page+1 ="
+										+ (page_allmember + 1));
+								lv_allmember.onLoadMoreComplete();
+
+							}
+						});
 			}
 		});
 
@@ -190,7 +195,7 @@ public class Allmember extends BaseActivity {
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_allmenmber = _getView(R.id.acty_allmember_footer_allmember);
 		btn_myfriend = _getView(R.id.acty_allmember_footer_myfriend);
-		
+
 		btn_pressed = btn_allmenmber;
 
 		btn_back.setOnClickListener(this);
@@ -325,8 +330,6 @@ public class Allmember extends BaseActivity {
 		}
 	}
 
-	
-
 	class MyOnPageChangeListener implements OnPageChangeListener {
 
 		@Override
@@ -341,18 +344,18 @@ public class Allmember extends BaseActivity {
 
 		@Override
 		public void onPageSelected(int position) {
-			if (position == 0){
+			if (position == 0) {
 				tv_title.setText("全站会员");
 				btn_allmenmber.setBackgroundResource(R.color.blue_nav_bg_press);
 				btn_myfriend.setBackgroundResource(R.color.blue_nav_bg_nomal);
 			}
-				
-			if (position == 1){
+
+			if (position == 1) {
 				tv_title.setText("我的好友");
 				btn_allmenmber.setBackgroundResource(R.color.blue_nav_bg_nomal);
 				btn_myfriend.setBackgroundResource(R.color.blue_nav_bg_press);
 			}
-			
+
 		}
 	}
 }
