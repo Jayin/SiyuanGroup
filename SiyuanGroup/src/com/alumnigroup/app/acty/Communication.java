@@ -3,30 +3,44 @@ package com.alumnigroup.app.acty;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.Header;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.IssuesAPI;
+import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
-public class Communication extends BaseActivity {
+public class Communication extends BaseActivity implements OnItemClickListener{
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_post, btn_all, btn_myjoin, btn_favourite;
 	private PullAndLoadListView lv_all, lv_myjoin, lv_favourit;
 	private ViewPager viewpager;
 	private List<Issue> data_all, data_myjoin, data_favourite;
 	private IssueAdapter adapter_all, adapter_myjoin, adapter_favourite;
-	private int page_all=1,page_myjoin=1,page_favourit=1;
+	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
+	private IssuesAPI api;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,14 +56,88 @@ public class Communication extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-                 
+				api.getIssueList(1, new AsyncHttpResponseHandler() {
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							byte[] data, Throwable err) {
+						toast("网络异常 错误码:" + statusCode);
+						if (data != null)
+							L.i(new String(data));
+						if (err != null)
+							L.i(err.toString());
+						lv_all.onRefreshComplete();
+						L.i("Finish Faild : onRefresh--->load page=" + page_all
+								+ " load 1  ");
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						page_all = 1;
+						String json = new String(data);
+						if (JsonUtils.isOK(json)) {
+							List<Issue> newData_all = Issue
+									.create_by_jsonarray(json);
+							data_all.clear();
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+							L.i("Finish success! : onRefresh--->load page="
+									+ page_all + " load 1  ");
+						} else {
+							toast("error:" + JsonUtils.getErrorString(json));
+						}
+						lv_all.onRefreshComplete();
+					}
+				});
+
 			}
 		});
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.getIssueList(page_all + 1, new AsyncHttpResponseHandler() {
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							byte[] data, Throwable err) {
+						toast("网络异常 错误码:" + statusCode);
+						if (data != null)
+							L.i(new String(data));
+						if (err != null)
+							L.i(err.toString());
+						lv_all.onLoadMoreComplete();
+						L.i("Finish Faild:load more  --->load page=" + page_all
+								+ "  page+1 =" + (page_all + 1));
+					}
 
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						String json = new String(data);
+						if (JsonUtils.isOK(json)) {
+							List<Issue> newData_all = Issue
+									.create_by_jsonarray(json);
+							if (newData_all != null && newData_all.size() > 0) {
+								page_all++;
+								data_all.addAll(newData_all);
+								adapter_all.notifyDataSetChanged();
+							} else {
+								if (newData_all == null) {
+									toast("网络异常,解析错误");
+								}
+								if (newData_all.size() == 0) {
+									toast("没有更多了!");
+									lv_all.canLoadMore(false);
+								}
+							}
+						} else {
+							toast("Error:" + JsonUtils.getErrorString(json));
+						}
+						L.i("Finish :load more--->load page=" + page_all
+								+ "  page+1 =" + (page_all + 1));
+						lv_all.onLoadMoreComplete();
+					}
+				});
 			}
 		});
 
@@ -81,12 +169,14 @@ public class Communication extends BaseActivity {
 
 			}
 		});
-
+		lv_all.setOnItemClickListener(this);
+		lv_myjoin.setOnItemClickListener(this);
+		lv_favourit.setOnItemClickListener(this);
 	}
 
 	@Override
 	protected void initData() {
-		IssuesAPI api = new IssuesAPI();
+		api = new IssuesAPI();
 		data_all = new ArrayList<Issue>();
 		data_myjoin = new ArrayList<Issue>();
 		data_favourite = new ArrayList<Issue>();
@@ -107,9 +197,13 @@ public class Communication extends BaseActivity {
 		lv_favourit = (PullAndLoadListView) favourit
 				.findViewById(R.id.frame_acty_communication_favourite_listview);
 
-		lv_all.setAdapter(new IssueAdapter(data_all));
-		lv_myjoin.setAdapter(new IssueAdapter(data_myjoin));
-		lv_favourit.setAdapter(new IssueAdapter(data_favourite));
+		adapter_all = new IssueAdapter(data_all);
+		adapter_myjoin = new IssueAdapter(data_myjoin);
+		adapter_favourite = new IssueAdapter(data_favourite);
+
+		lv_all.setAdapter(adapter_all);
+		lv_myjoin.setAdapter(adapter_myjoin);
+		lv_favourit.setAdapter(adapter_favourite);
 
 		List<View> views = new ArrayList<View>();
 		views.add(all);
@@ -188,9 +282,67 @@ public class Communication extends BaseActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			ViewHolder h = null;
+			if (convertView == null) {
+				h = new ViewHolder();
+				convertView = getLayoutInflater().inflate(
+						R.layout.item_lv_acty_communication, null);
+				h.name = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_name);
+				h.major = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_major);
+				h.posttime = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_posttime);
+				h.title = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_title);
+				h.body = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_body);
+				h.numComment = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_numComment);
+				h.favourite = (TextView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_favourite);
+				h.avater = (ImageView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_avater);
+				convertView.setTag(h);
+			} else {
+				h = (ViewHolder) convertView.getTag();
+			}
+			h.name.setText(data.get(position).getUser().getName());
+			h.major.setText(data.get(position).getUser().getMajor());
+			h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
+					.getPosttime(), CalendarUtils.TYPE_timeline));
+			h.title.setText(data.get(position).getTitle());
+			h.body.setText(data.get(position).getBody());
+			h.numComment.setText(data.get(position).getNumComments() + "");
+			// h.favourite.setText(data.get(position).getFavourite()+"");
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL
+							+ data.get(position).getUser().getAvatar(),
+					h.avater);
 			return convertView;
 		}
 
+		class ViewHolder {
+			TextView name, major, posttime, title, body, numComment, favourite;
+			ImageView avater;
+		}
+
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Intent intent = new Intent(this,CommunicationDetail.class);
+		if(parent==lv_all){
+			intent.putExtra("issue", data_all.get(position));
+		}
+		if(parent==lv_myjoin){
+			intent.putExtra("issue", data_myjoin.get(position));
+		}
+		if(parent==lv_favourit){
+			intent.putExtra("issue", data_favourite.get(position));
+		}
+		openActivity(intent); 
 	}
 
 }

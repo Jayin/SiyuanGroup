@@ -40,9 +40,10 @@
         android:id="@+id/acty_head_iv_hr2"
         android:layout_width="2px"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_acty_head_hr" />
+        android:background="@drawable/ic_acty_head_hr" android:visibility="invisible"/>
 
     <RelativeLayout
+        android:visibility="invisible"
         android:id="@+id/acty_head_btn_compose"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >

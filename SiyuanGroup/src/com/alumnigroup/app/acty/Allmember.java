@@ -95,7 +95,7 @@ public class Allmember extends BaseActivity {
 							L.i("Finish success! : onRefresh--->load page="
 									+ page_allmember + " load 1  ");
 						}else{
-							toast("error:"+JsonUtils.getErrorString(json));
+							toast("Error:"+JsonUtils.getErrorString(json));
 						}
 						lv_allmember.onRefreshComplete();
 					}
@@ -130,22 +130,25 @@ public class Allmember extends BaseActivity {
 
 						// L.i(new String(data));
 						String json = new String(data);// json array
-						List<User> newData_allmember = User
-								.create_by_jsonarray(json);
-						if (newData_allmember != null
-								&& newData_allmember.size() > 0) {
-							page_allmember++;
-							data_allmember.addAll(newData_allmember);
-							adapter_allmember.notifyDataSetChanged();
-
-						} else {
-							if (newData_allmember == null) {
-								toast("网络异常,解析错误");
+						if (JsonUtils.isOK(json)){
+							List<User> newData_allmember = User
+									.create_by_jsonarray(json);
+							if (newData_allmember != null
+									&& newData_allmember.size() > 0) {
+								page_allmember++;
+								data_allmember.addAll(newData_allmember);
+								adapter_allmember.notifyDataSetChanged();
+							} else {
+								if (newData_allmember == null) {
+									toast("网络异常,解析错误");
+								}
+								if (newData_allmember.size() == 0) {
+									toast("没有更多了!");
+									lv_allmember.canLoadMore(false);
+								}
 							}
-							if (newData_allmember.size() == 0) {
-								toast("没有更多了!");
-								lv_allmember.canLoadMore(false);
-							}
+						}else{
+							toast("Error:"+JsonUtils.getErrorString(json));
 						}
 						L.i("Finish :load more--->load page=" + page_allmember
 								+ "  page+1 =" + (page_allmember + 1));
