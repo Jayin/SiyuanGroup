@@ -52,7 +52,6 @@
                         <TextView
                             android:id="@+id/acty_communicationdetail_tv_time"
                             style="@style/TextView.base"
-                            android:layout_gravity="right"
                             android:layout_marginTop="8dp"
                             android:text="2013-11-30 21:00:00"
                             android:textColor="@color/grey_lv_third"
@@ -70,7 +69,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/aa_test_line" />
+                android:background="@drawable/ic_image_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -103,7 +102,8 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="@drawable/aa_test_line" />
+                android:background="@drawable/ic_image_line" />
+
             <com.alumnigroup.widget.PullAndLoadListView
                 android:id="@+id/item_lv_acty_comminication_lv_comment"
                 style="@style/ListView.PullAndLoadListView"
@@ -111,6 +111,12 @@
             </com.alumnigroup.widget.PullAndLoadListView>
         </LinearLayout>
     </ScrollView>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/ic_image_line" />
 
     <include layout="@layout/acty_communicationdetail_footer" />
 

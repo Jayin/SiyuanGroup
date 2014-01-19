@@ -24,20 +24,55 @@
             android:layout_marginLeft="8dp"
             android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/item_lv_acty_circlelist_tv_groupName"
-                style="@style/TextView.base"
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@drawable/ic_image_location" />
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:layout_gravity="center_vertical"
+                    android:Maxems="7"
+                    android:text="马达拉斯加"
+                    android:layout_marginLeft="2dp"
+                    android:textSize="10sp"  android:textColor="@color/grey_lv_forth"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="6dp"
+                    android:src="@drawable/ic_image_status_on" />
+
+                <TextView
+                    android:id="@+id/item_lv_acty_circlelist_tv_groupName"
+                    style="@style/TextView.base"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginRight="6dp"
+                    android:ellipsize="end"
+                    android:gravity="right"
+                    android:text="活动时间:2014-4-5"
+                    android:textColor="@color/grey_lv_forth"
+                    android:textSize="10sp" />
+            </LinearLayout>
+
+            <TextView
+                style="@style/TextView.black"
                 android:layout_marginTop="8dp"
-                android:ellipsize="end"
-                android:text="网球俱乐部"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:text="马达拉斯加旅游考察活动马达拉斯加旅游考察活动"
+                android:singleLine="true" 
+                android:textStyle="bold"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
                 android:orientation="horizontal" >
 
                 <ImageView
@@ -60,7 +95,7 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_gravity="right"
-                    android:background="@drawable/ic_item_lv_acty_circlelist_member" />
+                    android:background="@drawable/ic_item_member_join" />
 
                 <TextView
                     android:id="@+id/item_lv_acty_circlelist_tv_memberCount"
@@ -69,20 +104,10 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="6dp"
-                    android:text="15位成员"
+                    android:text="15人已报名参加"
                     android:textColor="@color/blue_lv_two"
                     android:textSize="12sp" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/item_lv_acty_circlelist_tv_groupIntroduction"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:lines="3"
-                android:text="金钱是能让我们去除了天堂以外的任何地区性方面军的一份护照；同时，它也能向我们提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。福以外的任何福以外的任何福以外的任何 提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。"
-                android:textColor="@color/grey_lv_forth"
-                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 

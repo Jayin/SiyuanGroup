@@ -113,17 +113,21 @@
         </activity>
         <activity
             android:name=".acty.EditPersonalData"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".acty.EditKeyword"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".acty.EditAlbum"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait" >
         </activity>
         <activity android:name=".acty.SpaceOther" >
+        </activity>
+        <activity
+            android:name=".acty.Activities"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 
