@@ -11,6 +11,7 @@ import android.widget.BaseAdapter;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Issue;
@@ -25,6 +26,7 @@ public class Communication extends BaseActivity {
 	private ViewPager viewpager;
 	private List<Issue> data_all, data_myjoin, data_favourite;
 	private IssueAdapter adapter_all, adapter_myjoin, adapter_favourite;
+	private int page_all=1,page_myjoin=1,page_favourit=1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +42,7 @@ public class Communication extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-
+                 
 			}
 		});
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -84,6 +86,7 @@ public class Communication extends BaseActivity {
 
 	@Override
 	protected void initData() {
+		IssuesAPI api = new IssuesAPI();
 		data_all = new ArrayList<Issue>();
 		data_myjoin = new ArrayList<Issue>();
 		data_favourite = new ArrayList<Issue>();

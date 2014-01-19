@@ -19,8 +19,6 @@ import android.widget.ImageView;
  * <li>加入两个静态方法创建一个User实例和List< User > username,name,nickname分别为：用户名，真实姓名，昵称
  * 
  * @author vector /Jayin Ton
- * @version 1
- * @since 2013-12-20 10:56:22
  */
 public class User implements Serializable {
 
@@ -36,12 +34,11 @@ public class User implements Serializable {
          *            单个用户的json字符串
          * @return User
          */
-        public static User create_by_json(String json) {
+		public static User create_by_json(String json) {
                 User user = new User();
                 JSONObject obj = null;
                 JSONObject profile = null;
                 try {   
-                	    JsonUtils j = new JsonUtils();
                         obj = new JSONObject(json);
 //                        user.setId(obj.getString("id"));
 //                        user.setUsername(obj.getString("username"));
@@ -49,11 +46,11 @@ public class User implements Serializable {
 //                        user.setOnline(obj.getInt("isonline") == 0 ? false : true);
 //                        user.setAvatar(obj.getString("avatar"));
                         
-                        user.setId(j.getString(obj,"id"));
-                        user.setUsername(j.getString(obj,"username"));
-                        user.setRegTime(j.getString(obj,"regtime"));
-                        user.setOnline(j.getInt(obj,"isonline") == 0 ? false : true);
-                        user.setAvatar(j.getString(obj,"avatar"));
+                        user.setId(JsonUtils.getString(obj,"id"));
+                        user.setUsername(JsonUtils.getString(obj,"username"));
+                        user.setRegTime(JsonUtils.getString(obj,"regtime"));
+                        user.setOnline(JsonUtils.getInt(obj,"isonline") == 0 ? false : true);
+                        user.setAvatar(JsonUtils.getString(obj,"avatar"));
                         // parse profile
                         profile = obj.getJSONObject("profile");
 //                        user.setEmail(profile.getString("email"));
@@ -64,14 +61,14 @@ public class User implements Serializable {
 //                        user.setGrade(profile.getInt("grade"));
 //                        user.setUniversity(profile.getString("university"));
 //                        user.setMajor(profile.getString("major"));
-                        user.setEmail(j.getString(profile,"email"));
-                        user.setNickname(j.getString(profile,"nickname"));
-                        user.setName(j.getString(profile,"name"));
-                        user.setGender(j.getString(profile,"gender"));
-                        user.setAge(j.getInt(profile,"age"));
-                        user.setGrade(j.getInt(profile,"grade"));
-                        user.setUniversity(j.getString(profile,"university"));
-                        user.setMajor(j.getString(profile,"major"));
+                        user.setEmail(JsonUtils.getString(profile,"email"));
+                        user.setNickname(JsonUtils.getString(profile,"nickname"));
+                        user.setName(JsonUtils.getString(profile,"name"));
+                        user.setGender(JsonUtils.getString(profile,"gender"));
+                        user.setAge(JsonUtils.getInt(profile,"age"));
+                        user.setGrade(JsonUtils.getInt(profile,"grade"));
+                        user.setUniversity(JsonUtils.getString(profile,"university"));
+                        user.setMajor(JsonUtils.getString(profile,"major"));
                 } catch (Exception e) {
                         e.printStackTrace();
                         user = null;
@@ -96,7 +93,7 @@ public class User implements Serializable {
                         for (int i = 0; i < array.length(); i++) {
                                 list.add(create_by_json(array.getJSONObject(i).toString()));
                         }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                         e.printStackTrace();
                         list = null;
                 }

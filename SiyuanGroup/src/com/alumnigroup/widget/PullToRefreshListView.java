@@ -355,6 +355,15 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 			mOnRefreshListener.onRefresh();
 		}
 	}
+	/**
+	 * manually refresh
+	 */
+	public void toRefresh(){
+		if (mRefreshState != REFRESHING) {
+			prepareForRefresh();
+			onRefresh();
+		}
+	}
 
 	/**
 	 * Resets the list to a normal state after a refresh.

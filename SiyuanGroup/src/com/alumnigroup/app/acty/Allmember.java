@@ -44,7 +44,7 @@ public class Allmember extends BaseActivity {
 	private List<User> data_allmember = null, data_myfriend = null;
 	private ViewPager viewpager;
 	private UserAPI api;
-	private int page = 1;
+	private int page_allmember = 1,page_myfriend = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
 	private int currentStatus = 0; // 0代表从底部左边数起第一个处于显示状态
 
@@ -63,7 +63,7 @@ public class Allmember extends BaseActivity {
 			@Override
 			public void onRefresh() {
 				// page=1?
-				L.i("onRefresh--->load page=" + page + " load 1  ");
+				L.i("onRefresh--->load page=" + page_allmember + " load 1  ");
 				api.getAllMember(1, new AsyncHttpResponseHandler() {
 
 					@Override
@@ -75,7 +75,7 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onRefreshComplete();
-						L.i("Finish Faild : onRefresh--->load page=" + page
+						L.i("Finish Faild : onRefresh--->load page=" + page_allmember
 								+ " load 1  ");
 					}
 
@@ -83,7 +83,7 @@ public class Allmember extends BaseActivity {
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						page = 1;
+						page_allmember = 1;
 						// 还要判断是否有error_code
 						String json = new String(data);// jsonarray
 						if (JsonUtils.isOK(json)) {
@@ -93,7 +93,7 @@ public class Allmember extends BaseActivity {
 							data_allmember.addAll(newData_allmember);
 							adapter_allmember.notifyDataSetChanged();
 							L.i("Finish success! : onRefresh--->load page="
-									+ page + " load 1  ");
+									+ page_allmember + " load 1  ");
 						}else{
 							toast("error:"+JsonUtils.getErrorString(json));
 						}
@@ -107,9 +107,9 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
-				L.i("load more--->load page=" + page + "  page+1 ="
-						+ (page + 1));
-				api.getAllMember(page + 1, new AsyncHttpResponseHandler() {
+				L.i("load more--->load page=" + page_allmember + "  page+1 ="
+						+ (page_allmember + 1));
+				api.getAllMember(page_allmember + 1, new AsyncHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -120,8 +120,8 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onLoadMoreComplete();
-						L.i("Finish Faild:load more  --->load page=" + page
-								+ "  page+1 =" + (page + 1));
+						L.i("Finish Faild:load more  --->load page=" + page_allmember
+								+ "  page+1 =" + (page_allmember + 1));
 					}
 
 					@Override
@@ -134,7 +134,7 @@ public class Allmember extends BaseActivity {
 								.create_by_jsonarray(json);
 						if (newData_allmember != null
 								&& newData_allmember.size() > 0) {
-							page++;
+							page_allmember++;
 							data_allmember.addAll(newData_allmember);
 							adapter_allmember.notifyDataSetChanged();
 
@@ -147,8 +147,8 @@ public class Allmember extends BaseActivity {
 								lv_allmember.canLoadMore(false);
 							}
 						}
-						L.i("Finish :load more--->load page=" + page
-								+ "  page+1 =" + (page + 1));
+						L.i("Finish :load more--->load page=" + page_allmember
+								+ "  page+1 =" + (page_allmember + 1));
 						lv_allmember.onLoadMoreComplete();
 
 					}
