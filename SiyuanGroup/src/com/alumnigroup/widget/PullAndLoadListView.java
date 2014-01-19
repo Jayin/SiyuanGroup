@@ -14,12 +14,12 @@ import com.alumnigroup.app.R;
  * 下拉刷新 上推刷新
  * 
  * @author Jayin Ton
- *
  * 
  */
 public class PullAndLoadListView extends PullToRefreshListView {
-
-	// this params is design to use when then data you cannot load more,set this to false and it won't called listener.loadmore() and updata the UI(progressbar)
+	// this params is design to use when then data you cannot load more,set this
+	// to false and it won't called listener.loadmore() and updata the
+	// UI(progressbar)
 	private boolean _canLoadMore = true;
 	private TextView mLabLoadMore;
 
@@ -84,10 +84,6 @@ public class PullAndLoadListView extends PullToRefreshListView {
 		// if need a list to load more items
 		if (mOnLoadMoreListener != null) {
 
-			if (mProgressBarLoadMore.getVisibility() == View.GONE)
-				mLabLoadMore.setVisibility(View.VISIBLE);
-			else
-				mLabLoadMore.setVisibility(View.GONE);
 			// if (mProgressBarLoadMore.getVisibility() == View.GONE)
 			// mLabLoadMore.setVisibility(View.VISIBLE);
 			// else
@@ -102,7 +98,8 @@ public class PullAndLoadListView extends PullToRefreshListView {
 
 			boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
 
-			if (!mIsLoadingMore && loadMore && mRefreshState != REFRESHING
+			if (_canLoadMore && !mIsLoadingMore && loadMore
+					&& mRefreshState != REFRESHING
 					&& mCurrentScrollState != SCROLL_STATE_IDLE) {
 				mProgressBarLoadMore.setVisibility(View.VISIBLE);
 				// mLabLoadMore.setVisibility(View.VISIBLE);
@@ -111,7 +108,6 @@ public class PullAndLoadListView extends PullToRefreshListView {
 				mIsLoadingMore = true;
 				onLoadMore();
 			}
-
 		}
 	}
 

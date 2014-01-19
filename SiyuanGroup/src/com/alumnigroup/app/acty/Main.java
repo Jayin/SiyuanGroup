@@ -17,7 +17,6 @@ import com.alumnigroup.widget.ADView;
  * 
  * @author Jayin Ton
  * @since 2013.12.11;
- * @since 2013.12.11
  * 
  */
 public class Main extends BaseActivity implements OnClickListener {
@@ -35,36 +34,13 @@ public class Main extends BaseActivity implements OnClickListener {
 	 * 设置
 	 */
 	private View btnSetting;
-	
+
 	/**
 	 * 消息
 	 */
 	private View btnMessage;
-
-	/**
-	 * 全站会员
-	 */
-	private View btnMember;
-	/**
-	 * 全站动态
-	 */
-	private View btnAllDynamic;
-	/**
-	 * 校友交流区
-	 */
-	private View btnCommunication;
-	/**
-	 * 活动
-	 */
-	private View btnActivitys;
-	/**
-	 * 圈子
-	 */
-	private View btnCircle;
-	/**
-	 * 商务合作
-	 */
-	private View btnBusiness;
+	private View btn_allMember,btn_communication;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,30 +69,18 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		btnOneSpace = _getView(R.id.frame_main_one_myspace);
 		btnOneSpace.setOnClickListener(this);
-		
+
 		btnSetting = _getView(R.id.frame_main_one_setting);
 		btnSetting.setOnClickListener(this);
-		
+
 		btnMessage = _getView(R.id.frame_main_one_message);
 		btnMessage.setOnClickListener(this);
+
+		btn_allMember = _getView(R.id.frame_main_one_allmember);
+		btn_allMember.setOnClickListener(this);
 		
-		btnMember = _getView(R.id.frame_main_one_allmember);
-		btnMember.setOnClickListener(this);
-		
-		btnAllDynamic = _getView(R.id.frame_main_one_alldynamic);
-		btnAllDynamic.setOnClickListener(this);
-		
-		btnCommunication = _getView(R.id.frame_main_one_discuss);
-		btnCommunication.setOnClickListener(this);
-		
-		btnActivitys = _getView(R.id.frame_main_one_activity);
-		btnActivitys.setOnClickListener(this);
-		
-		btnCircle = _getView(R.id.frame_main_one_circle);
-		btnCircle.setOnClickListener(this);
-		
-		btnBusiness = _getView(R.id.frame_main_one_business);
-		btnBusiness.setOnClickListener(this);
+		btn_communication =_getView(R.id.frame_main_one_communication);
+		btn_communication.setOnClickListener(this);
 
 	}
 
@@ -146,47 +110,22 @@ public class Main extends BaseActivity implements OnClickListener {
 			intent.setClass(Main.this, SpacePersonal.class);
 			startActivity(intent);
 			break;
-			
+
 		case R.id.frame_main_one_setting:
 			intent.setClass(Main.this, Setting.class);
 			startActivity(intent);
 			break;
-			
+
 		case R.id.frame_main_one_message:
 			intent.setClass(Main.this, Message.class);
 			startActivity(intent);
 			break;
-			
 		case R.id.frame_main_one_allmember:
-			intent.setClass(Main.this, Allmember.class);
-			startActivity(intent);
+			openActivity(Allmember.class);
 			break;
-			
-		case R.id.frame_main_one_alldynamic:
-			intent.setClass(Main.this, Alldynamic.class);
-			startActivity(intent);
+		case R.id.frame_main_one_communication:
+			openActivity(Communication.class);
 			break;
-			
-		case R.id.frame_main_one_discuss:
-			intent.setClass(Main.this, Communication.class);
-			startActivity(intent);
-			break;
-			
-		case R.id.frame_main_one_activity:
-			intent.setClass(Main.this, Activitys.class);
-			startActivity(intent);
-			break;
-			
-		case R.id.frame_main_one_circle:
-			intent.setClass(Main.this, CircleList.class);
-			startActivity(intent);
-			break;
-			
-		case R.id.frame_main_one_business:
-			intent.setClass(Main.this, Business.class);
-			startActivity(intent);
-			break;
-
 		default:
 			break;
 		}

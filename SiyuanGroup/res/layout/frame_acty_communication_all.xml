@@ -5,8 +5,8 @@
     android:orientation="vertical" >
 
     <com.alumnigroup.widget.PullAndLoadListView
-        android:id="@+id/acty_allmember_lv_allmember"
-       style="@style/ListView.PullAndLoadListView" >
+        android:id="@+id/frame_acty_communication_all_listview"
+        style="@style/ListView.PullAndLoadListView" >
     </com.alumnigroup.widget.PullAndLoadListView>
 
 </LinearLayout>

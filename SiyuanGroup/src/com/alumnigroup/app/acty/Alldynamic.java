@@ -27,16 +27,15 @@ import com.alumnigroup.entity.Tweet;
 
 /**
  * 全部动态界面
- * 
  * @author vector
- * 
+ *
  */
-public class Alldynamic extends BaseActivity implements OnClickListener {
+public class Alldynamic extends BaseActivity implements OnClickListener{
 
 	/**
 	 * 返回按钮，全部动态按钮，好友动态按钮
 	 */
-	private View btnBack, btnAllDynamic, btnFriendDynamic;
+	private View btnBack,btnAllDynamic,btnFriendDynamic;
 	/**
 	 * 头上的标题
 	 */
@@ -66,31 +65,32 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 显示内容全部动态和好友动态ViewPeger
 	 */
 	private ViewPager vpDynamicContent;
-
+	
 	/**
 	 * 要显示的页卡
 	 */
 	private ArrayList<View> alDynamicView;
-
+	
+	
 	/**
 	 * 页卡的listview
 	 */
-	private ListView lvAllDynamic, lvFriendDynamic;
+	private ListView lvAllDynamic,lvFriendDynamic;
 	/**
 	 * 页卡的数据 -- listview
 	 */
-	private ArrayList<Tweet> alAllDynamicContent, alFriendDynamicContent;
-
+	private ArrayList<Tweet> alAllDynamicContent,alFriendDynamicContent;
+	
 	/**
 	 * 页卡的数据适配器
 	 */
-	private DynamicAdapter aptAllDynamic, aptFriendDynamic;
-
+	private DynamicAdapter aptAllDynamic,aptFriendDynamic;
+	
 	/**
 	 * 页卡的适配器
 	 */
 	private DynamicViewPagerAdapter viewAdapter;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -101,38 +101,34 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void initData() {
-
-		// 这里模拟一些数据
-		alAllDynamicContent = new ArrayList<Tweet>() {
-			{
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-			}
-		};
-		alFriendDynamicContent = new ArrayList<Tweet>() {
-			{
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-				add(new Tweet());
-			}
-		};
+		
+		//这里模拟一些数据
+		alAllDynamicContent = new ArrayList<Tweet>(){{
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+		}}; 
+		alFriendDynamicContent = new ArrayList<Tweet>(){{
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+			add(new Tweet());
+		}}; 
 	}
 
 	@Override
@@ -146,11 +142,11 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		initViewPager();
 		initDynamicDate();
 	}
-
+	
 	private void initDynamicDate() {
 		aptAllDynamic = new DynamicAdapter(alAllDynamicContent, this);
 		aptFriendDynamic = new DynamicAdapter(alFriendDynamicContent, this);
-
+		
 		lvAllDynamic.setAdapter(aptAllDynamic);
 		lvFriendDynamic.setAdapter(aptFriendDynamic);
 	}
@@ -169,8 +165,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 */
 	private void initCursor() {
 		ivCursor = (ImageView) findViewById(R.id.cursor);
-		bmpWidth = BitmapFactory.decodeResource(getResources(),
-				R.drawable.alldynamic_cursor).getWidth();// 获取图片宽度
+		bmpWidth = BitmapFactory.decodeResource(getResources(), R.drawable.alldynamic_cursor).getWidth();// 获取图片宽度
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 		int screenW = dm.widthPixels;// 获取分辨率宽度
@@ -179,14 +174,14 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		matrix.postTranslate(offset, 0);
 		ivCursor.setImageMatrix(matrix);// 设置动画初始位置
 	}
-
+	
 	/**
 	 * 初始化头标, 头标也有点击事件
 	 */
 	private void initDynamicName() {
 		btnAllDynamic = _getView(R.id.acty_alldynamic_alldynamic_name);
 		btnFriendDynamic = _getView(R.id.acty_alldynamic_frienddynamic_name);
-
+		
 		btnAllDynamic.setOnClickListener(this);
 		btnFriendDynamic.setOnClickListener(this);
 	}
@@ -195,41 +190,34 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 初始化ViewPager
 	 */
 	private void initViewPager() {
-
+		
 		vpDynamicContent = (ViewPager) _getView(R.id.acty_alldynamic_vp_content);
 		alDynamicView = new ArrayList<View>();
 		/**
 		 * alldynamic and listview
 		 */
 		LayoutInflater inflater = getLayoutInflater();
-		allDynamic = inflater.inflate(R.layout.item_lv_acty_alldynamic_content,
-				null);
-		lvAllDynamic = (ListView) allDynamic
-				.findViewById(R.id.item_lv_alldynamic_content);
-
+		allDynamic = inflater.inflate(R.layout.item_lv_acty_alldynamic_content, null);
+		lvAllDynamic = (ListView) allDynamic.findViewById(R.id.item_lv_alldynamic_content);
+		
 		/**
 		 * frienddynamic and listview
 		 */
-		friendDynamic = inflater.inflate(
-				R.layout.item_lv_acty_frienddynamic_content, null);
-		lvFriendDynamic = (ListView) friendDynamic
-				.findViewById(R.id.item_lv_frienddynamic_content);
-
+		friendDynamic = inflater.inflate(R.layout.item_lv_acty_frienddynamic_content, null);
+		lvFriendDynamic = (ListView) friendDynamic.findViewById(R.id.item_lv_frienddynamic_content);
+		
 		alDynamicView.add(allDynamic);
 		alDynamicView.add(friendDynamic);
 		viewAdapter = new DynamicViewPagerAdapter(alDynamicView);
 		vpDynamicContent.setAdapter(viewAdapter);
 		vpDynamicContent.setCurrentItem(0);
 		// 需要监听页卡改变事件
-		vpDynamicContent
-				.setOnPageChangeListener(new DynamicOnPageChangeListener());
+		vpDynamicContent.setOnPageChangeListener(new DynamicOnPageChangeListener());
 	}
-
 	/**
 	 * 监听页卡的改变
-	 * 
 	 * @author vector
-	 * 
+	 *
 	 */
 	class DynamicOnPageChangeListener implements OnPageChangeListener {
 
@@ -267,12 +255,12 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		}
 
 	}
-
+	
+	
 	/**
 	 * ViewPager 的适配器
-	 * 
 	 * @author vector
-	 * 
+	 *
 	 */
 	class DynamicViewPagerAdapter extends PagerAdapter {
 		private List<View> mListViews;
@@ -303,25 +291,23 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	
 	@Override
 	public void onClick(View v) {
+		toast("点击了...");
 		int id = v.getId();
 		switch (id) {
 		case R.id.acty_alldynamic_alldynamic_name:
 			vpDynamicContent.setCurrentItem(0);
 			break;
-			
+
 		case R.id.acty_alldynamic_frienddynamic_name:
 			vpDynamicContent.setCurrentItem(1);
 			break;
-
-		case R.id.acty_head_btn_back:
-			finish();
-			break;
-
+			
 		default:
 			break;
 		}
 	}
-
+	
 }

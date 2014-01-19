@@ -145,6 +145,7 @@ public class Login extends BaseActivity {
 		}
 	}
 
+	@Override
 	protected void initData() {
 		api = new UserAPI();
 	}

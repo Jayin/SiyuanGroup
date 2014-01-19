@@ -1,112 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    android:paddingLeft="10px"
-    android:paddingRight="10px"
-    android:paddingTop="3px" >
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_listview_bg_whitetogrey"
+    android:orientation="vertical" >
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50px"
-        android:paddingBottom="5px"
-        android:paddingTop="5px" >
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" >
 
         <ImageView
-            android:id="@+id/iv_listviewitem_head"
-            android:layout_width="50px"
-            android:layout_height="50px"
+            android:id="@+id/item_lv_acty_comminication_avater"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
             android:scaleType="centerInside"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:src="@drawable/aa_po2" />
+            android:src="@drawable/ic_image_load_loading" />
 
         <TextView
-            android:id="@+id/iv_listviewitem_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/iv_listviewitem_head"
-            android:layout_toRightOf="@+id/iv_listviewitem_head"
-            android:paddingBottom="5px"
-            android:paddingLeft="5px"
-            android:text="黄廉温"
-            android:textColor="#0099cc" />
+            android:id="@+id/item_lv_acty_comminication_name"
+            style="@style/TextView.black"
+            android:layout_alignTop="@+id/item_lv_acty_comminication_avater"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/item_lv_acty_comminication_avater"
+            android:text="黄廉温" />
 
         <TextView
-            android:id="@+id/iv_listviewitem_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/iv_listviewitem_name"
-            android:layout_alignBottom="@+id/iv_listviewitem_name"
+            android:id="@+id/item_lv_acty_comminication_major"
+            style="@style/TextView.black"
+            android:layout_alignBottom="@+id/item_lv_acty_comminication_avater"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@+id/item_lv_acty_comminication_avater"
+            android:text="computer science" />
+
+        <TextView
+            android:id="@+id/item_lv_acty_comminication_posttime"
+            style="@style/TextView.black"
             android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="6dp"
             android:text="2013-10-12 09:20"
-            android:textColor="#666666"
-            android:textSize="12px" />
-
+            android:textColor="@color/grey_lv_two"
+            android:textSize="12sp" />
     </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/ll_listView_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="6dp" >
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5px"
+            android:id="@+id/item_lv_acty_comminication_title"
+            style="@style/TextView.black"
             android:text="我是标题，我是用来测试的，"
-            android:textColor="#0099cc" />
+            android:textColor="@color/blue_lv_third"
+            android:textSize="16sp" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingBottom="5px"
+            android:id="@+id/item_lv_acty_comminication_body"
+            style="@style/TextView.black"
+            android:layout_marginTop="4dp"
             android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="12sp" />
     </LinearLayout>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="30px"
-        android:paddingBottom="5px" >
-
-        <TextView
-            android:id="@+id/textView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:text="评论(20)"
-            android:textSize="14px" />
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:gravity="right"
+        android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/imageView1"
             android:layout_width="wrap_content"
-            android:layout_height="18px"
-            android:layout_marginLeft="5dp"
-            android:layout_alignTop="@+id/textView1"
-            android:layout_toLeftOf="@+id/textView1"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_btn_look" />
+
+        <TextView
+            android:id="@+id/item_lv_acty_comminication_favourite"
+            style="@style/TextView.black"
+            android:layout_marginLeft="4dp"
+            android:text="关注(100)"
+            android:textSize="10dp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="8dp"
             android:src="@drawable/ic_btn_comment" />
 
         <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignTop="@+id/imageView1"
-            android:layout_toLeftOf="@+id/imageView1"
-            android:text="查看(100)"
-            android:textSize="14px" />
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="18px"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@+id/textView2"
-            android:src="@drawable/ic_btn_look" />
-    </RelativeLayout>
+            android:id="@+id/item_lv_acty_comminication_numComment"
+            style="@style/TextView.black"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="8dp"
+            android:text="评论(20)"
+            android:textSize="10sp" />
+    </LinearLayout>
 
 </LinearLayout>

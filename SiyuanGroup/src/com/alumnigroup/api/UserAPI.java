@@ -11,6 +11,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class UserAPI {
 	public UserAPI() {
+
 	}
 
 	/**
@@ -55,7 +56,7 @@ public class UserAPI {
 		RestClient.post("/api/users/login", params, responseHandler);
 	}
 
-
+ 
 	/**
 	 * 登出账号
 	 * 
@@ -66,7 +67,6 @@ public class UserAPI {
 		RequestParams params = new RequestParams();
 		RestClient.post("/api/users/logout", params, responseHandler);
 	}
-
 
 	/**
 	 * 精确查找用户<br>

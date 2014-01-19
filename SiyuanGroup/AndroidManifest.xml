@@ -112,10 +112,6 @@
             android:theme="@style/Translucent_NoTitle" >
         </activity>
         <activity
-            android:name=".acty.Activitys"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
             android:name=".acty.EditPersonalData"
             android:screenOrientation="portrait">
         </activity>
