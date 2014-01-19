@@ -25,22 +25,8 @@ public class Main extends BaseActivity implements OnClickListener {
 	private RelativeLayout parent_content;
 	private int width = 0, height = 0;;
 
-	/**
-	 * 个人空间
-	 */
-	private View btnOneSpace;
-
-	/**
-	 * 设置
-	 */
-	private View btnSetting;
-
-	/**
-	 * 消息
-	 */
-	private View btnMessage;
-	private View btn_allMember,btn_communication;
-	
+	private View btn_Message, btn_Setting, btn_OneSpace, btn_allMember,
+			btn_communication, btn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -67,19 +53,19 @@ public class Main extends BaseActivity implements OnClickListener {
 		adview.setURL(urls);
 		adview.display();
 
-		btnOneSpace = _getView(R.id.frame_main_one_myspace);
-		btnOneSpace.setOnClickListener(this);
+		btn_OneSpace = _getView(R.id.frame_main_one_myspace);
+		btn_OneSpace.setOnClickListener(this);
 
-		btnSetting = _getView(R.id.frame_main_one_setting);
-		btnSetting.setOnClickListener(this);
+		btn_Setting = _getView(R.id.frame_main_one_setting);
+		btn_Setting.setOnClickListener(this);
 
-		btnMessage = _getView(R.id.frame_main_one_message);
-		btnMessage.setOnClickListener(this);
+		btn_Message = _getView(R.id.frame_main_one_message);
+		btn_Message.setOnClickListener(this);
 
 		btn_allMember = _getView(R.id.frame_main_one_allmember);
 		btn_allMember.setOnClickListener(this);
-		
-		btn_communication =_getView(R.id.frame_main_one_communication);
+
+		btn_communication = _getView(R.id.frame_main_one_communication);
 		btn_communication.setOnClickListener(this);
 
 	}
@@ -101,24 +87,18 @@ public class Main extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		int id = v.getId();
 
-		Intent intent = new Intent();
-
-		switch (id) {
+		switch (v.getId()) {
 		case R.id.frame_main_one_myspace:
-			intent.setClass(Main.this, SpacePersonal.class);
-			startActivity(intent);
+			openActivity(SpacePersonal.class);
 			break;
 
 		case R.id.frame_main_one_setting:
-			intent.setClass(Main.this, Setting.class);
-			startActivity(intent);
+			openActivity(Setting.class);
 			break;
 
 		case R.id.frame_main_one_message:
-			intent.setClass(Main.this, Message.class);
-			startActivity(intent);
+			openActivity(Message.class);
 			break;
 		case R.id.frame_main_one_allmember:
 			openActivity(Allmember.class);

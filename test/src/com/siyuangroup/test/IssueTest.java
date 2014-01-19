@@ -11,9 +11,9 @@ public class IssueTest extends BaseTestActivity {
   private int page=1;
 	@Override
 	public void test1Click() {
-         //post();
+         post();
 		 //search("好饿了啊！！！",null);
-		 view(106);
+		// view(106);
 	}
 
 	private void view(int id) {
