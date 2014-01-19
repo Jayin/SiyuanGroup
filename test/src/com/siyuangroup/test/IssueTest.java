@@ -81,9 +81,9 @@ public class IssueTest extends BaseTestActivity {
 
 	@Override
 	public void test4Click() {
-//     Login();
-		IssuesAPI api = new IssuesAPI();
-		api.deleteIssue(106, new Response());
+      Login();
+//		IssuesAPI api = new IssuesAPI();
+//		api.deleteIssue(106, new Response());
 	}
 
 	private void Login() {
@@ -122,8 +122,8 @@ public class IssueTest extends BaseTestActivity {
 
 	@Override
 	public String test4Title() {
-		 return "删除";
-		//return "Login";
+		// return "删除";
+		return "Login";
 	}
 
  

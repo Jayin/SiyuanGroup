@@ -9,5 +9,6 @@
     <string name="xpull_to_refresh_refreshing_label">加载中</string>
     <string name="xpull_to_refresh_tap_label">点击刷新</string>
     <string name="xpull_to_refresh_tap_loadmore_label">加载更多</string>
+    <string name="xpull_to_refresh_have_no_more_to_refresh">没有更多</string>
 
 </resources>

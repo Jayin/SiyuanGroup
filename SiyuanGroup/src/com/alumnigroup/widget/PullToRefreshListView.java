@@ -29,7 +29,8 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	private static final int PULL_TO_REFRESH = 2;
 	private static final int RELEASE_TO_REFRESH = 3;
 	protected static final int REFRESHING = 4;
-
+	/** manual control whether albe to refresh or not */
+	private boolean canRefresh = true;
 
 	private OnRefreshListener mOnRefreshListener;
 
@@ -359,11 +360,42 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	 * manually refresh
 	 */
 	public void toRefresh(){
-		if (mRefreshState != REFRESHING) {
+		if (canRefresh && mRefreshState != REFRESHING) {
 			prepareForRefresh();
 			onRefresh();
 		}
 	}
+	/**
+	 * set whether it's able to refresh with text to tell the user it's able to
+	 * refresh
+	 * 
+	 * @param canRefresh
+	 *            able to refresh
+	 * @param text
+	 *            word to setText() to tell the user if it's able to refresh<br>
+	 * 
+	 */
+	public void setCanRefresh(boolean canRefresh, String text) {
+		this.canRefresh = canRefresh;
+		if (text != null)
+			mRefreshViewText.setText(text);
+		else
+			mRefreshViewText
+					.setText(R.string.xpull_to_refresh_have_no_more_to_refresh);
+	}
+
+	/**
+	 * set whether it's able to refresh<br>
+	 * you <strong>have to</strong> called this method <strong>after</strong>
+	 * {@link#onRefreshComplete()}
+	 * 
+	 * @param canRefrsh
+	 *            able to refresh
+	 */
+	public void setCanRefresh(boolean canRefrsh) {
+		setCanRefresh(canRefrsh, null);
+	}
+	
 
 	/**
 	 * Resets the list to a normal state after a refresh.
@@ -399,10 +431,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	private class OnClickRefreshListener implements OnClickListener {
 
 		public void onClick(View v) {
-			if (mRefreshState != REFRESHING) {
-				prepareForRefresh();
-				onRefresh();
-			}
+			toRefresh();
 		}
 
 	}

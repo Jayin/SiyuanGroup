@@ -43,7 +43,7 @@ public class Issue implements Serializable {
 	}
 
 	/**
-	 * 
+	 * 以json字符串构建一个List<Comment>实例
 	 * @param jsonarray
 	 * @return
 	 */
