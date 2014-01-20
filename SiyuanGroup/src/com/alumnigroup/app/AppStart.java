@@ -2,13 +2,12 @@ package com.alumnigroup.app;
 
  
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.alumnigroup.app.acty.Main;
- 
-/**
- * 启动页面
+import com.alumnigroup.app.acty.Login;
+/** 启动页面
  * @author Jayin Ton
  *
  */
@@ -22,7 +21,8 @@ public class AppStart extends BaseActivity  {
 			
 			@Override
 			public void run() {
-				openActivity(Main.class);
+				Intent intent = new Intent(AppStart.this,Login.class);
+				startActivity(intent);
 				closeActivity();
 			}
  

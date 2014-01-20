@@ -28,14 +28,17 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 
 /**
- * 个人空间
+ * 个人空间,进来要传递一个user 对象，用来代表自己, key = myself
  * 
  * @author vector
  * 
  */
 public class SpacePersonal extends BaseActivity implements
 		OnFocusChangeListener, OnTouchListener {
-
+	/**
+	 *代表自己的对象
+	 */
+	private User myself;
 	/**
 	 * 整个界面
 	 */
@@ -92,7 +95,11 @@ public class SpacePersonal extends BaseActivity implements
 	}
 
 	protected void initData() {
-
+		myself = (User) getIntent().getSerializableExtra("myself");
+		if(myself == null){
+			toast("出错了");
+			finish();
+		}
 	}
 
 	protected void initLayout() {
@@ -107,6 +114,9 @@ public class SpacePersonal extends BaseActivity implements
 		btnBack.setOnClickListener(this);
 		btnMore = _getView(R.id.acty_head_btn_more);
 		btnMore.setOnClickListener(this);
+		tvHeaderTitle = (TextView) _getView(R.id.acty_head_tv_title);
+		tvHeaderTitle.setText("我的空间");
+		
 
 		/**
 		 * 顶部
@@ -114,6 +124,7 @@ public class SpacePersonal extends BaseActivity implements
 		etLeave2Visitor = (EditText) _getView(R.id.acty_space_personal_top_et_leave2visitor);
 		etLeave2Visitor.setOnFocusChangeListener(this);
 		etLeave2Visitor.setOnTouchListener(this);
+		etLeave2Visitor.setText(myself.getSignature());
 		oldLeave2VisitorContent = etLeave2Visitor.getText().toString();
 		ivBackgroup = (ImageView) _getView(R.id.acty_space_personal_top_iv_backgroup);
 		ivBackgroup.setOnClickListener(this);

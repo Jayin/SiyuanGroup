@@ -1,7 +1,10 @@
 package com.alumnigroup.app.acty;
 
 import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -10,11 +13,15 @@ import android.widget.ViewFlipper;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.utils.StringUtils;
 import com.alumnigroup.utils.WidgetUtils;
 import com.alumnigroup.widget.MyProgressDialog;
+import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 /**
  * 登录注册页面
@@ -72,9 +79,9 @@ public class Login extends BaseActivity {
 						public void onSuccess(int statusCode, Header[] headers,
 								byte[] data) {
 							// 登录成功。。。save login info here..
-						  	dialog.dismiss();
 							String json = new String(data);
-							toast(json);
+							// toast(json);
+							succeed(json);
 						}
 
 					});
@@ -131,7 +138,7 @@ public class Login extends BaseActivity {
 							// regist successfully!
 							dialog.dismiss();
 							String json = new String(data);
-							//toast(json);
+							// toast(json);
 							toast("注册成功!");
 							flipper.showPrevious();
 						}
@@ -175,10 +182,59 @@ public class Login extends BaseActivity {
 
 	}
 
+	/**
+	 * 请求成功后
+	 */
+	private void succeed(String json) {
+		System.out.println(json);
+		final Intent intent = new Intent(Login.this, Main.class);
+		int id = -1;
+		JSONObject jsonObject = null;
+		try {
+			jsonObject = new JSONObject(json);
+			id = JsonUtils.getInt(jsonObject, "id");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		api.find(new RequestParams("id", id), new AsyncHttpResponseHandler() {
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					byte[] data, Throwable arg3) {
+				dialog.dismiss();
+				toast("网络异常  错误码:" + statusCode);
+				if (data != null)
+					L.i(new String(data));
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
+				String json = new String(data);
+				User myself = new Gson().fromJson(getJsonEmement(json), User.class);
+				intent.putExtra("myself", myself);
+				startActivity(intent);
+				dialog.dismiss();
+				finish();
+			}
+
+		});
+	}
+
 	private void initFlipper() {
 		flipper = (ViewFlipper) _getView(R.id.acty_login_flipper);
 		flipper.setInAnimation(this, R.anim.push_up_in);
 		flipper.setOutAnimation(this, R.anim.push_up_out);
+	}
+
+	private String getJsonEmement(String json) {
+		String jsonJsonEmement = "";
+		JSONObject jsonObject = null;
+		try {
+			jsonObject = new JSONObject(json);
+			jsonJsonEmement = jsonObject.getJSONArray("users").getJSONObject(0).toString();
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonJsonEmement;
 	}
 
 }

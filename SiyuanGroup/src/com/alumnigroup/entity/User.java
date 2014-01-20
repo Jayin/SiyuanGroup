@@ -71,7 +71,23 @@ public class User implements Serializable {
                 return user;
         }
 
-        /**
+        @Override
+		public String toString() {
+			return "User [avatar=" + avatar + ", username=" + username
+					+ ", passworrd=" + passworrd + ", email=" + email
+					+ ", isEmailVerified=" + isEmailVerified + ", isOnline="
+					+ isOnline + ", regIp=" + regIp + ", regTime=" + regTime
+					+ ", gender=" + gender + ", brithday=" + brithday
+					+ ", signature=" + signature + ", tags=" + tags
+					+ ", groups=" + groups + ", album=" + album + ", tweets="
+					+ tweets + ", post=" + post + ", mActivitys=" + mActivitys
+					+ ", name=" + name + ", major=" + major + ", id=" + id
+					+ ", intro=" + intro + ", grade=" + grade + ", university="
+					+ university + ", nickname=" + nickname + ", age=" + age
+					+ "]";
+		}
+
+		/**
          * 解析一个用户列表的列表
          * 
          * @param jsonarray
