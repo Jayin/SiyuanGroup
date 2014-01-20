@@ -13,6 +13,7 @@ public class CalendarUtils {
 	 * 时间轴，类似于新浪微博/微信的时间 :前xx分钟，今日hh:mm 昨日hh:mm
 	 */
 	public static String TYPE_timeline = "timeline";
+	public static String TYPE_ONE = "yy-mm-dd-hh-mm";
 
 	/**
 	 * 根据给定的时间和格式生成一时间字符串
@@ -29,19 +30,22 @@ public class CalendarUtils {
 			Calendar cur = getCurrent();
 			Calendar pre = getCurrent();
 			pre.setTimeInMillis(milliseconds);
-			int tmp = cur.get(Calendar.DAY_OF_YEAR)
+			int tmp = cur.get(Calendar.YEAR) - pre.get(Calendar.YEAR);
+			if(tmp>0)return getTimeFromat(milliseconds, TYPE_ONE);
+			tmp = cur.get(Calendar.DAY_OF_YEAR)
 					- pre.get(Calendar.DAY_OF_YEAR);
 			switch (tmp) {
 			case 0:
-
 				tmp = cur.get(Calendar.HOUR_OF_DAY)
 						- pre.get(Calendar.HOUR_OF_DAY);
 				if (tmp <= 1) {
 					tmp = cur.get(Calendar.MINUTE) - pre.get(Calendar.MINUTE);
 					sb.append(tmp).append("分钟").append("前");
 				} else {
-					sb.append("今日 ").append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
-							.append(":").append(_formatNmber(pre.get(Calendar.MINUTE)));
+					sb.append("今日 ")
+							.append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
+							.append(":")
+							.append(_formatNmber(pre.get(Calendar.MINUTE)));
 				}
 				break;
 			case 1:
@@ -51,10 +55,20 @@ public class CalendarUtils {
 			default:
 				sb.append(pre.get(Calendar.MONTH) + 1).append("月")
 						.append(pre.get(Calendar.DAY_OF_MONTH)).append("日 ")
-						.append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY))).append(":")
+						.append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
+						.append(":")
 						.append(_formatNmber(pre.get(Calendar.MINUTE)));
 				break;
 			}
+		} else if ("yy-mm-dd-hh-mm".equals(fromat)) {
+			Calendar c = getCurrent();
+			c.setTimeInMillis(milliseconds);
+			sb.append(c.get(Calendar.YEAR)).append("年")
+					.append((c.get(Calendar.MONTH) + 1) + "").append("月")
+					.append(c.get(Calendar.DAY_OF_MONTH)).append("日")
+					.append(_formatNmber(c.get(Calendar.HOUR_OF_DAY)))
+					.append(":")
+					.append(_formatNmber(c.get(Calendar.MINUTE)));
 		}
 
 		return sb.toString();
@@ -68,12 +82,13 @@ public class CalendarUtils {
 	public static Calendar getCurrent() {
 		return Calendar.getInstance();
 	}
-    /**
-     * 格式化时间
-     * 早上9:9 -> 09:09
-     * @param number
-     * @return
-     */
+
+	/**
+	 * 格式化时间 早上9:9 -> 09:09
+	 * 
+	 * @param number
+	 * @return
+	 */
 	private static String _formatNmber(int number) {
 		if (number < 10)
 			return "0" + number;

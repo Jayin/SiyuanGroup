@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 /**
  * 活动实体类
  * 
@@ -13,8 +15,9 @@ import java.util.List;
 public class MActivity implements Serializable {
 	public static MActivity creat_by_json(String json) {
 		MActivity acty = new MActivity();
-
-		return acty;
+        Gson gson = new Gson();
+        
+		return null;
 	}
 
 	public static List<MActivity> create_by_jsonarray(String jsonarray) {
@@ -43,17 +46,37 @@ public class MActivity implements Serializable {
 	private long starttime;
 	/** 活动时长 **/
 	private long duration;
-	/** 活动状态信息**/
-	private Status status;
+	/** 活动状态id**/
+	private int statusid;
 	/** 活动花费 **/
 	private String money;
 	/** 活动图标 **/
 	private String avater;
+	/** */
+	private String name;
+	/** 活动地点*/
+	private String site;
 	/** 活动名单 **/
 	private List<UserShip> userships;
 
 	public int getId() {
 		return id;
+	}
+
+	public int getStatusid() {
+		return statusid;
+	}
+
+	public void setStatusid(int statusid) {
+		this.statusid = statusid;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public void setId(int id) {
@@ -123,13 +146,6 @@ public class MActivity implements Serializable {
 	public void setUserships(List<UserShip> userships) {
 		this.userships = userships;
 	}
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
 
 	public String getMoney() {
 		return money;
@@ -146,7 +162,15 @@ public class MActivity implements Serializable {
 	public void setAvater(String avater) {
 		this.avater = avater;
 	}
-	
+	public String getSite() {
+		return site;
+	}
+
+	public void setSite(String site) {
+		this.site = site;
+	}
+
+
 	/**
 	 * 活动状态码
 	 * @author Jayin Ton
@@ -184,8 +208,6 @@ public class MActivity implements Serializable {
 		private int userid;
 		/** 活动id **/
 		private int activityid;
-		/** 是否取消 **/
-		private int iscanceled;
 		/** 是否被接受申请参加活动 **/
 		private int isaccepted;
 
@@ -211,14 +233,6 @@ public class MActivity implements Serializable {
 
 		public void setActivityid(int activityid) {
 			this.activityid = activityid;
-		}
-
-		public int getIscanceled() {
-			return iscanceled;
-		}
-
-		public void setIscanceled(int iscanceled) {
-			this.iscanceled = iscanceled;
 		}
 
 		public int getIsaccepted() {

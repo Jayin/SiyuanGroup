@@ -144,8 +144,7 @@ public class Allmember extends BaseActivity {
 									} else {
 										if (newData_allmember == null) {
 											toast("网络异常,解析错误");
-										}
-										if (newData_allmember.size() == 0) {
+										}else if (newData_allmember.size() == 0) {
 											toast("没有更多了!");
 											lv_allmember.canLoadMore(false);
 										}
