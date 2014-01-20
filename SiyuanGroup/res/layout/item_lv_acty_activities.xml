@@ -38,10 +38,11 @@
                 <TextView
                     style="@style/TextView.black"
                     android:layout_gravity="center_vertical"
-                    android:Maxems="7"
-                    android:text="马达拉斯加"
                     android:layout_marginLeft="2dp"
-                    android:textSize="10sp"  android:textColor="@color/grey_lv_forth"/>
+                    android:maxEms="7"
+                    android:text="马达拉斯加"
+                    android:textColor="@color/grey_lv_forth"
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -65,9 +66,9 @@
             <TextView
                 style="@style/TextView.black"
                 android:layout_marginTop="8dp"
+                android:singleLine="true"
                 android:text="马达拉斯加旅游考察活动马达拉斯加旅游考察活动"
-                android:singleLine="true" 
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
