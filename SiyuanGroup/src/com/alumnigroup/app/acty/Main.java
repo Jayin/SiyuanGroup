@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.widget.ADView;
 
