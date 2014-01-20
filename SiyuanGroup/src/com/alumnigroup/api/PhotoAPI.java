@@ -88,6 +88,7 @@ public class PhotoAPI {
 	 * @param page
 	 *            页码
 	 * @param responseHandler
+	 *       处理器
 	 */
 	public void getPhotoList(int page, AsyncHttpResponseHandler responseHandler) {
 		find(page, 0, 0, responseHandler);
