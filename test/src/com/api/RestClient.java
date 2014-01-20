@@ -14,7 +14,7 @@ import com.loopj.android.http.RequestParams;
  * 
  */
 public class RestClient {
-	private static final String BASE_URL = "http://10.10.65.165:8088";
+	public static final String BASE_URL = "http://192.168.1.106:8888";
 	private static int HTTP_Timeout = 6 * 1000;
 	public static Context context;
 
@@ -60,7 +60,8 @@ public class RestClient {
 
 	/**
 	 * 请求前初始化<br>
-	 * context不为空时带着cookie去访问
+	 * 必须在请求之前初始化，不然cookie失效<br>
+	 * context不为空时带着cookie去访问<br>
 	 */
 	private static void initClient() {
 		if (context != null)

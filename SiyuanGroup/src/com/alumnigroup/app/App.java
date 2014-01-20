@@ -1,11 +1,12 @@
 package com.alumnigroup.app;
 
+import android.app.Application;
+
+import com.alumnigroup.api.RestClient;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
-
-import android.app.Application;
 
 /**
  * Appliction Object of this app
@@ -27,5 +28,8 @@ public class App extends Application {
 				.defaultDisplayImageOptions(defaultOptions).build();
 
 		ImageLoader.getInstance().init(config);
+		
+		//init RestClient 
+		RestClient.init(getApplicationContext());
 	}
 }

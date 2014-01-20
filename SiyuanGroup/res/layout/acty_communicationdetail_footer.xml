@@ -3,11 +3,14 @@
     style="@style/LinearLayout.allmember_footer"
     android:orientation="horizontal" >
 
+  
+
     <RelativeLayout
         android:id="@+id/acty_circle_footer_groupInfo"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="@drawable/item_listview_bg_whitetogrey" >
 
         <TextView
             style="@style/TextView.base"
@@ -15,7 +18,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="分享"
-            android:textColor="@color/white"
+            android:textColor="@color/grey_lv_two"
             android:textSize="14sp" />
     </RelativeLayout>
 
@@ -23,7 +26,8 @@
         android:id="@+id/acty_circle_footer_groupMenber"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="@drawable/item_listview_bg_whitetogrey" >
 
         <TextView
             style="@style/TextView.base"
@@ -31,6 +35,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="评论"
+            android:textColor="@color/grey_lv_two"
             android:textSize="14sp" />
     </RelativeLayout>
 
@@ -38,7 +43,8 @@
         android:id="@+id/acty_circle_footer_groupShare"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="@drawable/item_listview_bg_whitetogrey" >
 
         <TextView
             style="@style/TextView.base"
@@ -46,6 +52,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="收藏"
+            android:textColor="@color/grey_lv_two"
             android:textSize="14sp" />
     </RelativeLayout>
 

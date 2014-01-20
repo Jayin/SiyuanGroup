@@ -6,20 +6,18 @@
 
     <include layout="@layout/acty_communicationdetail_header" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+ 
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+             android:layout_height="0dp"
+        android:layout_weight="1"
             android:orientation="vertical" >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
+                android:background="@drawable/item_listview_bg_whitetogrey"
                 android:orientation="vertical"
                 android:padding="4dp" >
 
@@ -29,7 +27,7 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:id="@+id/item_lv_acty_business_iv_avater"
+                        android:id="@+id/acty_communicationdetail_iv_avater"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:src="@drawable/ic_image_load_loading" />
@@ -42,7 +40,7 @@
                         android:orientation="vertical" >
 
                         <TextView
-                            android:id="@+id/item_lv_acty_business_tv_name"
+                            android:id="@+id/acty_communicationdetail_tv_name"
                             style="@style/TextView.base"
                             android:gravity="left"
                             android:text="marchen"
@@ -50,9 +48,9 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item_lv_acty_business_tv_time"
+                            android:id="@+id/acty_communicationdetail_tv_time"
                             style="@style/TextView.base"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="8dp"
                             android:text="2013-11-30 21:00:00"
                             android:textColor="@color/grey_lv_third"
                             android:textSize="12sp" />
@@ -66,10 +64,10 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <View
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/grey_lv_two" />
+                android:layout_height="1dp"
+                android:background="@drawable/ic_image_line" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -78,24 +76,45 @@
                 android:orientation="vertical" >
 
                 <TextView
+                    android:id="@+id/item_lv_acty_comminication_title"
+                    style="@style/TextView.black"
+                    android:text="我是标题，我是用来测试的，"
+                    android:textColor="@color/blue_lv_third"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/item_lv_acty_comminication_body"
                     style="@style/TextView.black"
                     android:layout_marginTop="4dp"
-                    android:text="按照您的领取劳务的金额，提供领取劳务人的身份证，正反面照片或者扫描件，需要将一个人的身份证正反面放在一个word文档中，不能所有人照片散放在一起。
-单人领取劳务金额不能超过800元，如果你是2700元，那么需要至少4个身份证，凑够签署即可。" />
+                    android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_image_load_loading" />
+                    android:src="@drawable/ic_image_load_loading"
+                    android:visibility="gone" />
             </LinearLayout>
 
-            <com.alumnigroup.widget.PullAndLoadListView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/ic_image_line" />
+
+            <com.alumnigroup.widget.PullAndLoadListView
+                android:id="@+id/item_lv_acty_comminication_lv_comment"
+                style="@style/ListView.PullAndLoadListView"
                 android:layout_marginTop="6dp" >
             </com.alumnigroup.widget.PullAndLoadListView>
         </LinearLayout>
-    </ScrollView>
+ 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:background="@drawable/ic_image_line" />
 
     <include layout="@layout/acty_communicationdetail_footer" />
 
