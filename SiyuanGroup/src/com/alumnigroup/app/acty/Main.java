@@ -1,9 +1,12 @@
 package com.alumnigroup.app.acty;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -21,6 +24,7 @@ import com.alumnigroup.widget.ADView;
  */
 public class Main extends BaseActivity implements OnClickListener {
 	private ADView adview;
+	private WebView webview;
 	private LinearLayout content;
 	private RelativeLayout parent_content;
 	private int width = 0, height = 0;;
@@ -45,13 +49,14 @@ public class Main extends BaseActivity implements OnClickListener {
 	@Override
 	protected void initLayout() {
 		adapteScreent();
-		adview = (ADView) _getView(R.id.acty_main_adview);
-		String[] urls = new String[] {
-				"http://lh3.ggpht.com/_yJtfXORDDe4/Sg-GN-1Mo4I/AAAAAAAAJQk/SVsfr1Iy7_I/s400/IMGP4048.jpg",
-				"http://img.szhome.com/images/sznews/2012/11/20121102144231234.JPG",
-				"http://www.carnews.com/Files/Editor_Files/image/Lee/minor5.jpg.pagespeed.ce.XG7AxB1en9.jpg" };
-		adview.setURL(urls);
-		adview.display();
+		// adview = (ADView) _getView(R.id.acty_main_adview);
+		// String[] urls = new String[] {
+		// "http://lh3.ggpht.com/_yJtfXORDDe4/Sg-GN-1Mo4I/AAAAAAAAJQk/SVsfr1Iy7_I/s400/IMGP4048.jpg",
+		// "http://img.szhome.com/images/sznews/2012/11/20121102144231234.JPG",
+		// "http://www.carnews.com/Files/Editor_Files/image/Lee/minor5.jpg.pagespeed.ce.XG7AxB1en9.jpg"
+		// };
+		// adview.setURL(urls);
+		// adview.display();
 
 		btn_OneSpace = _getView(R.id.frame_main_one_myspace);
 		btn_OneSpace.setOnClickListener(this);
@@ -68,6 +73,31 @@ public class Main extends BaseActivity implements OnClickListener {
 		btn_communication = _getView(R.id.frame_main_one_communication);
 		btn_communication.setOnClickListener(this);
 
+		initWebView();
+	}
+    //初始化广告栏
+	private void initWebView() {
+		webview = (WebView) _getView(R.id.acty_main_webview);
+		WebSettings webSettings = webview.getSettings();
+		webSettings.setJavaScriptEnabled(true);
+		webSettings.setSupportZoom(false);
+		webSettings.setLoadsImagesAutomatically(true); // 自动加载图片
+		webSettings.setBuiltInZoomControls(false);
+
+		webview.setWebViewClient(new WebViewClient() {
+			@Override
+			public void onLoadResource(WebView view, String url) {
+				 toast("onLoadResource-->"+url);
+			}
+			@Override
+			public boolean shouldOverrideUrlLoading(WebView view, String url) {
+				 toast("shouldOverrideUrlLoading-->"+url);
+				 //自行处理点击事件！
+				return true;
+			}
+		});
+		webview.loadUrl("http://192.168.1.100:8088/ad/index.html");
+		
 	}
 
 	// 适配屏幕

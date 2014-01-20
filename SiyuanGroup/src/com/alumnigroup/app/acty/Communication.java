@@ -3,6 +3,8 @@ package com.alumnigroup.app.acty;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.crypto.spec.PSource;
+
 import org.apache.http.Header;
 
 import android.content.Intent;
@@ -31,7 +33,11 @@ import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+/**
+ * 校友交流
+ * @author Jayin Ton
+ *
+ */
 public class Communication extends BaseActivity implements OnItemClickListener{
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_post, btn_all, btn_myjoin, btn_favourite;
@@ -124,8 +130,7 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 							} else {
 								if (newData_all == null) {
 									toast("网络异常,解析错误");
-								}
-								if (newData_all.size() == 0) {
+								}else if (newData_all.size() == 0) {
 									toast("没有更多了!");
 									lv_all.canLoadMore(false);
 								}
@@ -334,15 +339,16 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 			long id) {
 		Intent intent = new Intent(this,CommunicationDetail.class);
 		if(parent==lv_all){
-			intent.putExtra("issue", data_all.get(position));
+			intent.putExtra("issue", data_all.get(position-1));
+			toast(position+"");
 		}
 		if(parent==lv_myjoin){
-			intent.putExtra("issue", data_myjoin.get(position));
+			intent.putExtra("issue", data_myjoin.get(position-1));
 		}
 		if(parent==lv_favourit){
-			intent.putExtra("issue", data_favourite.get(position));
+			intent.putExtra("issue", data_favourite.get(position-1));
 		}
-		openActivity(intent); 
+	 	openActivity(intent); 
 	}
 
 }

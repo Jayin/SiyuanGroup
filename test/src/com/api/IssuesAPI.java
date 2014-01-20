@@ -115,9 +115,9 @@ public class IssuesAPI {
 	 */
 	public void commentIssue(int id,String body,AsyncHttpResponseHandler responseHandler){
 		RequestParams params = new RequestParams();
-		params.add("id", id+"");
+		params.add("issueid", id+"");
 		params.add("body", body);
-		RestClient.post("/api/issues/comment", params, responseHandler);
+		RestClient.post("/api/issues/comments/post", params, responseHandler);
 	}
 	/**
 	 * 话题详情 

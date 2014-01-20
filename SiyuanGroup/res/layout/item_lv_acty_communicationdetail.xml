@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_listview_bg_whitetogrey"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" >
+
+        <ImageView
+            android:id="@+id/item_lv_acty_communicationdetai_avater"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_image_load_loading" />
+
+        <TextView
+            android:id="@+id/item_lv_acty_communicationdetai_posttime"
+            style="@style/TextView.black"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="6dp"
+            android:text="2013-10-12 09:20"
+            android:textColor="@color/grey_lv_two"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/item_lv_acty_communicationdetai_body"
+            style="@style/TextView.black"
+            android:layout_below="@+id/item_lv_acty_communicationdetai_posttime"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_toRightOf="@+id/item_lv_acty_communicationdetai_avater"
+            android:text="我知道你这种做法坑定 不会的我知道你这种做法坑定 不会的我知道你这种做法坑定 不会的我知道你这种做法坑定 不会的我知道你这种做法坑定 不会的我知道你这种做法坑定 不会的我知道你这种做法坑定 不会的"
+            android:textSize="12sp" 
+            android:textColor="@color/grey_lv_forth"/>
+
+        <TextView
+            android:id="@+id/item_lv_acty_communicationdetai_name"
+            style="@style/TextView.black"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/item_lv_acty_communicationdetai_avater"
+            android:text="HOOK"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/ic_image_line" />
+
+</LinearLayout>

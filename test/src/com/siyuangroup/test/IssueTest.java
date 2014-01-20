@@ -45,8 +45,8 @@ public class IssueTest extends BaseTestActivity {
 		  
 
 		//   getIssueList();
-		update(106,"好饿了啊！！！","let's go");
-		   
+		//update(106,"好饿了啊！！！","let's go");
+		TempLogin.register();
 	}
   
 
@@ -104,14 +104,15 @@ public class IssueTest extends BaseTestActivity {
 
 	@Override
 	public String test1Title() {
-		//return "发布";
-		return "查看帖子";
+		 return "发布";
+	//	return "查看帖子";
 	}
 
 	@Override
 	public String test2Title() {
-		return "更新";
+		//return "更新";
 		//return "getIssueList";
+		return "register";
 	}
 
 	@Override

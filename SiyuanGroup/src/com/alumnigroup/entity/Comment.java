@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 
 /**
  * 评论
@@ -47,7 +48,12 @@ public class Comment implements Serializable {
 		JSONArray array = null;
 		try {
 			obj = new JSONObject(jsonarray);
+			obj = obj.getJSONObject("issue");
+			L.i("JSONARRAY---->");
+			L.i(jsonarray);
 			array = obj.getJSONArray("comments");
+			L.i(array.isNull(0)+"");
+			L.i(array.toString());
 			for (int i = 0; i < array.length(); i++) {
 				list.add(create_by_json(array.getJSONObject(i).toString()));
 			}
@@ -58,6 +64,7 @@ public class Comment implements Serializable {
 		}
 		return list;
 	}
+	
 
 	public Comment() {
 

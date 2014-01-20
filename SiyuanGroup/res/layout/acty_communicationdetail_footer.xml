@@ -6,7 +6,7 @@
   
 
     <RelativeLayout
-        android:id="@+id/acty_circle_footer_groupInfo"
+        android:id="@+id/acty_communicationdetail_footer_share"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -23,7 +23,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_circle_footer_groupMenber"
+        android:id="@+id/acty_communicationdetail_footer_comment"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
@@ -40,7 +40,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_circle_footer_groupShare"
+        android:id="@+id/acty_communicationdetail_footer_favourite"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
