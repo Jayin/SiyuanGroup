@@ -14,6 +14,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.AndroidUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.ADView;
 
 /**
@@ -31,7 +32,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	private int width = 0, height = 0;;
 
 	private View btn_Message, btn_Setting, btn_OneSpace, btn_allMember,
-			btn_communication, btn;
+			btn_communication, btn_activities,btn_group,acty_business;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,15 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		btn_communication = _getView(R.id.frame_main_one_communication);
 		btn_communication.setOnClickListener(this);
+		
+		btn_activities = _getView(R.id.frame_main_one_activities);
+		btn_activities.setOnClickListener(this);
+		
+		btn_group = _getView(R.id.frame_main_one_group);
+		btn_group.setOnClickListener(this);
+
+		acty_business = _getView(R.id.frame_main_one_business);
+		acty_business.setOnClickListener(this);
 
 		initWebView();
 	}
@@ -88,15 +98,24 @@ public class Main extends BaseActivity implements OnClickListener {
 		webview.setWebViewClient(new WebViewClient() {
 			@Override
 			public void onLoadResource(WebView view, String url) {
-				 toast("onLoadResource-->"+url);
+				// toast("onLoadResource-->"+url);
 			}
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				 toast("shouldOverrideUrlLoading-->"+url);
+				// toast("shouldOverrideUrlLoading-->"+url);
 				 //自行处理点击事件！
 				return true;
 			}
+			@Override
+			public void onReceivedError(WebView view, int errorCode,
+					String description, String failingUrl) {
+				view.setVisibility(View.INVISIBLE);
+				L.i("failingUrl-->"+failingUrl);
+				L.i("errorCode-->"+errorCode);
+				
+			}
 		});
+		
 		webview.loadUrl("http://192.168.1.100:8088/ad/index.html");
 		
 	}
@@ -136,6 +155,15 @@ public class Main extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.frame_main_one_communication:
 			openActivity(Communication.class);
+			break;
+		case R.id.frame_main_one_activities:
+			openActivity(Activities.class);
+			break;
+		case R.id.frame_main_one_group:
+			openActivity(Group.class);
+			break;
+		case R.id.frame_main_one_business:
+			openActivity(Business.class);
 			break;
 		default:
 			break;

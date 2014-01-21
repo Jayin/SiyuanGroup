@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.google.gson.Gson;
 
 /**
@@ -14,15 +18,30 @@ import com.google.gson.Gson;
  */
 public class MActivity implements Serializable {
 	public static MActivity creat_by_json(String json) {
-		MActivity acty = new MActivity();
-        Gson gson = new Gson();
-        
-		return null;
+		MActivity acty = null;
+		Gson gson = new Gson();
+		try {
+			acty = (MActivity) gson.fromJson(json, MActivity.class);
+		} catch (Exception e) {
+			acty = null;
+		}
+		return acty;
 	}
 
 	public static List<MActivity> create_by_jsonarray(String jsonarray) {
 		List<MActivity> list = new ArrayList<MActivity>();
-
+		JSONObject obj = null;
+		JSONArray array = null;
+		try {
+			obj = new JSONObject(jsonarray);
+			array = obj.getJSONArray("activities");
+			for (int i = 0; i < array.length(); i++) {
+				list.add(creat_by_json(array.getJSONObject(i).toString()));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			list = null;
+		}
 		return list;
 	}
 
@@ -46,7 +65,9 @@ public class MActivity implements Serializable {
 	private long starttime;
 	/** 活动时长 **/
 	private long duration;
-	/** 活动状态id**/
+	/** 活动状态 */
+	private Status status;
+	/** 活动状态id **/
 	private int statusid;
 	/** 活动花费 **/
 	private String money;
@@ -54,7 +75,7 @@ public class MActivity implements Serializable {
 	private String avater;
 	/** */
 	private String name;
-	/** 活动地点*/
+	/** 活动地点 */
 	private String site;
 	/** 活动名单 **/
 	private List<UserShip> userships;
@@ -162,6 +183,7 @@ public class MActivity implements Serializable {
 	public void setAvater(String avater) {
 		this.avater = avater;
 	}
+
 	public String getSite() {
 		return site;
 	}
@@ -170,26 +192,38 @@ public class MActivity implements Serializable {
 		this.site = site;
 	}
 
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
 
 	/**
 	 * 活动状态码
+	 * 
 	 * @author Jayin Ton
-	 *
+	 * 
 	 */
-	class Status implements Serializable{
-		/** 活动状态码id**/
+	class Status implements Serializable {
+		/** 活动状态码id **/
 		private int id;
-		/** 活动状态码描述**/
+		/** 活动状态码描述 **/
 		private String name;
+
 		public int getId() {
 			return id;
 		}
+
 		public void setId(int id) {
 			this.id = id;
 		}
+
 		public String getName() {
 			return name;
 		}
+
 		public void setName(String name) {
 			this.name = name;
 		}

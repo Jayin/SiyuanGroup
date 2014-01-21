@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <include layout="@layout/aa_acty_header" />
+    <include layout="@layout/acty_activityinfo_header" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,11 +14,9 @@
 
         <include
             android:id="@+id/acty_circle_groupInfo"
-            layout="@layout/frame_acty_group_groupinfo" />
-
-      
+            layout="@layout/frame_acty_activityinfo_introduce" />
     </LinearLayout>
 
-    <include layout="@layout/aa_acty_footer" />
+    <include layout="@layout/acty_activityinfo_foot" />
 
 </LinearLayout>

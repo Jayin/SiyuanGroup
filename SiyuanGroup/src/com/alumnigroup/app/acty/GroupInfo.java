@@ -1,23 +1,25 @@
 package com.alumnigroup.app.acty;
 
 import android.os.Bundle;
-import android.view.View;
 
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-/**
- * 活动页面
- * @author Jayin Ton
- *
- */
-public class Activities extends BaseActivity {
 
+/**
+ * 圈子列表
+ * 
+ * @author Jayin Ton
+ * 
+ */
+public class GroupInfo extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_activities);
+		setContentView(R.layout.acty_groupinfo);
+		initData();
+		initLayout();
 	}
-	
+
 	@Override
 	protected void initData() {
 
@@ -26,11 +28,6 @@ public class Activities extends BaseActivity {
 	@Override
 	protected void initLayout() {
 
-	}
-	
-	@Override
-	public void onClick(View v) {
-	 
 	}
 
 }

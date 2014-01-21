@@ -6,16 +6,18 @@ import android.view.View;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 /**
- * 活动页面
+ * 活动详情
  * @author Jayin Ton
  *
  */
-public class Activities extends BaseActivity {
+public class ActivitiesInfo extends BaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_activities);
+		setContentView(R.layout.acty_activitiesinfo);
+		initData();
+		initLayout();
 	}
 	
 	@Override
@@ -30,7 +32,7 @@ public class Activities extends BaseActivity {
 	
 	@Override
 	public void onClick(View v) {
-	 
+		 
 	}
 
 }

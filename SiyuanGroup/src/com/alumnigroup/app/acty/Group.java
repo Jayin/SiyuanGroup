@@ -6,18 +6,19 @@ import android.view.View;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 /**
- * 活动页面
+ * 圈子页面
  * @author Jayin Ton
  *
  */
-public class Activities extends BaseActivity {
-
+public class Group extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_activities);
+		setContentView(R.layout.acty_group);
+		initData();
+		initLayout();
 	}
-	
+
 	@Override
 	protected void initData() {
 
