@@ -10,6 +10,7 @@ import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
@@ -51,14 +52,6 @@ public class Main extends BaseActivity implements OnClickListener {
 	@Override
 	protected void initLayout() {
 		adapteScreent();
-		// adview = (ADView) _getView(R.id.acty_main_adview);
-		// String[] urls = new String[] {
-		// "http://lh3.ggpht.com/_yJtfXORDDe4/Sg-GN-1Mo4I/AAAAAAAAJQk/SVsfr1Iy7_I/s400/IMGP4048.jpg",
-		// "http://img.szhome.com/images/sznews/2012/11/20121102144231234.JPG",
-		// "http://www.carnews.com/Files/Editor_Files/image/Lee/minor5.jpg.pagespeed.ce.XG7AxB1en9.jpg"
-		// };
-		// adview.setURL(urls);
-		// adview.display();
 
 		btn_OneSpace = _getView(R.id.frame_main_one_myspace);
 		btn_OneSpace.setOnClickListener(this);
@@ -116,7 +109,7 @@ public class Main extends BaseActivity implements OnClickListener {
 			}
 		});
 		
-		webview.loadUrl("http://192.168.1.100:8088/ad/index.html");
+		webview.loadUrl(RestClient.BASE_URL+"/ad/index.html");
 		
 	}
 

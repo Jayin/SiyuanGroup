@@ -4,10 +4,10 @@
     android:orientation="horizontal" >
 
     <RelativeLayout
-        android:id="@+id/acty_activities_footer_allactivity"
+        android:id="@+id/acty_activities_footer_all"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1"    android:background="@color/blue_nav_bg_press" >
 
         <TextView
             style="@style/TextView.base"
@@ -19,23 +19,10 @@
             android:textSize="14sp" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/acty_activities_footer_histroyActivity"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-        <TextView
-            style="@style/TextView.base"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="历史活动"
-            android:textSize="14sp" />
-    </RelativeLayout>
+   
 
     <RelativeLayout
-        android:id="@+id/acty_activities_footer_myjion"
+        android:id="@+id/acty_activities_footer_myjoin"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -46,6 +33,20 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="我参与的"
+            android:textSize="14sp" />
+    </RelativeLayout>
+     <RelativeLayout
+        android:id="@+id/acty_activities_footer_favourite"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="收藏活动"
             android:textSize="14sp" />
     </RelativeLayout>
 

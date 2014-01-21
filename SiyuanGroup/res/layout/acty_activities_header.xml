@@ -59,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="发起"  />
+            android:text="搜索"  />
     </RelativeLayout>
 
 </LinearLayout>

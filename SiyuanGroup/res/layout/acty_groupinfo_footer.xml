@@ -4,7 +4,7 @@
     android:orientation="horizontal" >
 
     <RelativeLayout
-        android:id="@+id/acty_circlelist_footer_allgroup"
+        android:id="@+id/acty_circle_footer_groupInfo"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -14,13 +14,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="全部圈子"
+            android:text="圈子信息"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_circlelist_footer_joined"
+        android:id="@+id/acty_circle_footer_groupMenber"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -30,12 +30,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="我参与的"
+            android:text="圈子成员"
             android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_circlelist_footer_created"
+        android:id="@+id/acty_circle_footer_groupShare"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="我创建的"
+            android:text="圈子分享"
             android:textSize="14sp" />
     </RelativeLayout>
 

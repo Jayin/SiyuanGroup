@@ -6,11 +6,13 @@
 
     <include layout="@layout/acty_activities_header" />
 
-    <com.alumnigroup.widget.PullAndLoadListView
+    <android.support.v4.view.ViewPager
+        android:id="@+id/acty_activities_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:layout_weight="1">
-    </com.alumnigroup.widget.PullAndLoadListView>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white" >
+    </android.support.v4.view.ViewPager>
 
     <include layout="@layout/acty_activities_footer" />
 
