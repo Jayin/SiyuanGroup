@@ -107,6 +107,13 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
+    
+      <style name="ProgressBar.black">
+        <item name="android:indeterminateDrawable">@drawable/progressbar_style_black</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:indeterminateDuration">1000</item>
+    </style>
 
     <style name="Dialog"></style>
 
