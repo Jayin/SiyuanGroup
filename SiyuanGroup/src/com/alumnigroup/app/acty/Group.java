@@ -3,6 +3,7 @@ package com.alumnigroup.app.acty;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -11,16 +12,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.ActivityAPI;
+import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
-import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
@@ -40,7 +42,8 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	private List<MGroup> data_all, data_myjoin, data_mycreate;
 	private GroupAdapter adapter_all, adapter_myjoin, adapter_mycreate;
 	private int page_all = 1, page_myjoin = 1, page_mycreate = 1;
-	private ActivityAPI api;
+	private GroupAPI api;
+	private PopupWindow mPopupWindow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +59,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-
+              
 			}
 		});
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
@@ -102,12 +105,11 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 	private void initViewPager() {
 		viewpager = (ViewPager) _getView(R.id.acty_group_content);
-		View all = getLayoutInflater().inflate(
-				R.layout.frame_acty_group, null);
-		View myjoin = getLayoutInflater().inflate(
-				R.layout.frame_acty_group, null);
-		View favourit = getLayoutInflater().inflate(
-				R.layout.frame_acty_group, null);
+		View all = getLayoutInflater().inflate(R.layout.frame_acty_group, null);
+		View myjoin = getLayoutInflater().inflate(R.layout.frame_acty_group,
+				null);
+		View favourit = getLayoutInflater().inflate(R.layout.frame_acty_group,
+				null);
 		lv_all = (PullAndLoadListView) all
 				.findViewById(R.id.frame_acty_group_listview);
 		lv_myjoin = (PullAndLoadListView) myjoin
@@ -133,7 +135,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
-		api = new ActivityAPI();
+		api = new GroupAPI();
 		data_all = new ArrayList<MGroup>();
 		data_myjoin = new ArrayList<MGroup>();
 		data_mycreate = new ArrayList<MGroup>();
@@ -158,6 +160,24 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		btn_more.setOnClickListener(this);
 
 		initViewPager();
+		initPopupWindow();
+	}
+
+	private void initPopupWindow() {
+		View view = getLayoutInflater()
+				.inflate(R.layout.popup_acty_group, null);
+		View btn_search = view.findViewById(R.id.search), btn_create = view
+				.findViewById(R.id.create);
+		btn_search.setOnClickListener(this);
+		btn_create.setOnClickListener(this);
+		mPopupWindow = new PopupWindow(view);
+		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+		mPopupWindow.setOutsideTouchable(true);
+
+		// 控制popupwindow的宽度和高度自适应
+		view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+		mPopupWindow.setWidth(view.getMeasuredWidth());
+		mPopupWindow.setHeight(view.getMeasuredHeight());
 	}
 
 	@Override
@@ -168,6 +188,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			break;
 		case R.id.acty_head_btn_more:
 			toast("more");
+			mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.acty_group_footer_all:
 			viewpager.setCurrentItem(0, true);
@@ -177,6 +198,14 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			break;
 		case R.id.acty_group_footer_mycreat:
 			viewpager.setCurrentItem(2, true);
+			break;
+		case R.id.search:
+			toast("search");
+			mPopupWindow.dismiss();
+			break;
+		case R.id.create:
+			toast("create");
+			mPopupWindow.dismiss();
 			break;
 		default:
 			break;
