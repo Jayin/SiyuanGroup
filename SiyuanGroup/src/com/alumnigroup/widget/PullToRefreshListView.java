@@ -282,6 +282,8 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
+		//if canRefresh == false don't handler scroll 
+		if(!canRefresh)return;
 		// When the refresh view is completely visible, change the text to say
 		// "Release to refresh..." and flip the arrow drawable.
 		if (mCurrentScrollState == SCROLL_STATE_TOUCH_SCROLL
