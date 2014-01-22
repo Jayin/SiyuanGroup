@@ -5,8 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.alumnigroup.utils.JsonUtils;
 import com.google.gson.Gson;
 
 /**
@@ -17,19 +19,24 @@ import com.google.gson.Gson;
  * 
  */
 public class MGroup implements Serializable {
-	public MGroup create_by_json(String json) {
-		MGroup mGroup = null;
-		Gson gson = new Gson();
+	public static MGroup create_by_json(String json) {
+		MGroup mGroup = new MGroup();
+		JSONObject obj = null;
 		try {
-			mGroup = (MGroup) gson.fromJson(json, MGroup.class);
-		} catch (Exception e) {
+			obj = new JSONObject(json);
+			mGroup.setId(JsonUtils.getInt(obj, "id"));
+			mGroup.setOwnerid(JsonUtils.getInt(obj, "ownerid"));
+			mGroup.setDescription(JsonUtils.getString(obj, "description"));
+			mGroup.setCreatetime(JsonUtils.getLong(obj, "createtime"));
+			mGroup.setMemberships(Memberships.create_by_jsonarray(obj.getJSONArray("memberships").toString()));
+		} catch (JSONException e) {
 			e.printStackTrace();
 			mGroup = null;
 		}
 		return mGroup;
 	}
 
-	public List<MGroup> create_by_jsonarray(String jsonarray) {
+	public static  List<MGroup> create_by_jsonarray(String jsonarray) {
 		List<MGroup> list = new ArrayList<MGroup>();
 		JSONObject obj = null;
 		JSONArray array = null;
@@ -37,7 +44,7 @@ public class MGroup implements Serializable {
 			obj = new JSONObject(jsonarray);
 			array = obj.getJSONArray("groups");
 			for (int i = 0; i < array.length(); i++) {
-				list.add(create_by_json(array.getJSONArray(i).toString()));
+				list.add(create_by_json(array.getJSONObject(i).toString()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,7 +70,17 @@ public class MGroup implements Serializable {
 	/** 圈子图标 */
 	private String avatar;
 	/** 圈子名单 */
-	private Memberships memberships;
+	private List<Memberships> memberships;
+	/** 圈子拥有者*/
+	private User owner;
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
+	}
 
 	public int getId() {
 		return id;
@@ -113,21 +130,57 @@ public class MGroup implements Serializable {
 		this.avatar = avatar;
 	}
 
-	public Memberships getMemberships() {
+	public List<Memberships> getMemberships() {
 		return memberships;
 	}
 
-	public void setMemberships(Memberships memberships) {
+	public void setMemberships(List<Memberships> memberships) {
 		this.memberships = memberships;
 	}
 
+
+
 	/**
-	 * 成员名单
+	 *一条 成员名单数据
 	 * 
 	 * @author Jayin Ton
 	 * 
 	 */
-	public class Memberships implements Serializable {
+	public static class Memberships implements Serializable {
+		
+		public static Memberships create_by_json(String json){
+			Memberships m = new Memberships();
+			JSONObject obj = null;
+			try{
+				obj = new JSONObject(json);
+			    m.setUserid(JsonUtils.getInt(obj, "userid"));
+			    m.setIsowner(JsonUtils.getInt(obj, "isowner"));
+                m.setIsadmin(JsonUtils.getInt(obj, "isadmin"));
+                m.setRemark(JsonUtils.getString(obj, "remark"));
+                m.setRestrict(JsonUtils.getString(obj, "restrict"));
+                m.setUser(User.create_by_json(obj.getJSONObject("user").toString()));
+			}catch(Exception e){
+				e.printStackTrace();
+				m = null;
+			}
+			
+			return new Memberships();
+		}
+		
+		public static List<Memberships> create_by_jsonarray(String jsonarray){
+			List<Memberships> list = new ArrayList<MGroup.Memberships>();
+			JSONArray obj = null;
+			try {
+				obj = new JSONArray(jsonarray);
+				for(int i=0;i<obj.length();i++){
+					list.add(create_by_json(obj.getJSONObject(i).toString()));
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			    list  = null;
+			}
+			return list;
+		}
 		/** 用户id */
 		private int userid;
 		/** 是否是圈子拥有者 */
@@ -138,8 +191,12 @@ public class MGroup implements Serializable {
 		private String remark;
 		/** 限制 */
 		private String restrict;
-		/** 成员 */
-		private List<User> users;
+		/** 成员信息 */
+		private User user;
+		
+		public Memberships(){
+			
+		}
 
 		public int getUserid() {
 			return userid;
@@ -181,17 +238,12 @@ public class MGroup implements Serializable {
 			this.restrict = restrict;
 		}
 
-		public List<User> getUsers() {
-			return users;
+		public User getUser() {
+			return user;
 		}
 
-		public void setUsers(List<User> users) {
-			this.users = users;
+		public void setUser(User user) {
+			this.user = user;
 		}
-
-		 
-
-		 
-
 	}
 }

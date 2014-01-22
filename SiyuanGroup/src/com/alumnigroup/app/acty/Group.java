@@ -3,6 +3,8 @@ package com.alumnigroup.app.acty;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.Header;
+
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -22,10 +24,15 @@ import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
+import com.alumnigroup.entity.ResponseHandler;
+import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -59,14 +66,76 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-              
+				api.getGroupList(1, new ResponseHandler() {
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						String json = new String(data);
+						if (JsonUtils.isOK(json)) {
+
+							List<MGroup> newData_all = MGroup
+									.create_by_jsonarray(json);
+							if (newData_all != null) {
+								page_all = 1;
+								data_all.clear();
+								data_all.addAll(newData_all);
+								adapter_all.notifyDataSetChanged();
+							}else{
+								toast("还没有数据！");
+							}
+						} else {
+							toast("error:" + JsonUtils.getErrorString(json));
+						}
+						lv_all.onRefreshComplete();
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] header,
+							byte[] data, Throwable err) {
+						toast("网络异常 错误码:" + statusCode);
+						lv_all.onRefreshComplete();
+					}
+				});
 			}
 		});
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.getGroupList(page_all + 1, new ResponseHandler() {
 
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						String json = new String(data);
+						if (JsonUtils.isOK(json)) {
+							List<MGroup> newData_all = MGroup
+									.create_by_jsonarray(json);
+							if (newData_all != null && newData_all.size() > 0) {
+								page_all++;
+								data_all.addAll(newData_all);
+								adapter_all.notifyDataSetChanged();
+							} else {
+								if (newData_all == null) {
+									toast("网络异常,解析错误");
+								} else if (newData_all.size() == 0) {
+									toast("没有更多了!");
+									lv_all.canLoadMore(false);
+								}
+							}
+						} else {
+							toast("Error:" + JsonUtils.getErrorString(json));
+						}
+						lv_all.onLoadMoreComplete();
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] header,
+							byte[] data, Throwable err) {
+						toast("网络异常 错误码:" + statusCode);
+					}
+				});
 			}
 		});
 
@@ -264,8 +333,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			MGroup group = data.get(position);
 			h.name.setText(group.getName());
 			h.username.setText("ownid" + group.getOwnerid());
-			h.memberCount.setText(group.getMemberships().getUsers().size()
-					+ "名会员");
+			h.memberCount.setText(group.getMemberships().size() + "名会员");
 			h.description.setText(group.getDescription());
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + group.getAvatar(), h.avater);

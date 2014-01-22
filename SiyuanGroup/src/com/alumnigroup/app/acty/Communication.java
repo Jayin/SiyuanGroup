@@ -79,14 +79,16 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						page_all = 1;
 						String json = new String(data);
 						if (JsonUtils.isOK(json)) {
 							List<Issue> newData_all = Issue
 									.create_by_jsonarray(json);
-							data_all.clear();
-							data_all.addAll(newData_all);
-							adapter_all.notifyDataSetChanged();
+							if(newData_all!=null){
+								page_all = 1;
+								data_all.clear();
+								data_all.addAll(newData_all);
+								adapter_all.notifyDataSetChanged();
+							}
 							L.i("Finish success! : onRefresh--->load page="
 									+ page_all + " load 1  ");
 						} else {

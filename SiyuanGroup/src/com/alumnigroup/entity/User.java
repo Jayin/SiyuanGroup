@@ -35,35 +35,23 @@ public class User implements Serializable {
                 JSONObject profile = null;
                 try {   
                         obj = new JSONObject(json);
-//                        user.setId(obj.getString("id"));
-//                        user.setUsername(obj.getString("username"));
-//                        user.setRegTime(obj.getString("regtime"));
-//                        user.setOnline(obj.getInt("isonline") == 0 ? false : true);
-//                        user.setAvatar(obj.getString("avatar"));
-                        
                         user.setId(JsonUtils.getString(obj,"id"));
                         user.setUsername(JsonUtils.getString(obj,"username"));
                         user.setRegTime(JsonUtils.getString(obj,"regtime"));
                         user.setOnline(JsonUtils.getInt(obj,"isonline") == 0 ? false : true);
                         user.setAvatar(JsonUtils.getString(obj,"avatar"));
                         // parse profile
-                        profile = obj.getJSONObject("profile");
-//                        user.setEmail(profile.getString("email"));
-//                        user.setNickname(profile.getString("nickname"));
-//                        user.setName(profile.getString("name"));
-//                        user.setGender(profile.getString("gender"));
-//                        user.setAge(profile.getInt("age"));
-//                        user.setGrade(profile.getInt("grade"));
-//                        user.setUniversity(profile.getString("university"));
-//                        user.setMajor(profile.getString("major"));
-                        user.setEmail(JsonUtils.getString(profile,"email"));
-                        user.setNickname(JsonUtils.getString(profile,"nickname"));
-                        user.setName(JsonUtils.getString(profile,"name"));
-                        user.setGender(JsonUtils.getString(profile,"gender"));
-                        user.setAge(JsonUtils.getInt(profile,"age"));
-                        user.setGrade(JsonUtils.getInt(profile,"grade"));
-                        user.setUniversity(JsonUtils.getString(profile,"university"));
-                        user.setMajor(JsonUtils.getString(profile,"major"));
+                        profile = JsonUtils.getJSONObject(obj, "profile");
+                        if(profile!=null){
+                        	  user.setEmail(JsonUtils.getString(profile,"email"));
+                              user.setNickname(JsonUtils.getString(profile,"nickname"));
+                              user.setName(JsonUtils.getString(profile,"name"));
+                              user.setGender(JsonUtils.getString(profile,"gender"));
+                              user.setAge(JsonUtils.getInt(profile,"age"));
+                              user.setGrade(JsonUtils.getInt(profile,"grade"));
+                              user.setUniversity(JsonUtils.getString(profile,"university"));
+                              user.setMajor(JsonUtils.getString(profile,"major"));
+                        }
                 } catch (Exception e) {
                         e.printStackTrace();
                         user = null;
