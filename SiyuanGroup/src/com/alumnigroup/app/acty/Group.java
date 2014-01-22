@@ -19,20 +19,17 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
-import com.alumnigroup.entity.ResponseHandler;
+import com.alumnigroup.imple.ImageLoadingListenerImple;
+import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -87,6 +84,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						} else {
 							toast("error:" + JsonUtils.getErrorString(json));
 						}
+						lv_all.setCanLoadMore(true);
 						lv_all.onRefreshComplete();
 					}
 
@@ -323,9 +321,9 @@ public class Group extends BaseActivity implements OnItemClickListener {
 				h.memberCount = (TextView) convertView
 						.findViewById(R.id.item_lv_acty_group_tv_memberCount);
 				h.description = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_activities_ownername);
-				h.avater = (ImageView) convertView
 						.findViewById(R.id.item_lv_acty_group_tv_description);
+				h.avater = (ImageView) convertView
+						.findViewById(R.id.item_lv_acty_circlelist_iv_avater);
 				convertView.setTag(h);
 			} else {
 				h = (ViewHodler) convertView.getTag();
@@ -335,8 +333,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			h.username.setText("ownid" + group.getOwnerid());
 			h.memberCount.setText(group.getMemberships().size() + "名会员");
 			h.description.setText(group.getDescription());
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + group.getAvatar(), h.avater);
+			ImageLoader.getInstance().displayImage(RestClient.BASE_URL + group.getAvatar(), h.avater);
 			return convertView;
 		}
 

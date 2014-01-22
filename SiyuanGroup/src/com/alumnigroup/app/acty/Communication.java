@@ -25,6 +25,7 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.imple.ImageLoadingListenerImple;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
@@ -33,12 +34,14 @@ import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 /**
  * 校友交流
+ * 
  * @author Jayin Ton
- *
+ * 
  */
-public class Communication extends BaseActivity implements OnItemClickListener{
+public class Communication extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_post, btn_all, btn_myjoin, btn_favourite;
 	private PullAndLoadListView lv_all, lv_myjoin, lv_favourit;
@@ -67,13 +70,7 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
 						lv_all.onRefreshComplete();
-						L.i("Finish Faild : onRefresh--->load page=" + page_all
-								+ " load 1  ");
 					}
 
 					@Override
@@ -83,14 +80,12 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 						if (JsonUtils.isOK(json)) {
 							List<Issue> newData_all = Issue
 									.create_by_jsonarray(json);
-							if(newData_all!=null){
+							if (newData_all != null) {
 								page_all = 1;
 								data_all.clear();
 								data_all.addAll(newData_all);
 								adapter_all.notifyDataSetChanged();
 							}
-							L.i("Finish success! : onRefresh--->load page="
-									+ page_all + " load 1  ");
 						} else {
 							toast("error:" + JsonUtils.getErrorString(json));
 						}
@@ -109,13 +104,7 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
 						lv_all.onLoadMoreComplete();
-						L.i("Finish Faild:load more  --->load page=" + page_all
-								+ "  page+1 =" + (page_all + 1));
 					}
 
 					@Override
@@ -132,7 +121,7 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 							} else {
 								if (newData_all == null) {
 									toast("网络异常,解析错误");
-								}else if (newData_all.size() == 0) {
+								} else if (newData_all.size() == 0) {
 									toast("没有更多了!");
 									lv_all.setCanLoadMore(false);
 								}
@@ -140,8 +129,6 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 						} else {
 							toast("Error:" + JsonUtils.getErrorString(json));
 						}
-						L.i("Finish :load more--->load page=" + page_all
-								+ "  page+1 =" + (page_all + 1));
 						lv_all.onLoadMoreComplete();
 					}
 				});
@@ -315,7 +302,8 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 				h = (ViewHolder) convertView.getTag();
 			}
 			h.name.setText(data.get(position).getUser().getProfile().getName());
-			h.major.setText(data.get(position).getUser().getProfile().getMajor());
+			h.major.setText(data.get(position).getUser().getProfile()
+					.getMajor());
 			h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
 					.getPosttime(), CalendarUtils.TYPE_timeline));
 			h.title.setText(data.get(position).getTitle());
@@ -339,18 +327,18 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = new Intent(this,CommunicationDetail.class);
-		if(parent==lv_all){
-			intent.putExtra("issue", data_all.get(position-1));
-			toast(position+"");
+		Intent intent = new Intent(this, CommunicationDetail.class);
+		if (parent == lv_all) {
+			intent.putExtra("issue", data_all.get(position - 1));
+			toast(position + "");
 		}
-		if(parent==lv_myjoin){
-			intent.putExtra("issue", data_myjoin.get(position-1));
+		if (parent == lv_myjoin) {
+			intent.putExtra("issue", data_myjoin.get(position - 1));
 		}
-		if(parent==lv_favourit){
-			intent.putExtra("issue", data_favourite.get(position-1));
+		if (parent == lv_favourit) {
+			intent.putExtra("issue", data_favourite.get(position - 1));
 		}
-	 	openActivity(intent); 
+		openActivity(intent);
 	}
 
 }

@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.google.gson.Gson;
 
 /**
@@ -20,20 +21,13 @@ import com.google.gson.Gson;
  */
 public class MGroup implements Serializable {
 	public static MGroup create_by_json(String json) {
-		MGroup mGroup = new MGroup();
-		JSONObject obj = null;
-		try {
-			obj = new JSONObject(json);
-			mGroup.setId(JsonUtils.getInt(obj, "id"));
-			mGroup.setOwnerid(JsonUtils.getInt(obj, "ownerid"));
-			mGroup.setDescription(JsonUtils.getString(obj, "description"));
-			mGroup.setCreatetime(JsonUtils.getLong(obj, "createtime"));
-			mGroup.setMemberships(Memberships.create_by_jsonarray(obj.getJSONArray("memberships").toString()));
-		} catch (JSONException e) {
+		try{
+             Gson gson  = new Gson();
+             return (MGroup)gson.fromJson(json, MGroup.class);
+		}catch(Exception e){
 			e.printStackTrace();
-			mGroup = null;
+			return null;
 		}
-		return mGroup;
 	}
 
 	public static  List<MGroup> create_by_jsonarray(String jsonarray) {
@@ -50,7 +44,7 @@ public class MGroup implements Serializable {
 			e.printStackTrace();
 			list = null;
 		}
-		return null;
+		return list;
 	}
 
 	public MGroup() {
@@ -146,41 +140,9 @@ public class MGroup implements Serializable {
 	 * @author Jayin Ton
 	 * 
 	 */
-	public static class Memberships implements Serializable {
+	public  class Memberships implements Serializable {
 		
-		public static Memberships create_by_json(String json){
-			Memberships m = new Memberships();
-			JSONObject obj = null;
-			try{
-				obj = new JSONObject(json);
-			    m.setUserid(JsonUtils.getInt(obj, "userid"));
-			    m.setIsowner(JsonUtils.getInt(obj, "isowner"));
-                m.setIsadmin(JsonUtils.getInt(obj, "isadmin"));
-                m.setRemark(JsonUtils.getString(obj, "remark"));
-                m.setRestrict(JsonUtils.getString(obj, "restrict"));
-                m.setUser(User.create_by_json(obj.getJSONObject("user").toString()));
-			}catch(Exception e){
-				e.printStackTrace();
-				m = null;
-			}
-			
-			return new Memberships();
-		}
-		
-		public static List<Memberships> create_by_jsonarray(String jsonarray){
-			List<Memberships> list = new ArrayList<MGroup.Memberships>();
-			JSONArray obj = null;
-			try {
-				obj = new JSONArray(jsonarray);
-				for(int i=0;i<obj.length();i++){
-					list.add(create_by_json(obj.getJSONObject(i).toString()));
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			    list  = null;
-			}
-			return list;
-		}
+	
 		/** 用户id */
 		private int userid;
 		/** 是否是圈子拥有者 */

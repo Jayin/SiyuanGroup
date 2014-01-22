@@ -18,6 +18,7 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.imple.ImageLoadingListenerImple;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;

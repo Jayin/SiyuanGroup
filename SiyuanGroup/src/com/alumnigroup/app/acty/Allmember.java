@@ -21,6 +21,7 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.ImageLoadingListenerImple;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
@@ -62,7 +63,6 @@ public class Allmember extends BaseActivity {
 			@Override
 			public void onRefresh() {
 				// page=1?
-				L.i("onRefresh--->load page=" + page_allmember + " load 1  ");
 				api.getAllMember(1, new AsyncHttpResponseHandler() {
 
 					@Override
@@ -74,29 +74,27 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onRefreshComplete();
-						L.i("Finish Faild : onRefresh--->load page="
-								+ page_allmember + " load 1  ");
 					}
 
 					// page=1?
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						page_allmember = 1;
 						// 还要判断是否有error_code
 						String json = new String(data);// jsonarray
 						if (JsonUtils.isOK(json)) {
 							List<User> newData_allmember = User
 									.create_by_jsonarray(json);
-							data_allmember.clear();
-							data_allmember.addAll(newData_allmember);
-							adapter_allmember.notifyDataSetChanged();
-							L.i("Finish success! : onRefresh--->load page="
-									+ page_allmember + " load 1  ");
+							if (newData_allmember != null) {
+								page_allmember = 1;
+								data_allmember.clear();
+								data_allmember.addAll(newData_allmember);
+								adapter_allmember.notifyDataSetChanged();
+							}
 						} else {
 							toast("Error:" + JsonUtils.getErrorString(json));
 						}
-					 	lv_allmember.setCanLoadMore(true);//因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
+						lv_allmember.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
 						lv_allmember.onRefreshComplete();
 					}
 				});
@@ -107,8 +105,6 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
-				L.i("load more--->load page=" + page_allmember + "  page+1 ="
-						+ (page_allmember + 1));
 				api.getAllMember(page_allmember + 1,
 						new AsyncHttpResponseHandler() {
 
@@ -121,9 +117,6 @@ public class Allmember extends BaseActivity {
 								if (err != null)
 									L.i(err.toString());
 								lv_allmember.onLoadMoreComplete();
-								L.i("Finish Faild:load more  --->load page="
-										+ page_allmember + "  page+1 ="
-										+ (page_allmember + 1));
 							}
 
 							@Override
@@ -145,7 +138,7 @@ public class Allmember extends BaseActivity {
 									} else {
 										if (newData_allmember == null) {
 											toast("网络异常,解析错误");
-										}else if (newData_allmember.size() == 0) {
+										} else if (newData_allmember.size() == 0) {
 											toast("没有更多了!");
 											lv_allmember.setCanLoadMore(false);
 										}
@@ -154,9 +147,6 @@ public class Allmember extends BaseActivity {
 									toast("Error:"
 											+ JsonUtils.getErrorString(json));
 								}
-								L.i("Finish :load more--->load page="
-										+ page_allmember + "  page+1 ="
-										+ (page_allmember + 1));
 								lv_allmember.onLoadMoreComplete();
 
 							}
@@ -299,23 +289,12 @@ public class Allmember extends BaseActivity {
 				h = (ViewHolder) convertView.getTag();
 			}
 			User u = data.get(position);
-			if (u == null)
-				L.i(position + "u is null");
-			ImageLoader loader = ImageLoader.getInstance();
-			if (u.getAvatar() == null)
-				L.i(" u.getAvatar() is null");
-			else {
-				L.i(" u.getAvatar() is  " + u.getAvatar());
-			}
-			if (h.avatar == null)
-				L.i("h.avatar");
-			if (loader == null)
-				L.i("loader is null");
-			loader.displayImage(RestClient.BASE_URL + u.getAvatar(), h.avatar);
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + u.getAvatar(), h.avatar);
 			h.grade.setText(u.getProfile().getGrade() + "");
 			h.name.setText(u.getProfile().getName());
 			h.major.setText(u.getProfile().getMajor());
-			if (u.getIsonline()==1) {
+			if (u.getIsonline() == 1) {
 				h.online.setVisibility(View.VISIBLE);
 			} else {
 				h.online.setVisibility(View.INVISIBLE);
