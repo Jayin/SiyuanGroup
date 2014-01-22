@@ -121,7 +121,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 									toast("网络异常,解析错误");
 								} else if (newData_all.size() == 0) {
 									toast("没有更多了!");
-									lv_all.canLoadMore(false);
+									lv_all.setCanLoadMore(false);
 								}
 							}
 						} else {

@@ -65,7 +65,7 @@ public class CommunicationDetail extends BaseActivity {
         //头像
 		ImageLoader.getInstance().displayImage(
 				RestClient.BASE_URL + issue.getUser().getAvatar(), iv_avater);
-		tv_username.setText(issue.getUser().getName());
+		tv_username.setText(issue.getUser().getProfile().getName());
 		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
 				CalendarUtils.TYPE_timeline));
 		tv_title.setText(issue.getTitle());
@@ -138,7 +138,7 @@ public class CommunicationDetail extends BaseActivity {
 			}
 		});
 		// 评论是一次性加载完毕，所有不会出现加载更多
-		lv_comment.canLoadMore(false);
+		lv_comment.setCanLoadMore(false);
 		lv_comment.toRefresh();
 
 	}
@@ -212,7 +212,7 @@ public class CommunicationDetail extends BaseActivity {
 			} else {
 				h = (ViewHolder) convertView.getTag();
 			}
-			h.name.setText(data.get(position).getUser().getName());
+			h.name.setText(data.get(position).getUser().getProfile().getName());
 			h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
 					.getPosttime(), CalendarUtils.TYPE_timeline));
 			h.body.setText(data.get(position).getBody());

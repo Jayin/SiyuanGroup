@@ -134,7 +134,7 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 									toast("网络异常,解析错误");
 								}else if (newData_all.size() == 0) {
 									toast("没有更多了!");
-									lv_all.canLoadMore(false);
+									lv_all.setCanLoadMore(false);
 								}
 							}
 						} else {
@@ -314,8 +314,8 @@ public class Communication extends BaseActivity implements OnItemClickListener{
 			} else {
 				h = (ViewHolder) convertView.getTag();
 			}
-			h.name.setText(data.get(position).getUser().getName());
-			h.major.setText(data.get(position).getUser().getMajor());
+			h.name.setText(data.get(position).getUser().getProfile().getName());
+			h.major.setText(data.get(position).getUser().getProfile().getMajor());
 			h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
 					.getPosttime(), CalendarUtils.TYPE_timeline));
 			h.title.setText(data.get(position).getTitle());

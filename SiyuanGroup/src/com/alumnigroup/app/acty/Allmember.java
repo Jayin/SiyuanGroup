@@ -96,6 +96,7 @@ public class Allmember extends BaseActivity {
 						} else {
 							toast("Error:" + JsonUtils.getErrorString(json));
 						}
+					 	lv_allmember.setCanLoadMore(true);//因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
 						lv_allmember.onRefreshComplete();
 					}
 				});
@@ -146,7 +147,7 @@ public class Allmember extends BaseActivity {
 											toast("网络异常,解析错误");
 										}else if (newData_allmember.size() == 0) {
 											toast("没有更多了!");
-											lv_allmember.canLoadMore(false);
+											lv_allmember.setCanLoadMore(false);
 										}
 									}
 								} else {
@@ -311,10 +312,10 @@ public class Allmember extends BaseActivity {
 			if (loader == null)
 				L.i("loader is null");
 			loader.displayImage(RestClient.BASE_URL + u.getAvatar(), h.avatar);
-			h.grade.setText(u.getGrade() + "");
-			h.name.setText(u.getName());
-			h.major.setText(u.getMajor());
-			if (u.isOnline()) {
+			h.grade.setText(u.getProfile().getGrade() + "");
+			h.name.setText(u.getProfile().getName());
+			h.major.setText(u.getProfile().getMajor());
+			if (u.getIsonline()==1) {
 				h.online.setVisibility(View.VISIBLE);
 			} else {
 				h.online.setVisibility(View.INVISIBLE);

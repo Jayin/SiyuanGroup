@@ -124,7 +124,8 @@ public class SpacePersonal extends BaseActivity implements
 		etLeave2Visitor = (EditText) _getView(R.id.acty_space_personal_top_et_leave2visitor);
 		etLeave2Visitor.setOnFocusChangeListener(this);
 		etLeave2Visitor.setOnTouchListener(this);
-		etLeave2Visitor.setText(myself.getSignature());
+		//etLeave2Visitor.setText(myself.getSignature());
+		etLeave2Visitor.setText("myself.getSignature()"); //签名已经移除
 		oldLeave2VisitorContent = etLeave2Visitor.getText().toString();
 		ivBackgroup = (ImageView) _getView(R.id.acty_space_personal_top_iv_backgroup);
 		ivBackgroup.setOnClickListener(this);
