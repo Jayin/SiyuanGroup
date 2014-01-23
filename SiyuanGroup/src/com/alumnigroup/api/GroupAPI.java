@@ -95,6 +95,6 @@ public class GroupAPI {
 	public void view(int id,AsyncHttpResponseHandler responseHandler){
 		RequestParams params = new RequestParams();
 		params.add("id", id+"");
-		RestClient.post("/api/groups/view", params, responseHandler);
+		RestClient.get("/api/groups/view", params, responseHandler);
 	}
 }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -13,18 +14,22 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.entity.MGroup.Memberships;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.alumnigroup.widget.PullAndLoadListView;
+import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
+import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -43,6 +48,9 @@ public class GroupInfo extends BaseActivity {
 	private ViewPager viewpager;
 	private List<View> btns = new ArrayList<View>();
 	private GroupAPI api;
+	private PullAndLoadListView lv_member;
+	private List<User> data_user;
+	private MemberAdapter adapter_member;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +62,54 @@ public class GroupInfo extends BaseActivity {
 	}
 
 	private void initController() {
+		lv_member.setAdapter(adapter_member);
+		lv_member.setOnRefreshListener(new OnRefreshListener() {
 
+			@Override
+			public void onRefresh() {
+				api.view(group.getId(), new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						boolean canRefresh = true;
+						MGroup mGroup = MGroup.create_by_json(obj.toString());
+						List<User> newData = new ArrayList<User>();
+						for (Memberships ms : mGroup.getMemberships()) {
+							newData.add(ms.getUser());
+						}
+						if (newData != null) {
+							if (newData.size() == 0) {
+								toast("还没有会员!");
+								canRefresh = false;
+							} else {
+								data_user.clear();
+								data_user.addAll(newData);
+								adapter_member.notifyDataSetChanged();
+								canRefresh = false;
+							}
+						}
+						if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
+						lv_member.onRefreshComplete();
+						
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误代码:" + errorCode);
+						lv_member.onRefreshComplete();
+					}
+				});
+			}
+		});
+		lv_member.setOnLoadMoreListener(new OnLoadMoreListener() {
+
+			@Override
+			public void onLoadMore() {
+
+			}
+		});
+		lv_member.setCanLoadMore(false);
+		lv_member.toRefresh();
 	}
 
 	@Override
@@ -63,6 +118,10 @@ public class GroupInfo extends BaseActivity {
 		group = (MGroup) getSerializableExtra("group");
 		DataPool dp = new DataPool(DataPool.SP_Name_User, this);
 		user = (User) dp.get(DataPool.SP_Key_User);
+
+		data_user = new ArrayList<User>();
+		adapter_member = new MemberAdapter(data_user, getContext());
+
 	}
 
 	@Override
@@ -84,31 +143,34 @@ public class GroupInfo extends BaseActivity {
 	private void initViewPager() {
 		viewpager = (ViewPager) _getView(R.id.acty_group_content);
 		View info = getLayoutInflater().inflate(
-				R.layout.frame_acty_group_groupinfo, null);
+				R.layout.frame_acty_groupinfo_groupinfo, null);
 		View member = getLayoutInflater().inflate(
-				R.layout.frame_acty_group_groupmember, null);
+				R.layout.frame_acty_groupinfo_groupmember, null);
 		View share = getLayoutInflater().inflate(
-				R.layout.frame_acty_group_groupshare, null);
+				R.layout.frame_acty_groupinfo_groupshare, null);
+
+		lv_member = (PullAndLoadListView) member
+				.findViewById(R.id.frame_acty_groupinfo_groupmember_listview);
 
 		tv_owner = (TextView) info
-				.findViewById(R.id.frame_acty_group_groupinfo_tv_owner);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_tv_owner);
 		tv_numMember = (TextView) info
-				.findViewById(R.id.frame_acty_group_groupinfo_tv_numMember);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_tv_numMember);
 		tv_description = (TextView) info
-				.findViewById(R.id.frame_acty_group_groupinfo_tv_description);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_tv_description);
 		tv_groupName = (TextView) info
-				.findViewById(R.id.frame_acty_group_groupinfo_tv_groupName);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_tv_groupName);
 		iv_avatar = (ImageView) info
-				.findViewById(R.id.frame_acty_group_groupinfo_iv_avater);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_iv_avater);
 
 		btn_join = info
-				.findViewById(R.id.frame_acty_group_groupinfo_btn_joingroup);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_joingroup);
 		btn_invite = info
-				.findViewById(R.id.frame_acty_group_groupinfo_btn_invite);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
 		btn_exitGroup = info
-				.findViewById(R.id.frame_acty_group_groupinfo_btn_exitgroup);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
 		btn_deleteGroup = info
-				.findViewById(R.id.frame_acty_group_groupinfo_btn_deletegroup);
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup);
 		btn_join.setOnClickListener(this);
 		btn_invite.setOnClickListener(this);
 		btn_exitGroup.setOnClickListener(this);
@@ -157,7 +219,7 @@ public class GroupInfo extends BaseActivity {
 		case R.id.acty_groupinfo_footer_groupShare:
 			viewpager.setCurrentItem(2);
 			break;
-		case R.id.frame_acty_group_groupinfo_btn_joingroup:
+		case R.id.frame_acty_groupinfo_groupinfo_btn_joingroup:
 			api.join(group.getId(), new ResponseHandler() {
 
 				@Override
@@ -178,14 +240,14 @@ public class GroupInfo extends BaseActivity {
 				}
 			});
 			break;
-		case R.id.frame_acty_group_groupinfo_btn_invite:
+		case R.id.frame_acty_groupinfo_groupinfo_btn_invite:
 			toast("邀请");
 			break;
-		case R.id.frame_acty_group_groupinfo_btn_exitgroup:
+		case R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup:
 			toast("退出圈子");
 
 			break;
-		case R.id.frame_acty_group_groupinfo_btn_deletegroup:
+		case R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup:
 			toast("删除 圈子");
 			break;
 		default:

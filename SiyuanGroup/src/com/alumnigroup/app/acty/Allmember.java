@@ -8,27 +8,21 @@ import org.apache.http.Header;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.api.RestClient;
+import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
-import com.alumnigroup.imple.ImageLoadingListenerImple;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 全站会员
@@ -192,8 +186,8 @@ public class Allmember extends BaseActivity {
 		btn_allmenmber.setOnClickListener(this);
 		btn_myfriend.setOnClickListener(this);
 
-		adapter_allmember = new MemberAdapter(data_allmember);
-		adapter_myfriend = new MemberAdapter(data_myfriend);
+		adapter_allmember = new MemberAdapter(data_allmember,getContext());
+		adapter_myfriend = new MemberAdapter(data_myfriend,getContext());
 
 		lv_allmember.setAdapter(adapter_allmember);
 		lv_myfriend.setAdapter(adapter_myfriend);
@@ -238,74 +232,6 @@ public class Allmember extends BaseActivity {
 			break;
 		default:
 			break;
-		}
-	}
-
-	/**
-	 * 适配器
-	 */
-	class MemberAdapter extends BaseAdapter {
-		private List<User> data;
-
-		public MemberAdapter(List<User> data) {
-			this.data = data;
-		}
-
-		@Override
-		public int getCount() {
-			return data.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder h;
-			if (convertView == null) {
-				convertView = LayoutInflater.from(getContext()).inflate(
-						R.layout.item_lv_allmember, null);
-				h = new ViewHolder();
-
-				h.avatar = (ImageView) convertView
-						.findViewById(R.id.item_lv_allmember_avatar);
-				h.online = (ImageView) convertView
-						.findViewById(R.id.item_lv_allmember_online);
-				h.grade = (TextView) convertView
-						.findViewById(R.id.item_lv_allmemeber_grade);
-				h.name = (TextView) convertView
-						.findViewById(R.id.item_lv_allmemeber_name);
-				h.major = (TextView) convertView
-						.findViewById(R.id.item_lv_allmemeber_major);
-				convertView.setTag(h);
-			} else {
-				h = (ViewHolder) convertView.getTag();
-			}
-			User u = data.get(position);
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + u.getAvatar(), h.avatar);
-			h.grade.setText(u.getProfile().getGrade() + "");
-			h.name.setText(u.getProfile().getName());
-			h.major.setText(u.getProfile().getMajor());
-			if (u.getIsonline() == 1) {
-				h.online.setVisibility(View.VISIBLE);
-			} else {
-				h.online.setVisibility(View.INVISIBLE);
-			}
-			return convertView;
-		}
-
-		class ViewHolder {
-			ImageView avatar, online;
-			TextView name, grade, major;
-			ImageLoader loader;
 		}
 	}
 

@@ -184,7 +184,7 @@ public class JsonUtils {
 			return false;
 		}
 		try {
-			if (getInt(obj, "error_code") > 0) {
+			if (getInt(obj, "errorCode") > 0) {
 				return false;
 			}
 		} catch (JSONException e) {
@@ -215,5 +215,13 @@ public class JsonUtils {
 			}
 		}
 		return null;
+	}
+	/**
+	 * 获取请求返回的error_code
+	 * @param json 请求返回体json
+	 * @return error_code
+	 */
+	public static int  getErrorCode(String json){
+	   return getInt(json, "error_code");
 	}
 }

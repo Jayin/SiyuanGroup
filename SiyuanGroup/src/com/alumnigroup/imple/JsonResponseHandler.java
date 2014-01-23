@@ -27,10 +27,10 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 			Throwable err) {
 		// IOException
 		if (statusCode == 0) {
-			onFaild(Error_IOException,"bad newwork");
+			onFaild(Error_IOException,statusCode);
 		} else {
 			//status code > 300
-			onFaild(Error_Http,"http error");
+			onFaild(Error_Http,statusCode);
 		}
 	}
 
@@ -45,16 +45,16 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 					onOK(headers, obj);
 				} else {
 					//json string include `error_code`
-					onFaild(Error_Response,JsonUtils.getErrorString(json));
+					onFaild(Error_Response,JsonUtils.getErrorCode(json));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 				//can't not create JSONObject , server response the wrong format json string !
-				onFaild(Error_JsonParse,"server response the wrong format json string");
+				onFaild(Error_JsonParse,statusCode);
 			}
 		} else {
 			// statusCode:201-204
-			onFaild(Error_Http,"http error");
+			onFaild(Error_Http,statusCode);
 		}
 	}
 
@@ -71,8 +71,8 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
      * <li>json构建JSONObjec对象失败，
      * <li>json字符串解析（JsonUtils.isOK(json)}）出现错误代码
      * @param errorType 对应上述的错误类型{@link#Error_IOException}  {@link#Error_Http}  {@link#Error_JsonParse}  {@link#Error_Response}  
-     * @param errorMsg error message
+     * @param errorCode error code (三种:0,statusCode,error_code)
      */ 
-	public abstract void onFaild(int errorType,String errorMsg);
+	public abstract void onFaild(int errorType,int errorCode);
 	
 }
