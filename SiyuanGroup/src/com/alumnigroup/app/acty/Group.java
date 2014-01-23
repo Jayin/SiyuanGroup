@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 
+import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -24,7 +25,6 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
-import com.alumnigroup.imple.ImageLoadingListenerImple;
 import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
@@ -282,7 +282,15 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-
+		Intent intent = new Intent(this,GroupInfo.class);
+        if(parent==lv_all){
+        	intent.putExtra("group", data_all.get(position-1));	
+        }else if(parent==lv_mycreate){
+        	intent.putExtra("group", data_mycreate.get(position-1));
+        }else{
+        	intent.putExtra("group", data_myjoin.get(position-1));
+        }
+        openActivity(intent);
 	}
 
 	class GroupAdapter extends BaseAdapter {
@@ -331,7 +339,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			MGroup group = data.get(position);
 			h.name.setText(group.getName());
 			h.username.setText("ownid" + group.getOwnerid());
-			h.memberCount.setText(group.getMemberships().size() + "名会员");
+			h.memberCount.setText(group.getNumMembers() + "名会员");
 			h.description.setText(group.getDescription());
 			ImageLoader.getInstance().displayImage(RestClient.BASE_URL + group.getAvatar(), h.avater);
 			return convertView;

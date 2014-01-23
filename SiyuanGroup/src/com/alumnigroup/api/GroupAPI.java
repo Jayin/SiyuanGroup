@@ -87,4 +87,14 @@ public class GroupAPI {
 		params.add("groupid", groupid+"");
 		RestClient.post("/api/groups/quit", params, responseHandler);
 	}
+	/**
+	 * 查看圈子详细资料 
+	 * @param id 圈子id
+	 * @param responseHandler 处理器
+ 	 */
+	public void view(int id,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("id", id+"");
+		RestClient.post("/api/groups/view", params, responseHandler);
+	}
 }

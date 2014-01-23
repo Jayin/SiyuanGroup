@@ -21,16 +21,16 @@ import com.google.gson.Gson;
  */
 public class MGroup implements Serializable {
 	public static MGroup create_by_json(String json) {
-		try{
-             Gson gson  = new Gson();
-             return (MGroup)gson.fromJson(json, MGroup.class);
-		}catch(Exception e){
+		try {
+			Gson gson = new Gson();
+			return (MGroup) gson.fromJson(json, MGroup.class);
+		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static  List<MGroup> create_by_jsonarray(String jsonarray) {
+	public static List<MGroup> create_by_jsonarray(String jsonarray) {
 		List<MGroup> list = new ArrayList<MGroup>();
 		JSONObject obj = null;
 		JSONArray array = null;
@@ -65,8 +65,18 @@ public class MGroup implements Serializable {
 	private String avatar;
 	/** 圈子名单 */
 	private List<Memberships> memberships;
-	/** 圈子拥有者*/
+	/** 圈子拥有者 */
 	private User owner;
+	/** 圈子人数 */
+	private int numMembers;
+
+	public int getNumMembers() {
+		return numMembers;
+	}
+
+	public void setNumMembers(int numMembers) {
+		this.numMembers = numMembers;
+	}
 
 	public User getOwner() {
 		return owner;
@@ -132,17 +142,14 @@ public class MGroup implements Serializable {
 		this.memberships = memberships;
 	}
 
-
-
 	/**
-	 *一条 成员名单数据
+	 * 一条 成员名单数据
 	 * 
 	 * @author Jayin Ton
 	 * 
 	 */
-	public  class Memberships implements Serializable {
-		
-	
+	public class Memberships implements Serializable {
+
 		/** 用户id */
 		private int userid;
 		/** 是否是圈子拥有者 */
@@ -155,9 +162,9 @@ public class MGroup implements Serializable {
 		private String restrict;
 		/** 成员信息 */
 		private User user;
-		
-		public Memberships(){
-			
+
+		public Memberships() {
+
 		}
 
 		public int getUserid() {
