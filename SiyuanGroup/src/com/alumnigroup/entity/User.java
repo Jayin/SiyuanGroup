@@ -69,7 +69,7 @@ public class User implements Serializable {
 	}
 
 	/** 用户id **/
-	private String id;
+	private int id;
 	/** 用户名(登录) */
 	private String username;
 	/** 注册时间 */
@@ -100,12 +100,13 @@ public class User implements Serializable {
 	public void setProfile(Profile profile) {
 		this.profile = profile;
 	}
+ 
 
-	public String getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

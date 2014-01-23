@@ -4,9 +4,10 @@
     android:orientation="horizontal" >
 
     <RelativeLayout
-        android:id="@+id/acty_circle_footer_groupInfo"
+        android:id="@+id/acty_groupinfo_footer_groupInfo"
         android:layout_width="1dp"
         android:layout_height="match_parent"
+    android:background="@color/blue_nav_bg_press"
         android:layout_weight="1" >
 
         <TextView
@@ -20,7 +21,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_circle_footer_groupMenber"
+        android:id="@+id/acty_groupinfo_footer_groupMenber"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -35,7 +36,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_circle_footer_groupShare"
+        android:id="@+id/acty_groupinfo_footer_groupShare"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >

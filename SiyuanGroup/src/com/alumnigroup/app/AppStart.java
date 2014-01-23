@@ -39,8 +39,8 @@ public class AppStart extends BaseActivity {
 	}
 
 	private boolean checkLoginInfo() {
-		DataPool dp = new DataPool(this);
-		if (dp.contains("user"))
+		DataPool dp = new DataPool(DataPool.SP_Name_User,this);
+		if (dp.contains(DataPool.SP_Key_User))
 			return true;
 		else
 			return false;

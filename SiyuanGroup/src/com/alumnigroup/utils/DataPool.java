@@ -23,7 +23,8 @@ import android.util.Base64;
  * 
  */
 public class DataPool {
-    public final static String SP_User = "user";
+    public final static String SP_Name_User = "User"; //SharedPreference's name
+    public final static String SP_Key_User = "user";//key name in SharedPreference 
 	private Context context;
 	private String DataPoolName = "DataPool";
 	private SharedPreferences sp;

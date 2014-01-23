@@ -169,7 +169,7 @@ public class Login extends BaseActivity {
 	@Override
 	protected void initData() {
 		api = new UserAPI();
-		dp = new DataPool(this);
+		dp = new DataPool(DataPool.SP_Name_User,this);
 	}
 
 	@Override
@@ -211,7 +211,7 @@ public class Login extends BaseActivity {
 					if (userList == null || userList.size() == 0) {
 						toast("登录失败 没有改用户信息");
 					} else {
-						if (dp.put(DataPool.SP_User, userList.get(0))) {
+						if (dp.put(DataPool.SP_Key_User, userList.get(0))) {
 							Intent intent = new Intent(Login.this, Main.class);
 							intent.putExtra("myself", userList.get(0));
 							dialog.dismiss();
