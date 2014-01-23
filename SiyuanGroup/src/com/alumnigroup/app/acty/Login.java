@@ -83,8 +83,11 @@ public class Login extends BaseActivity {
 						@Override
 						public void onSuccess(int statusCode, Header[] headers,
 								byte[] data) {
+							dialog.dismiss();
 							// 登录成功。。。save login info here..
+							
 							String json = new String(data);
+							debug("onSuccess-->"+json);
 							// toast(json);
 							// succeed(json);
 							if (JsonUtils.isOK(json)) {
@@ -214,7 +217,6 @@ public class Login extends BaseActivity {
 						if (dp.put(DataPool.SP_Key_User, userList.get(0))) {
 							Intent intent = new Intent(Login.this, Main.class);
 							intent.putExtra("myself", userList.get(0));
-							dialog.dismiss();
 							openActivity(intent);
 							closeActivity();
 						}
@@ -224,7 +226,6 @@ public class Login extends BaseActivity {
 				@Override
 				public void onFailure(int statusCode, Header[] header,
 						byte[] data, Throwable err) {
-					dialog.dismiss();
 					toast("网络异常 错误码:"+statusCode);
 				}
 			});

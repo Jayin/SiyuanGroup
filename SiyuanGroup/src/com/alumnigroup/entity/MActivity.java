@@ -79,6 +79,8 @@ public class MActivity implements Serializable {
 	private String site;
 	/** 活动名单 **/
 	private List<UserShip> userships;
+	/** 圈子拥有者*/
+	private User owner;
 
 	public int getId() {
 		return id;

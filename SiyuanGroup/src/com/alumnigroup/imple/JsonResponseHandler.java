@@ -4,6 +4,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
@@ -33,7 +34,7 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 			onFaild(Error_Http,statusCode);
 		}
 	}
-
+   //在这里打log ...
 	@Override
 	public void onSuccess(int statusCode, Header[] headers, byte[] data) {
 		if (statusCode == 200) {
@@ -44,6 +45,7 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 				if (JsonUtils.isOK(json)) {
 					onOK(headers, obj);
 				} else {
+					L.e(json);
 					//json string include `error_code`
 					onFaild(Error_Response,JsonUtils.getErrorCode(json));
 				}

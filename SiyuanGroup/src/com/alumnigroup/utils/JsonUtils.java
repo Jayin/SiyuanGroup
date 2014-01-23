@@ -222,6 +222,6 @@ public class JsonUtils {
 	 * @return error_code
 	 */
 	public static int  getErrorCode(String json){
-	   return getInt(json, "error_code");
+	   return getInt(json, "errorCode");
 	}
 }

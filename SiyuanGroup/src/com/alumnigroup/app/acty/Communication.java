@@ -237,6 +237,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			break;
 		case R.id.acty_head_btn_post:
 			// post here
+			openActivity(CommunicationPublish.class);
 			break;
 		case R.id.acty_comunication_footer_all:
 			viewpager.setCurrentItem(0, true);
