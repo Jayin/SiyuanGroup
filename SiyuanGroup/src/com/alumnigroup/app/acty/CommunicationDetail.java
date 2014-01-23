@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,6 @@ import com.alumnigroup.entity.Issue;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.CommentView;
-import com.alumnigroup.widget.PullAndLoadListView;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -145,7 +143,9 @@ public class CommunicationDetail extends BaseActivity {
 			break;
 		case R.id.acty_communicationdetail_footer_comment:
 			// 评论
-			toast("comment");
+			Intent comIntent = new Intent(this,CommunicationComment.class);
+			comIntent.putExtra("issue", issue);
+			openActivity(comIntent);
 			break;
 		case R.id.acty_communicationdetail_footer_favourite:
 			// 收藏

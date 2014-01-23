@@ -141,6 +141,10 @@
             android:name=".acty.ActivitiesPublish"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.CommunicationComment"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

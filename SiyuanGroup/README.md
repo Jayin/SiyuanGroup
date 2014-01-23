@@ -9,6 +9,14 @@ depend library
 ===
 * PullAndLoadListView
 * Timessquare
+* AsyncHttpClient
+* universal-image-loader
+* google-gson
+
+License
+===
+MIT
+
 
 
 

@@ -331,7 +331,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		Intent intent = new Intent(this, CommunicationDetail.class);
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));
-			toast(position + "");
 		}
 		if (parent == lv_myjoin) {
 			intent.putExtra("issue", data_myjoin.get(position - 1));

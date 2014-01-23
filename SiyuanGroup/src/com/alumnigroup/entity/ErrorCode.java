@@ -8,6 +8,16 @@ public class ErrorCode {
 
 	static {
 		errorList = new HashMap<Integer, String>();
+		errorList.put(302, "重定向 ");
+		errorList.put(400, "错误请求");
+		errorList.put(401, "未授权");
+		errorList.put(403, "无权访问");
+		errorList.put(404, "服务器找不到给定的资源");
+		errorList.put(500, "服务器内部错误");
+		errorList.put(501, "服务器不支持请求");
+		errorList.put(502, "错误网关 ");
+		errorList.put(503, "服务器无法处理请求");
+
 		errorList.put(10001, "System error");
 		errorList.put(10008, "Parameter error");
 		errorList.put(10020, "Invalid api");

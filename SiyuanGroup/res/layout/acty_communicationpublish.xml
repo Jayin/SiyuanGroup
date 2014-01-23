@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/grey" >
+    android:background="@color/grey"
+    android:orientation="vertical" >
 
     <include layout="@layout/acty_communicationpublish_header" />
 
@@ -49,8 +49,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:clickable="true"
                 android:background="@drawable/btn_preference_sigle"
+                android:clickable="true"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -73,8 +73,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:clickable="true"
                 android:background="@drawable/btn_preference_sigle"
+                android:clickable="true"
                 android:orientation="horizontal" >
 
                 <TextView
