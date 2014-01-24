@@ -2,18 +2,71 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/grey"
     android:orientation="vertical" >
 
     <include layout="@layout/acty_groupcreate_header" />
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1" >
+        android:layout_height="match_parent"
+        android:padding="8dp" >
 
-         
-    </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical" >
 
+            <TextView
+                style="@style/TextView.base"
+                android:singleLine="true"
+                android:text="圈子名称"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <EditText
+                
+                android:id="@+id/et_name"
+                style="@style/EditText.base"
+                android:layout_marginTop="6dp" />
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_marginTop="6dp"
+                android:singleLine="true"
+                android:text="圈子简介"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/et_description"
+                style="@style/EditText.base"
+                android:layout_marginTop="6dp"
+                android:minLines="6" />
+
+            <LinearLayout
+                android:id="@+id/invite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:clickable="true"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:layout_weight="1"
+                    android:padding="6dp"
+                    android:text="邀请好友加入" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/ic_item_toright_blue" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

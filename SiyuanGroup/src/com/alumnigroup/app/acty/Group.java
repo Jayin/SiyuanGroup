@@ -78,7 +78,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 								data_all.clear();
 								data_all.addAll(newData_all);
 								adapter_all.notifyDataSetChanged();
-							}else{
+							} else {
 								toast("还没有数据！");
 							}
 						} else {
@@ -97,6 +97,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 				});
 			}
 		});
+
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
@@ -107,6 +108,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
 						String json = new String(data);
+						boolean canLoadMore = true;
 						if (JsonUtils.isOK(json)) {
 							List<MGroup> newData_all = MGroup
 									.create_by_jsonarray(json);
@@ -119,13 +121,14 @@ public class Group extends BaseActivity implements OnItemClickListener {
 									toast("网络异常,解析错误");
 								} else if (newData_all.size() == 0) {
 									toast("没有更多了!");
-									lv_all.setCanLoadMore(false);
+									canLoadMore = false;
 								}
 							}
 						} else {
 							toast("Error:" + JsonUtils.getErrorString(json));
 						}
 						lv_all.onLoadMoreComplete();
+						if(!canLoadMore)lv_all.setCanLoadMore(false);
 					}
 
 					@Override
@@ -272,6 +275,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			break;
 		case R.id.create:
 			toast("create");
+			openActivity(GroupCreate.class);
 			mPopupWindow.dismiss();
 			break;
 		default:
@@ -282,15 +286,15 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		Intent intent = new Intent(this,GroupInfo.class);
-        if(parent==lv_all){
-        	intent.putExtra("group", data_all.get(position-1));	
-        }else if(parent==lv_mycreate){
-        	intent.putExtra("group", data_mycreate.get(position-1));
-        }else{
-        	intent.putExtra("group", data_myjoin.get(position-1));
-        }
-        openActivity(intent);
+		Intent intent = new Intent(this, GroupInfo.class);
+		if (parent == lv_all) {
+			intent.putExtra("group", data_all.get(position - 1));
+		} else if (parent == lv_mycreate) {
+			intent.putExtra("group", data_mycreate.get(position - 1));
+		} else {
+			intent.putExtra("group", data_myjoin.get(position - 1));
+		}
+		openActivity(intent);
 	}
 
 	class GroupAdapter extends BaseAdapter {
@@ -341,7 +345,8 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			h.username.setText("ownid" + group.getOwnerid());
 			h.memberCount.setText(group.getNumMembers() + "名会员");
 			h.description.setText(group.getDescription());
-			ImageLoader.getInstance().displayImage(RestClient.BASE_URL + group.getAvatar(), h.avater);
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + group.getAvatar(), h.avater);
 			return convertView;
 		}
 

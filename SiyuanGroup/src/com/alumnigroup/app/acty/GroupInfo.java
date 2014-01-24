@@ -88,8 +88,10 @@ public class GroupInfo extends BaseActivity {
 								canRefresh = false;
 							}
 						}
-						if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
+						if(!canRefresh)lv_member.setCanRefresh(false,false);
 						lv_member.onRefreshComplete();
+					//	if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
+						//if(canRefresh)lv_member.setCanRefresh(false, false);
 						
 					}
 
