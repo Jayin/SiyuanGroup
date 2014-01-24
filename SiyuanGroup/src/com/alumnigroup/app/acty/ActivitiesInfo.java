@@ -1,11 +1,9 @@
 package com.alumnigroup.app.acty;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
@@ -22,13 +20,11 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
-import com.alumnigroup.entity.MGroup;
+
 import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.Userships;
-import com.alumnigroup.entity.MGroup.Memberships;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
@@ -66,22 +62,16 @@ public class ActivitiesInfo extends BaseActivity {
 	private void initController() {
 		lv_member.setAdapter(adapter_member);
 		lv_member.setOnRefreshListener(new OnRefreshListener() {
-
 			@Override
 			public void onRefresh() {
 				api.getUserList(acty.getId(), new JsonResponseHandler() {
-
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						//Userships us = Userships.create_by_json(obj.getJSONObject("userships"))
-						List<User> newData_member = null;
-						try {
-							debug("userships-->"+obj.getJSONArray("userships").toString());
-							newData_member = User
-									.create_by_jsonarray(obj.getJSONArray("userships").toString());
-						} catch (JSONException e) {
-							e.printStackTrace();
-							newData_member = new ArrayList<User>();//这是在挖坑？
+						List<Userships> us = Userships.create_by_jsonarray(obj
+								.toString());
+						List<User> newData_member = new ArrayList<User>();
+						for (Userships _us : us) {
+							newData_member.add(_us.getUser());
 						}
 						if (newData_member.size() == 0) {
 							toast("还没人参加这活动");
