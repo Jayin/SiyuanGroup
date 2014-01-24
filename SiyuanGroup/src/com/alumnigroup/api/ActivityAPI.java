@@ -112,7 +112,7 @@ public class ActivityAPI {
      * @param responseHandler 处理器
      */
 	public void update(int id, int maxnum, long duration, int statusid,
-			long money, String name,String content, AsyncHttpResponseHandler responseHandler) {
+			long money, String name,String content, String site, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		params.add("maxnum", maxnum + "");
@@ -121,6 +121,7 @@ public class ActivityAPI {
 		params.add("money", money+"");
 		params.add("name", name);
 		params.add("content", content);
+		params.add("site", site);
 		RestClient.post("/api/activities/update", params, responseHandler);
 	}
 

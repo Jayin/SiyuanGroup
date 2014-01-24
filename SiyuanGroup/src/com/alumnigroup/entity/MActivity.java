@@ -80,7 +80,25 @@ public class MActivity implements Serializable {
 	/** 活动名单 **/
 	private List<UserShip> userships;
 	/** 圈子拥有者*/
-	private User owner;
+	private User user;
+	/** 活动人数*/
+	private int numUsership;
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public int getNumUsership() {
+		return numUsership;
+	}
+
+	public void setNumUsership(int numUsership) {
+		this.numUsership = numUsership;
+	}
 
 	public int getId() {
 		return id;

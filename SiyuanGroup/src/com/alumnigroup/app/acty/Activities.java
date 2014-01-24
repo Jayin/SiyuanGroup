@@ -2,6 +2,12 @@ package com.alumnigroup.app.acty;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.http.Header;
+import org.json.JSONObject;
+
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -11,6 +17,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.ActivityAPI;
@@ -18,7 +25,7 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
-import com.alumnigroup.imple.ImageLoadingListenerImple;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
@@ -55,14 +62,67 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
+				api.getActivityList(1, new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<MActivity> newData_all = MActivity
+								.create_by_jsonarray(obj.toString());
+						if (newData_all == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多");
+							page_all = 1;
+						} else {
+							page_all = 1;
+							data_all.clear();
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+						}
+						lv_all.onRefreshComplete();
+						lv_all.setCanLoadMore(true);
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+						lv_all.onRefreshComplete();
+					}
+				});
 			}
 		});
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						boolean canLoadMore = true;
+						List<MActivity> newData_all = MActivity
+								.create_by_jsonarray(obj.toString());
+						if (newData_all == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多");
+							canLoadMore = false;
+						} else {
+							page_all++;
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+						}
+						lv_all.onLoadMoreComplete();
+						if (!canLoadMore)
+							lv_all.setCanLoadMore(false);
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+						lv_all.onLoadMoreComplete();
+					}
+				});
 			}
 		});
 
@@ -227,11 +287,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			MActivity acty = data.get(position);
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
-			h.starttime.setText("活动时间:"
+			h.starttime.setText("时间:"
 					+ CalendarUtils.getTimeFromat(acty.getStarttime(),
-							CalendarUtils.TYPE_ONE));
+							CalendarUtils.TYPE_TWO));
 			h.ownername.setText("name" + acty.getOwnerid());
-			h.applyCount.setText(acty.getUserships().size() + "人报名");
+			h.applyCount.setText(acty.getNumUsership() + "人报名");
 			h.status.setImageResource(acty.getStatus().getId() == 0 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
@@ -249,7 +309,18 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		int real_position = position;
+		int real_position = position - 1;
+		if (parent == lv_all) {
+              Intent intent = new Intent(this,ActivitiesInfo.class);
+              intent.putExtra("activity", data_all.get(real_position));
+              openActivity(intent);
+		}
+		if (parent == lv_myjoin) {
+
+		}
+		if (parent == lv_favourit) {
+
+		}
 	}
 
 }

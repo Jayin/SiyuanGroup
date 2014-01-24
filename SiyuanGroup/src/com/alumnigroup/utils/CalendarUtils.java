@@ -14,6 +14,7 @@ public class CalendarUtils {
 	 */
 	public static String TYPE_timeline = "timeline";
 	public static String TYPE_ONE = "yy-mm-dd-hh-mm";
+	public static String TYPE_TWO ="yy-mm-dd";
 
 	/**
 	 * 根据给定的时间和格式生成一时间字符串
@@ -63,12 +64,16 @@ public class CalendarUtils {
 		} else if ("yy-mm-dd-hh-mm".equals(fromat)) {
 			Calendar c = getCurrent();
 			c.setTimeInMillis(milliseconds);
-			sb.append(c.get(Calendar.YEAR)).append("年")
-					.append((c.get(Calendar.MONTH) + 1) + "").append("月")
-					.append(c.get(Calendar.DAY_OF_MONTH)).append("日")
+			sb.append(getTimeFromat(milliseconds, TYPE_TWO))
 					.append(_formatNmber(c.get(Calendar.HOUR_OF_DAY)))
 					.append(":")
 					.append(_formatNmber(c.get(Calendar.MINUTE)));
+		}else{
+			Calendar c = getCurrent();
+			c.setTimeInMillis(milliseconds);
+			sb.append(c.get(Calendar.YEAR)).append("年")
+			.append((c.get(Calendar.MONTH) + 1) + "").append("月")
+			.append(c.get(Calendar.DAY_OF_MONTH)).append("日");
 		}
 
 		return sb.toString();

@@ -41,9 +41,11 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="2dp"
                     android:maxEms="7"
+                    android:singleLine="true"
                     android:text="马达拉斯加"
                     android:textColor="@color/grey_lv_forth"
-                    android:textSize="10sp" />
+                    android:textSize="12sp"  android:textStyle="bold"
+                    />
 
                 <ImageView
                     android:id="@+id/item_lv_acty_activities_iv_status"
@@ -57,12 +59,13 @@
                     style="@style/TextView.base"
                     android:layout_width="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="6dp"
+                    android:layout_marginRight="2dp"
                     android:ellipsize="end"
                     android:gravity="right"
+                    android:singleLine="true"
                     android:text="活动时间:2014-4-5"
                     android:textColor="@color/grey_lv_forth"
-                    android:textSize="10sp" />
+                    android:textSize="12sp" android:textStyle="bold"/>
             </LinearLayout>
 
             <TextView

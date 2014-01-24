@@ -4,19 +4,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <include layout="@layout/acty_activityinfo_header" />
+    <include layout="@layout/acty_activitiesinfo_header" />
 
-    <LinearLayout
+      <android.support.v4.view.ViewPager
+        android:id="@+id/acty_activitiesinfo_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="horizontal" >
+        android:background="@color/white" >
+    </android.support.v4.view.ViewPager>
 
-        <include
-            android:id="@+id/acty_circle_groupInfo"
-            layout="@layout/frame_acty_activityinfo_introduce" />
-    </LinearLayout>
-
-    <include layout="@layout/acty_activityinfo_foot" />
+    <include layout="@layout/acty_activitiesinfo_foot" />
 
 </LinearLayout>
