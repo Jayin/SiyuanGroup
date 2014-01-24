@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.L;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -66,6 +67,7 @@ public class MemberAdapter extends BaseAdapter {
 		User u = data.get(position);
 		ImageLoader.getInstance().displayImage(
 				RestClient.BASE_URL + u.getAvatar(), h.avatar);
+		
 		h.grade.setText(u.getProfile().getGrade() + "");
 		h.name.setText(u.getProfile().getName());
 		h.major.setText(u.getProfile().getMajor());

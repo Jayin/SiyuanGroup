@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.google.gson.Gson;
 
 /**
@@ -32,6 +33,7 @@ public class User implements Serializable {
 	 */
 	public static User create_by_json(String json) {
 		try {
+			L.i("json user:"+json);
 			Gson gson = new Gson();
 			return (User) gson.fromJson(json, User.class);
 		} catch (Exception e) {
@@ -194,6 +196,16 @@ public class User implements Serializable {
 		return serialVersionUID;
 	}
 
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", username=" + username + ", regTime="
+				+ regTime + ", isonline=" + isonline + ", avatar=" + avatar
+				+ ", numFollowing=" + numFollowing + ", numFollowers="
+				+ numFollowers + ", numIssues=" + numIssues + ", numPhotos="
+				+ numPhotos + ", numStarring=" + numStarring + ", numEvents="
+				+ numEvents + ", profile=" + profile + "]";
+	}
+
 	public class Profile implements Serializable {
 		/* 邮箱 */
 		private String email;
@@ -277,6 +289,14 @@ public class User implements Serializable {
 
 		public void setMajor(String major) {
 			this.major = major;
+		}
+
+		@Override
+		public String toString() {
+			return "Profile [email=" + email + ", nickname=" + nickname
+					+ ", name=" + name + ", gender=" + gender + ", age=" + age
+					+ ", grade=" + grade + ", university=" + university
+					+ ", major=" + major + "]";
 		}
 
 	}

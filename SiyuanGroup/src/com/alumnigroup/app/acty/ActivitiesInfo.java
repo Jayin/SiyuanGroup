@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.Bundle;
@@ -23,6 +24,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.entity.Userships;
 import com.alumnigroup.entity.MGroup.Memberships;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -71,8 +73,16 @@ public class ActivitiesInfo extends BaseActivity {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						List<User> newData_member = User
-								.create_by_jsonarray(obj.toString());
+						//Userships us = Userships.create_by_json(obj.getJSONObject("userships"))
+						List<User> newData_member = null;
+						try {
+							debug("userships-->"+obj.getJSONArray("userships").toString());
+							newData_member = User
+									.create_by_jsonarray(obj.getJSONArray("userships").toString());
+						} catch (JSONException e) {
+							e.printStackTrace();
+							newData_member = new ArrayList<User>();//这是在挖坑？
+						}
 						if (newData_member.size() == 0) {
 							toast("还没人参加这活动");
 						} else {
