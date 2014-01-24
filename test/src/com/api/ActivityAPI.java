@@ -64,7 +64,7 @@ public class ActivityAPI {
 	 */
 	public void getActivityList(int page,
 			AsyncHttpResponseHandler responseHandler) {
-		find(page, 0, 0, 0,-1, null, null, responseHandler);
+		find(page, 0, 0, 0, -1, null, null, responseHandler);
 	}
 
 	/**
@@ -100,25 +100,36 @@ public class ActivityAPI {
 		params.add("activityid", activityid + "");
 		RestClient.post("/api/activities/accept", params, responseHandler);
 	}
-    /**
-     * 发起者更新活动资料 
-     * @param id 活动id
-     * @param maxnum  最大人数
-     * @param duration  持续时间,单位为分钟
-     * @param statusid  活动状态 0接受报名、1截止报名、2活动结束、3活动取消]
-     * @param money 活动费用
-     * @param name 活动名称
-     * @param content 活动内容
-     * @param responseHandler 处理器
-     */
+
+	/**
+	 * 发起者更新活动资料
+	 * 
+	 * @param id
+	 *            活动id
+	 * @param maxnum
+	 *            最大人数
+	 * @param duration
+	 *            持续时间,单位为分钟
+	 * @param statusid
+	 *            活动状态 0接受报名、1截止报名、2活动结束、3活动取消]
+	 * @param money
+	 *            活动费用
+	 * @param name
+	 *            活动名称
+	 * @param content
+	 *            活动内容
+	 * @param responseHandler
+	 *            处理器
+	 */
 	public void update(int id, int maxnum, long duration, int statusid,
-			long money, String name,String content, AsyncHttpResponseHandler responseHandler) {
+			long money, String name, String content,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		params.add("maxnum", maxnum + "");
 		params.add("duration", duration + "");
 		params.add("statusid", statusid + "");
-		params.add("money", money+"");
+		params.add("money", money + "");
 		params.add("name", name);
 		params.add("content", content);
 		RestClient.post("/api/activities/update", params, responseHandler);
@@ -185,12 +196,15 @@ public class ActivityAPI {
 	 *            活动名称
 	 * @param content
 	 *            活动描述
+	 * @param site
+	 *            活动地点
 	 * @param responseHandler
 	 *            处理器
 	 */
 	public void creatAcivity(int groupid, int maxnum, long starttime,
 			long duration, int statusid, long money, String name,
-			String content, AsyncHttpResponseHandler responseHandler) {
+			String content, String site,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("groupid", groupid + "");
 		params.add("maxnum", maxnum + "");
@@ -200,6 +214,7 @@ public class ActivityAPI {
 		params.add("money", money + "");
 		params.add("name", name);
 		params.add("content", content);
+		params.add("site", site);
 		RestClient.post("/api/activities/create", params, responseHandler);
 	}
 

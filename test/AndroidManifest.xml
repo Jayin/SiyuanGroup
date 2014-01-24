@@ -31,15 +31,17 @@
         <activity android:name=".GroupTest" >
         </activity>
         <activity android:name=".ActivityTest" >
-        </activity>
-        <activity android:name=".UserAPITest" >
-        </activity>
-        <activity android:name=".IssueTest" >
-            <intent-filter>
+                <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".UserAPITest" >
+        
+        </activity>
+        <activity android:name=".IssueTest" >
+            
         </activity>
     </application>
 

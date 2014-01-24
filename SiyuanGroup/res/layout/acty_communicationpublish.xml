@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/grey" >
+    android:background="@color/grey"
+    android:orientation="vertical" >
 
     <include layout="@layout/acty_communicationpublish_header" />
 
@@ -26,6 +26,7 @@
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_title"
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp" />
 
@@ -38,15 +39,18 @@
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_content"
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp"
                 android:minLines="6" />
 
             <LinearLayout
+                android:id="@+id/permission"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_preference_sigle"
+                android:clickable="true"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -65,10 +69,12 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/mention"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_preference_sigle"
+                android:clickable="true"
                 android:orientation="horizontal" >
 
                 <TextView

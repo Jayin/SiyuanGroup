@@ -1,5 +1,7 @@
 package com.alumnigroup.app.acty;
 
+import java.util.List;
+
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +16,8 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.ResponseHandler;
+import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.utils.StringUtils;
@@ -37,6 +41,7 @@ public class Login extends BaseActivity {
 	private View btn_login, btn_regitst, btn_ok, btn_cancle;
 	private UserAPI api;
 	private MyProgressDialog dialog;
+	private DataPool dp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -78,10 +83,19 @@ public class Login extends BaseActivity {
 						@Override
 						public void onSuccess(int statusCode, Header[] headers,
 								byte[] data) {
+							dialog.dismiss();
 							// 登录成功。。。save login info here..
+							
 							String json = new String(data);
+							debug("onSuccess-->"+json);
 							// toast(json);
-							succeed(json);
+							// succeed(json);
+							if (JsonUtils.isOK(json)) {
+								saveLoginInfo(json);
+							} else {
+								toast("Error:" + JsonUtils.getErrorString(json));
+							}
+
 						}
 
 					});
@@ -138,9 +152,12 @@ public class Login extends BaseActivity {
 							// regist successfully!
 							dialog.dismiss();
 							String json = new String(data);
-							// toast(json);
-							toast("注册成功!");
-							flipper.showPrevious();
+							if (JsonUtils.isOK(json)) {
+								toast("注册成功!");
+								flipper.showPrevious();
+							} else {
+								toast("Error:" + JsonUtils.getErrorString(json));
+							}
 						}
 					});
 			break;
@@ -155,6 +172,7 @@ public class Login extends BaseActivity {
 	@Override
 	protected void initData() {
 		api = new UserAPI();
+		dp = new DataPool(DataPool.SP_Name_User,this);
 	}
 
 	@Override
@@ -179,6 +197,39 @@ public class Login extends BaseActivity {
 		btn_cancle.setOnClickListener(this);
 
 		dialog = new MyProgressDialog(getContext());
+
+	}
+
+	private void saveLoginInfo(String json) {
+		int userid = JsonUtils.getInt(json, "id");
+		// 正确解析
+		if (userid > 0) {
+			api.find(new RequestParams("id", userid), new ResponseHandler() {
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers,
+						byte[] data) {
+					List<User> userList = User.create_by_jsonarray(new String(
+							data));
+					if (userList == null || userList.size() == 0) {
+						toast("登录失败 没有改用户信息");
+					} else {
+						if (dp.put(DataPool.SP_Key_User, userList.get(0))) {
+							Intent intent = new Intent(Login.this, Main.class);
+							intent.putExtra("myself", userList.get(0));
+							openActivity(intent);
+							closeActivity();
+						}
+					}
+				}
+
+				@Override
+				public void onFailure(int statusCode, Header[] header,
+						byte[] data, Throwable err) {
+					toast("网络异常 错误码:"+statusCode);
+				}
+			});
+		}
 
 	}
 
@@ -209,7 +260,8 @@ public class Login extends BaseActivity {
 			@Override
 			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
 				String json = new String(data);
-				User myself = new Gson().fromJson(getJsonEmement(json), User.class);
+				User myself = new Gson().fromJson(getJsonEmement(json),
+						User.class);
 				intent.putExtra("myself", myself);
 				startActivity(intent);
 				dialog.dismiss();
@@ -230,7 +282,8 @@ public class Login extends BaseActivity {
 		JSONObject jsonObject = null;
 		try {
 			jsonObject = new JSONObject(json);
-			jsonJsonEmement = jsonObject.getJSONArray("users").getJSONObject(0).toString();
+			jsonJsonEmement = jsonObject.getJSONArray("users").getJSONObject(0)
+					.toString();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

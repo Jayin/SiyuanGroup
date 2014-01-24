@@ -1,16 +1,10 @@
 package com.siyuangroup.test;
 
-import org.apache.http.Header;
 
 import com.api.ActivityAPI;
 import com.api.GroupAPI;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.utils.TempLogin;
-
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 public class ActivityTest extends BaseTestActivity {
@@ -34,41 +28,45 @@ public class ActivityTest extends BaseTestActivity {
 
 	private void createActy() {
 		ActivityAPI api  = new ActivityAPI();
+		api.creatAcivity(1, 50, System.currentTimeMillis(), 5, 0, 1000, "HKU Visition", "visite hku","HK",new Response()); 
+		
 	}
 
 	@Override
 	public void test2Click() {
-
+            GroupAPI api = new GroupAPI();
+            api.join(1, new Response());
 	}
 
 	@Override
 	public void test3Click() {
-
+       TempLogin.login();
 	}
 
 	@Override
 	public void test4Click() {
-
+       ActivityAPI api  =new ActivityAPI();
+       api.getUserList(1, new Response());
 	}
 
 	@Override
 	public String test1Title() {
-		return null;
+		return "create";
 	}
 
 	@Override
 	public String test2Title() {
-		return null;
+		return "joinGroup1";
 	}
 
 	@Override
 	public String test3Title() {
-		return null;
+		return "login";
 	}
 
 	@Override
 	public String test4Title() {
-		return null;
+		return "获取活动名单";
 	}
 
 	@Override

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_listview_bg_whitetogrey"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+      >
+
+        <ImageView
+            android:id="@+id/item_lv_acty_circlelist_iv_avater"
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_marginLeft="4dp"
+            android:layout_gravity="center"
+            android:background="@drawable/ic_image_load_loading" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/item_lv_acty_group_tv_ame"
+                style="@style/TextView.base"
+                android:layout_width="match_parent"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:text="网球俱乐部"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" >
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:background="@drawable/ic_item_lv_acty_circlelist_owner" />
+
+                <TextView
+                    android:id="@+id/item_lv_acty_group_tv_ownername"
+                    style="@style/TextView.base"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:layout_weight="1"
+                    android:text="土豪金"
+                    android:textColor="@color/blue_lv_two"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <ImageView
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:layout_gravity="right"
+                    android:background="@drawable/ic_item_lv_acty_circlelist_member" />
+
+                <TextView
+                    android:id="@+id/item_lv_acty_group_tv_memberCount"
+                    style="@style/TextView.base"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="6dp"
+                    android:text="15位成员"
+                    android:textColor="@color/blue_lv_two"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/item_lv_acty_group_tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="3"
+                android:text="金钱是能让我们去除了天堂以外的任何地区性方面军的一份护照；同时，它也能向我们提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。福以外的任何福以外的任何福以外的任何 提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。"
+                android:textColor="@color/grey_lv_forth"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_image_line" />
+
+</LinearLayout>

@@ -4,7 +4,7 @@ package com.siyuangroup.test;
 import com.api.UserAPI;
 
 public class UserAPITest extends BaseTestActivity {
-	private String username = "test11";
+	private String username = "test2";
 	private String password = "12345678";
 	private String profile_name = "jayin";
 	private String profile_nickname = "ton";
@@ -64,25 +64,25 @@ public class UserAPITest extends BaseTestActivity {
 	@Override
 	public String test1Title() {
 		// TODO Auto-generated method stub
-		return null;
+		return "regist";
 	}
 
 	@Override
 	public String test2Title() {
 		// TODO Auto-generated method stub
-		return null;
+		return "login";
 	}
 
 	@Override
 	public String test3Title() {
 		// TODO Auto-generated method stub
-		return null;
+		return "resetpsw";
 	}
 
 	@Override
 	public String test4Title() {
 		// TODO Auto-generated method stub
-		return null;
+		return "logout";
 	}
 
  

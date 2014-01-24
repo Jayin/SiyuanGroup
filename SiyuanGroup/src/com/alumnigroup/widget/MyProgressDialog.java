@@ -53,5 +53,16 @@ public class MyProgressDialog extends Dialog {
 	public void setText(CharSequence text) {
 		this.tv_updateinfo.setText(text);
 	}
+	
+	@Override
+	public void show() {
+		super.show();
+		reset();
+	}
+
+	private void reset() {
+      init();
+      setText("加载中");
+	}
 
 }

@@ -1,11 +1,17 @@
 package com.alumnigroup.app.acty;
 
+import org.apache.http.Header;
+import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.alumnigroup.api.UserAPI;
+import com.alumnigroup.app.App;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.imple.JsonResponseHandler;
 
 /**
  * 设置
@@ -59,9 +65,9 @@ public class Setting extends BaseActivity {
 			break;
 			
 		case R.id.acty_setting_btn_quit:
+			((App)getApplication()).cleanUpInfo();
 			toast("已经退出当前用户");
-			intent.setClass(Setting.this, Login.class);
-			startActivity(intent);
+			openActivity(Login.class);
 			finish();
 			break;
 			

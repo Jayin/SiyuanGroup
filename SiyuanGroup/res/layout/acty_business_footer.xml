@@ -20,7 +20,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_business_footer_my"
+        android:id="@+id/acty_business_footer_myjoin"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -35,7 +35,7 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_business_footer_collection"
+        android:id="@+id/acty_business_footer_favourite"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >

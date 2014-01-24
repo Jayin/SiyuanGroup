@@ -18,6 +18,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.alumnigroup.app.R;
+import com.alumnigroup.utils.L;
 /**
  * 下拉刷新 ListView
  * @author Jayin Ton
@@ -31,6 +32,8 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	protected static final int REFRESHING = 4;
 	/** manual control whether albe to refresh or not */
 	private boolean canRefresh = true;
+	/** use it with `canRefresh` when you don't wan't to show headview when it can't refresh*/
+	private boolean ableToShowHeadView = true;
 
 	private OnRefreshListener mOnRefreshListener;
 
@@ -282,6 +285,8 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 
 	public void onScroll(AbsListView view, int firstVisibleItem,
 			int visibleItemCount, int totalItemCount) {
+		//if canRefresh == false don't handler scroll 
+		if(!canRefresh)return;
 		// When the refresh view is completely visible, change the text to say
 		// "Release to refresh..." and flip the arrow drawable.
 		if (mCurrentScrollState == SCROLL_STATE_TOUCH_SCROLL
@@ -392,10 +397,20 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 	 * @param canRefrsh
 	 *            able to refresh
 	 */
-	public void setCanRefresh(boolean canRefrsh) {
-		setCanRefresh(canRefrsh, null);
+	public void setCanRefresh(boolean canRefresh) {
+		setCanRefresh(canRefresh, null);
 	}
-	
+	/**
+	 * <li>set whether it's able to refresh<br>
+	 * <li>set whether it's able to show the headView when it can't refresh
+	 * @see {@link#onRefreshComplete()} {@link#setCanRefresh()} 
+	 * @param canRefresh
+	 * @param ableToShowHeadView
+	 */
+	public void setCanRefresh(boolean canRefresh,boolean ableToShowHeadView){
+		setCanRefresh(canRefresh, null);
+		this.ableToShowHeadView = ableToShowHeadView;
+	}
 
 	/**
 	 * Resets the list to a normal state after a refresh.
@@ -417,10 +432,15 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 
 		// If refresh view is visible when loading completes, scroll down to
 		// the next item.
-		if (mRefreshView.getBottom() > 0) {
+		if ( mRefreshView.getBottom() > 0) {
 			invalidateViews();
 			setSelection(1);
 		}
+		// if it can't reRefresh the remove this head view
+		// but if you want to make it work again,called `reInit()`
+		if(!canRefresh && !ableToShowHeadView){
+			this.removeHeaderView(mRefreshView);
+		} 
 	}
 
 	/**

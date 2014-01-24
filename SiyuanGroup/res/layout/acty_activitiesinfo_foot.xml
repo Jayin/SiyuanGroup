@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/LinearLayout.allmember_footer"
+    android:orientation="horizontal" >
+
+    <RelativeLayout
+        android:id="@+id/btn_info"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="活动介绍"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btn_userlist"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="参加名单"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/btn_share"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="活动分享"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+</LinearLayout>

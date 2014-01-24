@@ -10,7 +10,7 @@
     android:paddingBottom="15dip"
     android:paddingTop="10dip" >
 
-    <ProgressBar
+      <ProgressBar
         android:id="@+id/pull_to_refresh_progress"
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="wrap_content"

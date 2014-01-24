@@ -8,15 +8,11 @@ import org.apache.http.Header;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.api.RestClient;
+import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
@@ -27,7 +23,6 @@ import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 全站会员
@@ -62,7 +57,6 @@ public class Allmember extends BaseActivity {
 			@Override
 			public void onRefresh() {
 				// page=1?
-				L.i("onRefresh--->load page=" + page_allmember + " load 1  ");
 				api.getAllMember(1, new AsyncHttpResponseHandler() {
 
 					@Override
@@ -74,28 +68,27 @@ public class Allmember extends BaseActivity {
 						if (err != null)
 							L.i(err.toString());
 						lv_allmember.onRefreshComplete();
-						L.i("Finish Faild : onRefresh--->load page="
-								+ page_allmember + " load 1  ");
 					}
 
 					// page=1?
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						page_allmember = 1;
 						// 还要判断是否有error_code
 						String json = new String(data);// jsonarray
 						if (JsonUtils.isOK(json)) {
 							List<User> newData_allmember = User
 									.create_by_jsonarray(json);
-							data_allmember.clear();
-							data_allmember.addAll(newData_allmember);
-							adapter_allmember.notifyDataSetChanged();
-							L.i("Finish success! : onRefresh--->load page="
-									+ page_allmember + " load 1  ");
+							if (newData_allmember != null) {
+								page_allmember = 1;
+								data_allmember.clear();
+								data_allmember.addAll(newData_allmember);
+								adapter_allmember.notifyDataSetChanged();
+							}
 						} else {
 							toast("Error:" + JsonUtils.getErrorString(json));
 						}
+						lv_allmember.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
 						lv_allmember.onRefreshComplete();
 					}
 				});
@@ -106,8 +99,6 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
-				L.i("load more--->load page=" + page_allmember + "  page+1 ="
-						+ (page_allmember + 1));
 				api.getAllMember(page_allmember + 1,
 						new AsyncHttpResponseHandler() {
 
@@ -120,9 +111,6 @@ public class Allmember extends BaseActivity {
 								if (err != null)
 									L.i(err.toString());
 								lv_allmember.onLoadMoreComplete();
-								L.i("Finish Faild:load more  --->load page="
-										+ page_allmember + "  page+1 ="
-										+ (page_allmember + 1));
 							}
 
 							@Override
@@ -144,18 +132,15 @@ public class Allmember extends BaseActivity {
 									} else {
 										if (newData_allmember == null) {
 											toast("网络异常,解析错误");
-										}else if (newData_allmember.size() == 0) {
+										} else if (newData_allmember.size() == 0) {
 											toast("没有更多了!");
-											lv_allmember.canLoadMore(false);
+											lv_allmember.setCanLoadMore(false);
 										}
 									}
 								} else {
 									toast("Error:"
 											+ JsonUtils.getErrorString(json));
 								}
-								L.i("Finish :load more--->load page="
-										+ page_allmember + "  page+1 ="
-										+ (page_allmember + 1));
 								lv_allmember.onLoadMoreComplete();
 
 							}
@@ -201,8 +186,8 @@ public class Allmember extends BaseActivity {
 		btn_allmenmber.setOnClickListener(this);
 		btn_myfriend.setOnClickListener(this);
 
-		adapter_allmember = new MemberAdapter(data_allmember);
-		adapter_myfriend = new MemberAdapter(data_myfriend);
+		adapter_allmember = new MemberAdapter(data_allmember,getContext());
+		adapter_myfriend = new MemberAdapter(data_myfriend,getContext());
 
 		lv_allmember.setAdapter(adapter_allmember);
 		lv_myfriend.setAdapter(adapter_myfriend);
@@ -247,85 +232,6 @@ public class Allmember extends BaseActivity {
 			break;
 		default:
 			break;
-		}
-	}
-
-	/**
-	 * 适配器
-	 */
-	class MemberAdapter extends BaseAdapter {
-		private List<User> data;
-
-		public MemberAdapter(List<User> data) {
-			this.data = data;
-		}
-
-		@Override
-		public int getCount() {
-			return data.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder h;
-			if (convertView == null) {
-				convertView = LayoutInflater.from(getContext()).inflate(
-						R.layout.item_lv_allmember, null);
-				h = new ViewHolder();
-
-				h.avatar = (ImageView) convertView
-						.findViewById(R.id.item_lv_allmember_avatar);
-				h.online = (ImageView) convertView
-						.findViewById(R.id.item_lv_allmember_online);
-				h.grade = (TextView) convertView
-						.findViewById(R.id.item_lv_allmemeber_grade);
-				h.name = (TextView) convertView
-						.findViewById(R.id.item_lv_allmemeber_name);
-				h.major = (TextView) convertView
-						.findViewById(R.id.item_lv_allmemeber_major);
-				convertView.setTag(h);
-			} else {
-				h = (ViewHolder) convertView.getTag();
-			}
-			User u = data.get(position);
-			if (u == null)
-				L.i(position + "u is null");
-			ImageLoader loader = ImageLoader.getInstance();
-			if (u.getAvatar() == null)
-				L.i(" u.getAvatar() is null");
-			else {
-				L.i(" u.getAvatar() is  " + u.getAvatar());
-			}
-			if (h.avatar == null)
-				L.i("h.avatar");
-			if (loader == null)
-				L.i("loader is null");
-			loader.displayImage(RestClient.BASE_URL + u.getAvatar(), h.avatar);
-			h.grade.setText(u.getGrade() + "");
-			h.name.setText(u.getName());
-			h.major.setText(u.getMajor());
-			if (u.isOnline()) {
-				h.online.setVisibility(View.VISIBLE);
-			} else {
-				h.online.setVisibility(View.INVISIBLE);
-			}
-			return convertView;
-		}
-
-		class ViewHolder {
-			ImageView avatar, online;
-			TextView name, grade, major;
-			ImageLoader loader;
 		}
 	}
 

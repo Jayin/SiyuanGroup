@@ -112,7 +112,7 @@ public class ActivityAPI {
      * @param responseHandler 处理器
      */
 	public void update(int id, int maxnum, long duration, int statusid,
-			long money, String name,String content, AsyncHttpResponseHandler responseHandler) {
+			long money, String name,String content, String site, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		params.add("maxnum", maxnum + "");
@@ -121,6 +121,7 @@ public class ActivityAPI {
 		params.add("money", money+"");
 		params.add("name", name);
 		params.add("content", content);
+		params.add("site", site);
 		RestClient.post("/api/activities/update", params, responseHandler);
 	}
 
@@ -215,5 +216,27 @@ public class ActivityAPI {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		RestClient.post("/api/activities/userslist", params, responseHandler);
+	}
+	/**
+	 * 获取活动参加历史列表
+	 * @param id 申请id,就是usership的id
+ 	 * @param userid 用户id
+	 * @param activityid 活动id
+	 * @param responseHandler 处理器
+	 */
+	public void getHistory(int id,int userid,int activityid,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		if(id>0)params.add("id", id+"");
+		if(userid>0)params.add("userid", userid+"");
+		if(activityid>0)params.add("activityid", activityid+"");
+		RestClient.get("/api/activities/history", params, responseHandler);
+	}
+	/**
+	 * 获取一用户曾经参加过的活动
+	 * @param userid user用户id
+	 * @param responseHandler 处理器
+	 */
+	public void getUserHistory(int userid,AsyncHttpResponseHandler responseHandler){
+		getHistory(userid,0,0,responseHandler);
 	}
 }

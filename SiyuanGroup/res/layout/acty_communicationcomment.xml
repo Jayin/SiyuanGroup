@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical" >
+
+    <include layout="@layout/acty_communicationcomment_header" />
+
+    <EditText
+        android:id="@+id/et_content"
+        style="@style/EditText.base"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="6dp"
+        android:hint="你想到了什么?"
+        android:minLines="6" />
+
+    <LinearLayout
+        android:id="@+id/mention"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/btn_preference_sigle"
+        android:clickable="true"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView.black"
+            android:layout_weight="1"
+            android:padding="6dp"
+            android:text="提及@" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ic_item_toright_blue" />
+    </LinearLayout>
+
+</LinearLayout>

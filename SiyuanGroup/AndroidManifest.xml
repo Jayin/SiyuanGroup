@@ -39,7 +39,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".acty.Circle"
+            android:name=".acty.GroupInfo"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -51,7 +51,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".acty.CircleList"
+            android:name=".acty.Group"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -127,6 +127,22 @@
         </activity>
         <activity
             android:name=".acty.Activities"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesInfo"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.GroupCreate"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesPublish"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.CommunicationComment"
             android:screenOrientation="portrait" >
         </activity>
     </application>

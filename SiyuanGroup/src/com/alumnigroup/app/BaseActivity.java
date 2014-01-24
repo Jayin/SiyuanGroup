@@ -26,9 +26,7 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
 	 * @param cls
 	 */
 	public void openActivity(Class<?> cls) {
-		Intent intent = getIntent();
-		intent.setClass(this, cls);
-		this.startActivity(intent);
+		this.startActivity(new Intent(this,cls));
 	}
 
 	/**
