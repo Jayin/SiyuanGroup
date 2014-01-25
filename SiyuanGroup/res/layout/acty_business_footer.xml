@@ -7,7 +7,7 @@
         android:id="@+id/acty_business_footer_all"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:layout_weight="1" >
+        android:layout_weight="1" android:background="@color/blue_nav_bg_press" >
 
         <TextView
             style="@style/TextView.base"

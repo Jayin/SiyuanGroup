@@ -41,13 +41,13 @@
         android:layout_width="2px"
         android:layout_height="match_parent"
         android:background="@drawable/ic_acty_head_hr"
-        android:visibility="visible" />
+        android:visibility="invisible" />
 
     <RelativeLayout
         android:id="@+id/acty_head_btn_compose"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true"
-        android:visibility="visible" >
+        android:visibility="invisible" >
 
            <ImageView
             android:layout_width="wrap_content"

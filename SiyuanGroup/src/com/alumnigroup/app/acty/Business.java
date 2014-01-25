@@ -65,7 +65,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						debug(obj.toString());
 						List<Cooperation> newData_all = Cooperation
 								.create_by_jsonarray(obj.toString());
 						if (newData_all == null) {
@@ -154,9 +153,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 			}
 		});
-		lv_all.setOnItemClickListener(this);
-		lv_myjoin.setOnItemClickListener(this);
-		lv_favourit.setOnItemClickListener(this);
 	}
 
 	@Override
@@ -181,6 +177,9 @@ public class Business extends BaseActivity implements OnItemClickListener {
 				.findViewById(R.id.frame_acty_business_listview);
 		lv_favourit = (PullAndLoadListView) favourit
 				.findViewById(R.id.frame_acty_business_listview);
+		lv_all.setOnItemClickListener(this);
+		lv_myjoin.setOnItemClickListener(this);
+		lv_favourit.setOnItemClickListener(this);
 
 		adapter_all = new BusinessAdapter(data_all);
 		adapter_myjoin = new BusinessAdapter(data_myjoin);
@@ -246,6 +245,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		int real_position = position - 1;
+		toast(""+real_position);
 		if (parent == lv_all) {
 			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_all.get(position));

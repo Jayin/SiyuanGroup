@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/item_listview_bg_whitetogrey"
     android:orientation="vertical"
-    android:clickable="true"
-    android:padding="4dp" >
+    android:paddingLeft="4dp"
+    android:paddingTop="4dp"
+     android:paddingRight="4dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -151,7 +152,9 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/ic_image_line" />
+        android:background="@color/grey_lv_two" />
 
 </LinearLayout>

@@ -3,8 +3,6 @@
     style="@style/LinearLayout.allmember_footer"
     android:orientation="horizontal" >
 
-  
-
     <RelativeLayout
         android:id="@+id/acty_communicationdetail_footer_share"
         android:layout_width="1dp"
