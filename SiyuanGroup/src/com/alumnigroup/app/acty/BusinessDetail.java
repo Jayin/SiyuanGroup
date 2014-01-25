@@ -21,7 +21,7 @@ public class BusinessDetail extends BaseActivity {
 	private TextView tv_username, tv_projectname, tv_deadline, tv_description;
 	private User user;
 	private CommentView commentView;
-	private BusinessAPI api ;
+	private BusinessAPI api;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +35,7 @@ public class BusinessDetail extends BaseActivity {
 	protected void initData() {
 
 		c = (Cooperation) getSerializableExtra("cooperation");
-
+		debug(c.toString());
 		user = (User) new DataPool(DataPool.SP_Name_User, this)
 				.get(DataPool.SP_Key_User);
 		api = new BusinessAPI();
@@ -44,16 +44,16 @@ public class BusinessDetail extends BaseActivity {
 	@Override
 	protected void initLayout() {
 		tv_username = (TextView) _getView(R.id.tv_username);
-		tv_projectname = (TextView) _getView(R.id.tv_username);
-		tv_deadline = (TextView) _getView(R.id.tv_username);
-		tv_description = (TextView) _getView(R.id.tv_username);
+		tv_projectname = (TextView) _getView(R.id.tv_projectname);
+		tv_deadline = (TextView) _getView(R.id.tv_deadline);
+		tv_description = (TextView) _getView(R.id.tv_description);
 
 		tv_username.setText(c.getUser().getProfile().getName());
 		tv_projectname.setText(c.getName());
 		tv_deadline.setText(CalendarUtils.getTimeFromat(c.getDeadline(),
 				CalendarUtils.TYPE_TWO));
 		tv_description.setText(c.getDescription());
-		
+
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_edit = _getView(R.id.btn_edit);
 		btn_end = _getView(R.id.btn_end);
@@ -72,7 +72,7 @@ public class BusinessDetail extends BaseActivity {
 
 		commentView = (CommentView) _getView(R.id.commentlist);
 
-	    //api get comment list
+		// api get comment list
 	}
 
 	@Override

@@ -315,7 +315,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			h.name_user.setText(c.getUser().getProfile().getName());
 			h.description.setText(c.getDescription());
 			h.numFavour.setText(14 + ""); // should change
-			h.commentNum.setText("评论数（11）");// should change
+			h.commentNum.setText("11");// should change
 
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + c.getAvatar(), h.avatar);

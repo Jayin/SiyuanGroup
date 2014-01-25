@@ -45,17 +45,27 @@ public class Cooperation implements Serializable {
 	public Cooperation() {
 
 	}
-
+    /** 项目id*/
 	private int id;
+	  /** 项目名称*/
 	private String name;
+	  /** 项目发布者id*/
 	private int ownerid;
+	  /** 描述*/
 	private String description;
+	  /** 公司*/
 	private String company;
+	  /** 截止日期*/
 	private long deadline; 
+	  /** 头像*/
 	private String avatar;
+	  /** 项目状态id*/
 	private int statusid;
+	  /** 是否私密*/
 	private int isprivate;
+	  /** 项目发布者*/
 	private User user;
+	  /** 项目状态*/
 	private Status status;
 
 	public int getId() {
@@ -146,4 +156,13 @@ public class Cooperation implements Serializable {
 		this.status = status;
 	}
 
+	@Override
+	public String toString() {
+		return "Cooperation [id=" + id + ", name=" + name + ", ownerid="
+				+ ownerid + ", description=" + description + ", company="
+				+ company + ", deadline=" + deadline + ", avatar=" + avatar
+				+ ", statusid=" + statusid + ", isprivate=" + isprivate
+				+ ", user=" + user + ", status=" + status + "]";
+	}
+  
 }
