@@ -79,8 +79,8 @@ public class ActivitiesInfo extends BaseActivity {
 							data_member.addAll(newData_member);
 							adapter_member.notifyDataSetChanged();
 						}
-						lv_member.onRefreshComplete();
 						lv_member.setCanRefresh(false, false);
+						lv_member.onRefreshComplete();
 					}
 
 					@Override
