@@ -3,6 +3,10 @@ package com.alumnigroup.app.acty;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.http.Header;
+import org.json.JSONObject;
+
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -10,28 +14,38 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.api.ActivityAPI;
+import com.alumnigroup.api.BusinessAPI;
+import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.acty.Activities.ActivitiesAdapter;
-import com.alumnigroup.entity.MActivity;
-import com.alumnigroup.entity.Project;
+import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
+/**
+ * 商务合作页面
+ * 
+ * @author Jayin Ton
+ * 
+ */
 public class Business extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_all, btn_favourite, btn_myjoin, btn_compose;
 	private PullAndLoadListView lv_all, lv_myjoin, lv_favourit;
 	private ViewPager viewpager;
-	private List<Project> data_all, data_myjoin, data_favourite;
+	private List<Cooperation> data_all, data_myjoin, data_favourite;
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
-	private ActivityAPI api;
+	private BusinessAPI api;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +61,68 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
+				api.getCooperationList(1, new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						debug(obj.toString());
+						List<Cooperation> newData_all = Cooperation
+								.create_by_jsonarray(obj.toString());
+						if (newData_all == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有去更多");
+							page_all = 1;
+						} else {
+							page_all = 1;
+							data_all.clear();
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+						}
+						lv_all.onRefreshComplete();
+						lv_all.setCanLoadMore(true);
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常  错误码:" + errorCode);
+						lv_all.onRefreshComplete();
+					}
+				});
 			}
 		});
 		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.getCooperationList(page_all + 1, new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						boolean canLoadMore = true;
+						List<Cooperation> newData_all = Cooperation
+								.create_by_jsonarray(obj.toString());
+						if (newData_all == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多了");
+							canLoadMore = false;
+						} else {
+							page_all++;
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+						}
+						lv_all.onLoadMoreComplete();
+						if (!canLoadMore)
+							lv_all.setCanLoadMore(false);
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常  错误码:" + errorCode);
+						lv_all.onLoadMoreComplete();
+					}
+				});
 			}
 		});
 
@@ -93,10 +161,10 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
-		api = new ActivityAPI();
-		data_all = new ArrayList<Project>();
-		data_myjoin = new ArrayList<Project>();
-		data_favourite = new ArrayList<Project>();
+		api = new BusinessAPI();
+		data_all = new ArrayList<Cooperation>();
+		data_myjoin = new ArrayList<Cooperation>();
+		data_favourite = new ArrayList<Cooperation>();
 	}
 
 	private void initViewPager() {
@@ -177,14 +245,24 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// TODO Auto-generated method stub
+		int real_position = position - 1;
+		if (parent == lv_all) {
+			Intent intent = new Intent(this, BusinessDetail.class);
+			intent.putExtra("cooperation", data_all.get(position));
+			openActivity(intent);
+		}
+		if (parent == lv_favourit) {
 
+		}
+		if (parent == lv_myjoin) {
+
+		}
 	}
 
 	class BusinessAdapter extends BaseAdapter {
-		private List<Project> data;
+		private List<Cooperation> data;
 
-		public BusinessAdapter(List<Project> data) {
+		public BusinessAdapter(List<Cooperation> data) {
 			this.data = data;
 		}
 
@@ -205,10 +283,61 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			convertView = getLayoutInflater().inflate(
-					R.layout.item_lv_acty_business, null);
+			ViewHolder h = null;
+			if (convertView == null) {
+				h = new ViewHolder();
+				convertView = getLayoutInflater().inflate(
+						R.layout.item_lv_acty_business, null);
+				h.name_project = (TextView) convertView
+						.findViewById(R.id.tv_projectname);
+				h.deadline = (TextView) convertView
+						.findViewById(R.id.tv_deadline);
+				h.major = (TextView) convertView.findViewById(R.id.tv_major);
+				h.name_user = (TextView) convertView
+						.findViewById(R.id.tv_username);
+				h.description = (TextView) convertView
+						.findViewById(R.id.tv_description);
+				h.numFavour = (TextView) convertView
+						.findViewById(R.id.tv_numFavour);
+				h.commentNum = (TextView) convertView
+						.findViewById(R.id.tv_numComment);
+				h.avatar = (ImageView) convertView.findViewById(R.id.iv_avater);
+				h.status = (ImageView) convertView.findViewById(R.id.iv_status);
+				convertView.setTag(h);
+			} else {
+				h = (ViewHolder) convertView.getTag();
+			}
+			Cooperation c = data.get(position);
+			h.name_project.setText(c.getName());
+			h.deadline.setText(CalendarUtils.getTimeFromat(c.getDeadline(),
+					CalendarUtils.TYPE_TWO));
+			h.major.setText(c.getUser().getProfile().getMajor());
+			h.name_user.setText(c.getUser().getProfile().getName());
+			h.description.setText(c.getDescription());
+			h.numFavour.setText(14 + ""); // should change
+			h.commentNum.setText("评论数（11）");// should change
+
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + c.getAvatar(), h.avatar);
+			if (c.getStatusid() != 2) {
+				ImageLoader.getInstance()
+						.displayImage(
+								"drawable://" + R.drawable.ic_image_status_on,
+								h.status);
+			} else {
+				ImageLoader.getInstance().displayImage(
+						"drawable://" + R.drawable.ic_image_status_off,
+						h.status);
+			}
 			return convertView;
 		}
 
+		class ViewHolder {
+			TextView name_project, deadline, major, name_user, description,
+					numFavour, commentNum;
+			ImageView avatar, status;
+		}
+
 	}
+
 }

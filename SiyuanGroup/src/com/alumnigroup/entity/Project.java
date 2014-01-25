@@ -4,6 +4,7 @@ import java.io.Serializable;
 /**
  * 项目
  * @author Jayin Ton
+ * @deprecated use Cooperation instead 
  *
  */
 public class Project implements Serializable {

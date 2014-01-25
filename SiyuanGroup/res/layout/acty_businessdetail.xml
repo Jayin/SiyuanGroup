@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
+    android:background="@color/white"
+    android:orientation="vertical" >
 
     <include layout="@layout/acty_businessdetail_header" />
 
@@ -98,6 +98,33 @@
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
+               <LinearLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_groupBuilder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:padding="6dp"
+                    android:text="项目"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/frame_acty_circle_groupinfo_tv_groupBuilder"
+                    style="@style/TextView.base"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="6dp"
+                    android:text="Golang china"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -138,6 +165,43 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_preference_first_normal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:padding="6dp"
+                    android:text="项目询问"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/ic_preference_last_normal"
+                android:orientation="horizontal" >
+
+                <com.alumnigroup.widget.CommentView
+                    android:id="@+id/commentlist"
+                    style="@style/TextView.base"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="6dp"
+                    android:minHeight="30dp"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" >
+                </com.alumnigroup.widget.CommentView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
 
                 <RelativeLayout
@@ -162,7 +226,7 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="4dp"
-                     android:background="@drawable/btn_common_red" >
+                    android:background="@drawable/btn_common_red" >
 
                     <TextView
                         style="@style/TextView.base"
@@ -192,21 +256,22 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="6dp"
-                   android:background="@drawable/btn_common_green" >
+                    android:background="@drawable/btn_common_green" >
 
                     <TextView
                         style="@style/TextView.base"
                         android:layout_centerInParent="true"
                         android:text="收藏" />
                 </RelativeLayout>
-                    <RelativeLayout
+
+                <RelativeLayout
                     android:id="@+id/frame_acty_circle_groupinfo_btn_deletegroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="6dp"
-                   android:background="@drawable/btn_common_green" >
+                    android:background="@drawable/btn_common_green" >
 
                     <TextView
                         style="@style/TextView.base"
@@ -216,4 +281,5 @@
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>
