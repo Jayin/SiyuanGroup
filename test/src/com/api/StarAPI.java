@@ -1,4 +1,4 @@
-package com.alumnigroup.api;
+package com.api;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -9,8 +9,16 @@ import com.loopj.android.http.RequestParams;
  * @author Jayin Ton
  * 
  */
-public class FavouriteAPI {
-	public FavouriteAPI() {
+public class StarAPI {
+	 /** 收藏类别：用户*/
+	public static final int Item_type_user = 1;
+	 /** 收藏类别：话题*/
+	public static final int Item_type_issue= 2;
+	 /** 收藏类别：活动*/
+	public static final int Item_type_activity= 3;
+	 /** 收藏类别：商务合作*/
+	public static final int Item_type_business= 4;
+	public StarAPI() {
 
 	}
     /**
