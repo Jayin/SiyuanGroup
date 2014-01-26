@@ -43,7 +43,7 @@
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:id="@+id/acty_head_btn_compose"
+        android:id="@+id/acty_head_btn_createActiviy"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
 
@@ -53,10 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/ic_acty_head_compose" android:visibility="gone" />
-        
-        
         <TextView
-            android:id="@+id/acty_head_tv_title"
             style="@style/TextView.navigtion_head_base"
             android:layout_centerInParent="true"
             android:text="发起活动" />

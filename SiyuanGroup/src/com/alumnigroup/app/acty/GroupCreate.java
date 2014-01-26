@@ -12,7 +12,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.StringUtils;
-import com.alumnigroup.utils.WidgetUtils;
+import com.alumnigroup.utils.EditTextUtils;
 
 /**
  * 创建圈子
@@ -58,8 +58,8 @@ public class GroupCreate extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_create:
-			String name = WidgetUtils.getTextTrim(et_name);
-			String description = WidgetUtils.getTextTrim(et_description);
+			String name = EditTextUtils.getTextTrim(et_name);
+			String description = EditTextUtils.getTextTrim(et_description);
             if(name==null || StringUtils.isEmpty(name)){
             	toast("圈子名称不能为空");
                 return ;	
