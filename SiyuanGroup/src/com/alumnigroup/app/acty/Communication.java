@@ -6,6 +6,7 @@ import java.util.List;
 import javax.crypto.spec.PSource;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.ImageLoadingListenerImple;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
@@ -65,33 +67,62 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-				api.getIssueList(1, new AsyncHttpResponseHandler() {
+				api.getIssueList(1, new JsonResponseHandler() {
+
 					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Issue> newData_all = Issue.create_by_jsonarray(obj
+								.toString());
+						if (newData_all == null) {
+							toast("网络异常 解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多");
+							page_all = 1;
+						} else {
+							page_all = 1;
+							data_all.clear();
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+						}
 						lv_all.onRefreshComplete();
+						lv_all.setCanLoadMore(true);
+
 					}
 
 					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-							List<Issue> newData_all = Issue
-									.create_by_jsonarray(json);
-							if (newData_all != null) {
-								page_all = 1;
-								data_all.clear();
-								data_all.addAll(newData_all);
-								adapter_all.notifyDataSetChanged();
-							}
-						} else {
-							toast("error:" + JsonUtils.getErrorString(json));
-						}
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
 						lv_all.onRefreshComplete();
 					}
 				});
+				// prepare to delete
+				// api.getIssueList(1, new AsyncHttpResponseHandler() {
+				// @Override
+				// public void onFailure(int statusCode, Header[] headers,
+				// byte[] data, Throwable err) {
+				// toast("网络异常 错误码:" + statusCode);
+				// lv_all.onRefreshComplete();
+				// }
+				//
+				// @Override
+				// public void onSuccess(int statusCode, Header[] headers,
+				// byte[] data) {
+				// String json = new String(data);
+				// if (JsonUtils.isOK(json)) {
+				// List<Issue> newData_all = Issue
+				// .create_by_jsonarray(json);
+				// if (newData_all != null) {
+				// page_all = 1;
+				// data_all.clear();
+				// data_all.addAll(newData_all);
+				// adapter_all.notifyDataSetChanged();
+				// }
+				// } else {
+				// toast("error:" + JsonUtils.getErrorString(json));
+				// }
+				// lv_all.onRefreshComplete();
+				// }
+				// });
 
 			}
 		});
@@ -99,39 +130,69 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getIssueList(page_all + 1, new AsyncHttpResponseHandler() {
+				api.getIssueList(page_all + 1, new JsonResponseHandler() {
+
 					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
+					public void onOK(Header[] headers, JSONObject obj) {
+						boolean canloadmore = true;
+						List<Issue> newData_all = Issue.create_by_jsonarray(obj
+								.toString());
+						if (newData_all == null) {
+							toast("网络异常,解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多了!");
+							canloadmore = false;
+						} else {
+							page_all++;
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
+						}
 						lv_all.onLoadMoreComplete();
+						if (!canloadmore)
+							lv_all.setCanLoadMore(false);
 					}
 
 					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-							List<Issue> newData_all = Issue
-									.create_by_jsonarray(json);
-							if (newData_all != null && newData_all.size() > 0) {
-								page_all++;
-								data_all.addAll(newData_all);
-								adapter_all.notifyDataSetChanged();
-							} else {
-								if (newData_all == null) {
-									toast("网络异常,解析错误");
-								} else if (newData_all.size() == 0) {
-									toast("没有更多了!");
-									lv_all.setCanLoadMore(false);
-								}
-							}
-						} else {
-							toast("Error:" + JsonUtils.getErrorString(json));
-						}
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
 						lv_all.onLoadMoreComplete();
+
 					}
 				});
+//prepare to delete
+//				api.getIssueList(page_all + 1, new AsyncHttpResponseHandler() {
+//					@Override
+//					public void onFailure(int statusCode, Header[] headers,
+//							byte[] data, Throwable err) {
+//						toast("网络异常 错误码:" + statusCode);
+//						lv_all.onLoadMoreComplete();
+//					}
+//
+//					@Override
+//					public void onSuccess(int statusCode, Header[] headers,
+//							byte[] data) {
+//						String json = new String(data);
+//						if (JsonUtils.isOK(json)) {
+//							List<Issue> newData_all = Issue
+//									.create_by_jsonarray(json);
+//							if (newData_all != null && newData_all.size() > 0) {
+//								page_all++;
+//								data_all.addAll(newData_all);
+//								adapter_all.notifyDataSetChanged();
+//							} else {
+//								if (newData_all == null) {
+//									toast("网络异常,解析错误");
+//								} else if (newData_all.size() == 0) {
+//									toast("没有更多了!");
+//									lv_all.setCanLoadMore(false);
+//								}
+//							}
+//						} else {
+//							toast("Error:" + JsonUtils.getErrorString(json));
+//						}
+//						lv_all.onLoadMoreComplete();
+//					}
+//				});
 			}
 		});
 

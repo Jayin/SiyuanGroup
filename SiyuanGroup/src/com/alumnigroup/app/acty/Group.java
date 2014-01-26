@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,6 +26,7 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
@@ -63,38 +65,67 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-				api.getGroupList(1, new ResponseHandler() {
+				api.getGroupList(1, new JsonResponseHandler() {
 
 					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-
-							List<MGroup> newData_all = MGroup
-									.create_by_jsonarray(json);
-							if (newData_all != null) {
-								page_all = 1;
-								data_all.clear();
-								data_all.addAll(newData_all);
-								adapter_all.notifyDataSetChanged();
-							} else {
-								toast("还没有数据！");
-							}
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<MGroup> newData_all = MGroup
+								.create_by_jsonarray(obj.toString());
+						if (newData_all == null) {
+							toast("网络异常 解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多");
+							page_all = 1;
 						} else {
-							toast("error:" + JsonUtils.getErrorString(json));
+							page_all = 1;
+							data_all.clear();
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
 						}
 						lv_all.setCanLoadMore(true);
 						lv_all.onRefreshComplete();
+
 					}
 
 					@Override
-					public void onFailure(int statusCode, Header[] header,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
 						lv_all.onRefreshComplete();
 					}
 				});
+
+				// api.getGroupList(1, new ResponseHandler() {
+				//
+				// @Override
+				// public void onSuccess(int statusCode, Header[] headers,
+				// byte[] data) {
+				// String json = new String(data);
+				// if (JsonUtils.isOK(json)) {
+				//
+				// List<MGroup> newData_all = MGroup
+				// .create_by_jsonarray(json);
+				// if (newData_all != null) {
+				// page_all = 1;
+				// data_all.clear();
+				// data_all.addAll(newData_all);
+				// adapter_all.notifyDataSetChanged();
+				// } else {
+				// toast("还没有数据！");
+				// }
+				// } else {
+				// toast("error:" + JsonUtils.getErrorString(json));
+				// }
+				// lv_all.setCanLoadMore(true);
+				// lv_all.onRefreshComplete();
+				// }
+				//
+				// @Override
+				// public void onFailure(int statusCode, Header[] header,
+				// byte[] data, Throwable err) {
+				// toast("网络异常 错误码:" + statusCode);
+				// lv_all.onRefreshComplete();
+				// }
+				// });
 			}
 		});
 
@@ -102,41 +133,72 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getGroupList(page_all + 1, new ResponseHandler() {
+				api.getGroupList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
+					public void onOK(Header[] headers, JSONObject obj) {
 						boolean canLoadMore = true;
-						if (JsonUtils.isOK(json)) {
-							List<MGroup> newData_all = MGroup
-									.create_by_jsonarray(json);
-							if (newData_all != null && newData_all.size() > 0) {
-								page_all++;
-								data_all.addAll(newData_all);
-								adapter_all.notifyDataSetChanged();
-							} else {
-								if (newData_all == null) {
-									toast("网络异常,解析错误");
-								} else if (newData_all.size() == 0) {
-									toast("没有更多了!");
-									canLoadMore = false;
-								}
-							}
+						List<MGroup> newData_all = MGroup
+								.create_by_jsonarray(obj.toString());
+						if (newData_all == null) {
+							toast("网络异常,解析错误");
+						} else if (newData_all.size() == 0) {
+							toast("没有更多了!");
+							canLoadMore = false;
 						} else {
-							toast("Error:" + JsonUtils.getErrorString(json));
+							page_all++;
+							data_all.addAll(newData_all);
+							adapter_all.notifyDataSetChanged();
 						}
 						lv_all.onLoadMoreComplete();
-						if(!canLoadMore)lv_all.setCanLoadMore(false);
+						if (!canLoadMore)
+							lv_all.setCanLoadMore(false);
+
 					}
 
 					@Override
-					public void onFailure(int statusCode, Header[] header,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+						lv_all.onLoadMoreComplete();
+
 					}
 				});
+//				api.getGroupList(page_all + 1, new ResponseHandler() {
+//
+//					@Override
+//					public void onSuccess(int statusCode, Header[] headers,
+//							byte[] data) {
+//						String json = new String(data);
+//						boolean canLoadMore = true;
+//						if (JsonUtils.isOK(json)) {
+//							List<MGroup> newData_all = MGroup
+//									.create_by_jsonarray(json);
+//							if (newData_all != null && newData_all.size() > 0) {
+//								page_all++;
+//								data_all.addAll(newData_all);
+//								adapter_all.notifyDataSetChanged();
+//							} else {
+//								if (newData_all == null) {
+//									toast("网络异常,解析错误");
+//								} else if (newData_all.size() == 0) {
+//									toast("没有更多了!");
+//									canLoadMore = false;
+//								}
+//							}
+//						} else {
+//							toast("Error:" + JsonUtils.getErrorString(json));
+//						}
+//						lv_all.onLoadMoreComplete();
+//						if (!canLoadMore)
+//							lv_all.setCanLoadMore(false);
+//					}
+//
+//					@Override
+//					public void onFailure(int statusCode, Header[] header,
+//							byte[] data, Throwable err) {
+//						toast("网络异常 错误码:" + statusCode);
+//					}
+//				});
 			}
 		});
 
