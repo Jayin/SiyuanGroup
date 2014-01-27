@@ -225,7 +225,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_compose:
-			toast("发布");
+			openActivity(BusinessPublish.class);
 			break;
 		case R.id.acty_business_footer_all:
 			viewpager.setCurrentItem(0, true);

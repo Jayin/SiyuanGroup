@@ -318,6 +318,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				h = (ViewHolder) convertView.getTag();
 			}
 			MActivity acty = data.get(position);
+			if(acty==null){
+				debug("acty is null");
+			}
+			if(h.actyName==null){
+				debug("h.actyName is null");
+			}
+			debug(data.toString());
+			
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
 			h.starttime.setText("时间:"

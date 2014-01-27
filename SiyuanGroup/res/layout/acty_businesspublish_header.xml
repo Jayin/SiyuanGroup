@@ -36,7 +36,6 @@
     </RelativeLayout>
 
     <ImageView
-        android:id="@+id/acty_head_iv_hr2"
         android:layout_width="2px"
         android:layout_height="match_parent"
         android:background="@drawable/ic_acty_head_hr" />

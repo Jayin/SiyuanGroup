@@ -5,7 +5,7 @@
     android:background="@color/grey"
     android:orientation="vertical" >
 
-    <include layout="@layout/acty_businesspublish_header" />
+    <include layout="@layout/acty_activitiespublish_header" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -180,7 +180,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="right"
-                    android:text="HK" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout

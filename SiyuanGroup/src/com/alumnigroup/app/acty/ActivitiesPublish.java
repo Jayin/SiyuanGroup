@@ -111,11 +111,20 @@ public class ActivitiesPublish extends BaseActivity {
 						.getTextTrim(et_maxNum));
 				int duration = Integer.parseInt(EditTextUtils
 						.getTextTrim(et_duration));
-				int statusid = 1;
+				int statusid = 0;// 0接受报名、1截止报名、2活动结束、3活动取消
 				long money = Integer.parseInt(EditTextUtils
 						.getTextTrim(et_money));
 				String name = EditTextUtils.getTextTrim(et_name);
 				String content = EditTextUtils.getTextTrim(et_description);
+				debug("发起活动:");
+				debug("groupid->"+groupid+"");
+				debug("maxnum->"+maxnum+"");
+				debug("duration->"+duration+"");
+				debug("statusid->"+statusid+"");
+				debug("money->"+money+"");
+				debug("name->"+name+"");
+				debug("content->"+content+"");
+				debug("starttime->"+starttime+"");
 				api.creatAcivity(groupid, maxnum, starttime, duration,
 						statusid, money, name, content,
 						new JsonResponseHandler() {

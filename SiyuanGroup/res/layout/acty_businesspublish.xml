@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp" >
+        android:layout_margin="8dp" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,11 +21,12 @@
             <TextView
                 style="@style/TextView.base"
                 android:singleLine="true"
-                android:text="项目标题"
+                android:text="项目名称"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_name"
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp" />
 
@@ -38,6 +39,7 @@
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_description"
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp"
                 android:minLines="6" />
@@ -52,21 +54,45 @@
                 <TextView
                     style="@style/TextView.black"
                     android:padding="6dp"
-                    android:text="截止日期" />
+                    android:text="公司/组织名称" />
 
-                <TextView
-                    style="@style/TextView.base"
+                <EditText
+                    android:id="@+id/et_company"
+                    style="@style/EditText.base"
                     android:layout_weight="1"
+                    android:background="@null"
                     android:gravity="right"
-                    android:padding="6dp"
-                    android:text="2013-6-7"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
+                    android:hint="点击编辑" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btn_deadline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:clickable="true"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:padding="6dp"
+                    android:text="截止日期" />
+
+                <TextView
+                    android:id="@+id/tv_deadline"
+                    style="@style/TextView.black"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="6dp"
+                    android:text="2013-6-7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/isprivate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_preference_sigle"
                 android:orientation="horizontal" >
@@ -75,13 +101,15 @@
                     style="@style/TextView.black"
                     android:layout_weight="1"
                     android:padding="6dp"
-                    android:text="设置权限" />
+                    android:text="是否私有" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <TextView
+                    android:id="@+id/tv_isprivate"
+                    style="@style/TextView.black"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_item_toright_blue" />
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:text="否" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
