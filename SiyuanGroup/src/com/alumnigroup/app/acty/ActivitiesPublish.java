@@ -116,6 +116,7 @@ public class ActivitiesPublish extends BaseActivity {
 						.getTextTrim(et_money));
 				String name = EditTextUtils.getTextTrim(et_name);
 				String content = EditTextUtils.getTextTrim(et_description);
+				String site = EditTextUtils.getTextTrim(et_site);
 				debug("发起活动:");
 				debug("groupid->"+groupid+"");
 				debug("maxnum->"+maxnum+"");
@@ -125,8 +126,9 @@ public class ActivitiesPublish extends BaseActivity {
 				debug("name->"+name+"");
 				debug("content->"+content+"");
 				debug("starttime->"+starttime+"");
+				debug("site->"+site+"");
 				api.creatAcivity(groupid, maxnum, starttime, duration,
-						statusid, money, name, content,
+						statusid, money, name, content,site,
 						new JsonResponseHandler() {
 
 							@Override

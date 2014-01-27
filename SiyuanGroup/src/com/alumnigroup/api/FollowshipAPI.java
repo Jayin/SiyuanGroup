@@ -63,8 +63,9 @@ public class FollowshipAPI {
 	 */
 	public void getFollowingList(int page ,int userid ,AsyncHttpResponseHandler responseHandler){
 		RequestParams params = new RequestParams();
+		params.add("page", page+"");
 		params.add("userid", userid+"");
-		RestClient.post("/api/followship/following", params, responseHandler);
+		RestClient.get("/api/followship/following", params, responseHandler);
 	}
 	/**
 	 * 用户的粉丝列表 
@@ -76,7 +77,7 @@ public class FollowshipAPI {
 		RequestParams params = new RequestParams();
 		params.add("page", page+"");
 		params.add("followid", followid+"");
-		RestClient.post("/api/followship/followers", params, responseHandler);
+		RestClient.get("/api/followship/followers", params, responseHandler);
 	}
 	
 

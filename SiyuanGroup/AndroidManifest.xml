@@ -153,6 +153,10 @@
             android:name=".acty.Browser"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.FollowingList"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

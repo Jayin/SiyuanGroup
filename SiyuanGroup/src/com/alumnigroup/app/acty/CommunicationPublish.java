@@ -3,6 +3,7 @@ package com.alumnigroup.app.acty;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -82,7 +83,10 @@ public class CommunicationPublish extends BaseActivity {
 			toast("permission");
 			break;
 		case R.id.mention:
-			toast("mention");
+			//toast("mention");
+		    Intent intent  = new Intent(this,FollowingList.class);
+		    intent.putExtra("userid", 1);
+		    openActivity(intent);
 			break;
 		default:
 			break;
