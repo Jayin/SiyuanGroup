@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/white" >
+    android:background="@color/white"
+    android:orientation="vertical" >
 
     <include layout="@layout/acty_businessdetail_header" />
 
@@ -24,8 +24,11 @@
                 android:padding="4dp" >
 
                 <LinearLayout
+                    android:id="@+id/btn_space"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/item_listview_bg_whitetogrey"
+                    android:clickable="true"
                     android:orientation="horizontal" >
 
                     <ImageView
@@ -42,7 +45,7 @@
                         android:orientation="vertical" >
 
                         <TextView
-                            android:id="@+id/item_lv_acty_business_tv_name"
+                            android:id="@+id/tv_username"
                             style="@style/TextView.base"
                             android:gravity="left"
                             android:text="marchen"
@@ -50,7 +53,7 @@
                             android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/item_lv_acty_business_tv_time"
+                            android:id="@+id/tv_time"
                             style="@style/TextView.base"
                             android:layout_marginTop="4dp"
                             android:text="2013-11-30 21:00:00"
@@ -72,6 +75,160 @@
                 android:background="@color/grey_lv_two" />
 
             <LinearLayout
+                android:id="@+id/owner"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/item_listview_bg_whitetogrey"
+                android:orientation="horizontal" >
+
+                <RelativeLayout
+                    android:id="@+id/btn_edit"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_listview_bg_whitetogrey" >
+
+                    <TextView
+                        style="@style/TextView.base"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="编辑"
+                        android:textColor="@color/grey_lv_two"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey_lv_one" />
+
+                <RelativeLayout
+                    android:id="@+id/btn_end"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_listview_bg_whitetogrey" >
+
+                    <TextView
+                        style="@style/TextView.base"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="结束"
+                        android:textColor="@color/grey_lv_two"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey_lv_one" />
+
+                <RelativeLayout
+                    android:id="@+id/btn_delete"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_listview_bg_whitetogrey" >
+
+                    <TextView
+                        style="@style/TextView.base"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="删除"
+                        android:textColor="@color/grey_lv_two"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/common"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:background="@drawable/item_listview_bg_whitetogrey"
+                android:orientation="horizontal"
+                android:visibility="gone" >
+
+                <RelativeLayout
+                    android:id="@+id/btn_favourite"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_listview_bg_whitetogrey" >
+
+                    <TextView
+                        style="@style/TextView.base"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="收藏"
+                        android:textColor="@color/grey_lv_two"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/grey_lv_one" />
+
+                <RelativeLayout
+                    android:id="@+id/btn_comment"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/item_listview_bg_whitetogrey" >
+
+                    <TextView
+                        style="@style/TextView.base"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="询问"
+                        android:textColor="@color/grey_lv_two"
+                        android:textSize="16sp" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:background="@drawable/ic_image_line" />
+
+            <LinearLayout
+                android:id="@+id/frame_acty_circle_groupinfo_btn_groupBuilder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="14dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:padding="6dp"
+                    android:text="截止日期"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/tv_deadline"
+                    style="@style/TextView.base"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:padding="6dp"
+                    android:text="2013-6-7"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/frame_acty_circle_groupinfo_btn_groupBuilder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -84,17 +241,17 @@
                 <TextView
                     style="@style/TextView.base"
                     android:padding="6dp"
-                    android:text="截止日期"
+                    android:text="项目"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/frame_acty_circle_groupinfo_tv_groupBuilder"
+                    android:id="@+id/tv_projectname"
                     style="@style/TextView.base"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:padding="6dp"
-                    android:text="2013-6-7"
+                    android:text="Golang china"
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -125,7 +282,7 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/frame_acty_circle_groupinfo_tv_groupRule"
+                    android:id="@+id/tv_description"
                     style="@style/TextView.base"
                     android:layout_weight="1"
                     android:gravity="left"
@@ -138,82 +295,47 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_preference_first_normal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:padding="6dp"
+                    android:text="项目询问"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/ic_preference_last_normal"
+                android:orientation="horizontal" >
+
+                <com.alumnigroup.widget.CommentView
+                    android:id="@+id/commentlist"
+                    style="@style/TextView.base"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="6dp"
+                    android:minHeight="30dp"
+                    android:padding="6dp"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" >
+                </com.alumnigroup.widget.CommentView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical" >
-
-                <RelativeLayout
-                    android:id="@+id/frame_acty_circle_groupinfo_btn_joingroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_common_green" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_centerInParent="true"
-                        android:text="编辑" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/frame_acty_circle_groupinfo_btn_invitaition"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="4dp"
-                     android:background="@drawable/btn_common_red" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_centerInParent="true"
-                        android:text="结束" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/frame_acty_circle_groupinfo_btn_exitgroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@drawable/btn_common_red" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_centerInParent="true"
-                        android:text="删除" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/frame_acty_circle_groupinfo_btn_deletegroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="6dp"
-                   android:background="@drawable/btn_common_green" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_centerInParent="true"
-                        android:text="收藏" />
-                </RelativeLayout>
-                    <RelativeLayout
-                    android:id="@+id/frame_acty_circle_groupinfo_btn_deletegroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginTop="6dp"
-                   android:background="@drawable/btn_common_green" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_centerInParent="true"
-                        android:text="询问" />
-                </RelativeLayout>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
 </LinearLayout>

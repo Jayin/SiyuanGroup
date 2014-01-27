@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="280dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_bg_dialog_white"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TextView.black"
+        android:layout_gravity="center_horizontal"
+        android:text="时间选择"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <com.squareup.timessquare.CalendarPickerView
+        android:id="@+id/calendarview"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:background="#FFFFFF"
+        android:paddingBottom="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:scrollbarStyle="outsideOverlay" >
+    </com.squareup.timessquare.CalendarPickerView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="8dp"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/comfirm"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/btn_common_green"
+            android:text="确  认"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+</LinearLayout>

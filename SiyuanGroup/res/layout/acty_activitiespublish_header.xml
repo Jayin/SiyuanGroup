@@ -43,7 +43,7 @@
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:id="@+id/acty_head_btn_compose"
+        android:id="@+id/acty_head_btn_create"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
 

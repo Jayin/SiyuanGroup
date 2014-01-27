@@ -8,8 +8,8 @@
     <WebView
         android:id="@+id/acty_main_webview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="80dp"
+        android:layout_height="60dp"
+     
         android:background="#00000000"
         />
 

@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -20,8 +21,8 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
-import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.MGroup.Memberships;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.DataPool;
@@ -41,7 +42,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class GroupInfo extends BaseActivity {
 	private MGroup group;
 	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
-			btn_invite, btn_exitGroup, btn_deleteGroup;
+			btn_invite, btn_exitGroup, btn_deleteGroup,btn_createActivity;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
@@ -129,16 +130,18 @@ public class GroupInfo extends BaseActivity {
 	@Override
 	protected void initLayout() {
 		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_edit = _getView(R.id.acty_head_btn_compose);
+		//btn_edit = _getView(R.id.acty_head_btn_createActiviy);
 		btn_info = _getView(R.id.acty_groupinfo_footer_groupInfo);
 		btn_member = _getView(R.id.acty_groupinfo_footer_groupMenber);
 		btn_share = _getView(R.id.acty_groupinfo_footer_groupShare);
+		btn_createActivity = _getView(R.id.acty_head_btn_createActiviy);
 
 		btn_back.setOnClickListener(this);
-		btn_edit.setOnClickListener(this);
+	//	btn_edit.setOnClickListener(this);
 		btn_info.setOnClickListener(this);
 		btn_member.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
+		btn_createActivity.setOnClickListener(this);
 		initViewPager();
 	}
 
@@ -185,7 +188,7 @@ public class GroupInfo extends BaseActivity {
 		// 不是圈子拥有者
 		if (user.getId() != group.getOwner().getId()) {
 			btn_deleteGroup.setVisibility(View.GONE);
-			btn_edit.setVisibility(View.INVISIBLE);
+		//	btn_edit.setVisibility(View.INVISIBLE);
 		}
 
 		ImageLoader.getInstance().displayImage(
@@ -251,6 +254,11 @@ public class GroupInfo extends BaseActivity {
 			break;
 		case R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup:
 			toast("删除 圈子");
+			break;
+		case R.id.acty_head_btn_createActiviy:
+			 Intent intent = new Intent(this,ActivitiesPublish.class);
+			 intent.putExtra("group", group);
+			 openActivity(intent);
 			break;
 		default:
 			break;

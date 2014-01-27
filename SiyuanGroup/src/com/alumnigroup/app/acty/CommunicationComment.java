@@ -14,7 +14,7 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.StringUtils;
-import com.alumnigroup.utils.WidgetUtils;
+import com.alumnigroup.utils.EditTextUtils;
 
 /**
  * 校友交流，评论页面
@@ -62,7 +62,7 @@ public class CommunicationComment extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_post:
-			String body = WidgetUtils.getTextTrim(et_content);
+			String body = EditTextUtils.getTextTrim(et_content);
 			if (body == null || StringUtils.isEmpty(body)) {
 				toast("写点东西吧！");
 				return;

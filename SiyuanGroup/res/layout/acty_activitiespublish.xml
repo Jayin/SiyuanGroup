@@ -2,45 +2,54 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/grey" >
+    android:background="@color/grey"
+    android:orientation="vertical" >
 
     <include layout="@layout/acty_activitiespublish_header" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp" >
+         android:layout_margin="8dp"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:orientation="vertical" >
+            android:orientation="vertical"
+           
+             >
 
             <TextView
                 style="@style/TextView.base"
                 android:singleLine="true"
-                android:text="标题"
+                android:text="活动名称"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_name"
                 style="@style/EditText.base"
-                android:layout_marginTop="6dp" />
+                android:layout_marginTop="6dp"
+                android:gravity="center_vertical"
+                android:textStyle="bold" />
 
             <TextView
                 style="@style/TextView.base"
                 android:layout_marginTop="6dp"
                 android:singleLine="true"
-                android:text="描述"
+                android:text="活动简介"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <EditText
+                android:id="@+id/et_description"
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp"
-                android:minLines="6" />
+                android:minLines="6"
+                android:textSize="14sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -52,14 +61,103 @@
                 <TextView
                     style="@style/TextView.black"
                     android:padding="6dp"
-                    android:text="权限" />
+                    android:text="最大人数" />
+
+                <EditText
+                    android:id="@+id/et_maxNum"
+                    style="@style/EditText.base"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:inputType="number"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
 
                 <TextView
+                    style="@style/TextView.black"
+                    android:padding="6dp"
+                    android:text="活动费用" />
+
+                <EditText
+                    android:id="@+id/et_money"
+                    style="@style/EditText.base"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right"   android:inputType="number"
+                    android:hint="RMB"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_starttime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:padding="6dp"
+                    android:text="活动开始" />
+
+                <TextView
+                    android:id="@+id/et_startTime"
+                    style="@style/EditText.base"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:padding="6dp"
+                    android:text="活动时长" />
+
+                <EditText
+                    android:id="@+id/et_duration"
+                    style="@style/EditText.base"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:hint="天" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_deadline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.black"
+                    android:padding="6dp"
+                    android:text="截止日期" />
+
+                <TextView
+                    android:id="@+id/et_deadline"
                     style="@style/TextView.base"
                     android:layout_weight="1"
                     android:gravity="right"
                     android:padding="6dp"
-                    android:text="高尔夫小组"
+                    android:text=""
                     android:textColor="@color/black"
                     android:textSize="16sp" />
             </LinearLayout>
@@ -73,9 +171,32 @@
 
                 <TextView
                     style="@style/TextView.black"
+                    android:padding="6dp"
+                    android:text="活动地点" />
+
+                <EditText
+                    android:id="@+id/et_site"
+                    style="@style/EditText.base"
+                    android:layout_weight="1"
+                    android:background="@null"
+                    android:gravity="right"
+                    android:text="" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_invite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/btn_preference_sigle"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.black"
                     android:layout_weight="1"
                     android:padding="6dp"
-                    android:text="提及@" />
+                    android:text="邀请好友" />
 
                 <ImageView
                     android:layout_width="wrap_content"

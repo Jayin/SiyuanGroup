@@ -94,6 +94,16 @@ public class User implements Serializable {
 	private int numEvents;
 	/** 个人资料 */
 	private Profile profile;
+	/** 封面图片*/
+	private String cover;
+
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
 
 	public Profile getProfile() {
 		return profile;
