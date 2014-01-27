@@ -149,6 +149,10 @@
             android:name=".acty.BusinessPublish"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.Browser"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
