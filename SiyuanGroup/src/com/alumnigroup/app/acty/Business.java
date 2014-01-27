@@ -315,10 +315,10 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			h.name_user.setText(c.getUser().getProfile().getName());
 			h.description.setText(c.getDescription());
 			h.numFavour.setText(14 + ""); // should change
-			h.commentNum.setText("11");// should change
+			h.commentNum.setText(c.getNumComments()+""); 
 
 			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + c.getAvatar(), h.avatar);
+					RestClient.BASE_URL + c.getUser().getAvatar(), h.avatar);
 			if (c.getStatusid() != 2) {
 				ImageLoader.getInstance()
 						.displayImage(

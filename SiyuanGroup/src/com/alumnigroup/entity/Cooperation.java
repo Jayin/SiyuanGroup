@@ -45,28 +45,39 @@ public class Cooperation implements Serializable {
 	public Cooperation() {
 
 	}
-    /** 项目id*/
+
+	/** 项目id */
 	private int id;
-	  /** 项目名称*/
+	/** 项目名称 */
 	private String name;
-	  /** 项目发布者id*/
+	/** 项目发布者id */
 	private int ownerid;
-	  /** 描述*/
+	/** 描述 */
 	private String description;
-	  /** 公司*/
+	/** 公司 */
 	private String company;
-	  /** 截止日期*/
-	private long deadline; 
-	  /** 头像*/
+	/** 截止日期 */
+	private long deadline;
+	/** 头像 */
 	private String avatar;
-	  /** 项目状态id*/
+	/** 项目状态id */
 	private int statusid;
-	  /** 是否私密*/
+	/** 是否私密 */
 	private int isprivate;
-	  /** 项目发布者*/
+	/** 项目发布者 */
 	private User user;
-	  /** 项目状态*/
+	/** 项目状态 */
 	private Status status;
+	/** 评论数 */
+	private int numComments;
+
+	public int getNumComments() {
+		return numComments;
+	}
+
+	public void setNumComments(int numComments) {
+		this.numComments = numComments;
+	}
 
 	public int getId() {
 		return id;
@@ -164,5 +175,5 @@ public class Cooperation implements Serializable {
 				+ ", statusid=" + statusid + ", isprivate=" + isprivate
 				+ ", user=" + user + ", status=" + status + "]";
 	}
-  
+
 }

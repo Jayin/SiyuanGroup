@@ -50,10 +50,10 @@ public class ActivitiesPublish extends BaseActivity {
 	protected void initData() {
 		group = (MGroup) getSerializableExtra("group");
 		api = new ActivityAPI();
-		// if (group == null) {
-		// closeActivity();
-		// toast("error");
-		// }
+		if (group == null) {
+			closeActivity();
+			toast("error");
+		}
 	}
 
 	@Override
@@ -116,8 +116,9 @@ public class ActivitiesPublish extends BaseActivity {
 						.getTextTrim(et_money));
 				String name = EditTextUtils.getTextTrim(et_name);
 				String content = EditTextUtils.getTextTrim(et_description);
-				api.creatAcivity(groupid, maxnum, starttime, duration, statusid,
-						money, name, content, new JsonResponseHandler() {
+				api.creatAcivity(groupid, maxnum, starttime, duration,
+						statusid, money, name, content,
+						new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {

@@ -371,7 +371,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			h.title.setText(data.get(position).getTitle());
 			h.body.setText(data.get(position).getBody());
 			h.numComment.setText(data.get(position).getNumComments() + "");
-			// h.favourite.setText(data.get(position).getFavourite()+"");
+			//h.favourite.setText(data.get(position).getFavourite()+"");
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL
 							+ data.get(position).getUser().getAvatar(),

@@ -130,14 +130,14 @@ public class GroupInfo extends BaseActivity {
 	@Override
 	protected void initLayout() {
 		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_edit = _getView(R.id.acty_head_btn_compose);
+		//btn_edit = _getView(R.id.acty_head_btn_createActiviy);
 		btn_info = _getView(R.id.acty_groupinfo_footer_groupInfo);
 		btn_member = _getView(R.id.acty_groupinfo_footer_groupMenber);
 		btn_share = _getView(R.id.acty_groupinfo_footer_groupShare);
 		btn_createActivity = _getView(R.id.acty_head_btn_createActiviy);
 
 		btn_back.setOnClickListener(this);
-		btn_edit.setOnClickListener(this);
+	//	btn_edit.setOnClickListener(this);
 		btn_info.setOnClickListener(this);
 		btn_member.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
@@ -188,7 +188,7 @@ public class GroupInfo extends BaseActivity {
 		// 不是圈子拥有者
 		if (user.getId() != group.getOwner().getId()) {
 			btn_deleteGroup.setVisibility(View.GONE);
-			btn_edit.setVisibility(View.INVISIBLE);
+		//	btn_edit.setVisibility(View.INVISIBLE);
 		}
 
 		ImageLoader.getInstance().displayImage(

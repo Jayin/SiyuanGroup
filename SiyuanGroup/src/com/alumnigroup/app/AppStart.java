@@ -4,8 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import com.alumnigroup.app.acty.ActivitiesPublish;
 import com.alumnigroup.app.acty.Login;
+import com.alumnigroup.app.acty.Main;
 import com.alumnigroup.utils.DataPool;
 
 /**
@@ -27,7 +27,7 @@ public class AppStart extends BaseActivity {
 				Intent intent = new Intent(AppStart.this, Login.class);
 				// startActivity(intent);
 				if (checkLoginInfo()) {
-					openActivity(ActivitiesPublish.class);
+					openActivity(Main.class);
 				} else {
 					openActivity(Login.class);
 				}

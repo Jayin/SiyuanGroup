@@ -8,6 +8,7 @@ public class ErrorCode {
 
 	static {
 		errorList = new HashMap<Integer, String>();
+		errorList.put(0, "网络链接不可用");
 		errorList.put(302, "重定向 ");
 		errorList.put(400, "错误请求");
 		errorList.put(401, "未授权");
