@@ -70,8 +70,16 @@ public class Cooperation implements Serializable {
 	private Status status;
 	/** 评论数 */
 	private int numComments;
-	 
- 
+	/** 项目(消息)截止日期*/ 
+    private long regdeadline ;
+
+	public long getRegdeadline() {
+		return regdeadline;
+	}
+
+	public void setRegdeadline(long regdeadline) {
+		this.regdeadline = regdeadline;
+	}
 
 	public int getNumComments() {
 		return numComments;

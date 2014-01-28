@@ -44,7 +44,7 @@ public class GroupInfo extends BaseActivity {
 	private int RequestCode_invite = 1;
 	private MGroup group;
 	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
-			btn_invite, btn_exitGroup,   btn_createActivity;
+			btn_invite, btn_exitGroup, btn_createActivity;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
@@ -175,7 +175,7 @@ public class GroupInfo extends BaseActivity {
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
 		btn_exitGroup = info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
-		 
+
 		btn_edit = info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_edit);
 
@@ -253,12 +253,11 @@ public class GroupInfo extends BaseActivity {
 			invite();
 			break;
 		case R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup:
-			toast("退出圈子");
 			exitGroup();
 			break;
-	 
+
 		case R.id.frame_acty_groupinfo_groupinfo_btn_edit:
-			toast("编辑圈子");
+			editGroup();
 			break;
 		case R.id.acty_head_btn_createActiviy:
 			Intent intent = new Intent(this, ActivitiesPublish.class);
@@ -270,22 +269,30 @@ public class GroupInfo extends BaseActivity {
 		}
 	}
 
+	private void editGroup() {
+		Intent intent = new Intent(this, GroupCreate.class);
+		intent.putExtra("group", group);
+		openActivity(intent);
+	}
+
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-	   if(requestCode==RequestCode_invite && resultCode==RESULT_OK){
-		   // to post.
-		  if(data.getSerializableExtra("result")!=null){
- 			  ArrayList<User> userList = (ArrayList<User>)data.getSerializableExtra("result");
- 			  //add post data...
- 			  toast("select count:"+userList.size());
-		  }
-	   }
+		if (requestCode == RequestCode_invite && resultCode == RESULT_OK) {
+			// to post.
+			if (data.getSerializableExtra("result") != null) {
+				ArrayList<User> userList = (ArrayList<User>) data
+						.getSerializableExtra("result");
+				// add post data...
+				toast("select count:" + userList.size());
+			}
+		}
 	}
 
 	private void invite() {
 		Intent intent = new Intent(this, FollowingList.class);
-        User u = new AppInfo(getContext()).getUser();
- 		intent.putExtra("userid", u.getId());
+		User u = new AppInfo(getContext()).getUser();
+		intent.putExtra("userid", u.getId());
 		startActivityForResult(intent, RequestCode_invite);
 	}
 

@@ -76,7 +76,7 @@
 
             <LinearLayout
                 android:id="@+id/owner"
-                android:visibility="gone" 
+            
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
@@ -126,7 +126,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/common"
+                android:id="@+id/common"     android:visibility="gone" 
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"

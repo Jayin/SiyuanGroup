@@ -132,10 +132,9 @@ public class BusinessDetail extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.btn_edit:
-			toast("edit");
+			edit();
 			break;
 		case R.id.btn_end:
-			toast("end");
 			end();
 			break;
 		case R.id.btn_space:
@@ -150,6 +149,12 @@ public class BusinessDetail extends BaseActivity {
 		default:
 			break;
 		}
+	}
+
+	private void edit() {
+		Intent intent = new Intent(this,BusinessPublish.class);
+		intent.putExtra("cooperation", c);
+		openActivity(intent);
 	}
 
 	private void comment() {

@@ -105,13 +105,14 @@ public class ActivityAPI {
      * @param id 活动id
      * @param maxnum  最大人数
      * @param duration  持续时间,单位为分钟
-     * @param statusid  活动状态 0接受报名、1截止报名、2活动结束、3活动取消]
+     * @param regdeadline 注册时间
+     * @param statusid  活动状态 1接受报名、2截止报名、3活动结束、4活动取消]
      * @param money 活动费用
      * @param name 活动名称
      * @param content 活动内容
      * @param responseHandler 处理器
      */
-	public void update(int id, int maxnum, long duration, int statusid,
+	public void update(int id, int maxnum, long duration,long regdeadline , int statusid,
 			long money, String name,String content, String site, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
@@ -122,6 +123,7 @@ public class ActivityAPI {
 		params.add("name", name);
 		params.add("content", content);
 		params.add("site", site);
+		params.add("regdeadline", regdeadline+"");
 		RestClient.post("/api/activities/update", params, responseHandler);
 	}
 

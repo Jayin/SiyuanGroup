@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -140,6 +141,7 @@ public class ActivitiesInfo extends BaseActivity {
 		tv_site = (TextView) info.findViewById(R.id.tv_address);
 		tv_description = (TextView) info.findViewById(R.id.tv_description);
 		tv_duration = (TextView) info.findViewById(R.id.tv_duration);
+		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
 		ImageLoader.getInstance().displayImage(RestClient.BASE_URL, iv_avatar);
@@ -203,7 +205,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 			break;
 		case R.id.btn_edit:
-
+            editActivity();
 			break;
 		case R.id.btn_favourite:
             favourite();
@@ -219,7 +221,13 @@ public class ActivitiesInfo extends BaseActivity {
 			break;
 		}
 	}
-    // 收藏的remark默认为期类型名
+    private void editActivity() {
+         Intent intent =new Intent(this, ActivitiesPublish.class);
+         intent.putExtra("activity", acty);
+         openActivity(intent);
+	}
+
+	// 收藏的remark默认为期类型名
 	private void favourite() {
 		StarAPI starapi = new StarAPI();
 		starapi.star(StarAPI.Item_type_activity, acty.getId(), "activity", new JsonResponseHandler() {

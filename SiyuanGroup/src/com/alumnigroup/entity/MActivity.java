@@ -83,6 +83,16 @@ public class MActivity implements Serializable {
 	private User user;
 	/** 活动人数*/
 	private int numUsership;
+	/** 活动截止申请日期*/
+	private long regdeadline;
+
+	public long getRegdeadline() {
+		return regdeadline;
+	}
+
+	public void setRegdeadline(long regdeadline) {
+		this.regdeadline = regdeadline;
+	}
 
 	public User getUser() {
 		return user;

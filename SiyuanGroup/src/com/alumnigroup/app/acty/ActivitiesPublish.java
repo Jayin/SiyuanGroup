@@ -1,7 +1,5 @@
 package com.alumnigroup.app.acty;
 
-import java.util.Calendar;
-
 import org.apache.http.Header;
 import org.json.JSONObject;
 
@@ -13,6 +11,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -37,6 +36,7 @@ public class ActivitiesPublish extends BaseActivity {
 	private TimePickDialog dialog;
 	private int sy_pickwhat = 1; // 1 pick: tv_startTime ; 2 tv_deadline
 	private long starttime = 0, regdeadline = 0;
+	private MActivity acty;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +48,19 @@ public class ActivitiesPublish extends BaseActivity {
 
 	@Override
 	protected void initData() {
+		boolean hasParams = false;
 		group = (MGroup) getSerializableExtra("group");
 		api = new ActivityAPI();
-		if (group == null) {
+		if (group != null) {
+			hasParams = true;
+		}
+		if (getSerializableExtra("activity") != null) {
+			acty = (MActivity) getSerializableExtra("activity");
+			hasParams = true;
+		}
+		if (!hasParams) {
 			closeActivity();
-			toast("error");
+			toast("无参数");
 		}
 	}
 
@@ -95,6 +103,21 @@ public class ActivitiesPublish extends BaseActivity {
 		btn_starttime.setOnClickListener(this);
 		btn_deadline.setOnClickListener(this);
 
+		if (acty != null) {
+			starttime = acty.getStarttime();
+			regdeadline = acty.getRegdeadline();
+			et_name.setText(acty.getName());
+			et_description.setText(acty.getContent());
+			et_maxNum.setText(acty.getMaxnum() + "");
+			et_money.setText(acty.getMoney());
+			tv_startTime.setText(CalendarUtils.getTimeFromat(
+					acty.getStarttime(), CalendarUtils.TYPE_TWO));
+			et_duration.setText(acty.getDuration() + "");
+			tv_deadline.setText(CalendarUtils.getTimeFromat(
+					acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
+			et_site.setText(acty.getSite());
+		}
+
 	}
 
 	@Override
@@ -106,7 +129,8 @@ public class ActivitiesPublish extends BaseActivity {
 		case R.id.acty_head_btn_create:
 			// create..
 			if (check()) {
-				int groupid = group.getId();
+
+				int groupid = group == null ? 0 : group.getId();
 				int maxnum = Integer.parseInt(EditTextUtils
 						.getTextTrim(et_maxNum));
 				int duration = Integer.parseInt(EditTextUtils
@@ -117,21 +141,16 @@ public class ActivitiesPublish extends BaseActivity {
 				String name = EditTextUtils.getTextTrim(et_name);
 				String content = EditTextUtils.getTextTrim(et_description);
 				String site = EditTextUtils.getTextTrim(et_site);
-				api.creatAcivity(groupid, maxnum, starttime, duration,regdeadline,
-						statusid, money, name, content,site,
-						new JsonResponseHandler() {
+				if (acty == null) {
+					create(groupid, maxnum, duration, statusid, money, name,
+							content, site);
+				}
 
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								toast("活动发起成功");
-								closeActivity();
-							}
+				else {
+					update(acty.getId(), maxnum, duration, statusid, money,
+							name, content, site);
+				}
 
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 错误码:" + errorCode);
-							}
-						});
 			}
 			break;
 		case R.id.btn_invite:
@@ -153,15 +172,51 @@ public class ActivitiesPublish extends BaseActivity {
 		}
 	}
 
+	private void update(int actyid, int maxnum, int duration, int statusid,
+			long money, String name, String content, String site) {
+		api.update(actyid, maxnum, duration, regdeadline, statusid, money,
+				name, content, site, new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("已更新");
+						closeActivity();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+					}
+				});
+
+	}
+
+	private void create(int groupid, int maxnum, int duration, int statusid,
+			long money, String name, String content, String site) {
+		api.creatAcivity(groupid, maxnum, starttime, duration,
+
+		regdeadline, statusid, money, name, content, site,
+				new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("活动发起成功");
+						closeActivity();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+					}
+				});
+
+	}
+
 	private boolean check() {
 		if (EditTextUtils.isEmpty(et_name)) {
 			toast("活动名称不能为空");
 			return false;
 		}
-		// if(EditTextUtils.isEmpty(et_description)){
-		// toast("活动简介不能为空");
-		// return false;
-		// }
 		if (EditTextUtils.isEmpty(et_maxNum)) {
 			toast("活动人数不能为空");
 			return false;
@@ -170,18 +225,10 @@ public class ActivitiesPublish extends BaseActivity {
 			toast("活动费用不能为空");
 			return false;
 		}
-		// if(EditTextUtils.isEmpty(et_startTime)){
-		// toast("活动开始时间不能为空");
-		// return false;
-		// }
 		if (EditTextUtils.isEmpty(et_duration)) {
 			toast("活动时长不能为空");
 			return false;
 		}
-		// if (EditTextUtils.isEmpty(tv_deadline)) {
-		// toast("活动截止日期不能为空");
-		// return false;
-		// }
 		if (EditTextUtils.isEmpty(et_site)) {
 			toast("活动地点不能为空");
 			return false;
