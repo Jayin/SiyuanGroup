@@ -282,4 +282,15 @@ public class BusinessAPI {
 		RestClient.post("/api/cooperations/comments/post", params,
 				responseHandler);
 	}
+	/**
+	 * 获取合作详情
+	 * @param id 合作ID
+	 * @param responseHandler
+	 */
+	public void view(int id,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("id", id+"");
+		RestClient.get("/api/cooperations/view", params,
+				responseHandler);
+	}
 }

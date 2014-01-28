@@ -70,6 +70,8 @@ public class Cooperation implements Serializable {
 	private Status status;
 	/** 评论数 */
 	private int numComments;
+	 
+ 
 
 	public int getNumComments() {
 		return numComments;
@@ -173,7 +175,12 @@ public class Cooperation implements Serializable {
 				+ ownerid + ", description=" + description + ", company="
 				+ company + ", deadline=" + deadline + ", avatar=" + avatar
 				+ ", statusid=" + statusid + ", isprivate=" + isprivate
-				+ ", user=" + user + ", status=" + status + "]";
+				+ ", user=" + user + ", status=" + status + ", numComments="
+				+ numComments + "]";
 	}
+
+	 
+
+ 
 
 }
