@@ -195,7 +195,10 @@ public class FollowingList extends BaseActivity {
 					intent.putExtra("result", wrapSelect());
 					setResult(RESULT_OK, intent);
 				}
+			}else{
+				setResult(RESULT_CANCELED);
 			}
+			closeActivity();
 			break;
 		default:
 			break;
