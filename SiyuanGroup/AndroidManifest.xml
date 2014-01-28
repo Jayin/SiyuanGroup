@@ -157,6 +157,10 @@
             android:name=".acty.FollowingList"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.BusinessComment"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

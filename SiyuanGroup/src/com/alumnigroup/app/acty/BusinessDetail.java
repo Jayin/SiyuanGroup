@@ -7,6 +7,7 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -141,7 +142,7 @@ public class BusinessDetail extends BaseActivity {
 			toast("to space");
 			break;
 		case R.id.btn_comment:
-			toast("comment");
+			comment();
 			break;
 		case R.id.btn_favourite:
 			favourite();
@@ -149,6 +150,12 @@ public class BusinessDetail extends BaseActivity {
 		default:
 			break;
 		}
+	}
+
+	private void comment() {
+		Intent intent = new Intent(this,BusinessComment.class);
+		intent.putExtra("cooperation", c);
+		openActivity(intent);
 	}
 
 	private void end() {

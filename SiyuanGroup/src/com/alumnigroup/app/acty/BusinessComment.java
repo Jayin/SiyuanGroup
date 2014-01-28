@@ -7,39 +7,43 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.alumnigroup.api.IssuesAPI;
+import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
-import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.StringUtils;
 import com.alumnigroup.utils.EditTextUtils;
+import com.alumnigroup.utils.StringUtils;
 
 /**
- * 校友交流，评论页面
+ * 商务合作 询问页面
  * 
  * @author Jayin Ton
  * 
  */
-public class CommunicationComment extends BaseActivity {
+public class BusinessComment extends BaseActivity {
+	private Cooperation c;
 	private View btn_back, btn_post, btn_mention;
 	private EditText et_content;
-	private IssuesAPI api;
-	private Issue issue;
+	private BusinessAPI api ;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_communicationcomment);
+		setContentView(R.layout.acty_businesscomment);
 		initData();
 		initLayout();
 	}
 
 	@Override
 	protected void initData() {
-		api = new IssuesAPI();
-		issue = (Issue) getSerializableExtra("issue");
+		c = (Cooperation) getSerializableExtra("cooperation");
+		if (c == null) {
+			toast("不存在该项目");
+			closeActivity();
+		}
+		api = new BusinessAPI();
 	}
 
 	@Override
@@ -52,7 +56,6 @@ public class CommunicationComment extends BaseActivity {
 		btn_back.setOnClickListener(this);
 		btn_post.setOnClickListener(this);
 		btn_mention.setOnClickListener(this);
-
 	}
 
 	@Override
@@ -67,17 +70,17 @@ public class CommunicationComment extends BaseActivity {
 				toast("还是写点东西吧！");
 				return;
 			}
-			api.commentIssue(issue.getId(), body, new JsonResponseHandler() {
-
+			api.comment(c.getId(), body, new JsonResponseHandler() {
+				
 				@Override
 				public void onOK(Header[] headers, JSONObject obj) {
-                       toast("评论成功");
-                       closeActivity();
+					 toast("发布成功");
+                     closeActivity();
 				}
-
+				
 				@Override
 				public void onFaild(int errorType, int errorCode) {
-                    toast("网络异常 错误代码:"+ErrorCode.errorList.get(errorCode));
+					toast("网络异常 错误代码:"+ErrorCode.errorList.get(errorCode));
 				}
 			});
 			break;
@@ -88,4 +91,5 @@ public class CommunicationComment extends BaseActivity {
 			break;
 		}
 	}
+
 }
