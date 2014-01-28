@@ -14,6 +14,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.EditTextUtils;
+import com.alumnigroup.utils.StringUtils;
 import com.alumnigroup.widget.TimePickDialog;
 import com.alumnigroup.widget.TimePickDialog.OnSiglePickFinishedListener;
 
@@ -22,7 +23,7 @@ public class BusinessPublish extends BaseActivity {
 	private EditText et_name, et_description, et_company;
 	private TextView tv_deadline, tv_isPrivate;
 	private TimePickDialog dialog;
-	private long deadline_time;
+	private long regdeadline;
 	private BusinessAPI api;
 
 	@Override
@@ -63,7 +64,7 @@ public class BusinessPublish extends BaseActivity {
 
 			@Override
 			public void onFinish(long selecttime) {
-				deadline_time = selecttime;
+				regdeadline = selecttime;
 				tv_deadline.setText(CalendarUtils.getTimeFromat(selecttime,
 						CalendarUtils.TYPE_TWO));
 
@@ -83,10 +84,9 @@ public class BusinessPublish extends BaseActivity {
 				String name = EditTextUtils.getTextTrim(et_name);
 				String description = EditTextUtils.getTextTrim(et_description);
 				String company = EditTextUtils.getTextTrim(et_company);
-				long deadline = deadline_time;
 				int statusid = 1;
 				int isprivate = tv_isPrivate.getText().equals("是") ? 1 : 0;
-				api.create(name, description, company, deadline, statusid,
+				api.create(name, description, company, regdeadline, statusid,
 						isprivate, new JsonResponseHandler() {
 
 							@Override
@@ -107,7 +107,7 @@ public class BusinessPublish extends BaseActivity {
 			dialog.show();
 			break;
 		case R.id.isprivate:
-			if (tv_isPrivate.equals("是")) {
+			if (tv_isPrivate.getText().equals("是")) {
 				tv_isPrivate.setText("否");
 			} else {
 				tv_isPrivate.setText("是");
@@ -130,6 +130,10 @@ public class BusinessPublish extends BaseActivity {
 		}
 		if (EditTextUtils.isEmpty(et_company)) {
 			toast("公司组织不能为空");
+			return false;
+		}
+		if (StringUtils.isEmpty(tv_deadline.getText().toString())) {
+			toast("截止日期不能为空");
 			return false;
 		}
 		return true;

@@ -70,7 +70,8 @@
                     android:background="@null"
                     android:gravity="right"
                     android:inputType="number"
-                    android:text="" />
+                    android:text="" 
+                    android:hint="点击编辑"/>
             </LinearLayout>
 
             <LinearLayout
@@ -135,7 +136,7 @@
                     android:inputType="number"
                     android:background="@null"
                     android:gravity="right"
-                    android:hint="天" />
+                    android:hint="单位:天" />
             </LinearLayout>
 
             <LinearLayout
@@ -180,7 +181,7 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="right"
-                    android:text="" />
+                    android:text=""  android:hint="点击编辑"/>
             </LinearLayout>
 
             <LinearLayout

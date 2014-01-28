@@ -179,7 +179,7 @@ public class ActivityAPI {
 	 * @param duration
 	 *            活动持续时间,单位为天
 	 * @param statusid
-	 *            活动状态 0接受报名、1截止报名、2活动结束、3活动取消
+	 *            活动状态 1接受报名、2截止报名、3活动结束、4活动取消
 	 * @param money
 	 *            花费
 	 * @param name
@@ -192,7 +192,7 @@ public class ActivityAPI {
 	 *            处理器
 	 */
 	public void creatAcivity(int groupid, int maxnum, long starttime,
-			long duration, int statusid, long money, String name,
+			long duration,long regdeadline , int statusid, long money, String name,
 			String content,String site, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("groupid", groupid + "");
@@ -204,6 +204,7 @@ public class ActivityAPI {
 		params.add("name", name);
 		params.add("content", content);
 		params.add("site", site);
+		params.add("regdeadline", regdeadline+"");
 		RestClient.post("/api/activities/create", params, responseHandler);
 	}
 

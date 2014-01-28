@@ -36,7 +36,7 @@ public class ActivitiesPublish extends BaseActivity {
 	private ActivityAPI api;
 	private TimePickDialog dialog;
 	private int sy_pickwhat = 1; // 1 pick: tv_startTime ; 2 tv_deadline
-	private long starttime = 0, deadline = 0;
+	private long starttime = 0, regdeadline = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class ActivitiesPublish extends BaseActivity {
 					tv_startTime.setText(CalendarUtils.getTimeFromat(
 							selecttime, CalendarUtils.TYPE_TWO));
 				} else if (sy_pickwhat == 2) {
-					deadline = selecttime;
+					regdeadline = selecttime;
 					tv_deadline.setText(CalendarUtils.getTimeFromat(selecttime,
 							CalendarUtils.TYPE_TWO));
 				}
@@ -111,23 +111,13 @@ public class ActivitiesPublish extends BaseActivity {
 						.getTextTrim(et_maxNum));
 				int duration = Integer.parseInt(EditTextUtils
 						.getTextTrim(et_duration));
-				int statusid = 0;// 0接受报名、1截止报名、2活动结束、3活动取消
+				int statusid = 1;// 1接受报名、2截止报名、3活动结束、4活动取消
 				long money = Integer.parseInt(EditTextUtils
 						.getTextTrim(et_money));
 				String name = EditTextUtils.getTextTrim(et_name);
 				String content = EditTextUtils.getTextTrim(et_description);
 				String site = EditTextUtils.getTextTrim(et_site);
-				debug("发起活动:");
-				debug("groupid->"+groupid+"");
-				debug("maxnum->"+maxnum+"");
-				debug("duration->"+duration+"");
-				debug("statusid->"+statusid+"");
-				debug("money->"+money+"");
-				debug("name->"+name+"");
-				debug("content->"+content+"");
-				debug("starttime->"+starttime+"");
-				debug("site->"+site+"");
-				api.creatAcivity(groupid, maxnum, starttime, duration,
+				api.creatAcivity(groupid, maxnum, starttime, duration,regdeadline,
 						statusid, money, name, content,site,
 						new JsonResponseHandler() {
 

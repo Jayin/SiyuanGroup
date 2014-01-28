@@ -108,8 +108,8 @@ public class BusinessAPI {
 	 *            合作简介
 	 * @param company
 	 *            公司或组织
-	 * @param deadline
-	 *            合作期限
+	 * @param regdeadline
+	 *           合作截止时间
 	 * @param statusid
 	 *            1发布 2结束
 	 * @param isprivate
@@ -118,13 +118,13 @@ public class BusinessAPI {
 	 *            处理器
 	 */
 	public void create(String name, String description, String company,
-			long deadline, int statusid, int isprivate,
+			long regdeadline, int statusid, int isprivate,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("name", name);
 		params.add("description", description);
 		params.add("company", company);
-		params.add("deadline", deadline + "");
+		params.add("regdeadline", regdeadline + "");
 		params.add("statusid", statusid + "");
 		params.add("isprivate", isprivate + "");
 		RestClient.post("/api/cooperations/create", params, responseHandler);
