@@ -1,14 +1,19 @@
 package com.alumnigroup.app.acty;
 
+import org.apache.http.Header;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
 import com.alumnigroup.api.BusinessAPI;
+import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.widget.CommentView;
@@ -97,11 +102,27 @@ public class BusinessDetail extends BaseActivity {
 
 			break;
 		case R.id.btn_favourite:
-
+			favourite();
 			break;
 		default:
 			break;
 		}
+	}
+	//收藏的remark默认为期类型名
+	private void favourite() {
+		 StarAPI starapi = new StarAPI();
+		 starapi.star(StarAPI.Item_type_business, c.getId(), "business", new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				 toast("收藏成功");
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+			   toast("收藏失败 错误码:"+errorCode);
+			}
+		});
 	}
 
 }
