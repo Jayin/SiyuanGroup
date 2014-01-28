@@ -76,6 +76,7 @@
 
             <LinearLayout
                 android:id="@+id/owner"
+                android:visibility="gone" 
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
@@ -121,28 +122,7 @@
                         android:textSize="16sp" />
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/grey_lv_one" />
-
-                <RelativeLayout
-                    android:id="@+id/btn_delete"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/item_listview_bg_whitetogrey" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="删除"
-                        android:textColor="@color/grey_lv_two"
-                        android:textSize="16sp" />
-                </RelativeLayout>
+            
             </LinearLayout>
 
             <LinearLayout
@@ -151,7 +131,7 @@
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
                 android:orientation="horizontal"
-                android:visibility="gone" >
+                >
 
                 <RelativeLayout
                     android:id="@+id/btn_favourite"

@@ -30,8 +30,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class BusinessDetail extends BaseActivity {
 	private Cooperation c;
-	private View btn_back, btn_edit, btn_end, btn_delete, btn_space,
-			btn_comment, btn_favourite;
+	private View btn_back, btn_edit, btn_end, btn_space, btn_comment,
+			btn_favourite;
 	private View owner, common;
 	private TextView tv_username, tv_projectname, tv_deadline, tv_description,
 			tv_notify;
@@ -78,7 +78,6 @@ public class BusinessDetail extends BaseActivity {
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_edit = _getView(R.id.btn_edit);
 		btn_end = _getView(R.id.btn_end);
-		btn_delete = _getView(R.id.btn_delete);
 		btn_space = _getView(R.id.btn_space);
 		btn_comment = _getView(R.id.btn_comment);
 		btn_favourite = _getView(R.id.btn_favourite);
@@ -86,7 +85,6 @@ public class BusinessDetail extends BaseActivity {
 		btn_back.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
 		btn_end.setOnClickListener(this);
-		btn_delete.setOnClickListener(this);
 		btn_space.setOnClickListener(this);
 		btn_comment.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
@@ -137,9 +135,7 @@ public class BusinessDetail extends BaseActivity {
 			break;
 		case R.id.btn_end:
 			toast("end");
-			break;
-		case R.id.btn_delete:
-			toast("delete");
+			end();
 			break;
 		case R.id.btn_space:
 			toast("to space");
@@ -153,6 +149,22 @@ public class BusinessDetail extends BaseActivity {
 		default:
 			break;
 		}
+	}
+
+	private void end() {
+		api.end(c.getId(), new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("项目一结束");
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("结束项目失败 错误码:" + errorCode);
+			}
+		});
+
 	}
 
 	// 收藏的remark默认为期类型名

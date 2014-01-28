@@ -44,7 +44,7 @@ public class GroupInfo extends BaseActivity {
 	private int RequestCode_invite = 1;
 	private MGroup group;
 	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
-			btn_invite, btn_exitGroup, btn_deleteGroup, btn_createActivity;
+			btn_invite, btn_exitGroup,   btn_createActivity;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
@@ -175,8 +175,7 @@ public class GroupInfo extends BaseActivity {
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
 		btn_exitGroup = info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
-		btn_deleteGroup = info
-				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup);
+		 
 		btn_edit = info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_edit);
 
@@ -184,7 +183,6 @@ public class GroupInfo extends BaseActivity {
 		btn_join.setOnClickListener(this);
 		btn_invite.setOnClickListener(this);
 		btn_exitGroup.setOnClickListener(this);
-		btn_deleteGroup.setOnClickListener(this);
 
 		btns.add(btn_info);
 		btns.add(btn_member);
@@ -258,9 +256,7 @@ public class GroupInfo extends BaseActivity {
 			toast("退出圈子");
 			exitGroup();
 			break;
-		case R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup:
-			toast("删除 圈子");
-			break;
+	 
 		case R.id.frame_acty_groupinfo_groupinfo_btn_edit:
 			toast("编辑圈子");
 			break;
