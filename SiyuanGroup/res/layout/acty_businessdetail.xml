@@ -32,7 +32,7 @@
                     android:orientation="horizontal" >
 
                     <ImageView
-                        android:id="@+id/item_lv_acty_business_iv_avater"
+                        android:id="@+id/iv_avatar"
                         android:layout_width="48dp"
                         android:layout_height="48dp"
                         android:src="@drawable/ic_image_load_loading" />
@@ -76,6 +76,7 @@
 
             <LinearLayout
                 android:id="@+id/owner"
+            
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
@@ -121,37 +122,16 @@
                         android:textSize="16sp" />
                 </RelativeLayout>
 
-                <View
-                    android:layout_width="2dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="center_vertical"
-                    android:background="@color/grey_lv_one" />
-
-                <RelativeLayout
-                    android:id="@+id/btn_delete"
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:background="@drawable/item_listview_bg_whitetogrey" >
-
-                    <TextView
-                        style="@style/TextView.base"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="删除"
-                        android:textColor="@color/grey_lv_two"
-                        android:textSize="16sp" />
-                </RelativeLayout>
+            
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/common"
+                android:id="@+id/common"     android:visibility="gone" 
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
                 android:orientation="horizontal"
-                android:visibility="gone" >
+                >
 
                 <RelativeLayout
                     android:id="@+id/btn_favourite"
@@ -295,10 +275,9 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="8dp"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="8dp"
-                android:background="@drawable/ic_preference_first_normal"
                 android:orientation="horizontal" >
 
                 <TextView
@@ -309,13 +288,22 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/ic_line_1" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
-                android:background="@drawable/ic_preference_last_normal"
                 android:orientation="horizontal" >
+
+                <TextView
+                    android:id="@+id/tv_notify"
+                    style="@style/TextView.black"
+                    android:layout_gravity="center_horizontal"
+                    android:text="还没有人询问"
+                    android:visibility="gone" />
 
                 <com.alumnigroup.widget.CommentView
                     android:id="@+id/commentlist"
@@ -324,7 +312,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="6dp"
                     android:minHeight="30dp"
-                    android:padding="6dp"
                     android:textColor="@color/black"
                     android:textSize="12sp" >
                 </com.alumnigroup.widget.CommentView>

@@ -21,8 +21,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class MemberAdapter extends BaseAdapter {
 	private List<User> data;
-    private Context context;
-	public MemberAdapter(List<User> data,Context context) {
+	private Context context;
+
+	public MemberAdapter(List<User> data, Context context) {
 		this.data = data;
 		this.context = context;
 	}
@@ -67,7 +68,6 @@ public class MemberAdapter extends BaseAdapter {
 		User u = data.get(position);
 		ImageLoader.getInstance().displayImage(
 				RestClient.BASE_URL + u.getAvatar(), h.avatar);
-		
 		h.grade.setText(u.getProfile().getGrade() + "");
 		h.name.setText(u.getProfile().getName());
 		h.major.setText(u.getProfile().getMajor());
@@ -84,4 +84,5 @@ public class MemberAdapter extends BaseAdapter {
 		TextView name, grade, major;
 		ImageLoader loader;
 	}
+	
 }

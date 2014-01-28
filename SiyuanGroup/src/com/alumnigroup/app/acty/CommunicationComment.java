@@ -64,7 +64,7 @@ public class CommunicationComment extends BaseActivity {
 		case R.id.acty_head_btn_post:
 			String body = EditTextUtils.getTextTrim(et_content);
 			if (body == null || StringUtils.isEmpty(body)) {
-				toast("写点东西吧！");
+				toast("还是写点东西吧！");
 				return;
 			}
 			api.commentIssue(issue.getId(), body, new JsonResponseHandler() {

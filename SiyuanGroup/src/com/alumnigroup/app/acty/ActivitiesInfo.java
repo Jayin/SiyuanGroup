@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -17,6 +18,7 @@ import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
@@ -28,6 +30,7 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -138,6 +141,7 @@ public class ActivitiesInfo extends BaseActivity {
 		tv_site = (TextView) info.findViewById(R.id.tv_address);
 		tv_description = (TextView) info.findViewById(R.id.tv_description);
 		tv_duration = (TextView) info.findViewById(R.id.tv_duration);
+		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
 		ImageLoader.getInstance().displayImage(RestClient.BASE_URL, iv_avatar);
@@ -201,10 +205,10 @@ public class ActivitiesInfo extends BaseActivity {
 
 			break;
 		case R.id.btn_edit:
-
+            editActivity();
 			break;
 		case R.id.btn_favourite:
-
+            favourite();
 			break;
 		case R.id.btn_exit:
 
@@ -216,6 +220,32 @@ public class ActivitiesInfo extends BaseActivity {
 		default:
 			break;
 		}
+	}
+    private void editActivity() {
+         Intent intent =new Intent(this, ActivitiesPublish.class);
+         intent.putExtra("activity", acty);
+         openActivity(intent);
+	}
+
+	// 收藏的remark默认为期类型名
+	private void favourite() {
+		StarAPI starapi = new StarAPI();
+		starapi.star(StarAPI.Item_type_activity, acty.getId(), "activity", new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("收藏成功");
+				
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				 toast("收藏失败 错误码:"+errorCode);
+				
+			}
+		});
+		 
+		
 	}
 
 }

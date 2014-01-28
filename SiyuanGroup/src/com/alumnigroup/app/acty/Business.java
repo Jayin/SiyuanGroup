@@ -248,7 +248,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		toast(""+real_position);
 		if (parent == lv_all) {
 			Intent intent = new Intent(this, BusinessDetail.class);
-			intent.putExtra("cooperation", data_all.get(position));
+			intent.putExtra("cooperation", data_all.get(real_position));
 			openActivity(intent);
 		}
 		if (parent == lv_favourit) {

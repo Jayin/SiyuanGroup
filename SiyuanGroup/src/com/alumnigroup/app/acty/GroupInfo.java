@@ -18,6 +18,7 @@ import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
@@ -40,9 +41,10 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class GroupInfo extends BaseActivity {
+	private int RequestCode_invite = 1;
 	private MGroup group;
 	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
-			btn_invite, btn_exitGroup, btn_deleteGroup,btn_createActivity;
+			btn_invite, btn_exitGroup, btn_createActivity;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
@@ -89,11 +91,12 @@ public class GroupInfo extends BaseActivity {
 								canRefresh = false;
 							}
 						}
-						if(!canRefresh)lv_member.setCanRefresh(false,false);
+						if (!canRefresh)
+							lv_member.setCanRefresh(false, false);
 						lv_member.onRefreshComplete();
-					//	if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
-						//if(canRefresh)lv_member.setCanRefresh(false, false);
-						
+						// if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
+						// if(canRefresh)lv_member.setCanRefresh(false, false);
+
 					}
 
 					@Override
@@ -130,14 +133,12 @@ public class GroupInfo extends BaseActivity {
 	@Override
 	protected void initLayout() {
 		btn_back = _getView(R.id.acty_head_btn_back);
-		//btn_edit = _getView(R.id.acty_head_btn_createActiviy);
 		btn_info = _getView(R.id.acty_groupinfo_footer_groupInfo);
 		btn_member = _getView(R.id.acty_groupinfo_footer_groupMenber);
 		btn_share = _getView(R.id.acty_groupinfo_footer_groupShare);
 		btn_createActivity = _getView(R.id.acty_head_btn_createActiviy);
 
 		btn_back.setOnClickListener(this);
-	//	btn_edit.setOnClickListener(this);
 		btn_info.setOnClickListener(this);
 		btn_member.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
@@ -174,22 +175,24 @@ public class GroupInfo extends BaseActivity {
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
 		btn_exitGroup = info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
-		btn_deleteGroup = info
-				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup);
+
+		btn_edit = info
+				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_edit);
+
+		btn_edit.setOnClickListener(this);
 		btn_join.setOnClickListener(this);
 		btn_invite.setOnClickListener(this);
 		btn_exitGroup.setOnClickListener(this);
-		btn_deleteGroup.setOnClickListener(this);
 
 		btns.add(btn_info);
 		btns.add(btn_member);
 		btns.add(btn_share);
 		L.i(user.getId() + "");
-		// 不是圈子拥有者
-		if (user.getId() != group.getOwner().getId()) {
-			btn_deleteGroup.setVisibility(View.GONE);
-		//	btn_edit.setVisibility(View.INVISIBLE);
-		}
+		// // 不是圈子拥有者
+		// if (user.getId() != group.getOwner().getId()) {
+		// btn_deleteGroup.setVisibility(View.GONE);
+		// btn_edit.setVisibility(View.INVISIBLE);
+		// }
 
 		ImageLoader.getInstance().displayImage(
 				RestClient.BASE_URL + group.getAvatar(), iv_avatar);
@@ -247,22 +250,67 @@ public class GroupInfo extends BaseActivity {
 			break;
 		case R.id.frame_acty_groupinfo_groupinfo_btn_invite:
 			toast("邀请");
+			invite();
 			break;
 		case R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup:
-			toast("退出圈子");
-
+			exitGroup();
 			break;
-		case R.id.frame_acty_groupinfo_groupinfo_btn_deletegroup:
-			toast("删除 圈子");
+
+		case R.id.frame_acty_groupinfo_groupinfo_btn_edit:
+			editGroup();
 			break;
 		case R.id.acty_head_btn_createActiviy:
-			 Intent intent = new Intent(this,ActivitiesPublish.class);
-			 intent.putExtra("group", group);
-			 openActivity(intent);
+			Intent intent = new Intent(this, ActivitiesPublish.class);
+			intent.putExtra("group", group);
+			openActivity(intent);
 			break;
 		default:
 			break;
 		}
+	}
+
+	private void editGroup() {
+		Intent intent = new Intent(this, GroupCreate.class);
+		intent.putExtra("group", group);
+		openActivity(intent);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RequestCode_invite && resultCode == RESULT_OK) {
+			// to post.
+			if (data.getSerializableExtra("result") != null) {
+				ArrayList<User> userList = (ArrayList<User>) data
+						.getSerializableExtra("result");
+				// add post data...
+				toast("select count:" + userList.size());
+			}
+		}
+	}
+
+	private void invite() {
+		Intent intent = new Intent(this, FollowingList.class);
+		User u = new AppInfo(getContext()).getUser();
+		intent.putExtra("userid", u.getId());
+		startActivityForResult(intent, RequestCode_invite);
+	}
+
+	private void exitGroup() {
+		api.exit(group.getId(), new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("已退出该群");
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("退出失败 错误码:" + errorCode);
+
+			}
+		});
+
 	}
 
 }

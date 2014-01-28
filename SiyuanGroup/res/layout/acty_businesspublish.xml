@@ -85,7 +85,7 @@
                     android:layout_weight="1"
                     android:gravity="right"
                     android:padding="6dp"
-                    android:text="2013-6-7" />
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout

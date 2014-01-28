@@ -94,38 +94,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 					}
 				});
 
-				// api.getGroupList(1, new ResponseHandler() {
-				//
-				// @Override
-				// public void onSuccess(int statusCode, Header[] headers,
-				// byte[] data) {
-				// String json = new String(data);
-				// if (JsonUtils.isOK(json)) {
-				//
-				// List<MGroup> newData_all = MGroup
-				// .create_by_jsonarray(json);
-				// if (newData_all != null) {
-				// page_all = 1;
-				// data_all.clear();
-				// data_all.addAll(newData_all);
-				// adapter_all.notifyDataSetChanged();
-				// } else {
-				// toast("还没有数据！");
-				// }
-				// } else {
-				// toast("error:" + JsonUtils.getErrorString(json));
-				// }
-				// lv_all.setCanLoadMore(true);
-				// lv_all.onRefreshComplete();
-				// }
-				//
-				// @Override
-				// public void onFailure(int statusCode, Header[] header,
-				// byte[] data, Throwable err) {
-				// toast("网络异常 错误码:" + statusCode);
-				// lv_all.onRefreshComplete();
-				// }
-				// });
 			}
 		});
 
@@ -163,42 +131,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 					}
 				});
-//				api.getGroupList(page_all + 1, new ResponseHandler() {
-//
-//					@Override
-//					public void onSuccess(int statusCode, Header[] headers,
-//							byte[] data) {
-//						String json = new String(data);
-//						boolean canLoadMore = true;
-//						if (JsonUtils.isOK(json)) {
-//							List<MGroup> newData_all = MGroup
-//									.create_by_jsonarray(json);
-//							if (newData_all != null && newData_all.size() > 0) {
-//								page_all++;
-//								data_all.addAll(newData_all);
-//								adapter_all.notifyDataSetChanged();
-//							} else {
-//								if (newData_all == null) {
-//									toast("网络异常,解析错误");
-//								} else if (newData_all.size() == 0) {
-//									toast("没有更多了!");
-//									canLoadMore = false;
-//								}
-//							}
-//						} else {
-//							toast("Error:" + JsonUtils.getErrorString(json));
-//						}
-//						lv_all.onLoadMoreComplete();
-//						if (!canLoadMore)
-//							lv_all.setCanLoadMore(false);
-//					}
-//
-//					@Override
-//					public void onFailure(int statusCode, Header[] header,
-//							byte[] data, Throwable err) {
-//						toast("网络异常 错误码:" + statusCode);
-//					}
-//				});
 			}
 		});
 

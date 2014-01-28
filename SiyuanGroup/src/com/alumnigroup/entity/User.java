@@ -33,7 +33,7 @@ public class User implements Serializable {
 	 */
 	public static User create_by_json(String json) {
 		try {
-			L.i("json user:"+json);
+			L.i("User.java --json:"+json);
 			Gson gson = new Gson();
 			return (User) gson.fromJson(json, User.class);
 		} catch (Exception e) {
