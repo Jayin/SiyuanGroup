@@ -158,7 +158,7 @@ public class BusinessAPI {
 		params.add("name", name);
 		params.add("description", description);
 		params.add("company", company);
-		params.add("regdeadline", regdeadline + "");
+		params.add("regdeadline",  CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
 		params.add("statusid", statusid + "");
 		params.add("isprivate", isprivate + "");
 		RestClient.post("/api/cooperations/update", params, responseHandler);

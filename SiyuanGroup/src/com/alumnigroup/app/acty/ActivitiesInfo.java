@@ -43,7 +43,7 @@ public class ActivitiesInfo extends BaseActivity {
 	private View btn_back, btn_info, btn_userlist, btn_share;
 	private TextView tv_starttime, tv_applyDeadline, tv_money, tv_applyNum,
 			tv_site, tv_description, tv_name, tv_duration;
-	private View btn_apply, btn_edit, btn_favourite, btn_exit, btn_cancle;
+	private View btn_apply, btn_edit, btn_favourite, btn_exit, btn_end;
 	private ImageView iv_avatar;
 	private MActivity acty;
 	private ActivityAPI api;
@@ -131,8 +131,8 @@ public class ActivitiesInfo extends BaseActivity {
 		btn_apply = info.findViewById(R.id.btn_apply);
 		btn_edit = info.findViewById(R.id.btn_edit);
 		btn_favourite = info.findViewById(R.id.btn_favourite);
-		btn_exit = info.findViewById(R.id.btn_exit);
-		btn_cancle = info.findViewById(R.id.btn_cancle);
+		btn_exit = info.findViewById(R.id.btn_cancle);
+		btn_end = info.findViewById(R.id.btn_end);
 
 		tv_starttime = (TextView) info.findViewById(R.id.tv_starttime);
 		tv_applyDeadline = (TextView) info.findViewById(R.id.tv_deadline);// 结束日期
@@ -158,10 +158,11 @@ public class ActivitiesInfo extends BaseActivity {
 		btns.add(btn_userlist);
 		btns.add(btn_userlist);
 
+		btn_apply.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
 		btn_exit.setOnClickListener(this);
-		btn_cancle.setOnClickListener(this);
+		btn_end.setOnClickListener(this);
 
 		List<View> views = new ArrayList<View>();
 		views.add(info);
@@ -202,7 +203,7 @@ public class ActivitiesInfo extends BaseActivity {
 			viewpager.setCurrentItem(2);
 			break;
 		case R.id.btn_apply:
-
+			joinActivity();
 			break;
 		case R.id.btn_edit:
             editActivity();
@@ -210,18 +211,65 @@ public class ActivitiesInfo extends BaseActivity {
 		case R.id.btn_favourite:
             favourite();
 			break;
-		case R.id.btn_exit:
-
-			break;
 		case R.id.btn_cancle:
-
+			cancelActivity();
+			break;
+		case R.id.btn_end:
+			endActivity();
 			break;
 
 		default:
 			break;
 		}
 	}
-    private void editActivity() {
+    private void endActivity() {
+		  api.endActivity(acty.getId(), new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+			   toast("已结束活动");
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				 toast("结束活动失败,错误码:"+errorCode);
+			}
+		});
+	}
+
+	private void cancelActivity() {
+		api.cancelActivity(acty.getId(), new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("已退出活动"); 
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("退出活动失败,错误码:"+errorCode);
+			}
+		}) ;
+		
+	}
+
+	private void joinActivity() {
+		 api.joinActivity(acty.getId(), new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("已报名参加"); 
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("报名失败,错误码:"+errorCode);
+			}
+		});
+		
+	}
+
+	private void editActivity() {
          Intent intent =new Intent(this, ActivitiesPublish.class);
          intent.putExtra("activity", acty);
          openActivity(intent);

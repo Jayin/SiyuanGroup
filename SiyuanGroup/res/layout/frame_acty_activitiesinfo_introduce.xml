@@ -283,7 +283,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/btn_exit"
+                android:id="@+id/btn_cancle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -298,7 +298,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/btn_cancle"
+                android:id="@+id/btn_end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
@@ -309,7 +309,7 @@
                 <TextView
                     style="@style/TextView.base"
                     android:layout_centerInParent="true"
-                    android:text="取消活动" />
+                    android:text="结束活动" />
             </RelativeLayout>
         </LinearLayout>
     </LinearLayout>

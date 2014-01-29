@@ -283,9 +283,7 @@ public class GroupInfo extends BaseActivity {
 			if (data.getSerializableExtra("result") != null) {
 				ArrayList<User> userList = (ArrayList<User>) data
 						.getSerializableExtra("result");
-				// add post data...
-				toast("select count:" + userList.size());
-				api.invite((Integer[])userList.toArray(), group.getId(), new JsonResponseHandler() {
+				api.invite(userList, group.getId(), new JsonResponseHandler() {
 					
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -294,7 +292,7 @@ public class GroupInfo extends BaseActivity {
 					
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("退出失败 错误码:" + errorCode);
+						toast("邀请失败  错误码:" + errorCode);
 					}
 				});
 			}

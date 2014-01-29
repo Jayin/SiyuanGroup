@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.util.List;
+
+import com.alumnigroup.entity.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -135,14 +138,14 @@ public class GroupAPI {
 	}
 	/**
 	 * 拉好友进圈子
-	 * @param userid[] 数组，一个或多个用户id 
+	 * @param users 用户 为了获得一个或多个用户id 
 	 * @param groupid 圈子id
 	 * @param responseHandler 处理器
 	 */
-	public void invite(Integer[] userid,int groupid,AsyncHttpResponseHandler responseHandler){
+	public void invite(List<User> users,int groupid,AsyncHttpResponseHandler responseHandler){
 		RequestParams params = new RequestParams();
-		for(int i=0;i<userid.length;i++){
-			params.add("userid", userid[i]+"");
+		for(int i=0;i<users.size();i++){
+			params.add("userid", users.get(i).getId()+"");
 		}
 		params.add("groupid", groupid+"");
 		RestClient.post("/api/groups/pull", params, responseHandler);
