@@ -285,6 +285,18 @@ public class GroupInfo extends BaseActivity {
 						.getSerializableExtra("result");
 				// add post data...
 				toast("select count:" + userList.size());
+				api.invite((Integer[])userList.toArray(), group.getId(), new JsonResponseHandler() {
+					
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("已发出邀请");
+					}
+					
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("退出失败 错误码:" + errorCode);
+					}
+				});
 			}
 		}
 	}

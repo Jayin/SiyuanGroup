@@ -98,6 +98,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
+				debug("page_all-->"+page_all);
 				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
 					@Override

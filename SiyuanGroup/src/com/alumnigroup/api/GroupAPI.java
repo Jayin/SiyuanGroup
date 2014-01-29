@@ -133,4 +133,18 @@ public class GroupAPI {
 		params.add("groupid", groupid+"");
 		RestClient.post("/api/groups/remove", params, responseHandler);
 	}
+	/**
+	 * 拉好友进圈子
+	 * @param userid[] 数组，一个或多个用户id 
+	 * @param groupid 圈子id
+	 * @param responseHandler 处理器
+	 */
+	public void invite(Integer[] userid,int groupid,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		for(int i=0;i<userid.length;i++){
+			params.add("userid", userid[i]+"");
+		}
+		params.add("groupid", groupid+"");
+		RestClient.post("/api/groups/pull", params, responseHandler);
+	}
 }
