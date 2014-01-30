@@ -37,8 +37,11 @@
         <activity android:name=".IssueTest" >
         </activity>
         <activity android:name=".FavourAPITest" >
+        </activity>
+        <activity android:name=".StarTest" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

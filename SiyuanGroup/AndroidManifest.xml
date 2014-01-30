@@ -161,6 +161,14 @@
             android:name=".acty.BusinessComment"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.GroupManage"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesManage"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

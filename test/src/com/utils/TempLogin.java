@@ -37,7 +37,7 @@ public class TempLogin {
 					public void onFailure(int arg0,
 							Header[] arg1, byte[] arg2,
 							Throwable arg3) {
-						L.i("login Failure!\n"+new String(arg2));
+						if(arg2!=null)L.i("login Failure!\n"+new String(arg2));
 					}
 				});
 	}

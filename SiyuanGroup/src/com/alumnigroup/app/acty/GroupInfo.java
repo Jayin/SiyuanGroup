@@ -7,10 +7,12 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
@@ -44,7 +46,7 @@ public class GroupInfo extends BaseActivity {
 	private int RequestCode_invite = 1;
 	private MGroup group;
 	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
-			btn_invite, btn_exitGroup, btn_createActivity;
+			btn_invite, btn_exitGroup, btn_more;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
@@ -54,14 +56,38 @@ public class GroupInfo extends BaseActivity {
 	private PullAndLoadListView lv_member;
 	private List<User> data_user;
 	private MemberAdapter adapter_member;
+	private PopupWindow mPopupWindow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_groupinfo);
 		initData();
+		initPopupWindow();
 		initLayout();
 		initController();
+	}
+
+	private void initPopupWindow() {
+		View view = getLayoutInflater()
+				.inflate(R.layout.popup_acty_groupinfo, null);
+		
+		(view.findViewById(R.id.manage)).setOnClickListener(this);
+		(view.findViewById(R.id.join)).setOnClickListener(this);
+		(view.findViewById(R.id.exit)).setOnClickListener(this);
+		(view.findViewById(R.id.createActivity)).setOnClickListener(this);
+
+
+		mPopupWindow = new PopupWindow(view);
+		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+		mPopupWindow.setOutsideTouchable(true);
+	 
+
+		// 控制popupwindow的宽度和高度自适应
+		view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+		mPopupWindow.setWidth(view.getMeasuredWidth());
+		mPopupWindow.setHeight(view.getMeasuredHeight());
+		
 	}
 
 	private void initController() {
@@ -136,13 +162,13 @@ public class GroupInfo extends BaseActivity {
 		btn_info = _getView(R.id.acty_groupinfo_footer_groupInfo);
 		btn_member = _getView(R.id.acty_groupinfo_footer_groupMenber);
 		btn_share = _getView(R.id.acty_groupinfo_footer_groupShare);
-		btn_createActivity = _getView(R.id.acty_head_btn_createActiviy);
+		btn_more = _getView(R.id.acty_head_btn_more);
 
 		btn_back.setOnClickListener(this);
 		btn_info.setOnClickListener(this);
 		btn_member.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
-		btn_createActivity.setOnClickListener(this);
+		btn_more.setOnClickListener(this);
 		initViewPager();
 	}
 
@@ -169,20 +195,20 @@ public class GroupInfo extends BaseActivity {
 		iv_avatar = (ImageView) info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_iv_avater);
 
-		btn_join = info
-				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_joingroup);
-		btn_invite = info
-				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
-		btn_exitGroup = info
-				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
+//		btn_join = info
+//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_joingroup);
+//		btn_invite = info
+//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
+//		btn_exitGroup = info
+//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
+//
+//		btn_edit = info
+//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_edit);
 
-		btn_edit = info
-				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_edit);
-
-		btn_edit.setOnClickListener(this);
-		btn_join.setOnClickListener(this);
-		btn_invite.setOnClickListener(this);
-		btn_exitGroup.setOnClickListener(this);
+//		btn_edit.setOnClickListener(this);
+//		btn_join.setOnClickListener(this);
+//		btn_invite.setOnClickListener(this);
+//		btn_exitGroup.setOnClickListener(this);
 
 		btns.add(btn_info);
 		btns.add(btn_member);
@@ -227,39 +253,39 @@ public class GroupInfo extends BaseActivity {
 		case R.id.acty_groupinfo_footer_groupShare:
 			viewpager.setCurrentItem(2);
 			break;
-		case R.id.frame_acty_groupinfo_groupinfo_btn_joingroup:
-			api.join(group.getId(), new ResponseHandler() {
-
-				@Override
-				public void onSuccess(int statusCode, Header[] headers,
-						byte[] data) {
-					String json = new String(data);
-					if (JsonUtils.isOK(json)) {
-						toast("加入成功");
-					} else {
-						toast("Error:" + JsonUtils.getErrorString(json));
-					}
-				}
-
-				@Override
-				public void onFailure(int statusCode, Header[] header,
-						byte[] data, Throwable err) {
-					toast("网络异常 错误代码:" + statusCode);
-				}
-			});
+//		case R.id.frame_acty_groupinfo_groupinfo_btn_joingroup:
+//		 
+//		
+//			break;
+//		case R.id.frame_acty_groupinfo_groupinfo_btn_invite:
+//			toast("邀请");
+//			invite();
+//			break;
+//		case R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup:
+//			exitGroup();
+//			break;
+//
+//		case R.id.frame_acty_groupinfo_groupinfo_btn_edit:
+//			editGroup();
+//			break;
+		case R.id.acty_head_btn_more:
+			if(!mPopupWindow.isShowing())mPopupWindow.showAsDropDown(btn_more);
 			break;
-		case R.id.frame_acty_groupinfo_groupinfo_btn_invite:
-			toast("邀请");
-			invite();
+		case R.id.manage:
+			toast("manage");
+			mPopupWindow.dismiss();
+			//manage...page
 			break;
-		case R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup:
-			exitGroup();
+		case R.id.join:
+			mPopupWindow.dismiss();
+			joinActivity();
 			break;
-
-		case R.id.frame_acty_groupinfo_groupinfo_btn_edit:
+		case R.id.exit:
+			mPopupWindow.dismiss();
 			editGroup();
 			break;
-		case R.id.acty_head_btn_createActiviy:
+		case R.id.createActivity:
+			mPopupWindow.dismiss();
 			Intent intent = new Intent(this, ActivitiesPublish.class);
 			intent.putExtra("group", group);
 			openActivity(intent);
@@ -267,6 +293,27 @@ public class GroupInfo extends BaseActivity {
 		default:
 			break;
 		}
+	}
+	private void joinActivity(){
+		api.join(group.getId(), new ResponseHandler() {
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					byte[] data) {
+				String json = new String(data);
+				if (JsonUtils.isOK(json)) {
+					toast("加入成功");
+				} else {
+					toast("Error:" + JsonUtils.getErrorString(json));
+				}
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] header,
+					byte[] data, Throwable err) {
+				toast("网络异常 错误代码:" + statusCode);
+			}
+		});
 	}
 
 	private void editGroup() {
