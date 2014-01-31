@@ -43,7 +43,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class GroupInfo extends BaseActivity {
-	private int RequestCode_invite = 1;
 	private MGroup group;
 	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
 			btn_invite, btn_exitGroup, btn_more;
@@ -69,25 +68,23 @@ public class GroupInfo extends BaseActivity {
 	}
 
 	private void initPopupWindow() {
-		View view = getLayoutInflater()
-				.inflate(R.layout.popup_acty_groupinfo, null);
-		
+		View view = getLayoutInflater().inflate(R.layout.popup_acty_groupinfo,
+				null);
+
 		(view.findViewById(R.id.manage)).setOnClickListener(this);
 		(view.findViewById(R.id.join)).setOnClickListener(this);
 		(view.findViewById(R.id.exit)).setOnClickListener(this);
 		(view.findViewById(R.id.createActivity)).setOnClickListener(this);
 
-
 		mPopupWindow = new PopupWindow(view);
 		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
 		mPopupWindow.setOutsideTouchable(true);
-	 
 
 		// 控制popupwindow的宽度和高度自适应
 		view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
 		mPopupWindow.setWidth(view.getMeasuredWidth());
 		mPopupWindow.setHeight(view.getMeasuredHeight());
-		
+
 	}
 
 	private void initController() {
@@ -195,21 +192,6 @@ public class GroupInfo extends BaseActivity {
 		iv_avatar = (ImageView) info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_iv_avater);
 
-//		btn_join = info
-//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_joingroup);
-//		btn_invite = info
-//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_invite);
-//		btn_exitGroup = info
-//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup);
-//
-//		btn_edit = info
-//				.findViewById(R.id.frame_acty_groupinfo_groupinfo_btn_edit);
-
-//		btn_edit.setOnClickListener(this);
-//		btn_join.setOnClickListener(this);
-//		btn_invite.setOnClickListener(this);
-//		btn_exitGroup.setOnClickListener(this);
-
 		btns.add(btn_info);
 		btns.add(btn_member);
 		btns.add(btn_share);
@@ -253,28 +235,14 @@ public class GroupInfo extends BaseActivity {
 		case R.id.acty_groupinfo_footer_groupShare:
 			viewpager.setCurrentItem(2);
 			break;
-//		case R.id.frame_acty_groupinfo_groupinfo_btn_joingroup:
-//		 
-//		
-//			break;
-//		case R.id.frame_acty_groupinfo_groupinfo_btn_invite:
-//			toast("邀请");
-//			invite();
-//			break;
-//		case R.id.frame_acty_groupinfo_groupinfo_btn_exitgroup:
-//			exitGroup();
-//			break;
-//
-//		case R.id.frame_acty_groupinfo_groupinfo_btn_edit:
-//			editGroup();
-//			break;
 		case R.id.acty_head_btn_more:
-			if(!mPopupWindow.isShowing())mPopupWindow.showAsDropDown(btn_more);
+			if (!mPopupWindow.isShowing())
+				mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.manage:
 			toast("manage");
 			mPopupWindow.dismiss();
-			//manage...page
+			toManagePage();
 			break;
 		case R.id.join:
 			mPopupWindow.dismiss();
@@ -282,7 +250,8 @@ public class GroupInfo extends BaseActivity {
 			break;
 		case R.id.exit:
 			mPopupWindow.dismiss();
-			editGroup();
+			exitGroup();
+			// editGroup();
 			break;
 		case R.id.createActivity:
 			mPopupWindow.dismiss();
@@ -294,12 +263,18 @@ public class GroupInfo extends BaseActivity {
 			break;
 		}
 	}
-	private void joinActivity(){
+
+	private void toManagePage() {
+		Intent intent = new Intent(this, GroupManage.class);
+		intent.putExtra("group", group);
+		openActivity(intent);
+	}
+
+	private void joinActivity() {
 		api.join(group.getId(), new ResponseHandler() {
 
 			@Override
-			public void onSuccess(int statusCode, Header[] headers,
-					byte[] data) {
+			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
 				String json = new String(data);
 				if (JsonUtils.isOK(json)) {
 					toast("加入成功");
@@ -309,48 +284,11 @@ public class GroupInfo extends BaseActivity {
 			}
 
 			@Override
-			public void onFailure(int statusCode, Header[] header,
-					byte[] data, Throwable err) {
+			public void onFailure(int statusCode, Header[] header, byte[] data,
+					Throwable err) {
 				toast("网络异常 错误代码:" + statusCode);
 			}
 		});
-	}
-
-	private void editGroup() {
-		Intent intent = new Intent(this, GroupCreate.class);
-		intent.putExtra("group", group);
-		openActivity(intent);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == RequestCode_invite && resultCode == RESULT_OK) {
-			// to post.
-			if (data.getSerializableExtra("result") != null) {
-				ArrayList<User> userList = (ArrayList<User>) data
-						.getSerializableExtra("result");
-				api.invite(userList, group.getId(), new JsonResponseHandler() {
-					
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						toast("已发出邀请");
-					}
-					
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-						toast("邀请失败  错误码:" + errorCode);
-					}
-				});
-			}
-		}
-	}
-
-	private void invite() {
-		Intent intent = new Intent(this, FollowingList.class);
-		User u = new AppInfo(getContext()).getUser();
-		intent.putExtra("userid", u.getId());
-		startActivityForResult(intent, RequestCode_invite);
 	}
 
 	private void exitGroup() {

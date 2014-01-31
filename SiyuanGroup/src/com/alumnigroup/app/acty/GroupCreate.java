@@ -6,6 +6,7 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.BaseActivity;
@@ -16,7 +17,7 @@ import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
 
 /**
- * 创建圈子
+ * 创建圈子页面
  * 
  * @author Jayin Ton
  * 
@@ -26,6 +27,7 @@ public class GroupCreate extends BaseActivity {
 	private EditText et_name, et_description;
 	private GroupAPI api;
 	private MGroup group = null;
+	private TextView tv_title; // 创建圈子/编辑去啊你
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public class GroupCreate extends BaseActivity {
 		btn_invite = _getView(R.id.invite);
 		et_name = (EditText) _getView(R.id.et_name);
 		et_description = (EditText) _getView(R.id.et_description);
+		tv_title = (TextView) _getView(R.id.acty_head_tv_title);
 
 		btn_back.setOnClickListener(this);
 		btn_create.setOnClickListener(this);
@@ -58,6 +61,7 @@ public class GroupCreate extends BaseActivity {
 		if (group != null) {
 			et_name.setText(group.getName());
 			et_description.setText(group.getDescription());
+			tv_title.setText("编辑");
 		}
 	}
 

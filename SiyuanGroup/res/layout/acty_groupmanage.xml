@@ -8,6 +8,7 @@
     <include layout="@layout/acty_groupmanage_header" />
 
     <LinearLayout
+        android:id="@+id/btn_invite"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -33,6 +34,7 @@
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/btn_edit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -58,6 +60,7 @@
     </LinearLayout>
     
     <LinearLayout
+        android:id="@+id/btn_updateAvater"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="14dp"
@@ -81,8 +84,11 @@
             android:layout_gravity="center_vertical"
             android:background="@drawable/ic_item_toright_blue" />
     </LinearLayout>
- 
 
-    
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/a_dynamic_1" />
 
 </LinearLayout>

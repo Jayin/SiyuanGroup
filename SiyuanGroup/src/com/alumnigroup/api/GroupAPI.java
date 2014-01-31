@@ -116,6 +116,7 @@ public class GroupAPI {
 	}
 	/**
 	 * 更新圈子头像
+	 * <p>avatar :file</p>
 	 * @param groupid  圈子id
 	 * @param params   包含文件的 RequestParams
 	 * @param responseHandler 处理器
