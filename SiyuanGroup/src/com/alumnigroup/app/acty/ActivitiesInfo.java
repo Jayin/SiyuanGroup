@@ -36,7 +36,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 活动详情
+ * 活动详情页面
  * 
  * @author Jayin Ton
  * 
@@ -241,20 +241,7 @@ public class ActivitiesInfo extends BaseActivity {
 		}
 	}
 
-	private void endActivity() {
-		api.endActivity(acty.getId(), new JsonResponseHandler() {
 
-			@Override
-			public void onOK(Header[] headers, JSONObject obj) {
-				toast("已结束活动");
-			}
-
-			@Override
-			public void onFaild(int errorType, int errorCode) {
-				toast("结束活动失败,错误码:" + errorCode);
-			}
-		});
-	}
 
 	private void cancelActivity() {
 		api.cancelActivity(acty.getId(), new JsonResponseHandler() {
@@ -288,11 +275,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 	}
 
-	private void editActivity() {
-		Intent intent = new Intent(this, ActivitiesPublish.class);
-		intent.putExtra("activity", acty);
-		openActivity(intent);
-	}
+
 
 	// 收藏的remark默认为期类型名
 	private void favourite() {

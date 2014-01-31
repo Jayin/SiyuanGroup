@@ -28,7 +28,6 @@ public class GroupManage extends BaseActivity {
 	private View btn_back, btn_invite, btn_edit, btn_updateAvatar;
 	private MGroup group;
 	private GroupAPI api;
-	private ImageView iv;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +58,6 @@ public class GroupManage extends BaseActivity {
 		btn_edit.setOnClickListener(this);
 		btn_updateAvatar.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
-		iv = (ImageView)_getView(R.id.imageView1);
 	}
 
 	@Override
@@ -109,7 +107,6 @@ public class GroupManage extends BaseActivity {
 			ContentResolver resolver = getContentResolver(); 
 			RequestParams params = new RequestParams();
 			try {
-				iv.setImageURI(uri);
 				params.put("avatar", resolver.openInputStream(uri));
 				api.updateAvatar(group.getId(), params, new JsonResponseHandler() {
 					
@@ -123,7 +120,7 @@ public class GroupManage extends BaseActivity {
                       toast("网络异常 错误码:"+errorCode);						
 					}
 				});
-			} catch (FileNotFoundException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 				toast("图片资源不存在");
 			}
