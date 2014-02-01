@@ -24,7 +24,7 @@ import com.loopj.android.http.RequestParams;
 
 public class GroupManage extends BaseActivity {
 	private int RequestCode_invite = 1;
-	private int RequestCode_Pick_imagge = 2;
+	private int RequestCode_Pick_image = 2;
 	private View btn_back, btn_invite, btn_edit, btn_updateAvatar;
 	private MGroup group;
 	private GroupAPI api;
@@ -101,7 +101,7 @@ public class GroupManage extends BaseActivity {
 					}
 				});
 			}
-		} else if (requestCode == RequestCode_Pick_imagge
+		} else if (requestCode == RequestCode_Pick_image
 				&& resultCode == RESULT_OK) {
 			Uri uri = data.getData();
 			ContentResolver resolver = getContentResolver(); 
@@ -143,6 +143,6 @@ public class GroupManage extends BaseActivity {
 	private void updateAvater() {
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");// 相片类型
-		startActivityForResult(intent, RequestCode_Pick_imagge);
+		startActivityForResult(intent, RequestCode_Pick_image);
 	}
 }

@@ -19,7 +19,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
  *
  */
 public class ActivitiesManage extends BaseActivity {
-	private int RequestCode_Pick_imagge = 2;
+	private int RequestCode_Pick_image = 2;
 	private View btn_back, btn_edit, btn_updateAvatar, btn_end;
 	private MActivity acty;
 	private ActivityAPI api;
@@ -78,12 +78,12 @@ public class ActivitiesManage extends BaseActivity {
 	private void updateAvater() {
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");// 相片类型
-		startActivityForResult(intent, RequestCode_Pick_imagge);
+		startActivityForResult(intent, RequestCode_Pick_image);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode==RequestCode_Pick_imagge && resultCode==RESULT_OK){
+		if(requestCode==RequestCode_Pick_image && resultCode==RESULT_OK){
 			Uri uri = data.getData();
 		//	api.updateAvatar(params, responseHandler)
 		}
