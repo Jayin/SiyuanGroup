@@ -192,8 +192,14 @@ public class FollowingList extends BaseActivity {
 			if (getIntent() != null) {
 				Intent intent = getIntent();
 				if(intent!=null){
-					intent.putExtra("result", wrapSelect());
-					setResult(RESULT_OK, intent);
+					//有选择的才算ok
+					ArrayList<User> result = wrapSelect();
+					if(result.size()>0){
+						intent.putExtra("result",result );
+						setResult(RESULT_OK, intent);
+					}else{
+						setResult(RESULT_CANCELED);
+					}
 				}
 			}else{
 				setResult(RESULT_CANCELED);

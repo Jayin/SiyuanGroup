@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.util.List;
+
+import com.alumnigroup.entity.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -113,6 +116,7 @@ public class GroupAPI {
 	}
 	/**
 	 * 更新圈子头像
+	 * <p>avatar :file</p>
 	 * @param groupid  圈子id
 	 * @param params   包含文件的 RequestParams
 	 * @param responseHandler 处理器
@@ -132,5 +136,19 @@ public class GroupAPI {
 		params.add("userid", userid+"");
 		params.add("groupid", groupid+"");
 		RestClient.post("/api/groups/remove", params, responseHandler);
+	}
+	/**
+	 * 拉好友进圈子
+	 * @param users 用户 为了获得一个或多个用户id 
+	 * @param groupid 圈子id
+	 * @param responseHandler 处理器
+	 */
+	public void invite(List<User> users,int groupid,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		for(int i=0;i<users.size();i++){
+			params.add("userid", users.get(i).getId()+"");
+		}
+		params.add("groupid", groupid+"");
+		RestClient.post("/api/groups/pull", params, responseHandler);
 	}
 }

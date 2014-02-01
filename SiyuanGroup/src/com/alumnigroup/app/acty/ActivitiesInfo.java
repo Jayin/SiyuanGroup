@@ -7,10 +7,12 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
@@ -34,16 +36,15 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 活动详情
+ * 活动详情页面
  * 
  * @author Jayin Ton
  * 
  */
 public class ActivitiesInfo extends BaseActivity {
-	private View btn_back, btn_info, btn_userlist, btn_share;
+	private View btn_back, btn_info, btn_userlist, btn_share, btn_more;
 	private TextView tv_starttime, tv_applyDeadline, tv_money, tv_applyNum,
 			tv_site, tv_description, tv_name, tv_duration;
-	private View btn_apply, btn_edit, btn_favourite, btn_exit, btn_cancle;
 	private ImageView iv_avatar;
 	private MActivity acty;
 	private ActivityAPI api;
@@ -52,14 +53,35 @@ public class ActivitiesInfo extends BaseActivity {
 	private List<User> data_member, data_share;
 	private MemberAdapter adapter_member, adapter_share;
 	private ViewPager viewpager;
+	private PopupWindow mPopupWindow;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_activitiesinfo);
 		initData();
+		initPopupWindow();
 		initLayout();
 		initController();
+	}
+
+	private void initPopupWindow() {
+		View view = getLayoutInflater().inflate(
+				R.layout.popup_acty_activitiesinfo, null);
+
+		(view.findViewById(R.id.manage)).setOnClickListener(this);
+		(view.findViewById(R.id.join)).setOnClickListener(this);
+		(view.findViewById(R.id.exit)).setOnClickListener(this);
+		(view.findViewById(R.id.favourite)).setOnClickListener(this);
+
+		mPopupWindow = new PopupWindow(view);
+		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+		mPopupWindow.setOutsideTouchable(true);
+
+		// 控制popupwindow的宽度和高度自适应
+		view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+		mPopupWindow.setWidth(view.getMeasuredWidth());
+		mPopupWindow.setHeight(view.getMeasuredHeight());
 	}
 
 	private void initController() {
@@ -128,12 +150,6 @@ public class ActivitiesInfo extends BaseActivity {
 		lv_share = (PullAndLoadListView) share
 				.findViewById(R.id.frame_acty_activitiesinfo_share_listview);
 
-		btn_apply = info.findViewById(R.id.btn_apply);
-		btn_edit = info.findViewById(R.id.btn_edit);
-		btn_favourite = info.findViewById(R.id.btn_favourite);
-		btn_exit = info.findViewById(R.id.btn_exit);
-		btn_cancle = info.findViewById(R.id.btn_cancle);
-
 		tv_starttime = (TextView) info.findViewById(R.id.tv_starttime);
 		tv_applyDeadline = (TextView) info.findViewById(R.id.tv_deadline);// 结束日期
 		tv_money = (TextView) info.findViewById(R.id.tv_money);
@@ -141,7 +157,8 @@ public class ActivitiesInfo extends BaseActivity {
 		tv_site = (TextView) info.findViewById(R.id.tv_address);
 		tv_description = (TextView) info.findViewById(R.id.tv_description);
 		tv_duration = (TextView) info.findViewById(R.id.tv_duration);
-		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
+		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(
+				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
 		ImageLoader.getInstance().displayImage(RestClient.BASE_URL, iv_avatar);
@@ -156,12 +173,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 		btns.add(btn_info);
 		btns.add(btn_userlist);
-		btns.add(btn_userlist);
-
-		btn_edit.setOnClickListener(this);
-		btn_favourite.setOnClickListener(this);
-		btn_exit.setOnClickListener(this);
-		btn_cancle.setOnClickListener(this);
+		btns.add(btn_share);
 
 		List<View> views = new ArrayList<View>();
 		views.add(info);
@@ -173,11 +185,13 @@ public class ActivitiesInfo extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		btn_more = _getView(R.id.acty_head_btn_more);
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_info = _getView(R.id.btn_info);
 		btn_userlist = _getView(R.id.btn_userlist);
 		btn_share = _getView(R.id.btn_share);
 
+		btn_more.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
 		btn_info.setOnClickListener(this);
 		btn_userlist.setOnClickListener(this);
@@ -201,51 +215,87 @@ public class ActivitiesInfo extends BaseActivity {
 		case R.id.btn_share:
 			viewpager.setCurrentItem(2);
 			break;
-		case R.id.btn_apply:
-
+		case R.id.acty_head_btn_more:
+			if (!mPopupWindow.isShowing())
+				mPopupWindow.showAsDropDown(btn_more);
 			break;
-		case R.id.btn_edit:
-            editActivity();
+		case R.id.manage:
+			toast("manage");
+			mPopupWindow.dismiss();
+		   //to manage..
 			break;
-		case R.id.btn_favourite:
-            favourite();
+		case R.id.join:
+			mPopupWindow.dismiss();
+			joinActivity();
 			break;
-		case R.id.btn_exit:
-
+		case R.id.exit:
+			mPopupWindow.dismiss();
+			cancelActivity();
 			break;
-		case R.id.btn_cancle:
-
+		case R.id.favourite:
+			mPopupWindow.dismiss();
+			favourite();
 			break;
-
 		default:
 			break;
 		}
 	}
-    private void editActivity() {
-         Intent intent =new Intent(this, ActivitiesPublish.class);
-         intent.putExtra("activity", acty);
-         openActivity(intent);
+
+
+
+	private void cancelActivity() {
+		api.cancelActivity(acty.getId(), new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("已退出活动");
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("退出活动失败,错误码:" + errorCode);
+			}
+		});
+
 	}
+
+	private void joinActivity() {
+		api.joinActivity(acty.getId(), new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("已报名参加");
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("报名失败,错误码:" + errorCode);
+			}
+		});
+
+	}
+
+
 
 	// 收藏的remark默认为期类型名
 	private void favourite() {
 		StarAPI starapi = new StarAPI();
-		starapi.star(StarAPI.Item_type_activity, acty.getId(), "activity", new JsonResponseHandler() {
-			
-			@Override
-			public void onOK(Header[] headers, JSONObject obj) {
-				toast("收藏成功");
-				
-			}
-			
-			@Override
-			public void onFaild(int errorType, int errorCode) {
-				 toast("收藏失败 错误码:"+errorCode);
-				
-			}
-		});
-		 
-		
+		starapi.star(StarAPI.Item_type_activity, acty.getId(), "activity",
+				new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("收藏成功");
+
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("收藏失败 错误码:" + errorCode);
+
+					}
+				});
+
 	}
 
 }

@@ -1,5 +1,7 @@
 package com.alumnigroup.api;
 
+import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.L;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -39,6 +41,10 @@ public class ActivityAPI {
 			int statusid, String name, String content,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
+		if (page > 0)
+			params.add("page", page+"");
+		else
+			params.add("page", "1");
 		if (activityId > 0)
 			params.add("id", activityId + "");
 		if (ownerid > 0)
@@ -64,7 +70,7 @@ public class ActivityAPI {
 	 */
 	public void getActivityList(int page,
 			AsyncHttpResponseHandler responseHandler) {
-		find(page, 0, 0, 0,-1, null, null, responseHandler);
+		find(page, 0, 0, 0, -1, null, null, responseHandler);
 	}
 
 	/**
@@ -100,30 +106,42 @@ public class ActivityAPI {
 		params.add("activityid", activityid + "");
 		RestClient.post("/api/activities/accept", params, responseHandler);
 	}
-    /**
-     * 发起者更新活动资料 
-     * @param id 活动id
-     * @param maxnum  最大人数
-     * @param duration  持续时间,单位为分钟
-     * @param regdeadline 注册时间
-     * @param statusid  活动状态 1接受报名、2截止报名、3活动结束、4活动取消]
-     * @param money 活动费用
-     * @param name 活动名称
-     * @param content 活动内容
-     * @param responseHandler 处理器
-     */
-	public void update(int id, int maxnum, long duration,long regdeadline , int statusid,
-			long money, String name,String content, String site, AsyncHttpResponseHandler responseHandler) {
+
+	/**
+	 * 发起者更新活动资料
+	 * 
+	 * @param id
+	 *            活动id
+	 * @param maxnum
+	 *            最大人数
+	 * @param duration
+	 *            持续时间,单位为分钟
+	 * @param regdeadline
+	 *            注册时间
+	 * @param statusid
+	 *            活动状态 1接受报名、2截止报名、3活动结束、4活动取消]
+	 * @param money
+	 *            活动费用
+	 * @param name
+	 *            活动名称
+	 * @param content
+	 *            活动内容
+	 * @param responseHandler
+	 *            处理器
+	 */
+	public void update(int id, int maxnum, long duration, long regdeadline,
+			int statusid, long money, String name, String content, String site,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		params.add("maxnum", maxnum + "");
 		params.add("duration", duration + "");
 		params.add("statusid", statusid + "");
-		params.add("money", money+"");
+		params.add("money", money + "");
 		params.add("name", name);
 		params.add("content", content);
 		params.add("site", site);
-		params.add("regdeadline", regdeadline+"");
+		params.add("regdeadline", regdeadline + "");
 		RestClient.post("/api/activities/update", params, responseHandler);
 	}
 
@@ -189,24 +207,29 @@ public class ActivityAPI {
 	 * @param content
 	 *            活动描述
 	 * @param site
-	 *          活动地点
+	 *            活动地点
+	 *@param regdeadline
+	 *           截止报名日期
 	 * @param responseHandler
 	 *            处理器
 	 */
 	public void creatAcivity(int groupid, int maxnum, long starttime,
-			long duration,long regdeadline , int statusid, long money, String name,
-			String content,String site, AsyncHttpResponseHandler responseHandler) {
+			long duration, long regdeadline, int statusid, long money,
+			String name, String content, String site,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("groupid", groupid + "");
 		params.add("maxnum", maxnum + "");
-		params.add("starttime", starttime + "");
+		params.add("starttime", CalendarUtils.getTimeFromat(starttime, CalendarUtils.TYPE_THIRD) );
 		params.add("duration", duration + "");
 		params.add("statusid", statusid + "");
 		params.add("money", money + "");
 		params.add("name", name);
 		params.add("content", content);
 		params.add("site", site);
-		params.add("regdeadline", regdeadline+"");
+		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
+		L.i("regdeadline__>"+CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
+		L.i("starttime>"+CalendarUtils.getTimeFromat(starttime, CalendarUtils.TYPE_THIRD));
 		RestClient.post("/api/activities/create", params, responseHandler);
 	}
 
@@ -223,26 +246,41 @@ public class ActivityAPI {
 		params.add("id", id + "");
 		RestClient.post("/api/activities/userslist", params, responseHandler);
 	}
+
 	/**
 	 * 获取活动参加历史列表
-	 * @param id 申请id,就是usership的id
- 	 * @param userid 用户id
-	 * @param activityid 活动id
-	 * @param responseHandler 处理器
+	 * 
+	 * @param id
+	 *            申请id,就是usership的id
+	 * @param userid
+	 *            用户id
+	 * @param activityid
+	 *            活动id
+	 * @param responseHandler
+	 *            处理器
 	 */
-	public void getHistory(int id,int userid,int activityid,AsyncHttpResponseHandler responseHandler){
+	public void getHistory(int id, int userid, int activityid,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		if(id>0)params.add("id", id+"");
-		if(userid>0)params.add("userid", userid+"");
-		if(activityid>0)params.add("activityid", activityid+"");
+		if (id > 0)
+			params.add("id", id + "");
+		if (userid > 0)
+			params.add("userid", userid + "");
+		if (activityid > 0)
+			params.add("activityid", activityid + "");
 		RestClient.get("/api/activities/history", params, responseHandler);
 	}
+
 	/**
 	 * 获取一用户曾经参加过的活动
-	 * @param userid user用户id
-	 * @param responseHandler 处理器
+	 * 
+	 * @param userid
+	 *            user用户id
+	 * @param responseHandler
+	 *            处理器
 	 */
-	public void getUserHistory(int userid,AsyncHttpResponseHandler responseHandler){
-		getHistory(userid,0,0,responseHandler);
+	public void getUserHistory(int userid,
+			AsyncHttpResponseHandler responseHandler) {
+		getHistory(userid, 0, 0, responseHandler);
 	}
 }

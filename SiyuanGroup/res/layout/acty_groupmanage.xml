@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical" >
+
+    <include layout="@layout/acty_groupmanage_header" />
+
+    <LinearLayout
+        android:id="@+id/btn_invite"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/btn_preference_sigle"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView.black"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="邀请好友加入"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_item_toright_blue" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/btn_edit"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/btn_preference_sigle"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView.black"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="编辑圈子资料"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_item_toright_blue" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/btn_updateAvater"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:background="@drawable/btn_preference_sigle"
+        android:orientation="horizontal" >
+
+        <TextView
+            style="@style/TextView.black"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="2dp"
+            android:layout_weight="1"
+            android:padding="8dp"
+            android:text="更换圈子图标"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/ic_item_toright_blue" />
+    </LinearLayout>
+
+</LinearLayout>

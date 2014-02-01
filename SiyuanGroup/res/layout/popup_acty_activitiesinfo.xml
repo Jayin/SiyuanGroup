@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_popup_black_up"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/manage"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="54dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="管    理" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@color/grey_lv_third" />
+     <Button
+        android:id="@+id/favourite"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="54dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="收     藏" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@color/grey_lv_third" />
+    <Button
+        android:id="@+id/join"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="54dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="参加活动" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@color/grey_lv_third" />
+
+    <Button
+        android:id="@+id/exit"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="54dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="退出活动" />
+
+
+   
+
+</LinearLayout>

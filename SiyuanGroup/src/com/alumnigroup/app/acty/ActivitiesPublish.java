@@ -193,6 +193,18 @@ public class ActivitiesPublish extends BaseActivity {
 
 	private void create(int groupid, int maxnum, int duration, int statusid,
 			long money, String name, String content, String site) {
+		debug(" groupid-->" + groupid);
+		debug("maxnum -->" + maxnum);
+		debug("duration -->" + duration);
+		debug("statusid -->" + statusid);
+		debug("money-->" + money);
+
+		debug(" name-->" + name);
+		debug(" content-->" + starttime);
+		debug(" site-->" + site);
+		debug(" regdeadline-->" + regdeadline);
+		debug(" starttime-->" + starttime);
+
 		api.creatAcivity(groupid, maxnum, starttime, duration,
 
 		regdeadline, statusid, money, name, content, site,

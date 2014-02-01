@@ -41,13 +41,14 @@
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:id="@+id/acty_head_btn_createActiviy"
+        android:id="@+id/acty_head_btn_more"
         style="@style/RelativeLayout.allmember_header_btn"
         android:clickable="true" >
-        <TextView
-            style="@style/TextView.navigtion_head_base"
+            <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="发起活动" />
+            android:src="@drawable/ic_acty_head_overflow" />
     </RelativeLayout>
 
 </LinearLayout>

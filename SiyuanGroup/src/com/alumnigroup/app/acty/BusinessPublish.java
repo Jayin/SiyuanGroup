@@ -126,7 +126,7 @@ public class BusinessPublish extends BaseActivity {
 
 	private void update(String name, String description, String company,
 			int statusid, int isprivate) {
-		 api.update(name, description, company, regdeadline, statusid, isprivate, new JsonResponseHandler() {
+		 api.update(c.getId(),name, description, company, regdeadline, statusid, isprivate, new JsonResponseHandler() {
 			
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {

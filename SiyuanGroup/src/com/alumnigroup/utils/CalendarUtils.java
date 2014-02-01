@@ -13,8 +13,12 @@ public class CalendarUtils {
 	 * 时间轴，类似于新浪微博/微信的时间 :前xx分钟，今日hh:mm 昨日hh:mm
 	 */
 	public static String TYPE_timeline = "timeline";
+	/** "yy-mm-dd-hh-mm"*/
 	public static String TYPE_ONE = "yy-mm-dd-hh-mm";
-	public static String TYPE_TWO ="yy-mm-dd";
+	/** "yy-mm-dd"*/
+	public static String TYPE_TWO = "yy-mm-dd";
+	/**  "yy-mm-dd hh:mm:ss"*/
+	public static String TYPE_THIRD = "yy-mm-dd hh:mm:ss";
 
 	/**
 	 * 根据给定的时间和格式生成一时间字符串
@@ -27,10 +31,10 @@ public class CalendarUtils {
 	 */
 	public static String getTimeFromat(long milliseconds, String fromat) {
 		StringBuilder sb = new StringBuilder();
+		Calendar cur = getCurrent();
+		Calendar pre = getCurrent();
+		pre.setTimeInMillis(milliseconds);
 		if ("timeline".equals(fromat)) {
-			Calendar cur = getCurrent();
-			Calendar pre = getCurrent();
-			pre.setTimeInMillis(milliseconds);
 			int tmp = cur.get(Calendar.YEAR) - pre.get(Calendar.YEAR);
 			if(tmp>0)return getTimeFromat(milliseconds, TYPE_ONE);
 			tmp = cur.get(Calendar.DAY_OF_YEAR)
@@ -54,28 +58,26 @@ public class CalendarUtils {
 						.append(":").append(pre.get(Calendar.MINUTE));
 				break;
 			default:
-				sb.append(pre.get(Calendar.MONTH) + 1).append("月")
-						.append(pre.get(Calendar.DAY_OF_MONTH)).append("日 ")
+				sb.append(pre.get(Calendar.YEAR)).append("-").append(pre.get(Calendar.MONTH) + 1).append("-")
+						.append(pre.get(Calendar.DAY_OF_MONTH)).append("- ")
 						.append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
 						.append(":")
 						.append(_formatNmber(pre.get(Calendar.MINUTE)));
 				break;
 			}
 		} else if ("yy-mm-dd-hh-mm".equals(fromat)) {
-			Calendar c = getCurrent();
-			c.setTimeInMillis(milliseconds);
-			sb.append(getTimeFromat(milliseconds, TYPE_TWO))
-					.append(_formatNmber(c.get(Calendar.HOUR_OF_DAY)))
+			sb.append(getTimeFromat(milliseconds, TYPE_TWO)).append(" ")
+					.append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
 					.append(":")
-					.append(_formatNmber(c.get(Calendar.MINUTE)));
-		}else{
-			Calendar c = getCurrent();
-			c.setTimeInMillis(milliseconds);
-			sb.append(c.get(Calendar.YEAR)).append("年")
-			.append((c.get(Calendar.MONTH) + 1) + "").append("月")
-			.append(c.get(Calendar.DAY_OF_MONTH)).append("日");
+					.append(_formatNmber(pre.get(Calendar.MINUTE)));
+		}else if("yy-mm-dd".equals(fromat)){
+			sb.append(pre.get(Calendar.YEAR)).append("-")
+			.append((pre.get(Calendar.MONTH) + 1) + "").append("-")
+			.append(pre.get(Calendar.DAY_OF_MONTH));
+		}else if("yy-mm-dd hh:mm:ss".equals(fromat)){
+			sb.append(getTimeFromat(milliseconds,TYPE_TWO)).append(" ").append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
+			.append(":").append(_formatNmber(pre.get(Calendar.MINUTE))).append(":").append(_formatNmber(pre.get(Calendar.SECOND)));
 		}
-
 		return sb.toString();
 	}
 

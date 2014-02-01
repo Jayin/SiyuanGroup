@@ -1,5 +1,6 @@
 package com.alumnigroup.api;
 
+import com.alumnigroup.utils.CalendarUtils;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -124,7 +125,7 @@ public class BusinessAPI {
 		params.add("name", name);
 		params.add("description", description);
 		params.add("company", company);
-		params.add("regdeadline", regdeadline + "");
+		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
 		params.add("statusid", statusid + "");
 		params.add("isprivate", isprivate + "");
 		RestClient.post("/api/cooperations/create", params, responseHandler);
@@ -132,7 +133,8 @@ public class BusinessAPI {
 
 	/**
 	 * 发起者更新合作资料
-	 * 
+	 * @param id 
+	 *       合作id
 	 * @param name
 	 *            合作名称
 	 * @param description
@@ -148,14 +150,15 @@ public class BusinessAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void update(String name, String description, String company,
+	public void update(int id, String name, String description, String company,
 			long regdeadline, int statusid, int isprivate,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
+		params.add("id", id+"");
 		params.add("name", name);
 		params.add("description", description);
 		params.add("company", company);
-		params.add("regdeadline", regdeadline + "");
+		params.add("regdeadline",  CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
 		params.add("statusid", statusid + "");
 		params.add("isprivate", isprivate + "");
 		RestClient.post("/api/cooperations/update", params, responseHandler);

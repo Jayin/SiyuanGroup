@@ -4,21 +4,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.JsonReader;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
+import com.alumnigroup.api.FollowshipAPI;
 import com.alumnigroup.api.UserAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Following;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
+import com.alumnigroup.widget.MenuDialog;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
@@ -31,16 +40,20 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
  *         coded by Jayin Ton
  * 
  */
-public class Allmember extends BaseActivity {
+public class Allmember extends BaseActivity implements OnItemClickListener {
 	private TextView tv_title;
 	private View btn_back, btn_allmenmber, btn_myfriend, btn_pressed;
 	private PullAndLoadListView lv_allmember, lv_myfriend;
-	private List<User> data_allmember = null, data_myfriend = null;
+	private List<User> data_allmember = null, data_myfriend = null;// my friend
+																	// 为我关注的列表
 	private ViewPager viewpager;
 	private UserAPI api;
+	private FollowshipAPI followshipAPI;
 	private int page_allmember = 1, page_myfriend = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
 	private int currentStatus = 0; // 0代表从底部左边数起第一个处于显示状态
+	private MenuDialog dialog;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +165,38 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
+				followshipAPI.getFollowingList(1, user.getId(),
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<User> newData = Following
+										.getUsesList(Following
+												.create_by_jsonarray(obj
+														.toString()));
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("你还没有关注任何人");
+									page_myfriend = 1;
+								} else {
+									page_myfriend = 1;
+									data_myfriend.clear();
+									data_myfriend.addAll(newData);
+
+									adapter_myfriend.notifyDataSetChanged();
+								}
+								lv_myfriend.setCanRefresh(false, false);
+								lv_myfriend.onRefreshComplete();
+								lv_myfriend.setCanLoadMore(true);
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 错误码:" + errorCode);
+								lv_myfriend.onRefreshComplete();
+							}
+						});
 			}
 		});
 
@@ -160,16 +204,54 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
+				followshipAPI.getFollowingList(page_myfriend + 1, user.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								boolean canLoadMore = true;
+								List<User> newData = User
+										.create_by_jsonarray(obj.toString());
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("没有更多");
+									canLoadMore = false;
+								} else {
+									page_myfriend++;
+									data_myfriend.addAll(newData);
+									adapter_myfriend.notifyDataSetChanged();
+								}
+								lv_myfriend.onLoadMoreComplete();
+								if (!canLoadMore)
+									lv_myfriend.setCanLoadMore(false);
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 错误码:" + errorCode);
+								lv_myfriend.onLoadMoreComplete();
+							}
+						});
 
 			}
 		});
+
+		lv_allmember.setOnItemClickListener(this);
+		lv_myfriend.setOnItemClickListener(this);
 	}
 
 	@Override
 	protected void initData() {
 		api = new UserAPI();
+		followshipAPI = new FollowshipAPI();
 		data_allmember = new ArrayList<User>();
 		data_myfriend = new ArrayList<User>();
+		user = new AppInfo(getContext()).getUser();
+		if (user == null) {
+			toast("无用户信息,请重新登录!");
+			closeActivity();
+		}
 	}
 
 	@Override
@@ -186,11 +268,49 @@ public class Allmember extends BaseActivity {
 		btn_allmenmber.setOnClickListener(this);
 		btn_myfriend.setOnClickListener(this);
 
-		adapter_allmember = new MemberAdapter(data_allmember,getContext());
-		adapter_myfriend = new MemberAdapter(data_myfriend,getContext());
+		adapter_allmember = new MemberAdapter(data_allmember, getContext());
+		adapter_myfriend = new MemberAdapter(data_myfriend, getContext());
 
 		lv_allmember.setAdapter(adapter_allmember);
 		lv_myfriend.setAdapter(adapter_myfriend);
+
+		initMenuDialog();
+	}
+
+	private void initMenuDialog() {
+		dialog = new MenuDialog(getContext());
+		List<String> strings = new ArrayList<String>();
+		strings.add("关注");
+		strings.add("进入空间");
+		dialog.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				dialog.dismiss();
+				if (position == 0) {
+					FollowshipAPI api = new FollowshipAPI();
+					api.follow(data_allmember.get(dialog.getParentPosition())
+							.getId(), "following", new JsonResponseHandler() {
+
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							toast("已关注");
+						}
+
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							toast("关注失败,错误码:" + errorCode);
+						}
+					});
+				}
+				if (position == 1) {
+					toast("to space");
+					// to space
+				}
+			}
+		});
+		dialog.setData(strings);
 	}
 
 	private void initViewPager() {
@@ -262,5 +382,17 @@ public class Allmember extends BaseActivity {
 			}
 
 		}
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		if (parent == lv_allmember) {
+			dialog.show(position - 1);
+		}
+		if (parent == lv_myfriend) {
+
+		}
+
 	}
 }

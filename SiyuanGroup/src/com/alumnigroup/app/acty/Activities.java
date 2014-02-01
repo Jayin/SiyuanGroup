@@ -7,6 +7,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
@@ -50,7 +52,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
 	private ActivityAPI api;
 	private User mUser;
-
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -98,6 +100,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
+				debug("page_all-->"+page_all);
 				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
@@ -233,6 +236,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initLayout() {
+		
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_all = _getView(R.id.acty_activities_footer_all);
 		btn_myjoin = _getView(R.id.acty_activities_footer_myjoin);
@@ -242,6 +246,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		btns.add(btn_myjoin);
 		btns.add(btn_favourite);
 
+	
 		btn_back.setOnClickListener(this);
 		btn_all.setOnClickListener(this);
 		btn_myjoin.setOnClickListener(this);
@@ -265,6 +270,9 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_activities_footer_favourite:
 			viewpager.setCurrentItem(2, true);
 			break;
+		
+			
+			 
 		default:
 			break;
 		}
