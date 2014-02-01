@@ -4,21 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.CommentView;
@@ -149,11 +154,28 @@ public class CommunicationDetail extends BaseActivity {
 			break;
 		case R.id.acty_communicationdetail_footer_favourite:
 			// 收藏
-			toast("fav");
+			faviourite();
 			break;
 		default:
 			break;
 		}
+	}
+    //收藏的remark默认为期类型名
+	private void faviourite() {
+		 StarAPI starapi = new StarAPI();
+		 starapi.star(StarAPI.Item_type_issue, issue.getId(), "issue", new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				 toast("收藏成功");
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+			   toast("收藏失败 错误码:"+errorCode);
+			}
+		});
+		
 	}
 
 	class CommentAdapter extends BaseAdapter {
@@ -214,5 +236,6 @@ public class CommunicationDetail extends BaseActivity {
 			ImageView avater;
 		}
 	}
+
 
 }

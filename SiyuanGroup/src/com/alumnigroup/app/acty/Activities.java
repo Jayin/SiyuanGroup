@@ -7,7 +7,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
@@ -25,8 +26,11 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.DataPool;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
@@ -47,7 +51,8 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private ActivitiesAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
 	private ActivityAPI api;
-
+	private User mUser;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -95,6 +100,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
+				debug("page_all-->"+page_all);
 				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
@@ -125,21 +131,44 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				});
 			}
 		});
-
+		// 一次性加载完毕,没有分页
 		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
+				api.getUserHistory(mUser.getId(), new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<MActivity> newData_myjoin = MActivity
+								.create_by_jsonarray(obj.toString());
+						if (newData_myjoin == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_myjoin.size() == 0) {
+							toast("没有更多");
+						} else {
+							data_myjoin.addAll(newData_myjoin);
+							adapter_myjoin.notifyDataSetChanged();
+						}
+						lv_myjoin.onRefreshComplete();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+						lv_myjoin.onRefreshComplete();
+					}
+				});
 			}
 		});
 		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
-
+				// nothing to do?
 			}
 		});
+		
 		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -161,7 +190,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
+		DataPool dp = new DataPool(DataPool.SP_Name_User, getContext());
+		mUser = (User) dp.get(DataPool.SP_Key_User);
 		api = new ActivityAPI();
+		if(mUser==null){
+			L.i("muser is null");
+			toast("lol");
+		}
+		
 		data_all = new ArrayList<MActivity>();
 		data_myjoin = new ArrayList<MActivity>();
 		data_favourite = new ArrayList<MActivity>();
@@ -200,6 +236,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initLayout() {
+		
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_all = _getView(R.id.acty_activities_footer_all);
 		btn_myjoin = _getView(R.id.acty_activities_footer_myjoin);
@@ -209,6 +246,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		btns.add(btn_myjoin);
 		btns.add(btn_favourite);
 
+	
 		btn_back.setOnClickListener(this);
 		btn_all.setOnClickListener(this);
 		btn_myjoin.setOnClickListener(this);
@@ -232,6 +270,9 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_activities_footer_favourite:
 			viewpager.setCurrentItem(2, true);
 			break;
+		
+			
+			 
 		default:
 			break;
 		}
@@ -285,6 +326,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				h = (ViewHolder) convertView.getTag();
 			}
 			MActivity acty = data.get(position);
+			if(acty==null){
+				debug("acty is null");
+			}
+			if(h.actyName==null){
+				debug("h.actyName is null");
+			}
+			debug(data.toString());
+			
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
 			h.starttime.setText("时间:"
@@ -311,9 +360,9 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			long id) {
 		int real_position = position - 1;
 		if (parent == lv_all) {
-              Intent intent = new Intent(this,ActivitiesInfo.class);
-              intent.putExtra("activity", data_all.get(real_position));
-              openActivity(intent);
+			Intent intent = new Intent(this, ActivitiesInfo.class);
+			intent.putExtra("activity", data_all.get(real_position));
+			openActivity(intent);
 		}
 		if (parent == lv_myjoin) {
 

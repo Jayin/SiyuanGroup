@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_popup_black_up"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/search"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:background="@color/grey_lv_third" />
+
+    <Button
+        android:id="@+id/create"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="64dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="创建" />
+
+</LinearLayout>

@@ -3,6 +3,7 @@ package com.alumnigroup.app.acty;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,7 +12,7 @@ import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.WidgetUtils;
+import com.alumnigroup.utils.EditTextUtils;
 
 public class CommunicationPublish extends BaseActivity {
 	private View btn_back, btn_post, btn_permission, btn_mention;
@@ -54,8 +55,8 @@ public class CommunicationPublish extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_post:
-			String title = WidgetUtils.getTextTrim(et_title);
-			String body = WidgetUtils.getTextTrim(et_content);
+			String title = EditTextUtils.getTextTrim(et_title);
+			String body = EditTextUtils.getTextTrim(et_content);
 			if (title == null || title.equals("")) {
 				toast("标题不能为空!");
 			}
@@ -82,7 +83,10 @@ public class CommunicationPublish extends BaseActivity {
 			toast("permission");
 			break;
 		case R.id.mention:
-			toast("mention");
+			//toast("mention");
+		    Intent intent  = new Intent(this,FollowingList.class);
+		    intent.putExtra("userid", 1);
+		    openActivity(intent);
 			break;
 		default:
 			break;

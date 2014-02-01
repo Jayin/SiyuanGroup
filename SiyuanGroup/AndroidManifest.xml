@@ -145,6 +145,30 @@
             android:name=".acty.CommunicationComment"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.BusinessPublish"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.Browser"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.FollowingList"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.BusinessComment"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.GroupManage"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesManage"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

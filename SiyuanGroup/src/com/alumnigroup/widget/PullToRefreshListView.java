@@ -439,7 +439,7 @@ public class PullToRefreshListView extends ListView implements OnScrollListener 
 		// if it can't reRefresh the remove this head view
 		// but if you want to make it work again,called `reInit()`
 		if(!canRefresh && !ableToShowHeadView){
-			this.removeHeaderView(mRefreshView);
+			mRefreshView.setPadding(mRefreshView.getPaddingLeft(), -1 * mRefreshViewHeight, mRefreshView.getPaddingRight(), mRefreshView.getPaddingBottom());
 		} 
 	}
 

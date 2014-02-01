@@ -9,7 +9,7 @@
         android:id="@+id/search"
         style="@style/TextView.base"
         android:layout_width="100dp"
-        android:layout_height="64dp"
+        android:layout_height="54dp"
         android:background="@drawable/btn_popup_item_black"
         android:text="查找" />
 
@@ -25,7 +25,7 @@
         android:id="@+id/create"
         style="@style/TextView.base"
         android:layout_width="100dp"
-        android:layout_height="64dp"
+        android:layout_height="54dp"
         android:background="@drawable/btn_popup_item_black"
         android:text="创建" />
 

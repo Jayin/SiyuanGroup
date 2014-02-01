@@ -6,16 +6,18 @@ import org.json.JSONObject;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
-import com.alumnigroup.utils.WidgetUtils;
 
 /**
- * 创建圈子
+ * 创建圈子页面
  * 
  * @author Jayin Ton
  * 
@@ -24,6 +26,8 @@ public class GroupCreate extends BaseActivity {
 	private View btn_back, btn_create, btn_invite;
 	private EditText et_name, et_description;
 	private GroupAPI api;
+	private MGroup group = null;
+	private TextView tv_title; // 创建圈子/编辑去啊你
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +40,9 @@ public class GroupCreate extends BaseActivity {
 	@Override
 	protected void initData() {
 		api = new GroupAPI();
+		if (getSerializableExtra("group") != null) {
+			group = (MGroup) getSerializableExtra("group");
+		}
 	}
 
 	@Override
@@ -45,10 +52,17 @@ public class GroupCreate extends BaseActivity {
 		btn_invite = _getView(R.id.invite);
 		et_name = (EditText) _getView(R.id.et_name);
 		et_description = (EditText) _getView(R.id.et_description);
+		tv_title = (TextView) _getView(R.id.acty_head_tv_title);
 
 		btn_back.setOnClickListener(this);
 		btn_create.setOnClickListener(this);
 		btn_invite.setOnClickListener(this);
+
+		if (group != null) {
+			et_name.setText(group.getName());
+			et_description.setText(group.getDescription());
+			tv_title.setText("编辑");
+		}
 	}
 
 	@Override
@@ -58,26 +72,18 @@ public class GroupCreate extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_create:
-			String name = WidgetUtils.getTextTrim(et_name);
-			String description = WidgetUtils.getTextTrim(et_description);
-            if(name==null || StringUtils.isEmpty(name)){
-            	toast("圈子名称不能为空");
-                return ;	
-            }
-            
-			api.createGroup(name, description, new JsonResponseHandler() {
 
-				@Override
-				public void onOK(Header[] headers, JSONObject obj) {
-                     toast("创建成功");
-                     closeActivity();
-				}
+			String name = EditTextUtils.getTextTrim(et_name);
+			String description = EditTextUtils.getTextTrim(et_description);
+			if (name == null || StringUtils.isEmpty(name)) {
+				toast("圈子名称不能为空");
+				return;
+			}
+			if (group == null)
+				create(name, description);
+			else
+				update(name, description);
 
-				@Override
-				public void onFaild(int errorType, int errorCode) {
-                       toast("创建失败 错误码:"+errorCode);
-				}
-			});
 			break;
 		case R.id.invite:
 			toast("to friend list");
@@ -88,4 +94,39 @@ public class GroupCreate extends BaseActivity {
 		}
 	}
 
+	// 创建
+	private void create(String name, String description) {
+		api.createGroup(name, description, new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("创建成功");
+				closeActivity();
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("创建失败 错误码:" + errorCode);
+			}
+		});
+
+	}
+
+	// 编辑更新
+	private void update(String name, String description) {
+		api.updateInfo(group.getId(), name, description,
+				new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("修改成功");
+						closeActivity();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("创建失败 错误码:" + errorCode);
+					}
+				});
+	}
 }

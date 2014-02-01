@@ -106,7 +106,7 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
      * Get intent extra
      *
      * @param name
-     * @return int
+     * @return int -1 if not exist!
      */
     protected int getIntExtra(final String name) {
         return getIntent().getIntExtra(name, -1);

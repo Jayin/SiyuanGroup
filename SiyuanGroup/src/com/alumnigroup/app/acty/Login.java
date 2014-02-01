@@ -21,7 +21,7 @@ import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.utils.StringUtils;
-import com.alumnigroup.utils.WidgetUtils;
+import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.widget.MyProgressDialog;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -56,15 +56,15 @@ public class Login extends BaseActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.acty_login_btn_login:
-			if (StringUtils.isEmpty(WidgetUtils.getText(et_log_username))
-					|| StringUtils.isEmpty(WidgetUtils
+			if (StringUtils.isEmpty(EditTextUtils.getText(et_log_username))
+					|| StringUtils.isEmpty(EditTextUtils
 							.getText(et_login_password))) {
 				toast("输入不能为空 ");
 				return;
 			}
 
-			api.login(WidgetUtils.getText(et_log_username),
-					WidgetUtils.getText(et_login_password),
+			api.login(EditTextUtils.getText(et_log_username),
+					EditTextUtils.getText(et_login_password),
 					new AsyncHttpResponseHandler() {
 						@Override
 						public void onStart() {
@@ -104,33 +104,33 @@ public class Login extends BaseActivity {
 			flipper.showNext();
 			break;
 		case R.id.acty_register_btn_regist:
-			if (StringUtils.isEmpty(WidgetUtils.getText(et_reg_confirm))
+			if (StringUtils.isEmpty(EditTextUtils.getText(et_reg_confirm))
 					|| StringUtils
-							.isEmpty(WidgetUtils.getText(et_reg_password))
-					|| StringUtils.isEmpty(WidgetUtils.getText(et_reg_email))
+							.isEmpty(EditTextUtils.getText(et_reg_password))
+					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_email))
 					|| StringUtils
-							.isEmpty(WidgetUtils.getText(et_reg_username))
-					|| StringUtils.isEmpty(WidgetUtils.getText(et_reg_name))) {
+							.isEmpty(EditTextUtils.getText(et_reg_username))
+					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_name))) {
 				toast("输入不能为空 ");
 				return;
 			}
-			if (!WidgetUtils.getText(et_reg_password).equals(
-					WidgetUtils.getTextTrim(et_reg_confirm))) {
+			if (!EditTextUtils.getText(et_reg_password).equals(
+					EditTextUtils.getTextTrim(et_reg_confirm))) {
 				toast("输入密码不一致!");
 				return;
 			}
-			if (!StringUtils.isEmail(WidgetUtils.getText(et_reg_email))) {
+			if (!StringUtils.isEmail(EditTextUtils.getText(et_reg_email))) {
 				toast("邮箱不符合格式！");
 				return;
 			}
-			if (!StringUtils.isNickname(WidgetUtils.getText(et_reg_name))) {
+			if (!StringUtils.isNickname(EditTextUtils.getText(et_reg_name))) {
 				toast("姓名请填写中文或英文");
 				return;
 			}
-			api.regist(WidgetUtils.getText(et_reg_username),
-					WidgetUtils.getText(et_reg_password),
-					WidgetUtils.getText(et_reg_name),
-					WidgetUtils.getText(et_reg_email),
+			api.regist(EditTextUtils.getText(et_reg_username),
+					EditTextUtils.getText(et_reg_password),
+					EditTextUtils.getText(et_reg_name),
+					EditTextUtils.getText(et_reg_email),
 					new AsyncHttpResponseHandler() {
 						@Override
 						public void onStart() {

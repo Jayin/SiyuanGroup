@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.util.List;
+
+import com.alumnigroup.entity.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -96,5 +99,56 @@ public class GroupAPI {
 		RequestParams params = new RequestParams();
 		params.add("id", id+"");
 		RestClient.get("/api/groups/view", params, responseHandler);
+	}
+	/**
+	 * 更新圈子信息
+	 * @param id 圈子id
+	 * @param name 圈子名字
+	 * @param description 圈子描述
+ 	 * @param responseHandler 处理器
+	 */
+	public void updateInfo(int id,String name,String description,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("id", id+"");
+		params.add("name", name);
+		params.add("description", description);
+		RestClient.post("/api/groups/update", params, responseHandler);
+	}
+	/**
+	 * 更新圈子头像
+	 * <p>avatar :file</p>
+	 * @param groupid  圈子id
+	 * @param params   包含文件的 RequestParams
+	 * @param responseHandler 处理器
+	 */
+	public void updateAvatar(int groupid ,RequestParams params,AsyncHttpResponseHandler responseHandler){
+		params.put("groupid", groupid+"");
+		RestClient.post("/api/groups/avatar/update", params, responseHandler);
+	}
+	/**
+	 * 踢人出圈子
+	 * @param userid 被踢人的id
+	 * @param groupid 圈子id
+	 * @param responseHandler  处理器
+	 */
+	public void remove(int userid,int groupid,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("userid", userid+"");
+		params.add("groupid", groupid+"");
+		RestClient.post("/api/groups/remove", params, responseHandler);
+	}
+	/**
+	 * 拉好友进圈子
+	 * @param users 用户 为了获得一个或多个用户id 
+	 * @param groupid 圈子id
+	 * @param responseHandler 处理器
+	 */
+	public void invite(List<User> users,int groupid,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		for(int i=0;i<users.size();i++){
+			params.add("userid", users.get(i).getId()+"");
+		}
+		params.add("groupid", groupid+"");
+		RestClient.post("/api/groups/pull", params, responseHandler);
 	}
 }

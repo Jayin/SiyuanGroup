@@ -15,8 +15,8 @@ public class UserAPI {
 	}
 
 	/**
-	 * 注册
-	 * 
+	 * 注册<br>
+	 * use:{@link#regist()}
 	 * @param username
 	 *            用户名
 	 * @param password
@@ -35,6 +35,57 @@ public class UserAPI {
 		params.add("password", password);
 		params.add("profile[name]", name);
 		params.add("profile[email]", email);
+		RestClient.post("/api/users/register", params, responseHandler);
+	}
+
+	/**
+	 * 注册
+	 * 
+	 * @param username
+	 *            用户名
+	 * @param password
+	 *            密码
+	 * @param name
+	 *            optional 姓名
+	 * @param email
+	 *            optional 邮箱
+	 * @param gender
+	 *            optional 性别
+	 * @param age
+	 *            optional 年龄
+	 * @param grade
+	 *            optional 入学级数
+	 * @param university
+	 *            optional 学校
+	 * @param major
+	 *            optional 专业
+	 * @param summary
+	 *            optional 个性签名
+	 * @param responseHandler
+	 */
+	public void regist(String username, String password, String name,
+			String email, String gender, int age, int grade, String university,
+			String major, String summary,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("username", username);
+		params.add("password", password);
+		if (name != null)
+			params.add("profile[name]", name);
+		if (email != null)
+			params.add("profile[email]", email);
+		if (gender != null)
+			params.add("profile[gender]", gender);
+		if (age > 0)
+			params.add("profile[age]", age + "");
+		if (grade > 0)
+			params.add("profile[grade]", grade + "");
+		if (university != null)
+			params.add("profile[university]", university);
+		if (major != null)
+			params.add("profile[major]", major);
+		if (summary != null)
+			params.add("profile[summary]", summary);
 		RestClient.post("/api/users/register", params, responseHandler);
 	}
 

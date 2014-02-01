@@ -32,7 +32,7 @@ public class User implements Serializable {
 	 */
 	public static User create_by_json(String json) {
 		try {
-			L.i("json user:"+json);
+			L.i("User.java --json:"+json);
 			Gson gson = new Gson();
 			return (User) gson.fromJson(json, User.class);
 		} catch (Exception e) {
@@ -80,14 +80,6 @@ public class User implements Serializable {
 	/** 用户的头像相对url **/
 	private String avatar;
 	/** 空间背景图相对url **/
-	private String cover;
-	public String getCover() {
-		return cover;
-	}
-
-	public void setCover(String cover) {
-		this.cover = cover;
-	}
 
 	/** 关注数 */
 	private int numFollowing;
@@ -103,6 +95,16 @@ public class User implements Serializable {
 	private int numEvents;
 	/** 个人资料 */
 	private Profile profile;
+	/** 封面图片*/
+	private String cover;
+
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
 
 	public Profile getProfile() {
 		return profile;

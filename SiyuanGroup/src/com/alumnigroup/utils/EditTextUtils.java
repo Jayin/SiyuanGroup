@@ -8,7 +8,7 @@ import android.widget.EditText;
  * @author Jayin Ton
  * 
  */
-public class WidgetUtils {
+public class EditTextUtils {
 	/**
 	 * 获得EditText上的内容
 	 * 
@@ -31,5 +31,15 @@ public class WidgetUtils {
 		if (et == null)
 			return null;
 		return getText(et).trim();
+	}
+	/**
+	 * 检查是否为空
+	 * et==null -> 为空
+	 * @param et
+	 * @return
+	 */
+	public static boolean isEmpty(EditText et){
+		if(et==null)return true;
+		return StringUtils.isEmpty(getTextTrim(et));
 	}
 }

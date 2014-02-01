@@ -101,6 +101,9 @@ public class Main extends BaseActivity implements OnClickListener {
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				// toast("shouldOverrideUrlLoading-->"+url);
 				 //自行处理点击事件！
+				Intent intent = new Intent(Main.this, Browser.class);
+				intent.putExtra("url", url);
+				openActivity(intent);
 				return true;
 			}
 			@Override
