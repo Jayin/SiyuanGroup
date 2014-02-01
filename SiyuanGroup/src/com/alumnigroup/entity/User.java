@@ -7,7 +7,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.google.gson.Gson;
 
@@ -80,6 +79,16 @@ public class User implements Serializable {
 	private int isonline;
 	/** 用户的头像相对url **/
 	private String avatar;
+	/** 空间背景图相对url **/
+	private String cover;
+	public String getCover() {
+		return cover;
+	}
+
+	public void setCover(String cover) {
+		this.cover = cover;
+	}
+
 	/** 关注数 */
 	private int numFollowing;
 	/** 被关注数(分数量) */
@@ -207,7 +216,19 @@ public class User implements Serializable {
 	}
 
 	public class Profile implements Serializable {
-		/* 邮箱 */
+		/**
+		 * 个性签名
+		 */
+		private String summary;
+		public String getSummary() {
+			return summary;
+		}
+
+		public void setSummary(String summary) {
+			this.summary = summary;
+		}
+
+		/** 邮箱 */
 		private String email;
 		/** 昵称 **/
 		private String nickname;

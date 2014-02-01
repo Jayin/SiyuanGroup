@@ -23,6 +23,17 @@ import android.util.Base64;
  * 
  */
 public class DataPool {
+	/**
+	 * 保存全部会员中的缓存数据键，以后面加1 到20 表明是第几个，
+	 * SP_KEY_ALLMEMBER+i 才是真正的键
+	 */
+	public final static String SP_KEY_ALLMEMBER ="SP_KEY_ALLMEMBER";
+	/**
+	 * 我的好友
+	 */
+	public final static String SP_KEY_FRIEND_MEMBER ="SP_KEY_FRIEND_MEMBER";
+	
+	
     public final static String SP_Name_User = "User"; //SharedPreference's name
     public final static String SP_Key_User = "user";//key name in SharedPreference 
 	private Context context;

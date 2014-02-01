@@ -5,15 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.widget.OutoLinefeedLayout;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 查看别人的空间
+ * 查看别人的空间, 进入这个界面，必须intent.putExtra("user", User对象);
  * 
  * @author vector
  * 
@@ -22,18 +26,24 @@ public class SpaceOther extends BaseActivity {
 
 	private View btnAddfriend;
 
-	
+	private User user;
+
 	/**
 	 * header
 	 */
-	private View btnBack,btnMore;
+	private View btnBack, btnMore;
 	private TextView tvHeaderTitle;
 	
+	/**
+	 * top
+	 */
+	private ImageView ivBackground,ivPortrait;
+	private TextView tvTopName;
+	private TextView tvTopSummary;
 	/**
 	 * 个人资料
 	 */
 	private LinearLayout llPersonalData;
-	private View btnPersonalDataMore;
 
 	/**
 	 * keyword 布局：一个AutoLinefeedLayout .自动换行布局
@@ -71,28 +81,44 @@ public class SpaceOther extends BaseActivity {
 		initAlbum();
 		initPersonalData();
 		initNewDynamic();
+		initTop();
+	}
+
+	private void initTop() {
+		ivBackground = (ImageView) _getView(R.id.acty_space_other_top_iv_background);
+		ImageLoader.getInstance().displayImage(
+			    RestClient.BASE_URL + user.getCover(), ivBackground); 
+		ivPortrait = (ImageView) _getView(R.id.acty_space_other_top_iv_portrait);
+		ImageLoader.getInstance().displayImage(
+			    RestClient.BASE_URL + user.getAvatar(), ivPortrait); 
+		
+		tvTopName = (TextView) _getView(R.id.acty_space_other_top_tv_name);
+		tvTopName.setText(user.getProfile().getName());
+		
+		tvTopSummary = (TextView) _getView(R.id.acty_space_other_top_tv_leave2visitor);
+		tvTopSummary.setText(user.getProfile().getSummary());
 	}
 
 	@Override
 	protected void initData() {
-
+		user = (User) getIntent().getSerializableExtra("user");
 	}
 
 	@Override
 	protected void initLayout() {
-		
+
 		/**
 		 * header
 		 */
 		btnBack = _getView(R.id.acty_head_btn_back);
 		btnBack.setOnClickListener(this);
-		
+		tvHeaderTitle = (TextView) _getView(R.id.acty_head_tv_title);
+		tvHeaderTitle.setText(user.getProfile().getName());
+
 		/**
 		 * 个人资料
 		 */
 		llPersonalData = (LinearLayout) _getView(R.id.acty_space_other_personaldata_ll_content);
-		btnPersonalDataMore = _getView(R.id.acty_space_other_personaldata_btn_more);
-		btnPersonalDataMore.setOnClickListener(this);
 
 		/**
 		 * 关键字
@@ -161,9 +187,14 @@ public class SpaceOther extends BaseActivity {
 	 * 初始化个人资料
 	 */
 	private void initPersonalData() {
-		for (int i = 0; i < 5; i++) {
-			addPersonalData(i);
-		}
+
+		addPersonalData("昵称", user.getProfile().getNickname());
+		addPersonalData("用户名", user.getProfile().getName());
+		addPersonalData("性别", user.getProfile().getGender());
+		addPersonalData("年龄", user.getProfile().getAge() + "");
+		addPersonalData("大学", user.getProfile().getUniversity());
+		addPersonalData("毕业届数", user.getProfile().getGrade() + "");
+		addPersonalData("专业", user.getProfile().getMajor());
 	}
 
 	/**
@@ -186,7 +217,7 @@ public class SpaceOther extends BaseActivity {
 	/**
 	 * 增加, 参数使用来测试的，到时候填充数据的时候要改
 	 */
-	private void addPersonalData(int i) {
+	private void addPersonalData(String name, String value) {
 		/**
 		 */
 		LayoutInflater inflater = null;
@@ -195,9 +226,14 @@ public class SpaceOther extends BaseActivity {
 
 		convertView = inflater.inflate(
 				R.layout.itme_lv_space_other_personaldata, null);
+		TextView tvName = (TextView) convertView
+				.findViewById(R.id.item_lv_space_other_personaldata_name);
+		tvName.setText(name);
+		TextView tvValue = (TextView) convertView
+				.findViewById(R.id.item_lv_space_other_personaldata_value);
+		tvValue.setText(value);
 
 		/**
-		 * 加入新的关键字
 		 */
 		llPersonalData.addView(convertView);
 	}
@@ -278,11 +314,7 @@ public class SpaceOther extends BaseActivity {
 		int id = v.getId();
 		Intent intent = new Intent();
 		switch (id) {
-		case R.id.acty_space_other_personaldata_btn_more:
-			intent.setClass(SpaceOther.this, PersonalData.class);
-			startActivity(intent);
-			break;
-
+		
 		case R.id.acty_space_other_top_btn_add_friend:
 			intent.setClass(SpaceOther.this, AddFriend.class);
 			startActivity(intent);

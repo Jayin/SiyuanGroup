@@ -1,5 +1,6 @@
 package com.alumnigroup.app.acty;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,7 +34,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	private int width = 0, height = 0;;
 
 	private View btn_Message, btn_Setting, btn_OneSpace, btn_allMember,
-			btn_communication, btn_activities,btn_group,acty_business;
+			btn_communication, btn_activities,btn_group,acty_business,acty_allactivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,9 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		acty_business = _getView(R.id.frame_main_one_business);
 		acty_business.setOnClickListener(this);
+		
+		acty_allactivity = _getView(R.id.frame_main_one_allactivity);
+		acty_allactivity.setOnClickListener(this);
 
 		initWebView();
 	}
@@ -157,6 +161,15 @@ public class Main extends BaseActivity implements OnClickListener {
 			break;
 		case R.id.frame_main_one_business:
 			openActivity(Business.class);
+			break;
+			
+		case R.id.frame_main_one_allactivity:
+			/**
+			 * 如果改就全部改成这样的模式吧，还有APPstart 在直接进入这个acty 的时候要传一个User 对象，key == myself
+			 */
+			Intent intent = getIntent();
+			intent.setClass(Main.this, Alldynamic.class);
+			startActivity(intent);
 			break;
 		default:
 			break;

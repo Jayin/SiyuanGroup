@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.apache.http.Header;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
@@ -17,6 +20,7 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
@@ -25,17 +29,22 @@ import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
- * 全站会员
+ * 全站会员:<br>
+ * 第一次进来，自动刷新,如果没有数据提示：没有更多数据，保存20最多条记录<br>
+ * 第二次进来，拿缓存数据，需要主动刷新，刷新后更新缓存数据为最新，最新定义为列表顶部20条数据<br>
+ * 底部加载不更改缓存<br>
+ * 点击item 进入空间
  * 
  * @author create by vector<br>
  *         coded by Jayin Ton
  * 
  */
-public class Allmember extends BaseActivity {
+public class Allmember extends BaseActivity implements OnItemClickListener {
 	private TextView tv_title;
 	private View btn_back, btn_allmenmber, btn_myfriend, btn_pressed;
 	private PullAndLoadListView lv_allmember, lv_myfriend;
 	private List<User> data_allmember = null, data_myfriend = null;
+	private DataPool dp;
 	private ViewPager viewpager;
 	private UserAPI api;
 	private int page_allmember = 1, page_myfriend = 1;
@@ -83,6 +92,7 @@ public class Allmember extends BaseActivity {
 								page_allmember = 1;
 								data_allmember.clear();
 								data_allmember.addAll(newData_allmember);
+								saveAllMemberData2SP(newData_allmember);
 								adapter_allmember.notifyDataSetChanged();
 							}
 						} else {
@@ -148,11 +158,48 @@ public class Allmember extends BaseActivity {
 			}
 		});
 
+		lv_allmember.setOnItemClickListener(this);
+
 		lv_myfriend.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
+				api.getMyFriend(1, new AsyncHttpResponseHandler() {
 
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							byte[] data, Throwable err) {
+						toast("网络异常 错误码:" + statusCode);
+						if (data != null)
+							L.i(new String(data));
+						if (err != null)
+							L.i(err.toString());
+						lv_myfriend.onRefreshComplete();
+					}
+
+					// page=1?
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						// 还要判断是否有error_code
+						String json = new String(data);// jsonarray
+						if (JsonUtils.isOK(json)) {
+							List<User> newData_myfriend = User
+									.create_by_jsonarray(json);
+							if (newData_myfriend != null) {
+								page_myfriend = 1;
+								data_myfriend.clear();
+								data_myfriend.addAll(newData_myfriend);
+								saveMyFriendData2SP(newData_myfriend);
+								adapter_myfriend.notifyDataSetChanged();
+							}
+						} else {
+							toast("Error:" + JsonUtils.getErrorString(json));
+						}
+						lv_myfriend.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
+						lv_myfriend.onRefreshComplete();
+					}
+				});
 			}
 		});
 
@@ -160,16 +207,65 @@ public class Allmember extends BaseActivity {
 
 			@Override
 			public void onLoadMore() {
+				api.getMyFriend(page_myfriend + 1,
+						new AsyncHttpResponseHandler() {
 
+							@Override
+							public void onFailure(int statusCode,
+									Header[] headers, byte[] data, Throwable err) {
+								toast("网络异常 错误码:" + statusCode);
+								if (data != null)
+									L.i(new String(data));
+								if (err != null)
+									L.i(err.toString());
+								lv_myfriend.onLoadMoreComplete();
+							}
+
+							@Override
+							public void onSuccess(int statusCode,
+									Header[] headers, byte[] data) {
+
+								// L.i(new String(data));
+								String json = new String(data);// json array
+								if (JsonUtils.isOK(json)) {
+									List<User> newData_myFriend = User
+											.create_by_jsonarray(json);
+									if (newData_myFriend != null
+											&& newData_myFriend.size() > 0) {
+										page_myfriend++;
+										data_myfriend.addAll(newData_myFriend);
+										adapter_myfriend.notifyDataSetChanged();
+									} else {
+										if (newData_myFriend == null) {
+											toast("网络异常,解析错误");
+										} else if (newData_myFriend.size() == 0) {
+											toast("没有更多了!");
+											lv_myfriend.setCanLoadMore(false);
+										}
+									}
+								} else {
+									toast("Error:"
+											+ JsonUtils.getErrorString(json));
+								}
+								lv_myfriend.onLoadMoreComplete();
+
+							}
+						});
 			}
 		});
+		
+		lv_myfriend.setOnItemClickListener(this);
 	}
 
 	@Override
 	protected void initData() {
+		dp = new DataPool(this);
+
 		api = new UserAPI();
 		data_allmember = new ArrayList<User>();
+		loadAllMemberData(data_allmember);
 		data_myfriend = new ArrayList<User>();
+		loadMyFriendData(data_myfriend);
 	}
 
 	@Override
@@ -186,8 +282,8 @@ public class Allmember extends BaseActivity {
 		btn_allmenmber.setOnClickListener(this);
 		btn_myfriend.setOnClickListener(this);
 
-		adapter_allmember = new MemberAdapter(data_allmember,getContext());
-		adapter_myfriend = new MemberAdapter(data_myfriend,getContext());
+		adapter_allmember = new MemberAdapter(data_allmember, getContext());
+		adapter_myfriend = new MemberAdapter(data_myfriend, getContext());
 
 		lv_allmember.setAdapter(adapter_allmember);
 		lv_myfriend.setAdapter(adapter_myfriend);
@@ -235,6 +331,64 @@ public class Allmember extends BaseActivity {
 		}
 	}
 
+	/**
+	 * 保存缓存数据进sharepreferenses 中,最多保存20 条记录
+	 */
+	private void saveAllMemberData2SP(List<User> users) {
+		if (users == null || users.size() == 0) {
+			return;
+		}
+		for (int i = 1; i <= 20 && users.size() >= i
+				&& users.get(i - 1) != null; i++) {
+			dp.remove(DataPool.SP_KEY_ALLMEMBER + i);
+			dp.put(DataPool.SP_KEY_ALLMEMBER + i, users.get(i - 1));
+		}
+	}
+
+	/**
+	 * 加载缓存数据进users 中,最多20 条记录
+	 */
+	private void loadAllMemberData(List<User> users) {
+		if (users == null) {
+			return;
+		}
+		for (int i = 1; i <= 20; i++) {
+			User user = (User) dp.get(DataPool.SP_KEY_ALLMEMBER + i);
+			if (user != null) {
+				users.add(user);
+			}
+		}
+	}
+
+	/**
+	 * 保存缓存数据进sharepreferenses 中,最多保存20 条记录
+	 */
+	private void saveMyFriendData2SP(List<User> users) {
+		if (users == null || users.size() == 0) {
+			return;
+		}
+		for (int i = 1; i <= 20 && users.size() >= i
+				&& users.get(i - 1) != null; i++) {
+			dp.remove(DataPool.SP_KEY_FRIEND_MEMBER + i);
+			dp.put(DataPool.SP_KEY_FRIEND_MEMBER + i, users.get(i - 1));
+		}
+	}
+
+	/**
+	 * 加载缓存数据进users 中,最多20 条记录
+	 */
+	private void loadMyFriendData(List<User> users) {
+		if (users == null) {
+			return;
+		}
+		for (int i = 1; i <= 20; i++) {
+			User user = (User) dp.get(DataPool.SP_KEY_FRIEND_MEMBER + i);
+			if (user != null) {
+				users.add(user);
+			}
+		}
+	}
+
 	class MyOnPageChangeListener implements OnPageChangeListener {
 
 		@Override
@@ -262,5 +416,32 @@ public class Allmember extends BaseActivity {
 			}
 
 		}
+	}
+
+	/**
+	 * 单击每一个item 进入空间，传入一个user 对象，代表要进入谁的空间
+	 */
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		int vId = parent.getId();
+		Intent intent = getIntent();
+		intent.setClass(Allmember.this,SpaceOther.class);
+		switch (vId) {
+		case R.id.acty_allmember_lv_allmember:
+			intent.putExtra("user", data_allmember.get(position-1));
+			break;
+			
+		case R.id.acty_allmember_lv_myfriend:
+			intent.putExtra("user", data_myfriend.get(position-1));
+			break;
+
+		default:
+			break;
+		}
+		
+		startActivity(intent);
+		
+		
 	}
 }
