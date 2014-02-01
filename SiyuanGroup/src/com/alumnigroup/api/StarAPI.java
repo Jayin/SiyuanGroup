@@ -8,7 +8,7 @@ import com.loopj.android.http.RequestParams;
  * 
  * @author Jayin Ton
  * 
- */
+ */   
 public class StarAPI {
 	 /** 收藏类别：用户*/
 	public static final int Item_type_user = 1;

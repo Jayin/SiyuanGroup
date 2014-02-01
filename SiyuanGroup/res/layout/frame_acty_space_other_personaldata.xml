@@ -22,25 +22,6 @@
             android:textColor="#0a6ca2"
             android:textSize="18dp" />
 
-        <LinearLayout
-            android:id="@+id/acty_space_other_personaldata_btn_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/acty_space_other_personaldata_tv_label"
-            android:layout_marginRight="15dp"
-            android:background="@drawable/btn_simple_selected"
-            android:clickable="true"
-            android:gravity="center"
-            android:orientation="horizontal" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="更多···"
-                android:textColor="@color/black"
-                android:textSize="14sp" />
-        </LinearLayout>
     </RelativeLayout>
 
     <TextView

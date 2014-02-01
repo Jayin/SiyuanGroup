@@ -169,4 +169,19 @@ public class UserAPI {
 		find(new RequestParams("page", page + ""), responseHandler);
 	}
 
+	/**
+	 * 获取我的好友信息<br>
+	 * 根据给的你给的页数 page<br>
+	 * 
+	 * @param page
+	 * @param responseHandler
+	 *            处理器
+	 */
+	public void getMyFriend(int page,
+			AsyncHttpResponseHandler responseHandler) {
+		if (page <= 0)
+			page = 1;
+		find(new RequestParams("page", page + ""), responseHandler);
+	}
+
 }

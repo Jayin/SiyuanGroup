@@ -5,7 +5,7 @@
     android:background="@color/grey" >
 
     <ImageView
-        android:id="@+id/acty_space_other_top_iv_modify"
+        android:id="@+id/acty_space_other_top_iv_background"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
@@ -28,7 +28,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_alignLeft="@+id/acty_space_other_top_tv_leave2visitor"
-        android:layout_below="@+id/acty_space_other_top_iv_modify"
+        android:layout_below="@+id/acty_space_other_top_iv_background"
         android:layout_marginTop="-40dp"
         android:scaleType="centerCrop"
         android:src="@drawable/aa_po" />
@@ -37,7 +37,7 @@
         android:id="@+id/acty_space_other_top_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/acty_space_other_top_iv_modify"
+        android:layout_alignBottom="@+id/acty_space_other_top_iv_background"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/acty_space_other_top_iv_portrait"
@@ -47,29 +47,21 @@
 
     <LinearLayout
         android:id="@+id/acty_space_other_top_btn_add_friend"
-        android:clickable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/acty_space_other_top_tv_leave2visitor"
         android:layout_below="@+id/acty_space_other_top_iv_portrait"
         android:background="@drawable/btn_simple_selected"
-        android:orientation="horizontal"
-        >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_add_friend" />
+        android:clickable="true"
+        android:orientation="horizontal" >
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
             android:layout_gravity="center_vertical"
-            android:textSize="16dp"
-            
-            android:text="加为好友" />
-
+            android:text="关 注"
+            android:textColor="@color/black"
+            android:textSize="16dp" />
     </LinearLayout>
 
 </RelativeLayout>
