@@ -9,13 +9,14 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:orientation="horizontal"
-        android:padding="4dp" >
+         >
 
         <ImageView
             android:id="@+id/item_lv_acty_activities_iv_avater"
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_gravity="center"
+            android:layout_marginTop="4dp"      android:layout_marginLeft="4dp"
             android:background="@drawable/ic_image_load_loading" />
 
         <LinearLayout

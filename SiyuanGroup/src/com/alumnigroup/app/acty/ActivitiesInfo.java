@@ -161,7 +161,7 @@ public class ActivitiesInfo extends BaseActivity {
 				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
-		ImageLoader.getInstance().displayImage(RestClient.BASE_URL, iv_avatar);
+		ImageLoader.getInstance().displayImage(RestClient.BASE_URL +acty.getAvatar(), iv_avatar);
 
 		tv_starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
 				CalendarUtils.TYPE_TWO));
