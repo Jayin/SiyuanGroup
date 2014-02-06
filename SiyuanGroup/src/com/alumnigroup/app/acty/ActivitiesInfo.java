@@ -89,7 +89,8 @@ public class ActivitiesInfo extends BaseActivity {
 		lv_member.setOnRefreshListener(new OnRefreshListener() {
 			@Override
 			public void onRefresh() {
-				api.getUserList(acty.getId(), new JsonResponseHandler() {
+				//一次性加载全部用户
+				api.getUserListAll(acty.getNumUsership(),acty.getId(), new JsonResponseHandler() {
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
 						List<Userships> us = Userships.create_by_jsonarray(obj
@@ -223,6 +224,9 @@ public class ActivitiesInfo extends BaseActivity {
 			toast("manage");
 			mPopupWindow.dismiss();
 		   //to manage..
+			Intent intent = new Intent(getContext(), ActivitiesManage.class);
+			intent.putExtra("activity", acty);
+			openActivity(intent);
 			break;
 		case R.id.join:
 			mPopupWindow.dismiss();

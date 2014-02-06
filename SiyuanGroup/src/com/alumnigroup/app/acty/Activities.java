@@ -337,7 +337,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			h.status.setImageResource(acty.getStatus().getId() == 0 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
-			debug("avater-->" + acty.getAvatar());
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + acty.getAvatar(), h.avater);
 			return convertView;

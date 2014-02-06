@@ -1,5 +1,7 @@
 package com.alumnigroup.app.acty;
 
+import java.util.ArrayList;
+
 import org.apache.http.Header;
 import org.json.JSONObject;
 
@@ -12,15 +14,19 @@ import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.Userships;
 import com.alumnigroup.imple.JsonResponseHandler;
+
 /**
  * 活动管理页面
+ * 
  * @author Jayin Ton
- *
+ * 
  */
 public class ActivitiesManage extends BaseActivity {
+	private int RequestCode_Manage_Userships = 1;
 	private int RequestCode_Pick_image = 2;
-	private View btn_back, btn_edit, btn_updateAvatar, btn_end,btn_manage;
+	private View btn_back, btn_edit, btn_updateAvatar, btn_end, btn_manage;
 	private MActivity acty;
 	private ActivityAPI api;
 
@@ -67,39 +73,46 @@ public class ActivitiesManage extends BaseActivity {
 			editActivity();
 			break;
 		case R.id.btn_updateAvatar:
-           updateAvater();
+			updateAvater();
 			break;
 		case R.id.btn_end:
 			endActivity();
 			break;
 		case R.id.btn_manage:
-			toast("btn_manage");
+			Intent intent = new Intent(this, ActivitiesUserShip.class);
+			intent.putExtra("activities", acty);
+			startActivityForResult(intent, RequestCode_Manage_Userships);
 			break;
 		default:
 			break;
 		}
 	}
-	
+
 	private void updateAvater() {
 		Intent intent = new Intent(Intent.ACTION_PICK);
 		intent.setType("image/*");// 相片类型
 		startActivityForResult(intent, RequestCode_Pick_image);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if(requestCode==RequestCode_Pick_image && resultCode==RESULT_OK){
+		if (requestCode == RequestCode_Pick_image && resultCode == RESULT_OK) {
 			Uri uri = data.getData();
-		//	api.updateAvatar(params, responseHandler)
+			// api.updateAvatar(params, responseHandler)
+		} else if (requestCode == RequestCode_Manage_Userships
+				&& resultCode == RESULT_OK) {
+			ArrayList<Userships> result = (ArrayList<Userships>)data.getSerializableExtra("result");
+			toast("you select:" + result.size());
 		}
 	}
-	
+
 	private void editActivity() {
 		Intent intent = new Intent(this, ActivitiesPublish.class);
 		intent.putExtra("activity", acty);
 		openActivity(intent);
 	}
-	
+
 	private void endActivity() {
 		api.endActivity(acty.getId(), new JsonResponseHandler() {
 

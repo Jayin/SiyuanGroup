@@ -169,6 +169,10 @@
             android:name=".acty.ActivitiesManage"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.ActivitiesUserShip"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
