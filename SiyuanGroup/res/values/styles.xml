@@ -127,14 +127,13 @@
         <item name="android:windowAnimationStyle">@style/Animations.dialog</item>
     </style>
 
-    <style name="ListView"></style>
-
-    <style name="ListView.PullAndLoadListView">
+    <style name="ListView">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@color/white</item>
+    </style>
+
+    <style name="ListView.PullAndLoadListView" parent="ListView">
         <item name="android:divider">@null</item>
-        <item name="android:fadingEdge">none</item>
         <item name="android:cacheColorHint">#00000000</item>
     </style>
 
