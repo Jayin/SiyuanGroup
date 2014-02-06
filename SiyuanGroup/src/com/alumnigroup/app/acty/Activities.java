@@ -48,7 +48,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
 	private ActivityAPI api;
 	private User mUser;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -96,7 +96,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				debug("page_all-->"+page_all);
+				debug("page_all-->" + page_all);
 				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
@@ -164,7 +164,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				// nothing to do?
 			}
 		});
-		
+
 		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -189,11 +189,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, getContext());
 		mUser = (User) dp.get(DataPool.SP_Key_User);
 		api = new ActivityAPI();
-		if(mUser==null){
+		if (mUser == null) {
 			L.i("muser is null");
 			toast("lol");
 		}
-		
+
 		data_all = new ArrayList<MActivity>();
 		data_myjoin = new ArrayList<MActivity>();
 		data_favourite = new ArrayList<MActivity>();
@@ -232,7 +232,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initLayout() {
-		
+
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_all = _getView(R.id.acty_activities_footer_all);
 		btn_myjoin = _getView(R.id.acty_activities_footer_myjoin);
@@ -242,7 +242,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		btns.add(btn_myjoin);
 		btns.add(btn_favourite);
 
-	
 		btn_back.setOnClickListener(this);
 		btn_all.setOnClickListener(this);
 		btn_myjoin.setOnClickListener(this);
@@ -266,9 +265,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_activities_footer_favourite:
 			viewpager.setCurrentItem(2, true);
 			break;
-		
-			
-			 
+
 		default:
 			break;
 		}
@@ -322,14 +319,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				h = (ViewHolder) convertView.getTag();
 			}
 			MActivity acty = data.get(position);
-			if(acty==null){
+			if (acty == null) {
 				debug("acty is null");
 			}
-			if(h.actyName==null){
+			if (h.actyName == null) {
 				debug("h.actyName is null");
 			}
 			debug(data.toString());
-			
+
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
 			h.starttime.setText("时间:"
@@ -340,8 +337,9 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			h.status.setImageResource(acty.getStatus().getId() == 0 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
+			debug("avater-->" + acty.getAvatar());
 			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + acty.getAvater(), h.avater);
+					RestClient.BASE_URL + acty.getAvatar(), h.avater);
 			return convertView;
 		}
 
