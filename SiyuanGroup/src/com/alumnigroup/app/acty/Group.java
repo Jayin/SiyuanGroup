@@ -27,7 +27,6 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;

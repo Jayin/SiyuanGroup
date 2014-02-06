@@ -20,7 +20,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
  */
 public class ActivitiesManage extends BaseActivity {
 	private int RequestCode_Pick_image = 2;
-	private View btn_back, btn_edit, btn_updateAvatar, btn_end;
+	private View btn_back, btn_edit, btn_updateAvatar, btn_end,btn_manage;
 	private MActivity acty;
 	private ActivityAPI api;
 
@@ -47,12 +47,14 @@ public class ActivitiesManage extends BaseActivity {
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_end = _getView(R.id.btn_end);
 		btn_edit = _getView(R.id.btn_edit);
-		btn_updateAvatar = _getView(R.id.btn_updateAvater);
+		btn_updateAvatar = _getView(R.id.btn_updateAvatar);
+		btn_manage = _getView(R.id.btn_manage);
 
 		btn_end.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
 		btn_updateAvatar.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
+		btn_manage.setOnClickListener(this);
 	}
 
 	@Override
@@ -64,11 +66,14 @@ public class ActivitiesManage extends BaseActivity {
 		case R.id.btn_edit:
 			editActivity();
 			break;
-		case R.id.btn_updateAvater:
+		case R.id.btn_updateAvatar:
            updateAvater();
 			break;
 		case R.id.btn_end:
 			endActivity();
+			break;
+		case R.id.btn_manage:
+			toast("btn_manage");
 			break;
 		default:
 			break;

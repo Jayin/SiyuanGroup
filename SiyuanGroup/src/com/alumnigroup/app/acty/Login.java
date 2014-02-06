@@ -16,7 +16,7 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
-import com.alumnigroup.imple.ResponseHandler;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
@@ -204,13 +204,11 @@ public class Login extends BaseActivity {
 		int userid = JsonUtils.getInt(json, "id");
 		// 正确解析
 		if (userid > 0) {
-			api.find(new RequestParams("id", userid), new ResponseHandler() {
-
+			api.find(new RequestParams("id", userid), new JsonResponseHandler() {
+				
 				@Override
-				public void onSuccess(int statusCode, Header[] headers,
-						byte[] data) {
-					List<User> userList = User.create_by_jsonarray(new String(
-							data));
+				public void onOK(Header[] headers, JSONObject obj) {
+					List<User> userList = User.create_by_jsonarray(obj.toString());
 					if (userList == null || userList.size() == 0) {
 						toast("登录失败 没有改用户信息");
 					} else {
@@ -221,12 +219,12 @@ public class Login extends BaseActivity {
 							closeActivity();
 						}
 					}
+					
 				}
-
+				
 				@Override
-				public void onFailure(int statusCode, Header[] header,
-						byte[] data, Throwable err) {
-					toast("网络异常 错误码:"+statusCode);
+				public void onFaild(int errorType, int errorCode) {
+					toast("网络异常 错误码:"+errorCode);
 				}
 			});
 		}

@@ -27,7 +27,6 @@ import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MGroup.Memberships;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
@@ -271,22 +270,16 @@ public class GroupInfo extends BaseActivity {
 	}
 
 	private void joinActivity() {
-		api.join(group.getId(), new ResponseHandler() {
-
+		api.join(group.getId(), new JsonResponseHandler() {
+			
 			@Override
-			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-				String json = new String(data);
-				if (JsonUtils.isOK(json)) {
-					toast("加入成功");
-				} else {
-					toast("Error:" + JsonUtils.getErrorString(json));
-				}
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("加入成功");
 			}
-
+			
 			@Override
-			public void onFailure(int statusCode, Header[] header, byte[] data,
-					Throwable err) {
-				toast("网络异常 错误代码:" + statusCode);
+			public void onFaild(int errorType, int errorCode) {
+				toast("网络异常 错误代码:" + errorCode);
 			}
 		});
 	}
