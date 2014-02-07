@@ -177,6 +177,12 @@
             android:name=".acty.ActivitiesUserShip"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.AppUpdate"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AcivityTheme_dialog" >
+        </activity>
     </application>
 
 </manifest>
