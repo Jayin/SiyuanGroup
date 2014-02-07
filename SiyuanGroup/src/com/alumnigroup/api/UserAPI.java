@@ -17,6 +17,7 @@ public class UserAPI {
 	/**
 	 * 注册<br>
 	 * use:{@link#regist()}
+	 * 
 	 * @param username
 	 *            用户名
 	 * @param password
@@ -27,14 +28,15 @@ public class UserAPI {
 	 *            电子邮件
 	 * @param responseHandler
 	 *            响应处理器
+	 * @deprecated
 	 */
 	public void regist(String username, String password, String name,
 			String email, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("username", username);
 		params.add("password", password);
-		params.add("profile[name]", name);
-		params.add("profile[email]", email);
+		params.add("name", name);
+		params.add("email", email);
 		RestClient.post("/api/users/register", params, responseHandler);
 	}
 
@@ -71,21 +73,21 @@ public class UserAPI {
 		params.add("username", username);
 		params.add("password", password);
 		if (name != null)
-			params.add("profile[name]", name);
+			params.add("name", name);
 		if (email != null)
-			params.add("profile[email]", email);
+			params.add("email", email);
 		if (gender != null)
-			params.add("profile[gender]", gender);
+			params.add("gender", gender);
 		if (age > 0)
-			params.add("profile[age]", age + "");
+			params.add("age", age + "");
 		if (grade > 0)
-			params.add("profile[grade]", grade + "");
+			params.add("grade", grade + "");
 		if (university != null)
-			params.add("profile[university]", university);
+			params.add("university", university);
 		if (major != null)
-			params.add("profile[major]", major);
+			params.add("major", major);
 		if (summary != null)
-			params.add("profile[summary]", summary);
+			params.add("summary", summary);
 		RestClient.post("/api/users/register", params, responseHandler);
 	}
 
@@ -177,8 +179,7 @@ public class UserAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void getMyFriend(int page,
-			AsyncHttpResponseHandler responseHandler) {
+	public void getMyFriend(int page, AsyncHttpResponseHandler responseHandler) {
 		if (page <= 0)
 			page = 1;
 		find(new RequestParams("page", page + ""), responseHandler);
