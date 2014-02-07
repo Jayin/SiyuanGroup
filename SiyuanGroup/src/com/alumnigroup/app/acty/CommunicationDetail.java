@@ -110,6 +110,7 @@ public class CommunicationDetail extends BaseActivity {
 
 			@Override
 			public void onSuccess(int statusCode, Header[] header, byte[] data) {
+				tv_notify.setVisibility(View.GONE);
 				boolean canRefresh = true;
 				String json = new String(data);
 				if (JsonUtils.isOK(json)) {
