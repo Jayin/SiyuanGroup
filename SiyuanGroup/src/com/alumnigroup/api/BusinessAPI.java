@@ -110,7 +110,7 @@ public class BusinessAPI {
 	 * @param company
 	 *            公司或组织
 	 * @param regdeadline
-	 *           合作截止时间
+	 *            合作截止时间
 	 * @param statusid
 	 *            1发布 2结束
 	 * @param isprivate
@@ -125,7 +125,8 @@ public class BusinessAPI {
 		params.add("name", name);
 		params.add("description", description);
 		params.add("company", company);
-		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
+		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
+				CalendarUtils.TYPE_THIRD));
 		params.add("statusid", statusid + "");
 		params.add("isprivate", isprivate + "");
 		RestClient.post("/api/cooperations/create", params, responseHandler);
@@ -133,8 +134,9 @@ public class BusinessAPI {
 
 	/**
 	 * 发起者更新合作资料
-	 * @param id 
-	 *       合作id
+	 * 
+	 * @param id
+	 *            合作id
 	 * @param name
 	 *            合作名称
 	 * @param description
@@ -142,7 +144,7 @@ public class BusinessAPI {
 	 * @param company
 	 *            公司或组织
 	 * @param regdeadline
-	 *           截止日期
+	 *            截止日期
 	 * @param statusid
 	 *            1发布 2结束
 	 * @param isprivate
@@ -154,11 +156,12 @@ public class BusinessAPI {
 			long regdeadline, int statusid, int isprivate,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", id+"");
+		params.add("id", id + "");
 		params.add("name", name);
 		params.add("description", description);
 		params.add("company", company);
-		params.add("regdeadline",  CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
+		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
+				CalendarUtils.TYPE_THIRD));
 		params.add("statusid", statusid + "");
 		params.add("isprivate", isprivate + "");
 		RestClient.post("/api/cooperations/update", params, responseHandler);
@@ -189,6 +192,7 @@ public class BusinessAPI {
 	 *            合作名称
 	 * @param responseHandler
 	 *            处理器
+	 * 
 	 */
 	public void find(int page, int id, String name,
 			AsyncHttpResponseHandler responseHandler) {
@@ -213,6 +217,27 @@ public class BusinessAPI {
 	public void getCooperationList(int page,
 			AsyncHttpResponseHandler responseHandler) {
 		find(page, 0, null, responseHandler);
+	}
+    /**
+     * 合作搜索
+     * @param page 页码
+     * @param id  作者ID optional
+     * @param name 标题关键字 optional
+     * @param description  内容关键字 optional
+     * @param responseHandler
+     */
+	public void search(int page, int userid, String name, String description,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		if (page > 0)
+			params.add("page", page + "");
+		if (userid > 0)
+			params.add("userid", userid + "");
+		if (name != null)
+			params.add("name", name);
+		if (description != null)
+			params.add("description", description);
+		RestClient.get("/api/cooperations/search", params, responseHandler);
 	}
 
 	/**
@@ -285,15 +310,17 @@ public class BusinessAPI {
 		RestClient.post("/api/cooperations/comments/post", params,
 				responseHandler);
 	}
+
 	/**
 	 * 获取合作详情
-	 * @param id 合作ID
+	 * 
+	 * @param id
+	 *            合作ID
 	 * @param responseHandler
 	 */
-	public void view(int id,AsyncHttpResponseHandler responseHandler){
+	public void view(int id, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", id+"");
-		RestClient.get("/api/cooperations/view", params,
-				responseHandler);
+		params.add("id", id + "");
+		RestClient.get("/api/cooperations/view", params, responseHandler);
 	}
 }

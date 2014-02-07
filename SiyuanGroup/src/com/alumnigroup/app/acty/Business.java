@@ -21,9 +21,11 @@ import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
@@ -46,6 +48,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
 	private BusinessAPI api;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -124,19 +127,76 @@ public class Business extends BaseActivity implements OnItemClickListener {
 				});
 			}
 		});
-
+		// 搜索我发布的
 		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
 
+				api.search(1, user.getId(), null, null,
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Cooperation> newData_myjoin = Cooperation
+										.create_by_jsonarray(obj.toString());
+								if (newData_myjoin == null) {
+									toast("网络异常，解析错误");
+								} else if (newData_myjoin.size() == 0) {
+									toast("没有更多");
+									page_myjoin = 1;
+								} else {
+									page_myjoin = 1;
+									data_myjoin.clear();
+									data_myjoin.addAll(newData_myjoin);
+									adapter_myjoin.notifyDataSetChanged();
+								}
+								lv_myjoin.onRefreshComplete();
+								lv_myjoin.setCanLoadMore(true);
+
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常  错误码:" + errorCode);
+								lv_myjoin.onRefreshComplete();
+							}
+						});
 			}
 		});
 		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.search(page_myjoin + 1, user.getId(), null, null,
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								boolean canLoadMore = true;
+								List<Cooperation> newData_myjoin = Cooperation
+										.create_by_jsonarray(obj.toString());
+								if (newData_myjoin == null) {
+									toast("网络异常，解析错误");
+								} else if (newData_myjoin.size() == 0) {
+									toast("没有更多了");
+									canLoadMore = false;
+								} else {
+									page_myjoin++;
+									data_myjoin.addAll(newData_myjoin);
+									adapter_myjoin.notifyDataSetChanged();
+								}
+								lv_myjoin.onLoadMoreComplete();
+								if (!canLoadMore)
+									lv_myjoin.setCanLoadMore(false);
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常  错误码:" + errorCode);
+								lv_myjoin.onLoadMoreComplete();
+							}
+						});
 			}
 		});
 		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
@@ -157,10 +217,15 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
+		user = AppInfo.getUser(getContext());
+		if (user == null) {
+			toast("无用户信息，请登录");
+		}
 		api = new BusinessAPI();
 		data_all = new ArrayList<Cooperation>();
 		data_myjoin = new ArrayList<Cooperation>();
 		data_favourite = new ArrayList<Cooperation>();
+
 	}
 
 	private void initViewPager() {
@@ -245,14 +310,15 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		int real_position = position - 1;
-		toast(""+real_position);
 		if (parent == lv_all) {
 			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_all.get(real_position));
 			openActivity(intent);
 		}
 		if (parent == lv_favourit) {
-
+			Intent intent = new Intent(this, BusinessDetail.class);
+			intent.putExtra("cooperation", data_myjoin.get(real_position));
+			openActivity(intent);
 		}
 		if (parent == lv_myjoin) {
 
@@ -315,10 +381,15 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			h.name_user.setText(c.getUser().getProfile().getName());
 			h.description.setText(c.getDescription());
 			h.numFavour.setText(14 + ""); // should change
-			h.commentNum.setText(c.getNumComments()+""); 
-
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + c.getUser().getAvatar(), h.avatar);
+			h.commentNum.setText(c.getNumComments() + "");
+            if(c.getUser().getAvatar()!=null){
+            	ImageLoader.getInstance().displayImage(
+    					RestClient.BASE_URL + c.getUser().getAvatar(), h.avatar);
+            }else{
+            	ImageLoader.getInstance().displayImage(
+    					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
+            }
+			
 			if (c.getStatusid() != 2) {
 				ImageLoader.getInstance()
 						.displayImage(

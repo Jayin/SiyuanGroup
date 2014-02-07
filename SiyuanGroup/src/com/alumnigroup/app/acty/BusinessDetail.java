@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cocomment;
@@ -54,16 +55,17 @@ public class BusinessDetail extends BaseActivity {
 	@Override
 	protected void initData() {
 		c = (Cooperation) getSerializableExtra("cooperation");
-		user = (User) new DataPool(DataPool.SP_Name_User, this)
-				.get(DataPool.SP_Key_User);
+		user = AppInfo.getUser(getContext());
 		api = new BusinessAPI();
-
 		data = new ArrayList<Cocomment>();
 		adatper = new CocommentAdapter(data);
 	}
 
 	@Override
 	protected void initLayout() {
+		owner = _getView(R.id.linly_owner);
+		common = _getView(R.id.linly_common);
+		
 		tv_username = (TextView) _getView(R.id.tv_username);
 		tv_projectname = (TextView) _getView(R.id.tv_projectname);
 		tv_deadline = (TextView) _getView(R.id.tv_deadline);
@@ -91,13 +93,23 @@ public class BusinessDetail extends BaseActivity {
 		btn_favourite.setOnClickListener(this);
 
 		iv_avatar = (ImageView) _getView(R.id.iv_avatar);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + c.getUser().getAvatar(), iv_avatar);
+		if (c.getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + c.getUser().getAvatar(), iv_avatar);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+		}
 		commentView = (CommentView) _getView(R.id.commentlist);
 
 		// api get comment list
 		api.view(c.getId(), new JsonResponseHandler() {
 
+			@Override
+			public void onStart() {
+				tv_notify.setVisibility(View.VISIBLE);
+				tv_notify.setText("加载中...");
+			}
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				List<Cocomment> newData = null;
@@ -109,12 +121,15 @@ public class BusinessDetail extends BaseActivity {
 				}
 				if (newData == null) {
 					toast("网络异常 解析错误");
+					tv_notify.setVisibility(View.VISIBLE);
+					tv_notify.setText("加载失败");
 				} else if (newData.size() == 0) {
 					tv_notify.setVisibility(View.VISIBLE);
 					tv_notify.setText("还没有人询问");
 				} else {
 					data.addAll(newData);
 					commentView.setAdapter(new CocommentAdapter(data));
+					tv_notify.setVisibility(View.GONE);
 				}
 			}
 
@@ -123,6 +138,14 @@ public class BusinessDetail extends BaseActivity {
 				toast("网络异常 错误码:" + errorCode);
 			}
 		});
+        //用户和发布者有不同的显示
+		if (c.getOwnerid() !=  user.getId()) {
+			common.setVisibility(View.VISIBLE);
+			owner.setVisibility(View.GONE);
+		} else {
+			owner.setVisibility(View.VISIBLE);
+			common.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -152,13 +175,13 @@ public class BusinessDetail extends BaseActivity {
 	}
 
 	private void edit() {
-		Intent intent = new Intent(this,BusinessPublish.class);
+		Intent intent = new Intent(this, BusinessPublish.class);
 		intent.putExtra("cooperation", c);
 		openActivity(intent);
 	}
 
 	private void comment() {
-		Intent intent = new Intent(this,BusinessComment.class);
+		Intent intent = new Intent(this, BusinessComment.class);
 		intent.putExtra("cooperation", c);
 		openActivity(intent);
 	}
