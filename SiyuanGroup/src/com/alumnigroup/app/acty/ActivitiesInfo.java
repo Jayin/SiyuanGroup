@@ -21,6 +21,7 @@ import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MActivity;
@@ -54,6 +55,7 @@ public class ActivitiesInfo extends BaseActivity {
 	private MemberAdapter adapter_member, adapter_share;
 	private ViewPager viewpager;
 	private PopupWindow mPopupWindow;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +134,11 @@ public class ActivitiesInfo extends BaseActivity {
 	@Override
 	protected void initData() {
 		acty = (MActivity) getSerializableExtra("activity");
+		user = AppInfo.getUser(getContext());
+		if(user==null){
+			toast("无用户信息，请重新登录");
+			closeActivity();
+		}
 		api = new ActivityAPI();
 		data_member = new ArrayList<User>();
 		adapter_member = new MemberAdapter(data_member, getContext());
@@ -221,12 +228,14 @@ public class ActivitiesInfo extends BaseActivity {
 				mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.manage:
-			toast("manage");
 			mPopupWindow.dismiss();
-		   //to manage..
-			Intent intent = new Intent(getContext(), ActivitiesManage.class);
-			intent.putExtra("activity", acty);
-			openActivity(intent);
+			if(acty.getOwnerid()==user.getId()){
+				Intent intent = new Intent(getContext(), ActivitiesManage.class);
+				intent.putExtra("activity", acty);
+				openActivity(intent);
+			}else{
+				toast("无权管理该活动");
+			}
 			break;
 		case R.id.join:
 			mPopupWindow.dismiss();

@@ -319,14 +319,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				h = (ViewHolder) convertView.getTag();
 			}
 			MActivity acty = data.get(position);
-			if (acty == null) {
-				debug("acty is null");
-			}
-			if (h.actyName == null) {
-				debug("h.actyName is null");
-			}
-			debug(data.toString());
-
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
 			h.starttime.setText("时间:"
@@ -337,8 +329,13 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			h.status.setImageResource(acty.getStatus().getId() == 0 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + acty.getAvatar(), h.avater);
+			if(acty.getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + acty.getAvatar(), h.avater);
+			}else{
+				ImageLoader.getInstance().displayImage(
+						"drawable://"+R.drawable.ic_image_load_normal, h.avater);
+			}
 			return convertView;
 		}
 
