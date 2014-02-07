@@ -338,8 +338,13 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			h.username.setText("ownid" + group.getOwnerid());
 			h.memberCount.setText(group.getNumMembers() + "名会员");
 			h.description.setText(group.getDescription());
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + group.getAvatar(), h.avater);
+			if(group.getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + group.getAvatar(), h.avater);
+			}else{
+				ImageLoader.getInstance().displayImage("drawable://"+R.drawable.ic_image_load_normal,  h.avater);
+			}
+			
 			return convertView;
 		}
 

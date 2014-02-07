@@ -135,7 +135,7 @@ public class GroupManage extends BaseActivity {
 
 	private void invite() {
 		Intent intent = new Intent(this, FollowingList.class);
-		User u = new AppInfo(getContext()).getUser();
+		User u = AppInfo.getUser(getContext());
 		intent.putExtra("userid", u.getId());
 		startActivityForResult(intent, RequestCode_invite);
 	}

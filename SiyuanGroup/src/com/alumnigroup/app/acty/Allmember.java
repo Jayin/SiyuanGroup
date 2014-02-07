@@ -218,7 +218,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
-		user = new AppInfo(getContext()).getUser();
+		user = AppInfo.getUser(getContext());
 		if (user == null) {
 			toast("无用户信息,请重新登录!");
 			closeActivity();

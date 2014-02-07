@@ -10,7 +10,9 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -23,12 +25,12 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MGroup.Memberships;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
@@ -74,15 +76,16 @@ public class GroupInfo extends BaseActivity {
 		(view.findViewById(R.id.join)).setOnClickListener(this);
 		(view.findViewById(R.id.exit)).setOnClickListener(this);
 		(view.findViewById(R.id.createActivity)).setOnClickListener(this);
-
-		mPopupWindow = new PopupWindow(view);
-		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-		mPopupWindow.setOutsideTouchable(true);
-
-		// 控制popupwindow的宽度和高度自适应
-		view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-		mPopupWindow.setWidth(view.getMeasuredWidth());
-		mPopupWindow.setHeight(view.getMeasuredHeight());
+		 mPopupWindow = new PopupWindow(view);
+		 mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+		 mPopupWindow.setOutsideTouchable(true);
+		
+		
+		 // 控制popupwindow的宽度和高度自适应
+		 view.measure(View.MeasureSpec.UNSPECIFIED,
+		 View.MeasureSpec.UNSPECIFIED);
+		 mPopupWindow.setWidth(view.getMeasuredWidth());
+		 mPopupWindow.setHeight(view.getMeasuredHeight());
 
 	}
 
@@ -200,9 +203,13 @@ public class GroupInfo extends BaseActivity {
 		// btn_deleteGroup.setVisibility(View.GONE);
 		// btn_edit.setVisibility(View.INVISIBLE);
 		// }
-
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + group.getAvatar(), iv_avatar);
+		if (group.getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + group.getAvatar(), iv_avatar);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+		}
 		tv_owner.setText(group.getOwner().getProfile().getName());
 		tv_numMember.setText(group.getNumMembers() + "");
 		tv_description.setText(group.getDescription());
@@ -235,13 +242,15 @@ public class GroupInfo extends BaseActivity {
 			viewpager.setCurrentItem(2);
 			break;
 		case R.id.acty_head_btn_more:
-			if (!mPopupWindow.isShowing())
-				mPopupWindow.showAsDropDown(btn_more);
+			mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.manage:
-			toast("manage");
 			mPopupWindow.dismiss();
-			toManagePage();
+			if (group.getOwnerid() == AppInfo.getUser(getContext()).getId()) {
+				toManagePage();
+			} else {
+				toast("圈子不属于你的");
+			}
 			break;
 		case R.id.join:
 			mPopupWindow.dismiss();
@@ -271,12 +280,12 @@ public class GroupInfo extends BaseActivity {
 
 	private void joinActivity() {
 		api.join(group.getId(), new JsonResponseHandler() {
-			
+
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				toast("加入成功");
 			}
-			
+
 			@Override
 			public void onFaild(int errorType, int errorCode) {
 				toast("网络异常 错误代码:" + errorCode);
@@ -294,8 +303,8 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("退出失败 错误码:" + errorCode);
-
+				// toast("退出失败 错误码:" + errorCode);
+				toast(ErrorCode.errorList.get(errorCode));
 			}
 		});
 

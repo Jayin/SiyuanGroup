@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
       >
 
@@ -16,12 +16,13 @@
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_marginLeft="4dp"
+              android:layout_marginTop="4dp"
             android:layout_gravity="center"
             android:background="@drawable/ic_image_load_loading" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:orientation="vertical" >
 
@@ -39,7 +40,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal" 
+                android:layout_marginTop="4dp" >
 
                 <ImageView
                     android:layout_width="15dp"
@@ -49,7 +51,7 @@
                 <TextView
                     android:id="@+id/item_lv_acty_group_tv_ownername"
                     style="@style/TextView.base"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="4dp"
                     android:layout_weight="1"
@@ -67,7 +69,7 @@
                 <TextView
                     android:id="@+id/item_lv_acty_group_tv_memberCount"
                     style="@style/TextView.base"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="4dp"
                     android:layout_marginRight="6dp"
@@ -81,6 +83,7 @@
                 android:id="@+id/item_lv_acty_group_tv_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:ellipsize="end"
                 android:lines="3"
                 android:text="金钱是能让我们去除了天堂以外的任何地区性方面军的一份护照；同时，它也能向我们提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。福以外的任何福以外的任何福以外的任何 提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。提供除了幸福以外的任何东照；同时，它也能向我们提供除了幸福以外的任何东西。"
@@ -93,6 +96,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/ic_image_line" />
 
 </LinearLayout>
