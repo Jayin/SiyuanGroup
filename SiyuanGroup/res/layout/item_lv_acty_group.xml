@@ -41,11 +41,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal" 
+                android:gravity="center_vertical"
                 android:layout_marginTop="4dp" >
 
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:background="@drawable/ic_item_lv_acty_circlelist_owner" />
 
                 <TextView
@@ -61,8 +62,8 @@
                     android:textStyle="bold" />
 
                 <ImageView
-                    android:layout_width="15dp"
-                    android:layout_height="15dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="right"
                     android:background="@drawable/ic_item_lv_acty_circlelist_member" />
 

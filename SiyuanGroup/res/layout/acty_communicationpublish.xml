@@ -51,7 +51,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_preference_sigle"
                 android:clickable="true"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"  android:visibility="invisible">
 
                 <TextView
                     style="@style/TextView.black"
@@ -75,7 +75,7 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_preference_sigle"
                 android:clickable="true"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"  android:visibility="invisible">
 
                 <TextView
                     style="@style/TextView.black"

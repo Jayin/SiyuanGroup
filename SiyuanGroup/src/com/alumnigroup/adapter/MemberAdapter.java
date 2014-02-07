@@ -66,8 +66,14 @@ public class MemberAdapter extends BaseAdapter {
 			h = (ViewHolder) convertView.getTag();
 		}
 		User u = data.get(position);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + u.getAvatar(), h.avatar);
+		if (u.getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + u.getAvatar(), h.avatar);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
+		}
+
 		h.grade.setText(u.getProfile().getGrade() + "");
 		h.name.setText(u.getProfile().getName());
 		h.major.setText(u.getProfile().getMajor());
@@ -84,5 +90,5 @@ public class MemberAdapter extends BaseAdapter {
 		TextView name, grade, major;
 		ImageLoader loader;
 	}
-	
+
 }

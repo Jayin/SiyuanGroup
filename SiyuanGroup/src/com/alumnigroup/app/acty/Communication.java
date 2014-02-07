@@ -95,34 +95,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 						lv_all.onRefreshComplete();
 					}
 				});
-				// prepare to delete
-				// api.getIssueList(1, new AsyncHttpResponseHandler() {
-				// @Override
-				// public void onFailure(int statusCode, Header[] headers,
-				// byte[] data, Throwable err) {
-				// toast("网络异常 错误码:" + statusCode);
-				// lv_all.onRefreshComplete();
-				// }
-				//
-				// @Override
-				// public void onSuccess(int statusCode, Header[] headers,
-				// byte[] data) {
-				// String json = new String(data);
-				// if (JsonUtils.isOK(json)) {
-				// List<Issue> newData_all = Issue
-				// .create_by_jsonarray(json);
-				// if (newData_all != null) {
-				// page_all = 1;
-				// data_all.clear();
-				// data_all.addAll(newData_all);
-				// adapter_all.notifyDataSetChanged();
-				// }
-				// } else {
-				// toast("error:" + JsonUtils.getErrorString(json));
-				// }
-				// lv_all.onRefreshComplete();
-				// }
-				// });
 
 			}
 		});
@@ -159,40 +131,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 					}
 				});
-//prepare to delete
-//				api.getIssueList(page_all + 1, new AsyncHttpResponseHandler() {
-//					@Override
-//					public void onFailure(int statusCode, Header[] headers,
-//							byte[] data, Throwable err) {
-//						toast("网络异常 错误码:" + statusCode);
-//						lv_all.onLoadMoreComplete();
-//					}
-//
-//					@Override
-//					public void onSuccess(int statusCode, Header[] headers,
-//							byte[] data) {
-//						String json = new String(data);
-//						if (JsonUtils.isOK(json)) {
-//							List<Issue> newData_all = Issue
-//									.create_by_jsonarray(json);
-//							if (newData_all != null && newData_all.size() > 0) {
-//								page_all++;
-//								data_all.addAll(newData_all);
-//								adapter_all.notifyDataSetChanged();
-//							} else {
-//								if (newData_all == null) {
-//									toast("网络异常,解析错误");
-//								} else if (newData_all.size() == 0) {
-//									toast("没有更多了!");
-//									lv_all.setCanLoadMore(false);
-//								}
-//							}
-//						} else {
-//							toast("Error:" + JsonUtils.getErrorString(json));
-//						}
-//						lv_all.onLoadMoreComplete();
-//					}
-//				});
 			}
 		});
 
@@ -357,8 +295,8 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 						.findViewById(R.id.item_lv_acty_comminication_numComment);
 				h.favourite = (TextView) convertView
 						.findViewById(R.id.item_lv_acty_comminication_favourite);
-				h.avater = (ImageView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_avater);
+				h.avatar = (ImageView) convertView
+						.findViewById(R.id.item_lv_acty_comminication_avatar);
 				convertView.setTag(h);
 			} else {
 				h = (ViewHolder) convertView.getTag();
@@ -372,16 +310,22 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			h.body.setText(data.get(position).getBody());
 			h.numComment.setText(data.get(position).getNumComments() + "");
 			//h.favourite.setText(data.get(position).getFavourite()+"");
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL
-							+ data.get(position).getUser().getAvatar(),
-					h.avater);
+			if(data.get(position).getUser().getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL
+								+ data.get(position).getUser().getAvatar(),
+						h.avatar);
+			}else{
+				ImageLoader.getInstance().displayImage(
+						"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
+			}
+		
 			return convertView;
 		}
 
 		class ViewHolder {
 			TextView name, major, posttime, title, body, numComment, favourite;
-			ImageView avater;
+			ImageView avatar;
 		}
 
 	}

@@ -97,11 +97,15 @@ public class CommunicationDetail extends BaseActivity {
 
 		api.view(issue.getId(), new AsyncHttpResponseHandler() {
 			@Override
+			public void onStart() {
+				tv_notify.setText("评论加载中....");
+				tv_notify.setVisibility(View.VISIBLE);
+			}
+			@Override
 			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 					Throwable arg3) {
 				toast("网络异常 错误码:" + arg0);
-				tv_notify.setText("网络异常 错误码:" + arg0);
-				tv_notify.setVisibility(View.VISIBLE);
+				tv_notify.setVisibility(View.GONE);
 			}
 
 			@Override

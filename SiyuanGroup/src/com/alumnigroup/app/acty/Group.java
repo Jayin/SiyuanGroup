@@ -327,7 +327,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						.findViewById(R.id.item_lv_acty_group_tv_memberCount);
 				h.description = (TextView) convertView
 						.findViewById(R.id.item_lv_acty_group_tv_description);
-				h.avater = (ImageView) convertView
+				h.avatar = (ImageView) convertView
 						.findViewById(R.id.item_lv_acty_circlelist_iv_avater);
 				convertView.setTag(h);
 			} else {
@@ -340,9 +340,9 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			h.description.setText(group.getDescription());
 			if(group.getAvatar()!=null){
 				ImageLoader.getInstance().displayImage(
-						RestClient.BASE_URL + group.getAvatar(), h.avater);
+						RestClient.BASE_URL + group.getAvatar(), h.avatar);
 			}else{
-				ImageLoader.getInstance().displayImage("drawable://"+R.drawable.ic_image_load_normal,  h.avater);
+				ImageLoader.getInstance().displayImage("drawable://"+R.drawable.ic_image_load_normal,  h.avatar);
 			}
 			
 			return convertView;
@@ -350,7 +350,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 		class ViewHodler {
 			TextView name, username, memberCount, description;
-			ImageView avater;
+			ImageView avatar;
 		}
 	}
 
