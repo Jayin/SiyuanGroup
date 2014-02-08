@@ -42,7 +42,7 @@ public class CoreService extends Service {
 				checkVersion();
 			}
 		}
-		return Service.START_REDELIVER_INTENT;
+		return Service.START_STICKY;
 	}
 
 	private void checkVersion() {

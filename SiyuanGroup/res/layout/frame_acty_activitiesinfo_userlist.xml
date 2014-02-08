@@ -6,8 +6,7 @@
 
     <com.alumnigroup.widget.PullAndLoadListView
         android:id="@+id/frame_acty_activitiesinfo_userlist_listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+       style="@style/ListView.PullAndLoadListView" >
     </com.alumnigroup.widget.PullAndLoadListView>
 
 </LinearLayout>

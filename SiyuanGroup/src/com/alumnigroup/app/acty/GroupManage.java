@@ -109,7 +109,10 @@ public class GroupManage extends BaseActivity {
 			try {
 				params.put("avatar", resolver.openInputStream(uri));
 				api.updateAvatar(group.getId(), params, new JsonResponseHandler() {
-					
+					@Override
+					public void onStart() {
+						 toast("图片上传中..");
+					}
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
 						  toast("头像上传成功");

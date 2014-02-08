@@ -29,7 +29,7 @@ public class App extends Application {
 	private void initImageLoader() {
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
 		//在内存和sd卡中缓存,如果经常OOM 移除.cacheInMemory(true) or 每个Activity.onDestory()的时候调用用ImageLoader.getInstance().clearMemoryCache()
-				.cacheOnDisc(true).cacheInMemory(true) 
+				.cacheOnDisc(true).cacheInMemory(true).imageScaleType(ImageScaleType.EXACTLY_STRETCHED)
 				.imageScaleType(ImageScaleType.IN_SAMPLE_INT)//适配大小来display
 				.showImageOnLoading(R.drawable.ic_image_load_loading)  //正在加载
 				.showImageForEmptyUri(R.drawable.ic_image_load_normal) //没有图片

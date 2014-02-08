@@ -326,7 +326,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							CalendarUtils.TYPE_TWO));
 			h.ownername.setText("name" + acty.getOwnerid());
 			h.applyCount.setText(acty.getNumUsership() + "人报名");
-			h.status.setImageResource(acty.getStatus().getId() == 0 ? R.drawable.ic_image_status_on
+			h.status.setImageResource(acty.getStatus().getId() == 1 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
 			if(acty.getAvatar()!=null){

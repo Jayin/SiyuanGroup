@@ -264,8 +264,14 @@ public class ActivitiesUserShip extends BaseActivity {
 				h = (ViewHolder) convertView.getTag();
 			}
 			User u = data.get(position).getUser();
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + u.getAvatar(), h.avatar);
+			if(u.getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + u.getAvatar(), h.avatar);
+			}else{
+				ImageLoader.getInstance().displayImage(
+						"drawable://"+R.drawable.ic_image_load_normal, h.avatar);
+			}
+			
 			h.name.setText(u.getProfile().getName());
 			h.major.setText(u.getProfile().getMajor());
 			if (data.get(position).getIsaccepted() != 0) {//用户被接受参加

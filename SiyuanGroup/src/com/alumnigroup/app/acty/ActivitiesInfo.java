@@ -169,7 +169,14 @@ public class ActivitiesInfo extends BaseActivity {
 				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
-		ImageLoader.getInstance().displayImage(RestClient.BASE_URL +acty.getAvatar(), iv_avatar);
+		
+		if(acty.getAvatar()!=null){
+			ImageLoader.getInstance().displayImage(RestClient.BASE_URL +acty.getAvatar(), iv_avatar);
+		}else{
+			ImageLoader.getInstance().displayImage(
+					"drawable://"+R.drawable.ic_image_load_normal, iv_avatar);
+		}
+		
 
 		tv_starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
 				CalendarUtils.TYPE_TWO));
