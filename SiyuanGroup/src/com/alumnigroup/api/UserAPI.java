@@ -30,15 +30,15 @@ public class UserAPI {
 	 *            响应处理器
 	 * @deprecated
 	 */
-	public void regist(String username, String password, String name,
-			String email, AsyncHttpResponseHandler responseHandler) {
-		RequestParams params = new RequestParams();
-		params.add("username", username);
-		params.add("password", password);
-		params.add("name", name);
-		params.add("email", email);
-		RestClient.post("/api/users/register", params, responseHandler);
-	}
+//	public void regist(String username, String password, String name,
+//			String email, AsyncHttpResponseHandler responseHandler) {
+//		RequestParams params = new RequestParams();
+//		params.add("username", username);
+//		params.add("password", password);
+//		params.add("name", name);
+//		params.add("email", email);
+//		RestClient.post("/api/users/register", params, responseHandler);
+//	}
 
 	/**
 	 * 注册
@@ -73,21 +73,21 @@ public class UserAPI {
 		params.add("username", username);
 		params.add("password", password);
 		if (name != null)
-			params.add("name", name);
+			params.add("profile[name]", name);
 		if (email != null)
-			params.add("email", email);
+			params.add("profile[email]", email);
 		if (gender != null)
-			params.add("gender", gender);
+			params.add("profile[gender]", gender);
 		if (age > 0)
-			params.add("age", age + "");
+			params.add("profile[age]", age + "");
 		if (grade > 0)
-			params.add("grade", grade + "");
+			params.add("profile[grade]", grade + "");
 		if (university != null)
-			params.add("university", university);
+			params.add("profile[university]", university);
 		if (major != null)
-			params.add("major", major);
+			params.add("profile[major]", major);
 		if (summary != null)
-			params.add("summary", summary);
+			params.add("profile[summary]", summary);
 		RestClient.post("/api/users/register", params, responseHandler);
 	}
 
