@@ -6,6 +6,7 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.R.integer;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -15,8 +16,9 @@ import android.widget.ViewFlipper;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
-import com.alumnigroup.imple.ResponseHandler;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
@@ -37,7 +39,8 @@ public class Login extends BaseActivity {
 	private ViewFlipper flipper;
 	private EditText et_log_username, et_login_password;
 	private EditText et_reg_username, et_reg_password, et_reg_confirm,
-			et_reg_name, et_reg_email;
+			et_reg_name, et_reg_email, et_reg_university, et_reg_major,
+			et_reg_summary, et_reg_grade;
 	private View btn_login, btn_regitst, btn_ok, btn_cancle;
 	private UserAPI api;
 	private MyProgressDialog dialog;
@@ -85,9 +88,9 @@ public class Login extends BaseActivity {
 								byte[] data) {
 							dialog.dismiss();
 							// 登录成功。。。save login info here..
-							
+
 							String json = new String(data);
-							debug("onSuccess-->"+json);
+							debug("onSuccess-->" + json);
 							// toast(json);
 							// succeed(json);
 							if (JsonUtils.isOK(json)) {
@@ -105,12 +108,17 @@ public class Login extends BaseActivity {
 			break;
 		case R.id.acty_register_btn_regist:
 			if (StringUtils.isEmpty(EditTextUtils.getText(et_reg_confirm))
-					|| StringUtils
-							.isEmpty(EditTextUtils.getText(et_reg_password))
+					|| StringUtils.isEmpty(EditTextUtils
+							.getText(et_reg_password))
 					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_email))
-					|| StringUtils
-							.isEmpty(EditTextUtils.getText(et_reg_username))
-					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_name))) {
+					|| StringUtils.isEmpty(EditTextUtils
+							.getText(et_reg_username))
+					|| StringUtils.isEmpty(EditTextUtils
+							.getText(et_reg_university))
+					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_major))
+					|| StringUtils.isEmpty(EditTextUtils
+							.getText(et_reg_summary))
+					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_grade))) {
 				toast("输入不能为空 ");
 				return;
 			}
@@ -127,39 +135,35 @@ public class Login extends BaseActivity {
 				toast("姓名请填写中文或英文");
 				return;
 			}
-			api.regist(EditTextUtils.getText(et_reg_username),
-					EditTextUtils.getText(et_reg_password),
-					EditTextUtils.getText(et_reg_name),
-					EditTextUtils.getText(et_reg_email),
-					new AsyncHttpResponseHandler() {
+			String username = EditTextUtils.getText(et_reg_username);
+			String password = EditTextUtils.getText(et_reg_password);
+			String name = EditTextUtils.getText(et_reg_name);
+			String email = EditTextUtils.getText(et_reg_email);
+			int grade = Integer.parseInt(EditTextUtils.getText(et_reg_grade));
+			String university = EditTextUtils.getText(et_reg_university);
+			String major = EditTextUtils.getText(et_reg_major);
+			String summary = EditTextUtils.getText(et_reg_summary);
+			api.regist(username, password, name, email, "m", 30, grade,
+					university, major, summary, new JsonResponseHandler() {
 						@Override
 						public void onStart() {
 							dialog.show();
 						}
 
 						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								byte[] data, Throwable err) {
+						public void onOK(Header[] headers, JSONObject obj) {
 							dialog.dismiss();
-							toast("网络异常  错误码:" + statusCode);
-							if (data != null)
-								L.i(new String(data));
+							toast("注册成功!");
+							flipper.showPrevious();
+
 						}
 
 						@Override
-						public void onSuccess(int statusCode, Header[] headers,
-								byte[] data) {
-							// regist successfully!
-							dialog.dismiss();
-							String json = new String(data);
-							if (JsonUtils.isOK(json)) {
-								toast("注册成功!");
-								flipper.showPrevious();
-							} else {
-								toast("Error:" + JsonUtils.getErrorString(json));
-							}
+						public void onFaild(int errorType, int errorCode) {
+							toast("网络异常 " + ErrorCode.errorList.get(errorCode));
 						}
 					});
+
 			break;
 		case R.id.acty_register_btn_cancle:
 			flipper.showPrevious();
@@ -172,7 +176,7 @@ public class Login extends BaseActivity {
 	@Override
 	protected void initData() {
 		api = new UserAPI();
-		dp = new DataPool(DataPool.SP_Name_User,this);
+		dp = new DataPool(DataPool.SP_Name_User, this);
 	}
 
 	@Override
@@ -185,6 +189,11 @@ public class Login extends BaseActivity {
 		et_reg_confirm = (EditText) _getView(R.id.acty_register_et_comfirmpassword);
 		et_reg_name = (EditText) _getView(R.id.acty_register_et_name);
 		et_reg_email = (EditText) _getView(R.id.acty_register_et_email);
+
+		et_reg_university = (EditText) _getView(R.id.acty_register_et_university);
+		et_reg_major = (EditText) _getView(R.id.acty_register_et_major);
+		et_reg_summary = (EditText) _getView(R.id.acty_register_et_summary);
+		et_reg_grade = (EditText) _getView(R.id.acty_register_et_grade);
 
 		btn_login = _getView(R.id.acty_login_btn_login);
 		btn_regitst = _getView(R.id.acty_login_btn_regist);
@@ -204,31 +213,33 @@ public class Login extends BaseActivity {
 		int userid = JsonUtils.getInt(json, "id");
 		// 正确解析
 		if (userid > 0) {
-			api.find(new RequestParams("id", userid), new ResponseHandler() {
+			api.find(new RequestParams("id", userid),
+					new JsonResponseHandler() {
 
-				@Override
-				public void onSuccess(int statusCode, Header[] headers,
-						byte[] data) {
-					List<User> userList = User.create_by_jsonarray(new String(
-							data));
-					if (userList == null || userList.size() == 0) {
-						toast("登录失败 没有改用户信息");
-					} else {
-						if (dp.put(DataPool.SP_Key_User, userList.get(0))) {
-							Intent intent = new Intent(Login.this, Main.class);
-							intent.putExtra("myself", userList.get(0));
-							openActivity(intent);
-							closeActivity();
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							List<User> userList = User.create_by_jsonarray(obj
+									.toString());
+							if (userList == null || userList.size() == 0) {
+								toast("登录失败 没有改用户信息");
+							} else {
+								if (dp.put(DataPool.SP_Key_User,
+										userList.get(0))) {
+									Intent intent = new Intent(Login.this,
+											Main.class);
+									intent.putExtra("myself", userList.get(0));
+									openActivity(intent);
+									closeActivity();
+								}
+							}
+
 						}
-					}
-				}
 
-				@Override
-				public void onFailure(int statusCode, Header[] header,
-						byte[] data, Throwable err) {
-					toast("网络异常 错误码:"+statusCode);
-				}
-			});
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							toast("网络异常 错误码:" + errorCode);
+						}
+					});
 		}
 
 	}

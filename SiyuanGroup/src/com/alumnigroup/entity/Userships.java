@@ -45,10 +45,15 @@ public class Userships implements Serializable {
 		return list;
 	}
 
+	/** 活动名单(报名表)的id */
 	private int id;
+	/** 活动发起人id */
 	private int userid;
+	/** 活动id */
 	private int activityid;
+	/** 非0即为被接受 */
 	private int isaccepted;
+	/** 申请者 */
 	private User user;
 
 	public int getId() {
@@ -89,6 +94,13 @@ public class Userships implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "Userships [id=" + id + ", userid=" + userid + ", activityid="
+				+ activityid + ", isaccepted=" + isaccepted + ", user=" + user
+				+ "]";
 	}
 
 }

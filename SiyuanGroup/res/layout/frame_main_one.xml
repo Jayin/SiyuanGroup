@@ -21,7 +21,7 @@
                 android:background="@drawable/ic_frame_main_allmember" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv1"
                 android:layout_centerHorizontal="true"
                 android:text="全站会员" />
@@ -39,7 +39,7 @@
                 android:background="@drawable/ic_frame_main_allactivity" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv2"
                 android:layout_centerHorizontal="true"
                 android:text="全站动态" />
@@ -57,7 +57,7 @@
                 android:background="@drawable/ic_frame_main_discuss" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv3"
                 android:layout_centerHorizontal="true"
                 android:text="校友交流" />
@@ -81,7 +81,7 @@
                 android:background="@drawable/ic_frame_main_myspace" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv4"
                 android:layout_centerHorizontal="true"
                 android:text="个人空间" />
@@ -99,7 +99,7 @@
                 android:background="@drawable/ic_frame_main_activity" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv5"
                 android:layout_centerHorizontal="true"
                 android:text="活动" />
@@ -117,7 +117,7 @@
                 android:background="@drawable/ic_frame_main_group" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv6"
                 android:layout_centerHorizontal="true"
                 android:text="圈子" />
@@ -141,7 +141,7 @@
                 android:background="@drawable/ic_frame_main_business" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv7"
                 android:layout_centerHorizontal="true"
                 android:text="商务合作" />
@@ -159,7 +159,7 @@
                 android:background="@drawable/ic_frame_main_message" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv8"
                 android:layout_centerHorizontal="true"
                 android:text="消息" />
@@ -177,7 +177,7 @@
                 android:background="@drawable/ic_frame_main_setting" />
 
             <TextView
-                style="@style/TextView.base"
+                style="@style/TextView.item_main"
                 android:layout_below="@+id/frame_main_one_iv9"
                 android:layout_centerHorizontal="true"
                 android:text="设置" />

@@ -13,9 +13,11 @@ import android.widget.RelativeLayout;
 
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
+import com.alumnigroup.app.CoreService;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.AndroidUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.ADView;
 
@@ -34,7 +36,8 @@ public class Main extends BaseActivity implements OnClickListener {
 	private int width = 0, height = 0;;
 
 	private View btn_Message, btn_Setting, btn_OneSpace, btn_allMember,
-			btn_communication, btn_activities,btn_group,acty_business,acty_allactivity;
+			btn_communication, btn_activities, btn_group, acty_business,
+			acty_allactivity;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,13 @@ public class Main extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.acty_main);
 		initData();
 		initLayout();
+		checkVerison();
+	}
+
+	private void checkVerison() {
+		Intent service = new Intent(getContext(), CoreService.class);
+		service.setAction(Constants.Action_checkVersion);
+		startService(service);
 	}
 
 	@Override
@@ -68,22 +78,23 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		btn_communication = _getView(R.id.frame_main_one_communication);
 		btn_communication.setOnClickListener(this);
-		
+
 		btn_activities = _getView(R.id.frame_main_one_activities);
 		btn_activities.setOnClickListener(this);
-		
+
 		btn_group = _getView(R.id.frame_main_one_group);
 		btn_group.setOnClickListener(this);
 
 		acty_business = _getView(R.id.frame_main_one_business);
 		acty_business.setOnClickListener(this);
-		
+
 		acty_allactivity = _getView(R.id.frame_main_one_allactivity);
 		acty_allactivity.setOnClickListener(this);
 
 		initWebView();
 	}
-    //初始化广告栏
+
+	// 初始化广告栏
 	private void initWebView() {
 		webview = (WebView) _getView(R.id.acty_main_webview);
 		WebSettings webSettings = webview.getSettings();
@@ -97,27 +108,29 @@ public class Main extends BaseActivity implements OnClickListener {
 			public void onLoadResource(WebView view, String url) {
 				// toast("onLoadResource-->"+url);
 			}
+
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
 				// toast("shouldOverrideUrlLoading-->"+url);
-				 //自行处理点击事件！
+				// 自行处理点击事件！
 				Intent intent = new Intent(Main.this, Browser.class);
 				intent.putExtra("url", url);
 				openActivity(intent);
 				return true;
 			}
+
 			@Override
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) {
 				view.setVisibility(View.INVISIBLE);
-				L.i("failingUrl-->"+failingUrl);
-				L.i("errorCode-->"+errorCode);
-				
+				L.i("failingUrl-->" + failingUrl);
+				L.i("errorCode-->" + errorCode);
+
 			}
 		});
-		
-		webview.loadUrl(RestClient.BASE_URL+"/ad/index.html");
-		
+
+		webview.loadUrl(RestClient.BASE_URL + "/ad/index.html");
+
 	}
 
 	// 适配屏幕
@@ -165,10 +178,11 @@ public class Main extends BaseActivity implements OnClickListener {
 		case R.id.frame_main_one_business:
 			openActivity(Business.class);
 			break;
-			
+
 		case R.id.frame_main_one_allactivity:
 			/**
-			 * 如果改就全部改成这样的模式吧，还有APPstart 在直接进入这个acty 的时候要传一个User 对象，key == myself
+			 * 如果改就全部改成这样的模式吧，还有APPstart 在直接进入这个acty 的时候要传一个User 对象，key ==
+			 * myself
 			 */
 			Intent intent = getIntent();
 			intent.setClass(Main.this, Alldynamic.class);

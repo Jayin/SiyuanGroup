@@ -72,7 +72,7 @@ public class MActivity implements Serializable {
 	/** 活动花费 **/
 	private String money;
 	/** 活动图标 **/
-	private String avater;
+	private String avatar;
 	/** 活动名称*/
 	private String name;
 	/** 活动地点 */
@@ -85,6 +85,14 @@ public class MActivity implements Serializable {
 	private int numUsership;
 	/** 活动截止申请日期*/
 	private long regdeadline;
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
+	}
 
 	public long getRegdeadline() {
 		return regdeadline;
@@ -204,14 +212,6 @@ public class MActivity implements Serializable {
 
 	public void setMoney(String money) {
 		this.money = money;
-	}
-
-	public String getAvater() {
-		return avater;
-	}
-
-	public void setAvater(String avater) {
-		this.avater = avater;
 	}
 
 	public String getSite() {

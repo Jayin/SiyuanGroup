@@ -2,9 +2,8 @@ package com.alumnigroup.app.acty;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.http.Header;
-
+import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -13,20 +12,21 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
-
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
+import com.alumnigroup.api.FollowshipAPI;
 import com.alumnigroup.api.UserAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Following;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
+import com.alumnigroup.widget.MenuDialog;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 /**
  * 全站会员:<br>
@@ -50,6 +50,9 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 	private int page_allmember = 1, page_myfriend = 1;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
 	private int currentStatus = 0; // 0代表从底部左边数起第一个处于显示状态
+	private MenuDialog dialog;
+	private User user;
+	private FollowshipAPI followshipAPI;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,40 +68,31 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-				// page=1?
-				api.getAllMember(1, new AsyncHttpResponseHandler() {
-
+				api.getAllMember(1, new JsonResponseHandler() {
+					
 					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
-						lv_allmember.onRefreshComplete();
-					}
-
-					// page=1?
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						// 还要判断是否有error_code
-						String json = new String(data);// jsonarray
-						if (JsonUtils.isOK(json)) {
-							List<User> newData_allmember = User
-									.create_by_jsonarray(json);
-							if (newData_allmember != null) {
-								page_allmember = 1;
-								data_allmember.clear();
-								data_allmember.addAll(newData_allmember);
-								saveAllMemberData2SP(newData_allmember);
-								adapter_allmember.notifyDataSetChanged();
-							}
-						} else {
-							toast("Error:" + JsonUtils.getErrorString(json));
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<User> newData_allmember = User
+								.create_by_jsonarray(obj.toString());
+						if(newData_allmember==null){
+							toast("网络异常，解析错误");
+						}else if(newData_allmember.size()==0){
+							toast("没有更多");
+							page_allmember = 1;
+						}else{
+							page_allmember = 1;
+							data_allmember.clear();
+							data_allmember.addAll(newData_allmember);
+							adapter_allmember.notifyDataSetChanged();
+							//saveAllMemberData2SP(newData_allmember);
 						}
-						lv_allmember.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
+						lv_allmember.onRefreshComplete();
+						lv_allmember.setCanLoadMore(true);
+					}
+					
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
 						lv_allmember.onRefreshComplete();
 					}
 				});
@@ -109,97 +103,73 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getAllMember(page_allmember + 1,
-						new AsyncHttpResponseHandler() {
-
-							@Override
-							public void onFailure(int statusCode,
-									Header[] headers, byte[] data, Throwable err) {
-								toast("网络异常 错误码:" + statusCode);
-								if (data != null)
-									L.i(new String(data));
-								if (err != null)
-									L.i(err.toString());
-								lv_allmember.onLoadMoreComplete();
-							}
-
-							@Override
-							public void onSuccess(int statusCode,
-									Header[] headers, byte[] data) {
-
-								// L.i(new String(data));
-								String json = new String(data);// json array
-								if (JsonUtils.isOK(json)) {
-									List<User> newData_allmember = User
-											.create_by_jsonarray(json);
-									if (newData_allmember != null
-											&& newData_allmember.size() > 0) {
-										page_allmember++;
-										data_allmember
-												.addAll(newData_allmember);
-										adapter_allmember
-												.notifyDataSetChanged();
-									} else {
-										if (newData_allmember == null) {
-											toast("网络异常,解析错误");
-										} else if (newData_allmember.size() == 0) {
-											toast("没有更多了!");
-											lv_allmember.setCanLoadMore(false);
-										}
-									}
-								} else {
-									toast("Error:"
-											+ JsonUtils.getErrorString(json));
-								}
-								lv_allmember.onLoadMoreComplete();
-
-							}
-						});
+				api.getAllMember(page_allmember+1, new JsonResponseHandler() {
+					
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						boolean canLoadMore = true;
+						List<User> newData_allmember = User
+								.create_by_jsonarray(obj.toString());
+						if(newData_allmember==null){
+							toast("网络异常，解析错误");
+						}else if(newData_allmember.size()==0){
+							toast("没有更多");
+							canLoadMore = false;
+						}else{
+							page_allmember++;
+							data_allmember.addAll(newData_allmember);
+							adapter_allmember.notifyDataSetChanged();
+						}
+						lv_allmember.onLoadMoreComplete();
+						if (!canLoadMore)
+							lv_allmember.setCanLoadMore(false);
+					}
+					
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 错误码:" + errorCode);
+						lv_allmember.onLoadMoreComplete();
+					}
+				});
 			}
 		});
-
-		lv_allmember.setOnItemClickListener(this);
 
 		lv_myfriend.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
 			public void onRefresh() {
-				api.getMyFriend(1, new AsyncHttpResponseHandler() {
+				followshipAPI.getFollowingList(1, user.getId(),
+						new JsonResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
-						lv_myfriend.onRefreshComplete();
-					}
-
-					// page=1?
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						// 还要判断是否有error_code
-						String json = new String(data);// jsonarray
-						if (JsonUtils.isOK(json)) {
-							List<User> newData_myfriend = User
-									.create_by_jsonarray(json);
-							if (newData_myfriend != null) {
-								page_myfriend = 1;
-								data_myfriend.clear();
-								data_myfriend.addAll(newData_myfriend);
-								saveMyFriendData2SP(newData_myfriend);
-								adapter_myfriend.notifyDataSetChanged();
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<User> newData = Following
+										.getUsesList(Following
+												.create_by_jsonarray(obj
+														.toString()));
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("你还没有关注任何人");
+									page_myfriend = 1;
+								} else {
+									page_myfriend = 1;
+									data_myfriend.clear();
+									data_myfriend.addAll(newData);
+									adapter_myfriend.notifyDataSetChanged();
+									//saveMyFriendData2SP(newData_myfriend);
+								}
+								//lv_myfriend.setCanRefresh(false, false);  //好友应该加载一次就ok？
+								lv_myfriend.onRefreshComplete();
+								lv_myfriend.setCanLoadMore(true);
 							}
-						} else {
-							toast("Error:" + JsonUtils.getErrorString(json));
-						}
-						lv_myfriend.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
-						lv_myfriend.onRefreshComplete();
-					}
-				});
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 错误码:" + errorCode);
+								lv_myfriend.onRefreshComplete();
+							}
+						});
 			}
 		});
 
@@ -207,65 +177,59 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getMyFriend(page_myfriend + 1,
-						new AsyncHttpResponseHandler() {
+				followshipAPI.getFollowingList(page_myfriend + 1, user.getId(),
+						new JsonResponseHandler() {
 
 							@Override
-							public void onFailure(int statusCode,
-									Header[] headers, byte[] data, Throwable err) {
-								toast("网络异常 错误码:" + statusCode);
-								if (data != null)
-									L.i(new String(data));
-								if (err != null)
-									L.i(err.toString());
-								lv_myfriend.onLoadMoreComplete();
-							}
-
-							@Override
-							public void onSuccess(int statusCode,
-									Header[] headers, byte[] data) {
-
-								// L.i(new String(data));
-								String json = new String(data);// json array
-								if (JsonUtils.isOK(json)) {
-									List<User> newData_myFriend = User
-											.create_by_jsonarray(json);
-									if (newData_myFriend != null
-											&& newData_myFriend.size() > 0) {
-										page_myfriend++;
-										data_myfriend.addAll(newData_myFriend);
-										adapter_myfriend.notifyDataSetChanged();
-									} else {
-										if (newData_myFriend == null) {
-											toast("网络异常,解析错误");
-										} else if (newData_myFriend.size() == 0) {
-											toast("没有更多了!");
-											lv_myfriend.setCanLoadMore(false);
-										}
-									}
+							public void onOK(Header[] headers, JSONObject obj) {
+								boolean canLoadMore = true;
+								debug(obj.toString());
+								List<User> newData = Following
+										.getUsesList(Following
+												.create_by_jsonarray(obj
+														.toString()));
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("没有更多");
+									canLoadMore = false;
 								} else {
-									toast("Error:"
-											+ JsonUtils.getErrorString(json));
+									page_myfriend++;
+									data_myfriend.addAll(newData);
+									adapter_myfriend.notifyDataSetChanged();
 								}
 								lv_myfriend.onLoadMoreComplete();
+								if (!canLoadMore)
+									lv_myfriend.setCanLoadMore(false);
+							}
 
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 错误码:" + errorCode);
+								lv_myfriend.onLoadMoreComplete();
 							}
 						});
+
 			}
 		});
-		
+		lv_allmember.setOnItemClickListener(this);
 		lv_myfriend.setOnItemClickListener(this);
 	}
 
 	@Override
 	protected void initData() {
+		user = AppInfo.getUser(getContext());
+		if (user == null) {
+			toast("无用户信息,请重新登录!");
+			closeActivity();
+		}
 		dp = new DataPool(this);
-
+		followshipAPI = new FollowshipAPI();
 		api = new UserAPI();
 		data_allmember = new ArrayList<User>();
-		loadAllMemberData(data_allmember);
+		//loadAllMemberData(data_allmember);
 		data_myfriend = new ArrayList<User>();
-		loadMyFriendData(data_myfriend);
+		// loadMyFriendData(data_myfriend);
 	}
 
 	@Override
@@ -287,6 +251,44 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 		lv_allmember.setAdapter(adapter_allmember);
 		lv_myfriend.setAdapter(adapter_myfriend);
+		initMenuDialog();
+	}
+
+	private void initMenuDialog() {
+		dialog = new MenuDialog(getContext());
+		List<String> strings = new ArrayList<String>();
+		strings.add("关注");
+		strings.add("进入空间");
+		dialog.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				dialog.dismiss();
+				if (position == 0) {
+					FollowshipAPI api = new FollowshipAPI();
+					api.follow(data_allmember.get(dialog.getParentPosition())
+							.getId(), "following", new JsonResponseHandler() {
+
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							toast("已关注");
+						}
+
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							toast("关注失败,错误码:" + errorCode);
+						}
+					});
+				}
+				if (position == 1) {
+					Intent intent =new Intent(Allmember.this,SpaceOther.class);
+					intent.putExtra("user", data_allmember.get(dialog.getParentPosition()));
+					openActivity(intent);
+				}
+			}
+		});
+		dialog.setData(strings);
 	}
 
 	private void initViewPager() {
@@ -424,24 +426,13 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		int vId = parent.getId();
-		Intent intent = getIntent();
-		intent.setClass(Allmember.this,SpaceOther.class);
-		switch (vId) {
-		case R.id.acty_allmember_lv_allmember:
-			intent.putExtra("user", data_allmember.get(position-1));
-			break;
-			
-		case R.id.acty_allmember_lv_myfriend:
-			intent.putExtra("user", data_myfriend.get(position-1));
-			break;
-
-		default:
-			break;
+		if (parent == lv_allmember) {
+			dialog.show(position - 1);
 		}
-		
-		startActivity(intent);
-		
-		
+		if (parent == lv_myfriend) {
+			Intent intent = new Intent(this, SpaceOther.class);
+			intent.putExtra("user", data_myfriend.get(position - 1));
+			openActivity(intent);
+		}
 	}
 }

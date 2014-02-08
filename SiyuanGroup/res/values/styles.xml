@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppBaseTheme" parent="android:Theme.Light"></style>
 
@@ -13,6 +13,13 @@
     <style name="AcivityTheme_start">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <style name="AcivityTheme_dialog" parent="android:style/Theme.Dialog">
+         <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@+android:style/Animation.Translucent</item>
     </style>
 
     <style name="LinearLayout">
@@ -34,8 +41,8 @@
     </style>
 
     <style name="ImageView">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
     </style>
 
     <style name="TextView" />
@@ -46,6 +53,10 @@
         <item name="android:text">null</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="TextView.item_main" parent="TextView.base">
+        <item name="android:textSize">16sp</item>
     </style>
 
     <style name="TextView.black" parent="TextView.base">
@@ -97,6 +108,8 @@
     <style name="navigtion_head_title" parent="navigtion">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">18sp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
 
     <style name="ProgressBar"></style>
@@ -106,8 +119,8 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
     </style>
-    
-      <style name="ProgressBar.black">
+
+    <style name="ProgressBar.black">
         <item name="android:indeterminateDrawable">@drawable/progressbar_style_black</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -125,13 +138,14 @@
         <item name="android:windowAnimationStyle">@style/Animations.dialog</item>
     </style>
 
-    <style name="ListView"></style>
-
-    <style name="ListView.PullAndLoadListView">
+    <style name="ListView">
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:background">@color/white</item>
-        <item name="android:divider">#00000000</item>
+    </style>
+
+    <style name="ListView.PullAndLoadListView" parent="ListView">
+        <item name="android:divider">@null</item>
+        <item name="android:cacheColorHint">#00000000</item>
     </style>
 
     <!-- allmember -->

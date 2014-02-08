@@ -30,6 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:name=".CoreService" >
+        </service>
+
         <activity
             android:name=".acty.Allmember"
             android:screenOrientation="portrait" >
@@ -168,6 +172,16 @@
         <activity
             android:name=".acty.ActivitiesManage"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesUserShip"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.AppUpdate"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/AcivityTheme_dialog" >
         </activity>
     </application>
 

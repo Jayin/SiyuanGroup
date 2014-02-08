@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -218,7 +219,8 @@ public class ActivitiesPublish extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
+						//toast("网络异常 错误码:" + errorCode);
+						toast(ErrorCode.errorList.get(errorCode));
 					}
 				});
 
