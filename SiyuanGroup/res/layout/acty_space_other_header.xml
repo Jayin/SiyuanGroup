@@ -40,12 +40,14 @@
         android:id="@+id/acty_head_iv_hr2"
         android:layout_width="2px"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_acty_head_hr" />
+        android:background="@drawable/ic_acty_head_hr"
+		android:visibility="invisible"/>
 
     <RelativeLayout
         android:id="@+id/acty_head_btn_more"
         style="@style/RelativeLayout.allmember_header_btn"
-        android:clickable="true" >
+        android:clickable="true" 
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/acty_head_iv_more"

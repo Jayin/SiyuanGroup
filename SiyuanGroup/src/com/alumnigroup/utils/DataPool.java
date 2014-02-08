@@ -33,6 +33,16 @@ public class DataPool {
 	 */
 	public final static String SP_KEY_FRIEND_MEMBER ="SP_KEY_FRIEND_MEMBER";
 	
+	/**
+	 * 全站动态
+	 */
+	public final static String SP_KEY_ALL_DUNAMIC ="SP_KEY_ALL_DUNAMIC";
+	
+	/**
+	 * 好友动态
+	 */
+	public final static String SP_KEY_FRIEND_DUNAMIC ="SP_KEY_FRIEND_DUNAMIC";
+	
 	
     public final static String SP_Name_User = "User"; //SharedPreference's name
     public final static String SP_Key_User = "user";//key name in SharedPreference 

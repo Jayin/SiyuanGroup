@@ -13,7 +13,7 @@
         android:scaleType="centerCrop"
         android:src="@drawable/aa_space_theme" />
 
-    <EditText
+    <TextView
         android:id="@+id/acty_space_personal_top_et_leave2visitor"
         android:layout_width="match_parent"
         android:layout_height="100dp"

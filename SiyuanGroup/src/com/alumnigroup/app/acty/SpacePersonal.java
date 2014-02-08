@@ -2,6 +2,9 @@ package com.alumnigroup.app.acty;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.util.List;
+
+import org.apache.http.Header;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -22,21 +25,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alumnigroup.api.DynamicAPI;
+import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 个人空间,进来要传递一个user 对象，用来代表自己, key = myself
+ * 个人空间,进来要传递一个user 对象，用来代表自己, key = myself,，不然就不要进了
  * 
  * @author vector
  * 
  */
-public class SpacePersonal extends BaseActivity implements
-		OnFocusChangeListener, OnTouchListener {
+public class SpacePersonal extends BaseActivity {
 	/**
-	 *代表自己的对象
+	 * 代表自己的对象
 	 */
 	private User myself;
 	/**
@@ -53,18 +62,20 @@ public class SpacePersonal extends BaseActivity implements
 	/**
 	 * 顶部
 	 */
-	private EditText etLeave2Visitor;
+	private TextView etLeave2Visitor;
 	private String oldLeave2VisitorContent;
 	private ImageView ivBackgroup;
 	private Bitmap backgroupBitmap;
 	private byte[] backgroupData;
+
+	private ImageView ivPortrait;
+	private TextView tvUsername;
 
 	/**
 	 * 个人资料
 	 */
 	private LinearLayout llPersonalData;
 	private View btnPersonalDataEdit;
-	private View btnEditPersonalData;
 	/**
 	 * 关键字
 	 */
@@ -96,8 +107,8 @@ public class SpacePersonal extends BaseActivity implements
 
 	protected void initData() {
 		myself = (User) getIntent().getSerializableExtra("myself");
-		if(myself == null){
-			toast("出错了");
+		if (myself == null) {
+			toast("出错了，需要myself 为key的user");
 			finish();
 		}
 	}
@@ -105,7 +116,6 @@ public class SpacePersonal extends BaseActivity implements
 	protected void initLayout() {
 
 		viewParent = _getView(R.id.viewparent);
-		viewParent.setOnTouchListener(this);
 
 		/**
 		 * header
@@ -116,19 +126,25 @@ public class SpacePersonal extends BaseActivity implements
 		btnMore.setOnClickListener(this);
 		tvHeaderTitle = (TextView) _getView(R.id.acty_head_tv_title);
 		tvHeaderTitle.setText("我的空间");
-		
 
 		/**
 		 * 顶部
 		 */
-		etLeave2Visitor = (EditText) _getView(R.id.acty_space_personal_top_et_leave2visitor);
-		etLeave2Visitor.setOnFocusChangeListener(this);
-		etLeave2Visitor.setOnTouchListener(this);
-		//etLeave2Visitor.setText(myself.getSignature());
-		etLeave2Visitor.setText("myself.getSignature()"); //签名已经移除
+		etLeave2Visitor = (TextView) _getView(R.id.acty_space_personal_top_et_leave2visitor);
+		// etLeave2Visitor.setText(myself.getSignature());
+		etLeave2Visitor.setText(myself.getProfile().getSummary()); // 签名已经移除
 		oldLeave2VisitorContent = etLeave2Visitor.getText().toString();
 		ivBackgroup = (ImageView) _getView(R.id.acty_space_personal_top_iv_backgroup);
 		ivBackgroup.setOnClickListener(this);
+		ImageLoader.getInstance().displayImage(
+				RestClient.BASE_URL + myself.getCover(), ivBackgroup);
+
+		ivPortrait = (ImageView) _getView(R.id.acty_space_personal_top_iv_portrait);
+		ImageLoader.getInstance().displayImage(
+				RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
+
+		tvUsername = (TextView) _getView(R.id.acty_space_personal_top_tv_name);
+		tvUsername.setText(myself.getUsername());
 
 		/**
 		 * 个人资料
@@ -136,15 +152,13 @@ public class SpacePersonal extends BaseActivity implements
 		llPersonalData = (LinearLayout) _getView(R.id.acty_space_personal_personaldata_ll_content);
 		btnPersonalDataEdit = _getView(R.id.acty_space_personal_personaldata_btn_edit);
 		btnPersonalDataEdit.setOnClickListener(this);
-		btnEditPersonalData = _getView(R.id.acty_space_personal_personaldata_btn_edit);
-		btnEditPersonalData.setOnClickListener(this);
 
 		/**
 		 * 关键字
 		 */
 		lyKeyword = (OutoLinefeedLayout) _getView(R.id.acty_space_personal_keyword_OutoLinefeed);
 		lyKeyword.setMargin(10);
-		
+
 		btnEditKeywork = _getView(R.id.acty_space_personal_keyword_btn_edit);
 		btnEditKeywork.setOnClickListener(this);
 
@@ -171,9 +185,7 @@ public class SpacePersonal extends BaseActivity implements
 	 * 测试用的
 	 */
 	private void addData() {
-		for (int i = 0; i < 5; i++) {
-			addPersonalData(i);
-		}
+		initPersonalData();
 		for (int i = 0; i < 5; i++) {
 			addKeyWord("sdfsdfsdfsdfsd", i % 2);
 		}
@@ -211,17 +223,64 @@ public class SpacePersonal extends BaseActivity implements
 	 * 增加最新动态 , 参数使用来测试的，到时候填充数据的时候要改
 	 */
 	private void addNewDynamic(int i) {
+		DynamicAPI api = new DynamicAPI();
 		/**
 		 */
-		LayoutInflater inflater = null;
-		inflater = LayoutInflater.from(this);
-		View convertView = null;
+		final LayoutInflater inflater = LayoutInflater.from(this);
+		api.getAll(1, 13/*myself.getId()*/, new AsyncHttpResponseHandler() {
 
-		convertView = inflater.inflate(R.layout.item_lv_alldynamic, null);
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					byte[] data, Throwable err) {
+				toast("网络异常 错误码:" + statusCode);
+				if (data != null)
+					L.i(new String(data));
+				if (err != null)
+					L.i(err.toString());
+			}
 
-		/**
-		 */
-		llNewDynamic.addView(convertView);
+			@Override
+			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
+				// 还要判断是否有error_code
+				String json = new String(data);// jsonarray
+				if (JsonUtils.isOK(json)) {
+					List<Dynamic> newData_all = Dynamic
+							.create_by_jsonarray(json);
+					if (newData_all != null) {
+						for (Dynamic dynamic : newData_all) {
+
+							View convertView = null;
+
+							convertView = inflater.inflate(
+									R.layout.item_lv_alldynamic_update_spatial,
+									null);
+
+							ImageView portrait = (ImageView) convertView
+									.findViewById(R.id.item_lv_alldynamic_iv_portrait);
+
+							ImageLoader.getInstance().displayImage(
+									RestClient.BASE_URL
+											+ dynamic.getUser().getAvatar(),
+									portrait);
+							TextView name = (TextView) convertView
+									.findViewById(R.id.item_lv_alldynamic_tv_name);
+							name.setText(dynamic.getUser().getUsername());
+							TextView content = (TextView) convertView
+									.findViewById(R.id.item_lv_alldynamic_tv_content);
+							content.setText(dynamic.getMessage());
+							TextView time = (TextView) convertView
+									.findViewById(R.id.item_lv_alldynamic_tv_datetime);
+							/**
+							 */
+							llNewDynamic.addView(convertView);
+						}
+					}
+				} else {
+					toast("Error:" + JsonUtils.getErrorString(json));
+				}
+			}
+		});
+
 	}
 
 	/**
@@ -234,8 +293,8 @@ public class SpacePersonal extends BaseActivity implements
 		inflater = LayoutInflater.from(this);
 		View convertView = null;
 
-		convertView = inflater.inflate(
-				R.layout.item_acty_space_other_ly_image, null);
+		convertView = inflater.inflate(R.layout.item_acty_space_other_ly_image,
+				null);
 
 		/**
 		 * 加入新的关键字
@@ -277,9 +336,23 @@ public class SpacePersonal extends BaseActivity implements
 	}
 
 	/**
-	 * 增加, 参数使用来测试的，到时候填充数据的时候要改
+	 * 初始化个人资料
 	 */
-	private void addPersonalData(int i) {
+	private void initPersonalData() {
+
+		addPersonalData("昵称", myself.getProfile().getNickname());
+		addPersonalData("用户名", myself.getProfile().getName());
+		addPersonalData("性别", myself.getProfile().getGender());
+		addPersonalData("年龄", myself.getProfile().getAge() + "");
+		addPersonalData("大学", myself.getProfile().getUniversity());
+		addPersonalData("毕业届数", myself.getProfile().getGrade() + "");
+		addPersonalData("专业", myself.getProfile().getMajor());
+	}
+
+	/**
+	 * 增加,
+	 */
+	private void addPersonalData(String name, String value) {
 		/**
 		 */
 		LayoutInflater inflater = null;
@@ -288,89 +361,54 @@ public class SpacePersonal extends BaseActivity implements
 
 		convertView = inflater.inflate(
 				R.layout.itme_lv_space_other_personaldata, null);
+		TextView tvName = (TextView) convertView
+				.findViewById(R.id.item_lv_space_other_personaldata_name);
+		tvName.setText(name);
+		TextView tvValue = (TextView) convertView
+				.findViewById(R.id.item_lv_space_other_personaldata_value);
+		tvValue.setText(value);
 
 		/**
-		 * 
 		 */
 		llPersonalData.addView(convertView);
 	}
 
-	/**
-	 * 写的访客话的EditText 如果失去焦点，表明编辑完了
-	 */
-	public void onFocusChange(View v, boolean hasFocus) {
-		if (!hasFocus) {
-			String nowContent = etLeave2Visitor.getText().toString();
-			if (!nowContent.equals(oldLeave2VisitorContent)) {
-				toast("更新完成");
-			}
-		}
-	}
+
 
 	@Override
-	public boolean onTouch(View v, MotionEvent event) {
-
-		if ((event.getAction() & MotionEvent.ACTION_MASK) != MotionEvent.ACTION_DOWN) {
-			return false;
-		}
-
-		int id = v.getId();
-		switch (id) {
-		case R.id.acty_space_personal_top_et_leave2visitor:
-			// toast("touch  ---  et");
-			etLeave2Visitor.setFocusableInTouchMode(true);
-			etLeave2Visitor.requestFocus();
-			return false;
-
-		case R.id.viewparent:
-			// toast("touch  ---  view");
-			etLeave2Visitor.setFocusable(false);
-			return false;
-		default:
-			break;
-		}
-		return false;
-	}
-	@ Override
-	protected void onActivityResult ( int requestCode , int resultCode , Intent data )
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
 		ContentResolver resolver = getContentResolver();
 		/**
-		 * 因为两种方式都用到了startActivityForResult方法，
-		 * 这个方法执行完后都会执行onActivityResult方法， 所以为了区别到底选择了那个方式获取图片要进行判断，
+		 * 因为两种方式都用到了startActivityForResult方法， 这个方法执行完后都会执行onActivityResult方法，
+		 * 所以为了区别到底选择了那个方式获取图片要进行判断，
 		 * 这里的requestCode跟startActivityForResult里面第二个参数对应
 		 */
-		if (requestCode == 0)
-		{
-			try
-			{
+		if (requestCode == 0) {
+			try {
 				// 获得图片的uri
 				Uri originalUri = data.getData();
 				// 将图片内容解析成字节数组
-				backgroupData = readStream(resolver.openInputStream(Uri.parse(originalUri.toString())));
+				backgroupData = readStream(resolver.openInputStream(Uri
+						.parse(originalUri.toString())));
 				// 将字节数组转换为ImageView可调用的Bitmap对象
 				backgroupBitmap = getPicFromBytes(backgroupData, null);
-				// //把得到的图片绑定在控件上显示
+				// 把得到的图片绑定在控件上显示
 				ivBackgroup.setImageBitmap(backgroupBitmap);
-			} catch ( Exception e )
-			{
+			} catch (Exception e) {
 				System.out.println(e.getMessage());
 			}
 
-		} else if (requestCode == 1)
-		{
-			try
-			{
+		} else if (requestCode == 1) {
+			try {
 				super.onActivityResult(requestCode, resultCode, data);
 				Bundle extras = data.getExtras();
 				backgroupBitmap = (Bitmap) extras.get("data");
 				ByteArrayOutputStream baos = new ByteArrayOutputStream();
 				backgroupBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 				backgroupData = baos.toByteArray();
-			} catch ( Exception e )
-			{
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -382,7 +420,7 @@ public class SpacePersonal extends BaseActivity implements
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
-		Intent intent = new Intent();
+		Intent intent = getIntent();
 		switch (id) {
 		case R.id.acty_head_btn_back:
 			finish();
@@ -393,22 +431,21 @@ public class SpacePersonal extends BaseActivity implements
 			intent.putExtra("user", new User());
 			startActivity(intent);
 			break;
-			
+
 		case R.id.acty_space_personal_personaldata_btn_edit:
 			intent.setClass(SpacePersonal.this, EditPersonalData.class);
 			intent.putExtra("user", new User());
 			startActivity(intent);
 			break;
-			
+
 		case R.id.acty_space_personal_keyword_btn_edit:
 			intent.setClass(SpacePersonal.this, EditKeyword.class);
 			intent.putExtra("user", new User());
 			startActivity(intent);
 			break;
-			
+
 		case R.id.acty_space_personal_album_btn_edit:
 			intent.setClass(SpacePersonal.this, EditAlbum.class);
-			intent.putExtra("user", new User());
 			startActivity(intent);
 			break;
 

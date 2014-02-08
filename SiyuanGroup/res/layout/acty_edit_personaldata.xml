@@ -37,7 +37,7 @@
                 android:orientation="vertical" >
 
                 <ImageView
-                    android:id="@+id/imageView1"
+                    android:id="@+id/acty_edit_personaldata_iv_portrait"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="right|center_vertical"
@@ -65,14 +65,19 @@
                 android:textColor="@color/grey_lv_third" />
 
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/acty_edit_personaldata_ev_name"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:layout_marginLeft="40dp"
                 android:layout_weight="1"
                 android:background="@color/white"
-                android:gravity="right|center_vertical"
+                android:ems="10"
                 android:text="黄廉温"
-                android:textColor="@color/blue_lv_third" />
+                android:textColor="@color/blue_lv_third" >
+
+                <requestFocus />
+            </EditText>
+
         </LinearLayout>
 
         <LinearLayout
@@ -92,7 +97,7 @@
                 android:textColor="@color/grey_lv_third" />
 
             <RadioGroup
-                android:id="@+id/radiogroup1"
+                android:id="@+id/acty_edit_personaldata_rg_sex"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="match_parent"
@@ -100,18 +105,154 @@
                 android:orientation="horizontal" >
 
                 <RadioButton
-                    android:id="@+id/radiobutton1"
+                    android:id="@+id/acty_edit_personaldata_rg_sex_boy"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="男" />
 
                 <RadioButton
-                    android:id="@+id/radiobutton2"
+                    android:id="@+id/acty_edit_personaldata_rg_sex_gril"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="女" />
             </RadioGroup>
         </LinearLayout>
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_simple_selected"
+            android:orientation="horizontal"
+            android:padding="6dp" >
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/TextView.base"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="年龄："
+                android:textColor="@color/grey_lv_third" />
+
+            <EditText
+                android:id="@+id/acty_edit_personaldata_ev_age"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_marginLeft="40dp"
+                android:text="21"
+                android:textColor="@color/blue_lv_third" />
+        </LinearLayout>
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_simple_selected"
+            android:orientation="horizontal"
+            android:padding="6dp" >
+
+            <TextView
+                android:id="@+id/textView3"
+                style="@style/TextView.base"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="入学级数："
+                android:textColor="@color/grey_lv_third" />
+
+            <EditText
+                android:id="@+id/acty_edit_personaldata_ev_grade"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_marginLeft="5dp"
+                android:text="11 界"
+                android:textColor="@color/blue_lv_third" />
+        </LinearLayout>
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_simple_selected"
+            android:orientation="horizontal"
+            android:padding="6dp" >
+
+            <TextView
+                android:id="@+id/textView4"
+                style="@style/TextView.base"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="学校："
+                android:textColor="@color/grey_lv_third" />
+
+            <EditText
+                android:id="@+id/acty_edit_personaldata_ev_university"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_marginLeft="40dp"
+                android:text="五邑大学"
+                android:textColor="@color/blue_lv_third" />
+        </LinearLayout>
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_simple_selected"
+            android:orientation="horizontal"
+            android:padding="6dp" >
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/TextView.base"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="专业："
+                android:textColor="@color/grey_lv_third" />
+
+            <EditText
+                android:id="@+id/acty_edit_personaldata_ev_major"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_marginLeft="40dp"
+                android:text="电子信息工程"
+                android:textColor="@color/blue_lv_third" />
+        </LinearLayout>
+         <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/btn_simple_selected"
+            android:orientation="horizontal"
+            android:padding="6dp" >
+
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/TextView.base"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:text="个性签名："
+                android:textColor="@color/grey_lv_third" />
+
+            <EditText
+                android:id="@+id/acty_edit_personaldata_ev_summary"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/white"
+                android:layout_marginLeft="5dp"
+                android:text=""
+                android:textColor="@color/blue_lv_third" />
+        </LinearLayout>
+        
     </LinearLayout>
 
 </LinearLayout>

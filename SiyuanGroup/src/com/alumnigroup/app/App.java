@@ -20,9 +20,9 @@ import com.nostra13.universalimageloader.core.assist.ImageScaleType;
 public class App extends Application {
 	@Override
 	public void onCreate() {
-		initImageLoader();
+		initImageLoader();    
 
-		// init RestClient
+		// init RestClient  
 		RestClient.init(getApplicationContext());
 	}
     

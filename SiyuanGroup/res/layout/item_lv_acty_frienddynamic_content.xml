@@ -4,12 +4,12 @@
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical" >
-    
-    <ListView 
+
+    <com.alumnigroup.widget.PullAndLoadListView
         android:id="@+id/item_lv_frienddynamic_content"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent">
-        
-    </ListView>
+        style="@style/ListView.PullAndLoadListView"
+        android:divider="@color/grey"
+        android:dividerHeight="1px" >
+    </com.alumnigroup.widget.PullAndLoadListView>
 
 </LinearLayout>

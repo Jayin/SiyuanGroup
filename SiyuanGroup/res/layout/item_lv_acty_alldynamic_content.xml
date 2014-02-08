@@ -5,10 +5,11 @@
     android:background="#ffffff"
     android:orientation="vertical" >
 
-    <ListView
+    <com.alumnigroup.widget.PullAndLoadListView
         android:id="@+id/item_lv_alldynamic_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-    </ListView>
+        style="@style/ListView.PullAndLoadListView"
+        android:divider="@color/grey"
+        android:dividerHeight="1px" >
+    </com.alumnigroup.widget.PullAndLoadListView>
 
 </LinearLayout>

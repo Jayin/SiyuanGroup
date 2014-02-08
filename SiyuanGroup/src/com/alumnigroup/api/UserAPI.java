@@ -17,6 +17,7 @@ public class UserAPI {
 	/**
 	 * 注册<br>
 	 * use:{@link#regist()}
+	 * 
 	 * @param username
 	 *            用户名
 	 * @param password
@@ -177,11 +178,38 @@ public class UserAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void getMyFriend(int page,
-			AsyncHttpResponseHandler responseHandler) {
+	public void getMyFriend(int page, AsyncHttpResponseHandler responseHandler) {
 		if (page <= 0)
 			page = 1;
 		find(new RequestParams("page", page + ""), responseHandler);
+	}
+
+	/**
+	 * 更新个人资料
+	 * @param name
+	 * @param gender
+	 * @param age
+	 * @param grade
+	 * @param university
+	 * @param major
+	 * @param summary
+	 * @param responseHandler
+	 */
+	public void updateProfile(int id,String name, String gender, int age, int grade,
+			String university, String major, String summary,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		
+		params.add("name", name);
+		params.add("id", id+"");
+		params.add("gender", gender);
+		params.add("name", name);
+		params.add("age", age+"");
+		params.add("grade", grade+"");
+		params.add("university", university);
+		params.add("major", major);
+		params.add("summary", summary);
+		RestClient.post("/api/users/profile/update", params, responseHandler);
 	}
 
 }
