@@ -44,7 +44,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	private ViewPager viewpager;
 	private List<Cooperation> data_all, data_myjoin, data_favourite;
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
-	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
+	private int page_all = 0, page_myjoin = 0, page_favourit = 0;//可能因为网络原因没有加载到第一页
 	private BusinessAPI api;
 	private User user;
 	private XListView lv_myjoin,lv_all,  lv_favourit;
@@ -80,7 +80,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有去更多");
-							page_all = 1;
 						} else {
 							page_all = 1;
 							data_all.clear();
@@ -101,6 +100,11 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			
 			@Override
 			public void onLoadMore() {
+				if(page_all==0){
+					lv_all.startRefresh();
+					lv_all.stopLoadMore();
+					return;
+				}
 				api.getCooperationList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
@@ -144,7 +148,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 									toast("网络异常，解析错误");
 								} else if (newData_myjoin.size() == 0) {
 									toast("没有更多");
-									page_myjoin = 1;
 								} else {
 									page_myjoin = 1;
 									data_myjoin.clear();
@@ -166,6 +169,11 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			
 			@Override
 			public void onLoadMore() {
+				if(page_myjoin==0){
+					lv_myjoin.startRefresh();
+					lv_myjoin.stopLoadMore();
+					return;
+				}
 				api.search(page_myjoin + 1, user.getId(), null, null,
 						new JsonResponseHandler() {
 

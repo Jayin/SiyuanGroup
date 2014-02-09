@@ -3,8 +3,6 @@ package com.alumnigroup.app.acty;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.spec.PSource;
-
 import org.apache.http.Header;
 import org.json.JSONObject;
 
@@ -23,18 +21,16 @@ import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
-import com.alumnigroup.imple.ImageLoadingListenerImple;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
-import com.alumnigroup.widget.PullAndLoadListView;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -45,13 +41,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class Communication extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_post, btn_all, btn_myjoin, btn_favourite;
-	private PullAndLoadListView lv_all, lv_myjoin, lv_favourit;
+	private View btn_back, btn_post, btn_all, btn_my, btn_favourite;
+	private XListView lv_all, lv_my, lv_favourit;
 	private ViewPager viewpager;
-	private List<Issue> data_all, data_myjoin, data_favourite;
-	private IssueAdapter adapter_all, adapter_myjoin, adapter_favourite;
-	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
+	private List<Issue> data_all, data_my, data_favourite;
+	private IssueAdapter adapter_all, adapter_my, adapter_favourite;
+	private int page_all = 0, page_my = 0, page_favourit = 0;
 	private IssuesAPI api;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +60,13 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initController() {
-		lv_all.setOnRefreshListener(new OnRefreshListener() {
+		lv_all.setPullRefreshEnable(true);
+		lv_all.setPullLoadEnable(true);
+		lv_my.setPullRefreshEnable(true);
+		lv_my.setPullLoadEnable(true);
+		lv_favourit.setPullRefreshEnable(true);
+		lv_favourit.setPullLoadEnable(true);
+		lv_all.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
@@ -77,85 +80,127 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							toast("网络异常 解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有更多");
-							page_all = 1;
 						} else {
 							page_all = 1;
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 						}
-						lv_all.onRefreshComplete();
-						lv_all.setCanLoadMore(true);
-
+						lv_all.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast("网络异常 错误码:" + errorCode);
-						lv_all.onRefreshComplete();
+						lv_all.stopRefresh();
 					}
 				});
 
 			}
-		});
-		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				if (page_all == 0) { // 因为网络原因没有加载到第一页
+					lv_all.startRefresh();
+					lv_all.stopLoadMore();
+					return;
+				}
 				api.getIssueList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						boolean canloadmore = true;
 						List<Issue> newData_all = Issue.create_by_jsonarray(obj
 								.toString());
 						if (newData_all == null) {
 							toast("网络异常,解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有更多了!");
-							canloadmore = false;
 						} else {
 							page_all++;
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 						}
-						lv_all.onLoadMoreComplete();
-						if (!canloadmore)
-							lv_all.setCanLoadMore(false);
+						lv_all.stopLoadMore();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
-						lv_all.onLoadMoreComplete();
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_all.stopLoadMore();
+					}
+				});
 
+			}
+		});
+
+		lv_my.setXListViewListener(new IXListViewListener() {
+
+			@Override
+			public void onRefresh() {
+				api.getUserIssue(1, user.getId(), new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Issue> newData_my = Issue.create_by_jsonarray(obj
+								.toString());
+						if (newData_my == null) {
+							toast("网络异常 解析错误");
+						} else if (newData_my.size() == 0) {
+							toast("没有更多");
+						} else {
+							page_my = 1;
+							data_my.clear();
+							data_my.addAll(newData_my);
+							adapter_my.notifyDataSetChanged();
+						}
+						lv_my.stopRefresh();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_my.stopRefresh();
 					}
 				});
 			}
-		});
-
-		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
-
-			@Override
-			public void onRefresh() {
-
-			}
-		});
-		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.getUserIssue(page_my + 1, user.getId(),
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Issue> newData_my = Issue
+										.create_by_jsonarray(obj.toString());
+								if (newData_my == null) {
+									toast("网络异常,解析错误");
+								} else if (newData_my.size() == 0) {
+									toast("没有更多了!");
+								} else {
+									page_my++;
+									data_my.addAll(newData_my);
+									adapter_my.notifyDataSetChanged();
+								}
+								lv_my.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_my.stopLoadMore();
+							}
+						});
 			}
 		});
-		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
+
+		lv_favourit.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
 
 			}
-		});
-		lv_favourit.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
@@ -163,15 +208,22 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			}
 		});
 		lv_all.setOnItemClickListener(this);
-		lv_myjoin.setOnItemClickListener(this);
+		lv_my.setOnItemClickListener(this);
 		lv_favourit.setOnItemClickListener(this);
+
+		lv_all.startRefresh();
 	}
 
 	@Override
 	protected void initData() {
+		user = AppInfo.getUser(getContext());
+		if (user == null) {
+			toast("无用户信息,请重新登录");
+			closeActivity();
+		}
 		api = new IssuesAPI();
 		data_all = new ArrayList<Issue>();
-		data_myjoin = new ArrayList<Issue>();
+		data_my = new ArrayList<Issue>();
 		data_favourite = new ArrayList<Issue>();
 	}
 
@@ -183,19 +235,19 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 				R.layout.frame_acty_communication_join, null);
 		View favourit = getLayoutInflater().inflate(
 				R.layout.frame_acty_communication_favourite, null);
-		lv_all = (PullAndLoadListView) all
+		lv_all = (XListView) all
 				.findViewById(R.id.frame_acty_communication_all_listview);
-		lv_myjoin = (PullAndLoadListView) myjoin
+		lv_my = (XListView) myjoin
 				.findViewById(R.id.frame_acty_communication_join_listview);
-		lv_favourit = (PullAndLoadListView) favourit
+		lv_favourit = (XListView) favourit
 				.findViewById(R.id.frame_acty_communication_favourite_listview);
 
 		adapter_all = new IssueAdapter(data_all);
-		adapter_myjoin = new IssueAdapter(data_myjoin);
+		adapter_my = new IssueAdapter(data_my);
 		adapter_favourite = new IssueAdapter(data_favourite);
 
 		lv_all.setAdapter(adapter_all);
-		lv_myjoin.setAdapter(adapter_myjoin);
+		lv_my.setAdapter(adapter_my);
 		lv_favourit.setAdapter(adapter_favourite);
 
 		List<View> views = new ArrayList<View>();
@@ -212,17 +264,17 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_post = _getView(R.id.acty_head_btn_post);
 		btn_all = _getView(R.id.acty_comunication_footer_all);
-		btn_myjoin = _getView(R.id.acty_comunication_footer_myjoin);
+		btn_my = _getView(R.id.acty_comunication_footer_my);
 		btn_favourite = _getView(R.id.acty_comunication_footer_favourite);
 
 		btns.add(btn_all);
-		btns.add(btn_myjoin);
+		btns.add(btn_my);
 		btns.add(btn_favourite);
 
 		btn_back.setOnClickListener(this);
 		btn_post.setOnClickListener(this);
 		btn_all.setOnClickListener(this);
-		btn_myjoin.setOnClickListener(this);
+		btn_my.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
 
 		initViewPager();
@@ -241,7 +293,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_comunication_footer_all:
 			viewpager.setCurrentItem(0, true);
 			break;
-		case R.id.acty_comunication_footer_myjoin:
+		case R.id.acty_comunication_footer_my:
 			viewpager.setCurrentItem(1, true);
 			break;
 		case R.id.acty_comunication_footer_favourite:
@@ -309,17 +361,18 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			h.title.setText(data.get(position).getTitle());
 			h.body.setText(data.get(position).getBody());
 			h.numComment.setText(data.get(position).getNumComments() + "");
-			//h.favourite.setText(data.get(position).getFavourite()+"");
-			if(data.get(position).getUser().getAvatar()!=null){
+			// h.favourite.setText(data.get(position).getFavourite()+"");
+			if (data.get(position).getUser().getAvatar() != null) {
 				ImageLoader.getInstance().displayImage(
 						RestClient.BASE_URL
 								+ data.get(position).getUser().getAvatar(),
 						h.avatar);
-			}else{
+			} else {
 				ImageLoader.getInstance().displayImage(
-						"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
+						"drawable://" + R.drawable.ic_image_load_normal,
+						h.avatar);
 			}
-		
+
 			return convertView;
 		}
 
@@ -337,8 +390,8 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));
 		}
-		if (parent == lv_myjoin) {
-			intent.putExtra("issue", data_myjoin.get(position - 1));
+		if (parent == lv_my) {
+			intent.putExtra("issue", data_my.get(position - 1));
 		}
 		if (parent == lv_favourit) {
 			intent.putExtra("issue", data_favourite.get(position - 1));
