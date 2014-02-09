@@ -10,5 +10,12 @@
     <string name="xpull_to_refresh_tap_label">点击刷新</string>
     <string name="xpull_to_refresh_tap_loadmore_label">加载更多</string>
     <string name="xpull_to_refresh_have_no_more_to_refresh">没有更多</string>
+    <!-- new listview -->
+    <string name="header_hint_refresh_normal">下拉可以刷新</string>
+    <string name="header_hint_refresh_ready">松开可以刷新</string>
+    <string name="header_hint_refresh_loading">正在刷新&#8230;</string>
+    <string name="header_hint_refresh_time">更新于：</string>
+    <string name="footer_hint_load_normal">查看更多</string>
+    <string name="footer_hint_load_ready">松开载入更多</string>
 
 </resources>

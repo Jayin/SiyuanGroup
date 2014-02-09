@@ -28,9 +28,9 @@ import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.widget.PullAndLoadListView;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.alumnigroup.utils.L;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -42,13 +42,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class Business extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_all, btn_favourite, btn_myjoin, btn_compose;
-	private PullAndLoadListView lv_all, lv_myjoin, lv_favourit;
 	private ViewPager viewpager;
 	private List<Cooperation> data_all, data_myjoin, data_favourite;
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
 	private BusinessAPI api;
 	private User user;
+	private XListView lv_myjoin,lv_all,  lv_favourit;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +60,15 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initController() {
-		lv_all.setOnRefreshListener(new OnRefreshListener() {
-
+		lv_all.setPullRefreshEnable(true);
+		lv_all.setPullLoadEnable(true);
+		lv_myjoin.setPullRefreshEnable(true);
+		lv_myjoin.setPullLoadEnable(true);
+		lv_favourit.setPullRefreshEnable(true);
+		lv_favourit.setPullLoadEnable(true);
+		
+		lv_all.setXListViewListener(new IXListViewListener() {
+			
 			@Override
 			public void onRefresh() {
 				api.getCooperationList(1, new JsonResponseHandler() {
@@ -81,58 +88,124 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 						}
-						lv_all.onRefreshComplete();
-						lv_all.setCanLoadMore(true);
+						lv_all.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast("网络异常  错误码:" + errorCode);
-						lv_all.onRefreshComplete();
+						lv_all.stopRefresh();
 					}
 				});
+				
 			}
-		});
-		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
-
+			
 			@Override
 			public void onLoadMore() {
 				api.getCooperationList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						boolean canLoadMore = true;
 						List<Cooperation> newData_all = Cooperation
 								.create_by_jsonarray(obj.toString());
 						if (newData_all == null) {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有更多了");
-							canLoadMore = false;
 						} else {
 							page_all++;
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 						}
-						lv_all.onLoadMoreComplete();
-						if (!canLoadMore)
-							lv_all.setCanLoadMore(false);
+						lv_all.stopLoadMore();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast("网络异常  错误码:" + errorCode);
-						lv_all.onLoadMoreComplete();
+						lv_all.stopLoadMore();
 					}
 				});
+				
 			}
 		});
 		// 搜索我发布的
-		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
-
+//		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
+//
+//			@Override
+//			public void onRefresh() {
+//
+//				api.search(1, user.getId(), null, null,
+//						new JsonResponseHandler() {
+//
+//							@Override
+//							public void onOK(Header[] headers, JSONObject obj) {
+//								List<Cooperation> newData_myjoin = Cooperation
+//										.create_by_jsonarray(obj.toString());
+//								if (newData_myjoin == null) {
+//									toast("网络异常，解析错误");
+//								} else if (newData_myjoin.size() == 0) {
+//									toast("没有更多");
+//									page_myjoin = 1;
+//								} else {
+//									page_myjoin = 1;
+//									data_myjoin.clear();
+//									data_myjoin.addAll(newData_myjoin);
+//									adapter_myjoin.notifyDataSetChanged();
+//								}
+//								lv_myjoin.setCanRefresh(false, false);
+//								lv_myjoin.onRefreshComplete();
+//								lv_myjoin.setCanLoadMore(true);
+//
+//							}
+//
+//							@Override
+//							public void onFaild(int errorType, int errorCode) {
+//								toast("网络异常  错误码:" + errorCode);
+//								lv_myjoin.onRefreshComplete();
+//							}
+//						});
+//			}
+//		});
+//		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
+//
+//			@Override
+//			public void onLoadMore() {
+//				api.search(page_myjoin + 1, user.getId(), null, null,
+//						new JsonResponseHandler() {
+//
+//							@Override
+//							public void onOK(Header[] headers, JSONObject obj) {
+//								boolean canLoadMore = true;
+//								List<Cooperation> newData_myjoin = Cooperation
+//										.create_by_jsonarray(obj.toString());
+//								if (newData_myjoin == null) {
+//									toast("网络异常，解析错误");
+//								} else if (newData_myjoin.size() == 0) {
+//									toast("没有更多了");
+//									canLoadMore = false;
+//								} else {
+//									page_myjoin++;
+//									data_myjoin.addAll(newData_myjoin);
+//									adapter_myjoin.notifyDataSetChanged();
+//								}
+//								lv_myjoin.onLoadMoreComplete();
+//								if (!canLoadMore)
+//									lv_myjoin.setCanLoadMore(false);
+//							}
+//
+//							@Override
+//							public void onFaild(int errorType, int errorCode) {
+//								toast("网络异常  错误码:" + errorCode);
+//								lv_myjoin.onLoadMoreComplete();
+//							}
+//						});
+//			}
+//		});
+		lv_myjoin.setXListViewListener(new IXListViewListener() {
+			
 			@Override
 			public void onRefresh() {
-
 				api.search(1, user.getId(), null, null,
 						new JsonResponseHandler() {
 
@@ -151,22 +224,19 @@ public class Business extends BaseActivity implements OnItemClickListener {
 									data_myjoin.addAll(newData_myjoin);
 									adapter_myjoin.notifyDataSetChanged();
 								}
-								lv_myjoin.setCanRefresh(true, false);
-								lv_myjoin.onRefreshComplete();
-								lv_myjoin.setCanLoadMore(true);
+								lv_myjoin.stopRefresh();
 
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
 								toast("网络异常  错误码:" + errorCode);
-								lv_myjoin.onRefreshComplete();
+								lv_myjoin.stopRefresh();
 							}
 						});
+				
 			}
-		});
-		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
-
+			
 			@Override
 			public void onLoadMore() {
 				api.search(page_myjoin + 1, user.getId(), null, null,
@@ -174,46 +244,44 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								boolean canLoadMore = true;
 								List<Cooperation> newData_myjoin = Cooperation
 										.create_by_jsonarray(obj.toString());
 								if (newData_myjoin == null) {
 									toast("网络异常，解析错误");
 								} else if (newData_myjoin.size() == 0) {
 									toast("没有更多了");
-									canLoadMore = false;
 								} else {
 									page_myjoin++;
 									data_myjoin.addAll(newData_myjoin);
 									adapter_myjoin.notifyDataSetChanged();
 								}
-								lv_myjoin.onLoadMoreComplete();
-								if (!canLoadMore)
-									lv_myjoin.setCanLoadMore(false);
+								lv_myjoin.stopLoadMore();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
 								toast("网络异常  错误码:" + errorCode);
-								lv_myjoin.onLoadMoreComplete();
+								lv_myjoin.stopLoadMore();
 							}
 						});
 			}
 		});
-		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
-
+		lv_favourit.setXListViewListener(new IXListViewListener() {
+			
 			@Override
 			public void onRefresh() {
-
+				// TODO Auto-generated method stub
+				
 			}
-		});
-		lv_favourit.setOnLoadMoreListener(new OnLoadMoreListener() {
-
+			
 			@Override
 			public void onLoadMore() {
-
+				// TODO Auto-generated method stub
+				
 			}
 		});
+		
+		lv_all.startRefresh();
 	}
 
 	@Override
@@ -237,11 +305,11 @@ public class Business extends BaseActivity implements OnItemClickListener {
 				null);
 		View favourit = getLayoutInflater().inflate(
 				R.layout.frame_acty_business, null);
-		lv_all = (PullAndLoadListView) all
+		lv_all = (XListView) all
 				.findViewById(R.id.frame_acty_business_listview);
-		lv_myjoin = (PullAndLoadListView) myjoin
+		lv_myjoin = (XListView) myjoin
 				.findViewById(R.id.frame_acty_business_listview);
-		lv_favourit = (PullAndLoadListView) favourit
+		lv_favourit = (XListView) favourit
 				.findViewById(R.id.frame_acty_business_listview);
 		lv_all.setOnItemClickListener(this);
 		lv_myjoin.setOnItemClickListener(this);
@@ -311,6 +379,9 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		int real_position = position - 1;
+		
+		toast("position-->"+position);
+		L.i("position-->"+position);
 		if (parent == lv_all) {
 			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_all.get(real_position));
