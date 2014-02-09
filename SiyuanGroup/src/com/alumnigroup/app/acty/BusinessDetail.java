@@ -65,7 +65,7 @@ public class BusinessDetail extends BaseActivity {
 	protected void initLayout() {
 		owner = _getView(R.id.linly_owner);
 		common = _getView(R.id.linly_common);
-		
+
 		tv_username = (TextView) _getView(R.id.tv_username);
 		tv_projectname = (TextView) _getView(R.id.tv_projectname);
 		tv_deadline = (TextView) _getView(R.id.tv_deadline);
@@ -103,22 +103,18 @@ public class BusinessDetail extends BaseActivity {
 		commentView = (CommentView) _getView(R.id.commentlist);
 
 		// api get comment list
-		api.view(c.getId(), new JsonResponseHandler() {
+		api.getCommentList(c.getId(), new JsonResponseHandler() {
 
 			@Override
 			public void onStart() {
 				tv_notify.setVisibility(View.VISIBLE);
 				tv_notify.setText("加载中...");
 			}
+
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				List<Cocomment> newData = null;
-				try {
-					newData = Cocomment.create_by_jsonarray(obj.getJSONObject(
-							"cooperation").toString());
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
+				newData = Cocomment.create_by_jsonarray(obj.toString());
 				if (newData == null) {
 					toast("网络异常 解析错误");
 					tv_notify.setVisibility(View.VISIBLE);
@@ -138,8 +134,8 @@ public class BusinessDetail extends BaseActivity {
 				toast("网络异常 错误码:" + errorCode);
 			}
 		});
-        //用户和发布者有不同的显示
-		if (c.getOwnerid() !=  user.getId()) {
+		// 用户和发布者有不同的显示
+		if (c.getOwnerid() != user.getId()) {
 			common.setVisibility(View.VISIBLE);
 			owner.setVisibility(View.GONE);
 		} else {

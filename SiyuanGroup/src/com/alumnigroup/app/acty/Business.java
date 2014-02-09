@@ -151,6 +151,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 									data_myjoin.addAll(newData_myjoin);
 									adapter_myjoin.notifyDataSetChanged();
 								}
+								lv_myjoin.setCanRefresh(true, false);
 								lv_myjoin.onRefreshComplete();
 								lv_myjoin.setCanLoadMore(true);
 
