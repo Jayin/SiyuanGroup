@@ -11,6 +11,8 @@ import android.widget.EditText;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.EditTextUtils;
 
@@ -18,6 +20,7 @@ public class CommunicationPublish extends BaseActivity {
 	private View btn_back, btn_post, btn_permission, btn_mention;
 	private EditText et_title, et_content;
 	private IssuesAPI api;
+	private Issue issue;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,7 @@ public class CommunicationPublish extends BaseActivity {
 
 	@Override
 	protected void initData() {
+		issue = (Issue) getSerializableExtra("issue");
 		api = new IssuesAPI();
 	}
 
@@ -40,12 +44,17 @@ public class CommunicationPublish extends BaseActivity {
 		btn_mention = _getView(R.id.mention);
 		et_title = (EditText) _getView(R.id.et_title);
 		et_content = (EditText) _getView(R.id.et_content);
-		
+
+		if (issue != null) {
+			et_title.setText(issue.getTitle());
+			et_content.setText(issue.getBody());
+		}
+
 		btn_back.setOnClickListener(this);
 		btn_post.setOnClickListener(this);
 		btn_permission.setOnClickListener(this);
 		btn_mention.setOnClickListener(this);
-		
+
 	}
 
 	@Override
@@ -60,33 +69,46 @@ public class CommunicationPublish extends BaseActivity {
 			if (title == null || title.equals("")) {
 				toast("标题不能为空!");
 			}
-			api.postIssue(title, body, new JsonResponseHandler() {
+			if (issue == null) { // 发布
+				api.postIssue(title, body, new JsonResponseHandler() {
 
-				@Override
-				public void onOK(Header[] headers, JSONObject obj) {
-					toast("发布成功");
-					closeActivity();
-				}
-
-				@Override
-				public void onFaild(int errorType, int errorCode) {
-					if(errorCode==21301){
-						toast("身份验证失败，请重新登录");
-					}else{
-						toast("发送失败 错误码:" + errorCode);
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("发布成功");
+						closeActivity();
 					}
-					
-				}
-			});
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("发布失败 " + ErrorCode.errorList.get(errorCode));
+					}
+				});
+			} else { // 更新
+				api.updateIssue(issue.getId(), title, body,
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								toast("发布成功");
+								closeActivity();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("发布失败 "
+										+ ErrorCode.errorList.get(errorCode));
+							}
+						});
+			}
 			break;
 		case R.id.permission:
 			toast("permission");
 			break;
 		case R.id.mention:
-			//toast("mention");
-		    Intent intent  = new Intent(this,FollowingList.class);
-		    intent.putExtra("userid", 1);
-		    openActivity(intent);
+			// toast("mention");
+			Intent intent = new Intent(this, FollowingList.class);
+			intent.putExtra("userid", 1);
+			openActivity(intent);
 			break;
 		default:
 			break;

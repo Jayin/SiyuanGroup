@@ -17,10 +17,13 @@ import android.widget.TextView;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Comment;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
@@ -35,7 +38,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class CommunicationDetail extends BaseActivity {
-	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space;
+	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space,
+			btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
 	private ImageView iv_avater;
 	private Issue issue;
@@ -44,6 +48,8 @@ public class CommunicationDetail extends BaseActivity {
 	private List<Comment> data_commet;
 	private CommentAdapter adapter_commet;
 	private IssuesAPI api;
+	private User user;
+	private View vistor, owner;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +62,11 @@ public class CommunicationDetail extends BaseActivity {
 	@Override
 	protected void initData() {
 		issue = (Issue) getSerializableExtra("issue");
+		user = AppInfo.getUser(getContext());
+		if (user == null) {
+			toast("用户信息不存在，请重新登录");
+			closeActivity();
+		}
 		api = new IssuesAPI();
 		data_commet = new ArrayList<Comment>();
 	}
@@ -68,9 +79,26 @@ public class CommunicationDetail extends BaseActivity {
 		tv_title = (TextView) _getView(R.id.item_lv_acty_comminication_title);
 		tv_body = (TextView) _getView(R.id.item_lv_acty_comminication_body);
 		iv_avater = (ImageView) _getView(R.id.acty_communicationdetail_iv_avater);
+
+		owner = _getView(R.id.owner);
+		vistor = _getView(R.id.visitor);
+		if (issue.getUser().getId() == user.getId()) {
+			owner.setVisibility(View.VISIBLE);
+			vistor.setVisibility(View.GONE);
+		} else {
+			owner.setVisibility(View.GONE);
+			vistor.setVisibility(View.VISIBLE);
+		}
+
 		// 头像
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + issue.getUser().getAvatar(), iv_avater);
+		if (issue.getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + issue.getUser().getAvatar(),
+					iv_avater);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
+		}
 		tv_username.setText(issue.getUser().getProfile().getName());
 		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
 				CalendarUtils.TYPE_timeline));
@@ -82,12 +110,16 @@ public class CommunicationDetail extends BaseActivity {
 		btn_share = _getView(R.id.acty_communicationdetail_footer_share);
 		btn_comment = _getView(R.id.acty_communicationdetail_footer_comment);
 		btn_favourite = _getView(R.id.acty_communicationdetail_footer_favourite);
+		btn_delete = _getView(R.id.btn_delete);
+		btn_edit = _getView(R.id.btn_edit);
 
 		btn_back.setOnClickListener(this);
 		btn_space.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
 		btn_comment.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
+		btn_delete.setOnClickListener(this);
+		btn_edit.setOnClickListener(this);
 
 		lv_comment = (CommentView) _getView(R.id.item_lv_acty_comminication_lv_comment);
 		adapter_commet = new CommentAdapter(data_commet);
@@ -99,6 +131,7 @@ public class CommunicationDetail extends BaseActivity {
 				tv_notify.setText("评论加载中....");
 				tv_notify.setVisibility(View.VISIBLE);
 			}
+
 			@Override
 			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 					Throwable arg3) {
@@ -143,15 +176,15 @@ public class CommunicationDetail extends BaseActivity {
 			break;
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
-			toast("to personal space");
+			// toast("to personal space");
 			break;
 		case R.id.acty_communicationdetail_footer_share:
 			// 分享到圈子
-			toast("share");
+			// toast("share");
 			break;
 		case R.id.acty_communicationdetail_footer_comment:
 			// 评论
-			Intent comIntent = new Intent(this,CommunicationComment.class);
+			Intent comIntent = new Intent(this, CommunicationComment.class);
 			comIntent.putExtra("issue", issue);
 			openActivity(comIntent);
 			break;
@@ -159,26 +192,58 @@ public class CommunicationDetail extends BaseActivity {
 			// 收藏
 			faviourite();
 			break;
+
+		case R.id.btn_delete:
+			delete();
+			break;
+		case R.id.btn_edit:
+			edit();
+			break;
 		default:
 			break;
 		}
 	}
-    //收藏的remark默认为期类型名
-	private void faviourite() {
-		 StarAPI starapi = new StarAPI();
-		 starapi.star(StarAPI.Item_type_issue, issue.getId(), "issue", new JsonResponseHandler() {
-			
+
+	private void delete() {
+		api.deleteIssue(issue.getId(), new JsonResponseHandler() {
+
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-				 toast("收藏成功");
+				toast("删除成功");
+				closeActivity();
 			}
-			
+
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-			   toast("收藏失败 错误码:"+errorCode);
+				toast("删除失败  " + ErrorCode.errorList.get(errorCode));
 			}
 		});
-		
+
+	}
+
+	private void edit() {
+		Intent intent = new Intent(this, CommunicationPublish.class);
+		intent.putExtra("issue", issue);
+		openActivity(intent);
+	}
+
+	// 收藏的remark默认为期类型名
+	private void faviourite() {
+		StarAPI starapi = new StarAPI();
+		starapi.star(StarAPI.Item_type_issue, issue.getId(), "issue",
+				new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("收藏成功");
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("收藏失败 错误码:" + errorCode);
+					}
+				});
+
 	}
 
 	class CommentAdapter extends BaseAdapter {
@@ -239,6 +304,5 @@ public class CommunicationDetail extends BaseActivity {
 			ImageView avater;
 		}
 	}
-
 
 }
