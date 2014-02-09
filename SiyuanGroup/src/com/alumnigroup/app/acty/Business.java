@@ -16,7 +16,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.BusinessAPI;
@@ -130,78 +129,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			}
 		});
 		// 搜索我发布的
-//		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
-//
-//			@Override
-//			public void onRefresh() {
-//
-//				api.search(1, user.getId(), null, null,
-//						new JsonResponseHandler() {
-//
-//							@Override
-//							public void onOK(Header[] headers, JSONObject obj) {
-//								List<Cooperation> newData_myjoin = Cooperation
-//										.create_by_jsonarray(obj.toString());
-//								if (newData_myjoin == null) {
-//									toast("网络异常，解析错误");
-//								} else if (newData_myjoin.size() == 0) {
-//									toast("没有更多");
-//									page_myjoin = 1;
-//								} else {
-//									page_myjoin = 1;
-//									data_myjoin.clear();
-//									data_myjoin.addAll(newData_myjoin);
-//									adapter_myjoin.notifyDataSetChanged();
-//								}
-//								lv_myjoin.setCanRefresh(false, false);
-//								lv_myjoin.onRefreshComplete();
-//								lv_myjoin.setCanLoadMore(true);
-//
-//							}
-//
-//							@Override
-//							public void onFaild(int errorType, int errorCode) {
-//								toast("网络异常  错误码:" + errorCode);
-//								lv_myjoin.onRefreshComplete();
-//							}
-//						});
-//			}
-//		});
-//		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
-//
-//			@Override
-//			public void onLoadMore() {
-//				api.search(page_myjoin + 1, user.getId(), null, null,
-//						new JsonResponseHandler() {
-//
-//							@Override
-//							public void onOK(Header[] headers, JSONObject obj) {
-//								boolean canLoadMore = true;
-//								List<Cooperation> newData_myjoin = Cooperation
-//										.create_by_jsonarray(obj.toString());
-//								if (newData_myjoin == null) {
-//									toast("网络异常，解析错误");
-//								} else if (newData_myjoin.size() == 0) {
-//									toast("没有更多了");
-//									canLoadMore = false;
-//								} else {
-//									page_myjoin++;
-//									data_myjoin.addAll(newData_myjoin);
-//									adapter_myjoin.notifyDataSetChanged();
-//								}
-//								lv_myjoin.onLoadMoreComplete();
-//								if (!canLoadMore)
-//									lv_myjoin.setCanLoadMore(false);
-//							}
-//
-//							@Override
-//							public void onFaild(int errorType, int errorCode) {
-//								toast("网络异常  错误码:" + errorCode);
-//								lv_myjoin.onLoadMoreComplete();
-//							}
-//						});
-//			}
-//		});
 		lv_myjoin.setXListViewListener(new IXListViewListener() {
 			
 			@Override

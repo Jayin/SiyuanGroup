@@ -157,7 +157,7 @@ public class BusinessDetail extends BaseActivity {
 			end();
 			break;
 		case R.id.btn_space:
-			toast("to space");
+			//toast("to space");
 			break;
 		case R.id.btn_comment:
 			comment();
@@ -262,10 +262,17 @@ public class BusinessDetail extends BaseActivity {
 			h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
 					.getPosttime(), CalendarUtils.TYPE_timeline));
 			h.body.setText(data.get(position).getBody());
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL
-							+ data.get(position).getUser().getAvatar(),
-					h.avater);
+			if (data.get(position).getUser().getAvatar() == null) {
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL
+								+ data.get(position).getUser().getAvatar(),
+						h.avater);
+			} else {
+				ImageLoader.getInstance().displayImage(
+						"drawable://" + R.drawable.ic_image_load_normal,
+						iv_avatar);
+			}
+
 			return convertView;
 		}
 
