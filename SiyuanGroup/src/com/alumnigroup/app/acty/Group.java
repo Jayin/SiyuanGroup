@@ -42,12 +42,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class Group extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_all, btn_mycreate, btn_myjoin, btn_more;
-	private XListView lv_all, lv_myjoin, lv_mycreate;
+	private View btn_back, btn_all,  btn_myjoin, btn_more;
+	private XListView lv_all, lv_myjoin;
 	private ViewPager viewpager;
-	private List<MGroup> data_all, data_myjoin, data_mycreate;
-	private GroupAdapter adapter_all, adapter_myjoin, adapter_mycreate;
-	private int page_all = 0, page_myjoin = 0, page_mycreate = 0;
+	private List<MGroup> data_all, data_myjoin;
+	private GroupAdapter adapter_all, adapter_myjoin;
+	private int page_all = 0, page_myjoin = 0;
 	private GroupAPI api;
 	private PopupWindow mPopupWindow;
 
@@ -65,8 +65,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		lv_all.setPullLoadEnable(true);
 		lv_myjoin.setPullRefreshEnable(true);
 		lv_myjoin.setPullLoadEnable(true);
-		lv_mycreate.setPullRefreshEnable(true);
-		lv_mycreate.setPullLoadEnable(true);
 		lv_all.setXListViewListener(new IXListViewListener() {
 
 			@Override
@@ -141,30 +139,72 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
+				api.getMyGroupList(1, new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<MGroup> newData_my = MGroup
+								.create_by_jsonarray(obj.toString());
+						if (newData_my == null) {
+							toast("网络异常 解析错误");
+						} else if (newData_my.size() == 0) {
+							toast("没有更多");
+						} else {
+							page_myjoin= 1;
+							data_myjoin.clear();
+							data_myjoin.addAll(newData_my);
+							adapter_myjoin.notifyDataSetChanged();
+						}
+						lv_myjoin.stopRefresh();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_myjoin.stopRefresh();
+					}
+				});
 			}
 
 			@Override
 			public void onLoadMore() {
+				if (page_myjoin == 0) {
+					lv_myjoin.startRefresh();
+					lv_myjoin.stopLoadMore();
+					return;
+				}
+				api.getMyGroupList(page_myjoin + 1, new JsonResponseHandler() {
 
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<MGroup> newData_my = MGroup
+								.create_by_jsonarray(obj.toString());
+						if (newData_my == null) {
+							toast("网络异常,解析错误");
+						} else if (newData_my.size() == 0) {
+							toast("没有更多了!");
+						} else {
+							page_myjoin++;
+							data_myjoin.addAll(newData_my);
+							adapter_myjoin.notifyDataSetChanged();
+						}
+						lv_myjoin.stopLoadMore();
+
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_myjoin.stopLoadMore();
+					}
+				});
 			}
 		});
 
-		lv_mycreate.setXListViewListener(new IXListViewListener() {
-
-			@Override
-			public void onRefresh() {
-
-			}
-
-			@Override
-			public void onLoadMore() {
-
-			}
-		});
 		lv_all.setOnItemClickListener(this);
 		lv_myjoin.setOnItemClickListener(this);
-		lv_mycreate.setOnItemClickListener(this);
+		
+		lv_all.startRefresh();
 	}
 
 	private void initViewPager() {
@@ -172,26 +212,21 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		View all = getLayoutInflater().inflate(R.layout.frame_acty_group, null);
 		View myjoin = getLayoutInflater().inflate(R.layout.frame_acty_group,
 				null);
-		View favourit = getLayoutInflater().inflate(R.layout.frame_acty_group,
-				null);
+		 
 		lv_all = (XListView) all.findViewById(R.id.frame_acty_group_listview);
 		lv_myjoin = (XListView) myjoin
 				.findViewById(R.id.frame_acty_group_listview);
-		lv_mycreate = (XListView) favourit
-				.findViewById(R.id.frame_acty_group_listview);
+	 
 
 		adapter_all = new GroupAdapter(data_all);
 		adapter_myjoin = new GroupAdapter(data_myjoin);
-		adapter_mycreate = new GroupAdapter(data_mycreate);
 
 		lv_all.setAdapter(adapter_all);
 		lv_myjoin.setAdapter(adapter_myjoin);
-		lv_mycreate.setAdapter(adapter_mycreate);
 
 		List<View> views = new ArrayList<View>();
 		views.add(all);
 		views.add(myjoin);
-		views.add(favourit);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
 		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
 	}
@@ -201,7 +236,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		api = new GroupAPI();
 		data_all = new ArrayList<MGroup>();
 		data_myjoin = new ArrayList<MGroup>();
-		data_mycreate = new ArrayList<MGroup>();
 	}
 
 	@Override
@@ -209,17 +243,14 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_all = _getView(R.id.acty_group_footer_all);
 		btn_myjoin = _getView(R.id.acty_group_footer_myjoin);
-		btn_mycreate = _getView(R.id.acty_group_footer_mycreat);
 		btn_more = _getView(R.id.acty_head_btn_more);
 
 		btns.add(btn_all);
 		btns.add(btn_myjoin);
-		btns.add(btn_mycreate);
 
 		btn_back.setOnClickListener(this);
 		btn_all.setOnClickListener(this);
 		btn_myjoin.setOnClickListener(this);
-		btn_mycreate.setOnClickListener(this);
 		btn_more.setOnClickListener(this);
 
 		initViewPager();
@@ -259,9 +290,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_group_footer_myjoin:
 			viewpager.setCurrentItem(1, true);
 			break;
-		case R.id.acty_group_footer_mycreat:
-			viewpager.setCurrentItem(2, true);
-			break;
 		case R.id.search:
 			toast("search");
 			mPopupWindow.dismiss();
@@ -282,9 +310,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		Intent intent = new Intent(this, GroupInfo.class);
 		if (parent == lv_all) {
 			intent.putExtra("group", data_all.get(position - 1));
-		} else if (parent == lv_mycreate) {
-			intent.putExtra("group", data_mycreate.get(position - 1));
-		} else {
+		}  else {
 			intent.putExtra("group", data_myjoin.get(position - 1));
 		}
 		openActivity(intent);
