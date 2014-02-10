@@ -175,13 +175,14 @@ public class ActivityAPI {
 
 	/**
 	 * 更新活动图片
-	 * 
+	 * params包含ken="avatar"
+	 * @param id 活动id
 	 * @param params
 	 *            avatar-File
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void updateAvatar(RequestParams params,
+	public void updateAvatar(int id,RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
 		RestClient.post("/api/activities/avatar/update", params,
 				responseHandler);

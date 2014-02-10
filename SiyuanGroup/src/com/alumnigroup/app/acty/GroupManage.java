@@ -16,6 +16,7 @@ import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -114,9 +115,7 @@ public class GroupManage extends BaseActivity {
 		try {
 			fin = new FileInputStream(f);
 			RequestParams params = new RequestParams();
-			params.put("avatar", f);
 			params.put("avatar", f, "image/jpeg");
-			toast(FilePath.getImageFilePath() + "cache_face.jpg");
 			api.updateAvatar(group.getId(), params, new JsonResponseHandler() {
 				@Override
 				public void onStart() {
@@ -126,12 +125,11 @@ public class GroupManage extends BaseActivity {
 				@Override
 				public void onOK(Header[] headers, JSONObject obj) {
 					toast("头像上传成功");
-					f.delete();// 删除
 				}
 
 				@Override
 				public void onFaild(int errorType, int errorCode) {
-					toast("网络异常 错误码:" + errorCode);
+					toast("网络异常 "+ErrorCode.errorList.get(errorCode));
 				}
 			});
 

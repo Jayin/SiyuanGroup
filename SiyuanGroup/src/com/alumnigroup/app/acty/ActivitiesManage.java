@@ -1,5 +1,8 @@
 package com.alumnigroup.app.acty;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.apache.http.Header;
@@ -13,9 +16,12 @@ import android.view.View;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.Userships;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.FilePath;
+import com.loopj.android.http.RequestParams;
 
 /**
  * 活动管理页面
@@ -89,8 +95,18 @@ public class ActivitiesManage extends BaseActivity {
 	}
 
 	private void updateAvater() {
+		// 输出裁剪的临时文件
+		String path = FilePath.getImageFilePath() + "cache_face.jpg";
+		File protraitFile = new File(path);
+		Uri uri = Uri.fromFile(protraitFile);
 		Intent intent = new Intent(Intent.ACTION_PICK);
-		intent.setType("image/*");// 相片类型
+		intent.setType("image/*");
+		intent.putExtra("output", uri);
+		intent.putExtra("crop", "true");
+		intent.putExtra("aspectX", 1);// 裁剪框比例
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("outputX", 100);// 输出图片大小
+		intent.putExtra("outputY", 100);
 		startActivityForResult(intent, RequestCode_Pick_image);
 	}
 
@@ -98,11 +114,41 @@ public class ActivitiesManage extends BaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == RequestCode_Pick_image && resultCode == RESULT_OK) {
-			Uri uri = data.getData();
-			// api.updateAvatar(params, responseHandler)
+			final File f = new File(FilePath.getImageFilePath()
+					+ "cache_face.jpg");
+			FileInputStream fin;
+			try {
+				fin = new FileInputStream(f);
+				RequestParams params = new RequestParams();
+				params.put("avatar", f, "image/jpeg");
+				toast(FilePath.getImageFilePath() + "cache_face.jpg");
+				api.updateAvatar(acty.getId(), params,
+						new JsonResponseHandler() {
+							@Override
+							public void onStart() {
+								toast("图片上传中..");
+							}
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								toast("图片上传成功");
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+							}
+						});
+
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+				toast("图片资源不存在");
+			}
 		} else if (requestCode == RequestCode_Manage_Userships
 				&& resultCode == RESULT_OK) {
-			ArrayList<Userships> result = (ArrayList<Userships>)data.getSerializableExtra("result");
+			ArrayList<Userships> result = (ArrayList<Userships>) data
+					.getSerializableExtra("result");
 			toast("you select:" + result.size());
 		}
 	}
