@@ -281,7 +281,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_more:
-			toast("more");
 			mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.acty_group_footer_all:
@@ -291,7 +290,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			viewpager.setCurrentItem(1, true);
 			break;
 		case R.id.search:
-			toast("search");
+			//toast("search");
 			mPopupWindow.dismiss();
 			break;
 		case R.id.create:

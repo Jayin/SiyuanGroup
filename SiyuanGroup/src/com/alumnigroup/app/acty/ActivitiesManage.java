@@ -147,9 +147,9 @@ public class ActivitiesManage extends BaseActivity {
 			}
 		} else if (requestCode == RequestCode_Manage_Userships
 				&& resultCode == RESULT_OK) {
-			ArrayList<Userships> result = (ArrayList<Userships>) data
-					.getSerializableExtra("result");
-			toast("you select:" + result.size());
+//			ArrayList<Userships> result = (ArrayList<Userships>) data
+//					.getSerializableExtra("result");
+//			toast("you select:" + result.size());
 		}
 	}
 

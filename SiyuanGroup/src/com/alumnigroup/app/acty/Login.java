@@ -161,6 +161,7 @@ public class Login extends BaseActivity {
 						@Override
 						public void onFaild(int errorType, int errorCode) {
 							toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+							dialog.dismiss();
 						}
 					});
 
