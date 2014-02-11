@@ -403,13 +403,10 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
 						// 还要判断是否有error_code
-						toast("ok");
 						String json = new String(data);// jsonarray
 						if (JsonUtils.isOK(json)) {
-							System.out.println("json------>>>"+json);
 							List<Dynamic> newData_all = Dynamic
 									.create_by_jsonarray(json);
-							System.out.println("newData_all------>>>"+newData_all);
 							if (newData_all != null) {
 								page_all = 1;
 								alAllDynamicContent.clear();

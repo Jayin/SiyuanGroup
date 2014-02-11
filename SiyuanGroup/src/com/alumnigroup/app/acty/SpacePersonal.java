@@ -413,6 +413,13 @@ public class SpacePersonal extends BaseActivity {
 		}
 		api.updateCover(myself.getId(), backgroupData,
 				new AsyncHttpResponseHandler() {
+			
+			
+
+					@Override
+					public void onFinish() {
+						toast("finish");
+					}
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -427,7 +434,14 @@ public class SpacePersonal extends BaseActivity {
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						toast("更新完成");
+						String json = new String(data);// jsonarray
+						System.out.println(json);
+						if (JsonUtils.isOK(json)) {
+							toast("更新完成"+json);
+						}else{
+							toast("更新失败"+json);
+						}
+						
 					}
 				});
 
@@ -468,7 +482,7 @@ public class SpacePersonal extends BaseActivity {
 		case R.id.acty_space_personal_top_iv_backgroup:
 			final CharSequence[] items = { "相册", "拍照" };
 			AlertDialog dlg = new AlertDialog.Builder(SpacePersonal.this)
-					.setTitle("选择图片")
+					.setTitle("更新背景图")
 					.setItems(items, new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog, int item) {
 							// 这里item是根据选择的方式，

@@ -224,6 +224,14 @@ public class UserAPI {
 		RequestParams params = new RequestParams();
 		params.put("id", id + "");
 		params.put("cover", backgroupData);
-		RestClient.post("/api/users/profile/update", params, responseHandler);
+		RestClient.post("/api/users/cover/update", params, responseHandler);
+	}
+
+	public void updatePortrait(int id, byte[] portraitData,
+			AsyncHttpResponseHandler asyncHttpResponseHandler) {
+		RequestParams params = new RequestParams();
+		params.put("id", id + "");
+		params.put("avatar", portraitData);
+		RestClient.post("/api/users/cover/update", params, asyncHttpResponseHandler);
 	}
 }
