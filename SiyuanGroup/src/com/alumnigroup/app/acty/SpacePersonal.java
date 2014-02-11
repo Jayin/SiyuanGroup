@@ -16,17 +16,14 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
-import android.view.View.OnTouchListener;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alumnigroup.api.DynamicAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
@@ -96,6 +93,8 @@ public class SpacePersonal extends BaseActivity {
 	 * 访客
 	 */
 	private OutoLinefeedLayout lyVisitors;
+
+	private UserAPI api = new UserAPI();
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -227,7 +226,7 @@ public class SpacePersonal extends BaseActivity {
 		/**
 		 */
 		final LayoutInflater inflater = LayoutInflater.from(this);
-		api.getAll(1, 13/*myself.getId()*/, new AsyncHttpResponseHandler() {
+		api.getAll(1, 13/* myself.getId() */, new AsyncHttpResponseHandler() {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
@@ -373,8 +372,6 @@ public class SpacePersonal extends BaseActivity {
 		llPersonalData.addView(convertView);
 	}
 
-
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
@@ -409,12 +406,31 @@ public class SpacePersonal extends BaseActivity {
 				backgroupBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 				backgroupData = baos.toByteArray();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			// 把得到的图片绑定在控件上显示
 			ivBackgroup.setImageBitmap(backgroupBitmap);
 		}
+		api.updateCover(myself.getId(), backgroupData,
+				new AsyncHttpResponseHandler() {
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							byte[] data, Throwable err) {
+						toast("网络异常 错误码:" + statusCode);
+						if (data != null)
+							L.i(new String(data));
+						if (err != null)
+							L.i(err.toString());
+					}
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						toast("更新完成");
+					}
+				});
+
 	}
 
 	@Override

@@ -186,6 +186,7 @@ public class UserAPI {
 
 	/**
 	 * 更新个人资料
+	 * 
 	 * @param name
 	 * @param gender
 	 * @param age
@@ -195,20 +196,34 @@ public class UserAPI {
 	 * @param summary
 	 * @param responseHandler
 	 */
-	public void updateProfile(int id,String name, String gender, int age, int grade,
-			String university, String major, String summary,
+	public void updateProfile(int id, String name, String gender, int age,
+			int grade, String university, String major, String summary,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		
+
 		params.add("name", name);
-		params.add("id", id+"");
+		params.add("id", id + "");
 		params.add("gender", gender);
 		params.add("name", name);
-		params.add("age", age+"");
-		params.add("grade", grade+"");
+		params.add("age", age + "");
+		params.add("grade", grade + "");
 		params.add("university", university);
 		params.add("major", major);
 		params.add("summary", summary);
+		RestClient.post("/api/users/profile/update", params, responseHandler);
+	}
+
+	/**
+	 * 更新空间背景图
+	 * @param id
+	 * @param backgroupData
+	 * @param responseHandler
+	 */
+	public void updateCover(int id, byte[] backgroupData,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.put("id", id + "");
+		params.put("cover", backgroupData);
 		RestClient.post("/api/users/profile/update", params, responseHandler);
 	}
 }
