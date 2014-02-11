@@ -32,7 +32,6 @@ public class User implements Serializable {
 	 */
 	public static User create_by_json(String json) {
 		try {
-			L.i("User.java --json:"+json);
 			Gson gson = new Gson();
 			return (User) gson.fromJson(json, User.class);
 		} catch (Exception e) {
@@ -79,8 +78,6 @@ public class User implements Serializable {
 	private int isonline;
 	/** 用户的头像相对url **/
 	private String avatar;
-	/** 空间背景图相对url **/
-
 	/** 关注数 */
 	private int numFollowing;
 	/** 被关注数(分数量) */
@@ -214,7 +211,7 @@ public class User implements Serializable {
 				+ ", numFollowing=" + numFollowing + ", numFollowers="
 				+ numFollowers + ", numIssues=" + numIssues + ", numPhotos="
 				+ numPhotos + ", numStarring=" + numStarring + ", numEvents="
-				+ numEvents + ", profile=" + profile + "]";
+				+ numEvents + ", profile=" + profile + ", cover=" + cover + "]";
 	}
 
 	public class Profile implements Serializable {
@@ -222,14 +219,6 @@ public class User implements Serializable {
 		 * 个性签名
 		 */
 		private String summary;
-		public String getSummary() {
-			return summary;
-		}
-
-		public void setSummary(String summary) {
-			this.summary = summary;
-		}
-
 		/** 邮箱 */
 		private String email;
 		/** 昵称 **/
@@ -249,6 +238,13 @@ public class User implements Serializable {
 		private String university;
 		/** 专业 **/
 		private String major;
+		public String getSummary() {
+			return summary;
+		}
+
+		public void setSummary(String summary) {
+			this.summary = summary;
+		}
 
 		public String getEmail() {
 			return email;

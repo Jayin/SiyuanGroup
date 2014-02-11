@@ -27,7 +27,6 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
@@ -328,7 +327,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						.findViewById(R.id.item_lv_acty_group_tv_memberCount);
 				h.description = (TextView) convertView
 						.findViewById(R.id.item_lv_acty_group_tv_description);
-				h.avater = (ImageView) convertView
+				h.avatar = (ImageView) convertView
 						.findViewById(R.id.item_lv_acty_circlelist_iv_avater);
 				convertView.setTag(h);
 			} else {
@@ -339,14 +338,19 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			h.username.setText("ownid" + group.getOwnerid());
 			h.memberCount.setText(group.getNumMembers() + "名会员");
 			h.description.setText(group.getDescription());
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + group.getAvatar(), h.avater);
+			if(group.getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + group.getAvatar(), h.avatar);
+			}else{
+				ImageLoader.getInstance().displayImage("drawable://"+R.drawable.ic_image_load_normal,  h.avatar);
+			}
+			
 			return convertView;
 		}
 
 		class ViewHodler {
 			TextView name, username, memberCount, description;
-			ImageView avater;
+			ImageView avatar;
 		}
 	}
 

@@ -10,8 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -97,15 +95,20 @@ public class CommunicationDetail extends BaseActivity {
 
 		api.view(issue.getId(), new AsyncHttpResponseHandler() {
 			@Override
+			public void onStart() {
+				tv_notify.setText("评论加载中....");
+				tv_notify.setVisibility(View.VISIBLE);
+			}
+			@Override
 			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
 					Throwable arg3) {
 				toast("网络异常 错误码:" + arg0);
-				tv_notify.setText("网络异常 错误码:" + arg0);
-				tv_notify.setVisibility(View.VISIBLE);
+				tv_notify.setVisibility(View.GONE);
 			}
 
 			@Override
 			public void onSuccess(int statusCode, Header[] header, byte[] data) {
+				tv_notify.setVisibility(View.GONE);
 				boolean canRefresh = true;
 				String json = new String(data);
 				if (JsonUtils.isOK(json)) {

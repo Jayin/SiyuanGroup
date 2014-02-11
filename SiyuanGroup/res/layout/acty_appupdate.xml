@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="240dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="10dp"
+    android:background="@drawable/round_corner_blue_nomal"
+    android:minWidth="120dp"
+    android:orientation="vertical" >
+
+    <TextView
+        style="@style/TextView.black"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="6dp"
+        android:text="发现新版本"
+        android:textColor="@color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:background="@drawable/ic_line_1" />
+
+    <TextView
+        android:id="@+id/tv_updateInfo"
+        style="@style/TextView.black"
+        android:layout_gravity="center_horizontal"
+         android:layout_marginTop="12dp"
+        android:layout_marginLeft="6dp"
+          android:layout_marginRight="6dp"
+            android:layout_marginBottom="6dp"
+        android:gravity="left"
+        android:text="1\n发现新版本发现新1\n版本发1\n现新版本发现新版本发1\n现新版本发现新版本发现新版本"
+        android:textColor="@color/white" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="6dp"
+        android:orientation="horizontal"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp" >
+
+        <Button
+            android:id="@+id/btn_update"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginRight="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_common_blue_transparent"
+            android:gravity="center"
+            android:text="立即更新"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="34dp"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/btn_common_blue_transparent"
+            android:text="下次更新"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+</LinearLayout>

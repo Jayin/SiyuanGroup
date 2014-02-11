@@ -11,7 +11,7 @@
         android:layout_width="100dp"
         android:layout_height="54dp"
         android:background="@drawable/btn_popup_item_black"
-        android:text="查找" />
+        android:text="查找" android:visibility="gone"/>
 
     <ImageView
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
-        android:background="@color/grey_lv_third" />
+        android:background="@color/grey_lv_third" android:visibility="gone"/>
 
     <Button
         android:id="@+id/create"

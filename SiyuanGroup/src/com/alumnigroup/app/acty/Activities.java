@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
-
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -16,9 +14,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.TextView;
-
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.ActivityAPI;
@@ -52,7 +48,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
 	private ActivityAPI api;
 	private User mUser;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -100,7 +96,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				debug("page_all-->"+page_all);
+				debug("page_all-->" + page_all);
 				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
@@ -168,7 +164,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				// nothing to do?
 			}
 		});
-		
+
 		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
 
 			@Override
@@ -193,11 +189,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, getContext());
 		mUser = (User) dp.get(DataPool.SP_Key_User);
 		api = new ActivityAPI();
-		if(mUser==null){
+		if (mUser == null) {
 			L.i("muser is null");
 			toast("lol");
 		}
-		
+
 		data_all = new ArrayList<MActivity>();
 		data_myjoin = new ArrayList<MActivity>();
 		data_favourite = new ArrayList<MActivity>();
@@ -236,7 +232,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initLayout() {
-		
+
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_all = _getView(R.id.acty_activities_footer_all);
 		btn_myjoin = _getView(R.id.acty_activities_footer_myjoin);
@@ -246,7 +242,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		btns.add(btn_myjoin);
 		btns.add(btn_favourite);
 
-	
 		btn_back.setOnClickListener(this);
 		btn_all.setOnClickListener(this);
 		btn_myjoin.setOnClickListener(this);
@@ -270,9 +265,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_activities_footer_favourite:
 			viewpager.setCurrentItem(2, true);
 			break;
-		
-			
-			 
+
 		default:
 			break;
 		}
@@ -326,14 +319,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				h = (ViewHolder) convertView.getTag();
 			}
 			MActivity acty = data.get(position);
-			if(acty==null){
-				debug("acty is null");
-			}
-			if(h.actyName==null){
-				debug("h.actyName is null");
-			}
-			debug(data.toString());
-			
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
 			h.starttime.setText("时间:"
@@ -341,11 +326,16 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							CalendarUtils.TYPE_TWO));
 			h.ownername.setText("name" + acty.getOwnerid());
 			h.applyCount.setText(acty.getNumUsership() + "人报名");
-			h.status.setImageResource(acty.getStatus().getId() == 0 ? R.drawable.ic_image_status_on
+			h.status.setImageResource(acty.getStatus().getId() == 1 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + acty.getAvater(), h.avater);
+			if(acty.getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + acty.getAvatar(), h.avater);
+			}else{
+				ImageLoader.getInstance().displayImage(
+						"drawable://"+R.drawable.ic_image_load_normal, h.avater);
+			}
 			return convertView;
 		}
 

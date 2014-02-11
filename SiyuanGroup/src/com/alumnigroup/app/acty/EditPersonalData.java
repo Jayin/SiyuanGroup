@@ -17,9 +17,7 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
-import com.alumnigroup.imple.ResponseHandler;
 import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -149,7 +147,7 @@ public class EditPersonalData extends BaseActivity {
 
 	private void updateIntent() {
 		api.find(new RequestParams("id", myself.getId()),
-				new ResponseHandler() {
+				new AsyncHttpResponseHandler() {
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,

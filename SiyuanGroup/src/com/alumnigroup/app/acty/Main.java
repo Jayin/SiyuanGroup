@@ -7,18 +7,19 @@ import android.view.View.OnClickListener;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.webkit.WebSettings.LayoutAlgorithm;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
+import com.alumnigroup.app.CoreService;
 import com.alumnigroup.app.R;
-import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.AndroidUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.ADView;
+
 
 /**
  * 主界面
@@ -46,6 +47,13 @@ public class Main extends BaseActivity implements OnClickListener {
 		dp = new DataPool(DataPool.SP_Name_User,this);
 		initData();
 		initLayout();
+		checkVerison();
+	}
+
+	private void checkVerison() {
+		Intent service = new Intent(getContext(), CoreService.class);
+		service.setAction(Constants.Action_checkVersion);
+		startService(service);
 	}
 
 	@Override

@@ -211,5 +211,4 @@ public class UserAPI {
 		params.add("summary", summary);
 		RestClient.post("/api/users/profile/update", params, responseHandler);
 	}
-
 }

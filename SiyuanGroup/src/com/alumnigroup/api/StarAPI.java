@@ -10,14 +10,12 @@ import com.loopj.android.http.RequestParams;
  * 
  */   
 public class StarAPI {
-	 /** 收藏类别：用户*/
-	public static final int Item_type_user = 1;
 	 /** 收藏类别：话题*/
-	public static final int Item_type_issue= 2;
+	public static final int Item_type_issue= 1;
 	 /** 收藏类别：活动*/
-	public static final int Item_type_activity= 3;
+	public static final int Item_type_activity= 2;
 	 /** 收藏类别：商务合作*/
-	public static final int Item_type_business= 4;
+	public static final int Item_type_business= 3;
 	public StarAPI() {
 
 	}

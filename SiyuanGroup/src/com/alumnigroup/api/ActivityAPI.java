@@ -42,7 +42,7 @@ public class ActivityAPI {
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		if (page > 0)
-			params.add("page", page+"");
+			params.add("page", page + "");
 		else
 			params.add("page", "1");
 		if (activityId > 0)
@@ -208,8 +208,8 @@ public class ActivityAPI {
 	 *            活动描述
 	 * @param site
 	 *            活动地点
-	 *@param regdeadline
-	 *           截止报名日期
+	 * @param regdeadline
+	 *            截止报名日期
 	 * @param responseHandler
 	 *            处理器
 	 */
@@ -220,29 +220,52 @@ public class ActivityAPI {
 		RequestParams params = new RequestParams();
 		params.add("groupid", groupid + "");
 		params.add("maxnum", maxnum + "");
-		params.add("starttime", CalendarUtils.getTimeFromat(starttime, CalendarUtils.TYPE_THIRD) );
+		params.add("starttime", CalendarUtils.getTimeFromat(starttime,
+				CalendarUtils.TYPE_THIRD));
 		params.add("duration", duration + "");
 		params.add("statusid", statusid + "");
 		params.add("money", money + "");
 		params.add("name", name);
 		params.add("content", content);
 		params.add("site", site);
-		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
-		L.i("regdeadline__>"+CalendarUtils.getTimeFromat(regdeadline, CalendarUtils.TYPE_THIRD));
-		L.i("starttime>"+CalendarUtils.getTimeFromat(starttime, CalendarUtils.TYPE_THIRD));
+		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
+				CalendarUtils.TYPE_THIRD));
+		L.i("regdeadline__>"
+				+ CalendarUtils.getTimeFromat(regdeadline,
+						CalendarUtils.TYPE_THIRD));
+		L.i("starttime>"
+				+ CalendarUtils.getTimeFromat(starttime,
+						CalendarUtils.TYPE_THIRD));
 		RestClient.post("/api/activities/create", params, responseHandler);
 	}
 
 	/**
-	 * 获取活动人员名单
-	 * 
+	 * 获取活动人员名单(分页)<br>
+	 * 不分页{@linkplain#getUserListAll()}
+	 * @param page 页码
 	 * @param id
 	 *            活动id
+	 *            
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void getUserList(int id, AsyncHttpResponseHandler responseHandler) {
+	public void getUserList(int page, int id,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
+		params.add("page", page + "");
+		params.add("id", id + "");
+		RestClient.post("/api/activities/userslist", params, responseHandler);
+	}
+    /**
+     * 获得全部的活动人员名单
+     * @param limit
+     * @param id
+     * @param responseHandler
+     */
+	public void getUserListAll(int limit, int id,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("page", limit + "");
 		params.add("id", id + "");
 		RestClient.post("/api/activities/userslist", params, responseHandler);
 	}

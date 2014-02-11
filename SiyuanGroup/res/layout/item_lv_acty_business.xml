@@ -109,7 +109,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:orientation="horizontal" android:visibility="invisible">
 
             <ImageView
                 android:layout_width="15dp"
@@ -141,7 +141,7 @@
             <TextView
                 android:id="@+id/tv_numComment"
                 style="@style/TextView.base"
-                android:layout_marginLeft="4dp"
+                android:layout_marginLeft="2dp"
                 android:gravity="right"
                 android:text="询问(119)"
                 android:textColor="@color/grey_lv_forth"
@@ -152,9 +152,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginTop="4dp"
-        android:background="@color/grey_lv_two" />
+        android:background="@drawable/ic_line_1" />
 
 </LinearLayout>
