@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="全部圈子"
+            android:text="全     部"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
@@ -31,23 +31,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="我参与的"
+            android:text="我    的"
             android:textSize="14sp" />
     </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/acty_group_footer_mycreat"
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1" >
-
-        <TextView
-            style="@style/TextView.base"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="我创建的"
-            android:textSize="14sp" />
-    </RelativeLayout>
+ 
 
 </LinearLayout>

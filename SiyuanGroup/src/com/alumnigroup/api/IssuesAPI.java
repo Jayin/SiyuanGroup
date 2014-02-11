@@ -12,6 +12,7 @@ import com.loopj.android.http.RequestParams;
 public class IssuesAPI {
 	/**
 	 * 获得第page页的话题<br>
+	 * 
 	 * @param page
 	 *            第page页
 	 * @param responseHandler
@@ -42,6 +43,8 @@ public class IssuesAPI {
 	 * 
 	 * @param page
 	 *            第几页
+	 * @param userid
+	 *            用户id
 	 * @param title
 	 *            标题中包含的关键字
 	 * @param body
@@ -49,10 +52,13 @@ public class IssuesAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void search(int page, String title, String body,
+	public void search(int page, int userid, String title, String body,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("page", page + "");
+		if (page > 0)
+			params.add("page", page + "");
+		if (userid > 0)
+			params.add("userid", userid+"");
 		if (title != null && title.trim().length() > 0)
 			params.add("title", title);
 		if (body != null && body.trim().length() > 0)
@@ -81,52 +87,80 @@ public class IssuesAPI {
 			params.add("body", body);
 		RestClient.post("/api/issues/post", params, responseHandler);
 	}
-   /**
-    * 更新话题
-    * @param issueId 话题id
-    * @param title 话题标题  can be null
-    * @param body  话题内容 can be null
-    * @param responseHandler   处理器
-    */
+
+	/**
+	 * 更新话题
+	 * 
+	 * @param issueId
+	 *            话题id
+	 * @param title
+	 *            话题标题 can be null
+	 * @param body
+	 *            话题内容 can be null
+	 * @param responseHandler
+	 *            处理器
+	 */
 	public void updateIssue(int issueId, String title, String body,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", issueId+"");
+		params.add("id", issueId + "");
 		if (title != null)
 			params.add("title", title);
 		if (body != null)
 			params.add("body", body);
 		RestClient.post("/api/issues/update", params, responseHandler);
 	}
+
 	/**
 	 * 删除话题
-	 * @param issueid 话题id
-	 * @param responseHandler  处理器
+	 * 
+	 * @param issueid
+	 *            话题id
+	 * @param responseHandler
+	 *            处理器
 	 */
-	public void deleteIssue(int issueid,AsyncHttpResponseHandler responseHandler){
+	public void deleteIssue(int issueid,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", issueid+"");
+		params.add("id", issueid + "");
 		RestClient.post("/api/issues/delete", params, responseHandler);
 	}
+
 	/**
 	 * 话题详情
-	 * @param id issueid 
-	 * @param responseHandler 处理器
+	 * 
+	 * @param id
+	 *            issueid
+	 * @param responseHandler
+	 *            处理器
 	 */
-	public void commentIssue(int id,String body,AsyncHttpResponseHandler responseHandler){
+	public void commentIssue(int id, String body,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("issueid", id+"");
+		params.add("issueid", id + "");
 		params.add("body", body);
 		RestClient.post("/api/issues/comments/post", params, responseHandler);
 	}
+
 	/**
-	 * 话题详情 
-	 * @param id 话题id
+	 * 话题详情
+	 * 
+	 * @param id
+	 *            话题id
 	 * @param responseHandler
 	 */
-	public void view(int id,AsyncHttpResponseHandler responseHandler){
+	public void view(int id, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", id+"");
+		params.add("id", id + "");
 		RestClient.get("/api/issues/view", params, responseHandler);
+	}
+	/**
+	 * 获得用户发布的的话题
+	 * @param page  页码
+	 * @param userid 用户id
+	 * @param responseHandler 
+	 */
+	public void getUserIssue(int page,int userid,AsyncHttpResponseHandler responseHandler){
+		search(page, userid, null, null, responseHandler);
 	}
 }

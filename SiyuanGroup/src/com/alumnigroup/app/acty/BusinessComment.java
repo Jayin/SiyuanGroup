@@ -71,6 +71,10 @@ public class BusinessComment extends BaseActivity {
 				return;
 			}
 			api.comment(c.getId(), body, new JsonResponseHandler() {
+				@Override
+				public void onStart() {
+					 toast("发布中..");
+				}
 				
 				@Override
 				public void onOK(Header[] headers, JSONObject obj) {

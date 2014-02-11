@@ -49,6 +49,7 @@ public class Comment implements Serializable {
 		try {
 			obj = new JSONObject(jsonarray);
 			obj = obj.getJSONObject("issue");
+			array = obj.getJSONArray("comments");
 			for (int i = 0; i < array.length(); i++) {
 				list.add(create_by_json(array.getJSONObject(i).toString()));
 			}

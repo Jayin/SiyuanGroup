@@ -1,25 +1,26 @@
 package com.alumnigroup.app.acty;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
-
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.FilePath;
 import com.loopj.android.http.RequestParams;
 
 public class GroupManage extends BaseActivity {
@@ -35,6 +36,7 @@ public class GroupManage extends BaseActivity {
 		setContentView(R.layout.acty_groupmanage);
 		initData();
 		initLayout();
+		uploadFile();
 	}
 
 	@Override
@@ -103,31 +105,39 @@ public class GroupManage extends BaseActivity {
 			}
 		} else if (requestCode == RequestCode_Pick_image
 				&& resultCode == RESULT_OK) {
-			Uri uri = data.getData();
-			ContentResolver resolver = getContentResolver(); 
-			RequestParams params = new RequestParams();
-			try {
-				params.put("avatar", resolver.openInputStream(uri));
-				api.updateAvatar(group.getId(), params, new JsonResponseHandler() {
-					@Override
-					public void onStart() {
-						 toast("图片上传中..");
-					}
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						  toast("头像上传成功");
-					}
-					
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-                      toast("网络异常 错误码:"+errorCode);						
-					}
-				});
-			} catch (Exception e) {
-				e.printStackTrace();
-				toast("图片资源不存在");
-			}
+			uploadFile();
 		}
+	}
+
+	private void uploadFile() {
+		final File f = new File(FilePath.getImageFilePath() + "cache_face.jpg");
+		FileInputStream fin;
+		try {
+			fin = new FileInputStream(f);
+			RequestParams params = new RequestParams();
+			params.put("avatar", f, "image/jpeg");
+			api.updateAvatar(group.getId(), params, new JsonResponseHandler() {
+				@Override
+				public void onStart() {
+					toast("图片上传中..");
+				}
+
+				@Override
+				public void onOK(Header[] headers, JSONObject obj) {
+					toast("头像上传成功");
+				}
+
+				@Override
+				public void onFaild(int errorType, int errorCode) {
+					toast("网络异常 "+ErrorCode.errorList.get(errorCode));
+				}
+			});
+
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+			toast("图片资源不存在");
+		}
+
 	}
 
 	private void editGroup() {
@@ -144,8 +154,18 @@ public class GroupManage extends BaseActivity {
 	}
 
 	private void updateAvater() {
+		// 输出裁剪的临时文件
+		String path = FilePath.getImageFilePath() + "cache_face.jpg";
+		File protraitFile = new File(path);
+		Uri uri = Uri.fromFile(protraitFile);
 		Intent intent = new Intent(Intent.ACTION_PICK);
-		intent.setType("image/*");// 相片类型
+		intent.setType("image/*");
+		intent.putExtra("output", uri);
+		intent.putExtra("crop", "true");
+		intent.putExtra("aspectX", 1);// 裁剪框比例
+		intent.putExtra("aspectY", 1);
+		intent.putExtra("outputX", 100);// 输出图片大小
+		intent.putExtra("outputY", 100);
 		startActivityForResult(intent, RequestCode_Pick_image);
 	}
 }

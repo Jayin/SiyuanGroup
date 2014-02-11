@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -15,21 +16,24 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.L;
-import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -41,13 +45,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class Activities extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_all, btn_favourite, btn_myjoin;
-	private PullAndLoadListView lv_all, lv_myjoin, lv_favourit;
+	private XListView lv_all, lv_myjoin, lv_favourit;
 	private ViewPager viewpager;
 	private List<MActivity> data_all, data_myjoin, data_favourite;
 	private ActivitiesAdapter adapter_all, adapter_myjoin, adapter_favourite;
-	private int page_all = 1, page_myjoin = 1, page_favourit = 1;
+	private int page_all = 0, page_myjoin = 0, page_favourit = 0;
 	private ActivityAPI api;
-	private User mUser;
+	private User user;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +63,13 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initController() {
-		lv_all.setOnRefreshListener(new OnRefreshListener() {
+		lv_all.setPullRefreshEnable(true);
+		lv_all.setPullLoadEnable(true);
+		lv_myjoin.setPullRefreshEnable(true);
+		lv_myjoin.setPullLoadEnable(true);
+		lv_favourit.setPullRefreshEnable(true);
+		lv_favourit.setPullLoadEnable(true);
+		lv_all.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
@@ -73,66 +83,63 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有更多");
-							page_all = 1;
 						} else {
 							page_all = 1;
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 						}
-						lv_all.onRefreshComplete();
-						lv_all.setCanLoadMore(true);
+						lv_all.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
-						lv_all.onRefreshComplete();
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_all.stopRefresh();
 					}
 				});
 			}
-		});
-		lv_all.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
-				debug("page_all-->" + page_all);
+				if (page_all == 0) {
+					lv_all.stopLoadMore();
+					lv_all.startRefresh();
+					return;
+				}
 				api.getActivityList(page_all + 1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						boolean canLoadMore = true;
 						List<MActivity> newData_all = MActivity
 								.create_by_jsonarray(obj.toString());
 						if (newData_all == null) {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有更多");
-							canLoadMore = false;
 						} else {
 							page_all++;
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 						}
-						lv_all.onLoadMoreComplete();
-						if (!canLoadMore)
-							lv_all.setCanLoadMore(false);
+						lv_all.stopLoadMore();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
-						lv_all.onLoadMoreComplete();
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_all.stopLoadMore();
 					}
 				});
 			}
 		});
+
 		// 一次性加载完毕,没有分页
-		lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
+		lv_myjoin.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
-				api.getUserHistory(mUser.getId(), new JsonResponseHandler() {
+				api.getUserHistory(1, user.getId(), new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -143,36 +150,115 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 						} else if (newData_myjoin.size() == 0) {
 							toast("没有更多");
 						} else {
+							page_myjoin = 1;
+							data_myjoin.clear();
 							data_myjoin.addAll(newData_myjoin);
 							adapter_myjoin.notifyDataSetChanged();
 						}
-						lv_myjoin.onRefreshComplete();
+						lv_myjoin.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
-						lv_myjoin.onRefreshComplete();
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						lv_myjoin.stopRefresh();
 					}
 				});
 			}
-		});
-		lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
-				// nothing to do?
+				if (page_myjoin == 0) {
+					lv_myjoin.stopLoadMore();
+					lv_myjoin.startRefresh();
+					return;
+				}
+				api.getUserHistory(page_myjoin + 1, user.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<MActivity> newData_myjoin = MActivity
+										.create_by_jsonarray(obj.toString());
+								if (newData_myjoin == null) {
+									toast("网络异常，解析错误");
+								} else if (newData_myjoin.size() == 0) {
+									toast("没有更多");
+								} else {
+									page_myjoin++;
+									data_myjoin.addAll(newData_myjoin);
+									adapter_myjoin.notifyDataSetChanged();
+								}
+								lv_myjoin.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_myjoin.stopLoadMore();
+							}
+						});
+
 			}
 		});
-
-		lv_favourit.setOnRefreshListener(new OnRefreshListener() {
+		// lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
+		//
+		// @Override
+		// public void onRefresh() {
+		// api.getUserHistory(mUser.getId(), new JsonResponseHandler() {
+		//
+		// @Override
+		// public void onOK(Header[] headers, JSONObject obj) {
+		// List<MActivity> newData_myjoin = MActivity
+		// .create_by_jsonarray(obj.toString());
+		// if (newData_myjoin == null) {
+		// toast("网络异常，解析错误");
+		// } else if (newData_myjoin.size() == 0) {
+		// toast("没有更多");
+		// } else {
+		// data_myjoin.addAll(newData_myjoin);
+		// adapter_myjoin.notifyDataSetChanged();
+		// }
+		// lv_myjoin.onRefreshComplete();
+		// }
+		//
+		// @Override
+		// public void onFaild(int errorType, int errorCode) {
+		// toast("网络异常 错误码:" + errorCode);
+		// lv_myjoin.onRefreshComplete();
+		// }
+		// });
+		// }
+		// });
+		// lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
+		//
+		// @Override
+		// public void onLoadMore() {
+		// // nothing to do?
+		// }
+		// });
+		//
+		// lv_favourit.setOnRefreshListener(new OnRefreshListener() {
+		//
+		// @Override
+		// public void onRefresh() {
+		//
+		// }
+		// });
+		// lv_favourit.setOnLoadMoreListener(new OnLoadMoreListener() {
+		//
+		// @Override
+		// public void onLoadMore() {
+		//
+		// }
+		// });
+		lv_favourit.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
 
 			}
-		});
-		lv_favourit.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
@@ -182,14 +268,16 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		lv_all.setOnItemClickListener(this);
 		lv_myjoin.setOnItemClickListener(this);
 		lv_favourit.setOnItemClickListener(this);
+		
+		lv_all.startRefresh();
 	}
 
 	@Override
 	protected void initData() {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, getContext());
-		mUser = (User) dp.get(DataPool.SP_Key_User);
+		user = (User) dp.get(DataPool.SP_Key_User);
 		api = new ActivityAPI();
-		if (mUser == null) {
+		if (user == null) {
 			L.i("muser is null");
 			toast("lol");
 		}
@@ -207,11 +295,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 				R.layout.frame_acty_activities_myjoin, null);
 		View favourit = getLayoutInflater().inflate(
 				R.layout.frame_acty_activities_favourite, null);
-		lv_all = (PullAndLoadListView) all
+		lv_all = (XListView) all
 				.findViewById(R.id.frame_acty_activities_all_listview);
-		lv_myjoin = (PullAndLoadListView) myjoin
+		lv_myjoin = (XListView) myjoin
 				.findViewById(R.id.frame_acty_activities_myjoin_listview);
-		lv_favourit = (PullAndLoadListView) favourit
+		lv_favourit = (XListView) favourit
 				.findViewById(R.id.frame_acty_activities_favourite_listview);
 
 		adapter_all = new ActivitiesAdapter(data_all);
@@ -329,12 +417,13 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			h.status.setImageResource(acty.getStatus().getId() == 1 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
 			// h.favourite.setText(data.get(position).getFavourite()+"");
-			if(acty.getAvatar()!=null){
+			if (acty.getAvatar() != null) {
 				ImageLoader.getInstance().displayImage(
 						RestClient.BASE_URL + acty.getAvatar(), h.avater);
-			}else{
+			} else {
 				ImageLoader.getInstance().displayImage(
-						"drawable://"+R.drawable.ic_image_load_normal, h.avater);
+						"drawable://" + R.drawable.ic_image_load_normal,
+						h.avater);
 			}
 			return convertView;
 		}

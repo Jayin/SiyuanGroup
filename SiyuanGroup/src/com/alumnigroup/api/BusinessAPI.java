@@ -226,13 +226,13 @@ public class BusinessAPI {
      * @param description  内容关键字 optional
      * @param responseHandler
      */
-	public void search(int page, int userid, String name, String description,
+	public void search(int page, int ownerid, String name, String description,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		if (page > 0)
 			params.add("page", page + "");
-		if (userid > 0)
-			params.add("userid", userid + "");
+		if (ownerid > 0)
+			params.add("ownerid", ownerid + "");
 		if (name != null)
 			params.add("name", name);
 		if (description != null)
@@ -322,5 +322,36 @@ public class BusinessAPI {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		RestClient.get("/api/cooperations/view", params, responseHandler);
+	}
+	/**
+	 * 获取评论列表
+	 * @param id 评论ID
+	 * @param cooperationid 合作ID
+	 * @param userid 用户ID
+	 * @param responseHandler
+	 */
+	public void getCommentListBase(int id,int cooperationid,int userid,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		if(id>0)params.add("id", id + "");
+		if(cooperationid>0)params.add("cooperationid", cooperationid + "");
+		if(userid>0)params.add("userid", userid + "");
+		RestClient.get("/api/cooperations/comments/find", params, responseHandler);
+	}
+	/**
+	 * 获得一个合作的评论列表
+	 * @param cooperationid 合作id
+	 * @param responseHandler
+	 */
+	public void getCommentList(int cooperationid,AsyncHttpResponseHandler responseHandler){
+		getCommentListBase(0, cooperationid, 0, responseHandler);
+	}
+	/**
+	 * 获得一个用户的合作合作列表
+	 * @param page 页码 ，可选
+	 * @param ownerid 用户的id 必填
+	 * @param responseHandler
+ 	 */
+	public void getUserCooperationList(int page ,int ownerid,AsyncHttpResponseHandler responseHandler){
+		search(page, ownerid, null, null, responseHandler);
 	}
 }

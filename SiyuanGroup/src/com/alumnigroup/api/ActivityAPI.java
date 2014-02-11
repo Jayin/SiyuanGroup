@@ -175,13 +175,14 @@ public class ActivityAPI {
 
 	/**
 	 * 更新活动图片
-	 * 
+	 * params包含ken="avatar"
+	 * @param id 活动id
 	 * @param params
 	 *            avatar-File
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void updateAvatar(RequestParams params,
+	public void updateAvatar(int id,RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
 		RestClient.post("/api/activities/avatar/update", params,
 				responseHandler);
@@ -242,10 +243,12 @@ public class ActivityAPI {
 	/**
 	 * 获取活动人员名单(分页)<br>
 	 * 不分页{@linkplain#getUserListAll()}
-	 * @param page 页码
+	 * 
+	 * @param page
+	 *            页码
 	 * @param id
 	 *            活动id
-	 *            
+	 * 
 	 * @param responseHandler
 	 *            处理器
 	 */
@@ -256,12 +259,14 @@ public class ActivityAPI {
 		params.add("id", id + "");
 		RestClient.post("/api/activities/userslist", params, responseHandler);
 	}
-    /**
-     * 获得全部的活动人员名单
-     * @param limit
-     * @param id
-     * @param responseHandler
-     */
+
+	/**
+	 * 获得全部的活动人员名单
+	 * 
+	 * @param limit
+	 * @param id
+	 * @param responseHandler
+	 */
 	public void getUserListAll(int limit, int id,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
@@ -273,6 +278,8 @@ public class ActivityAPI {
 	/**
 	 * 获取活动参加历史列表
 	 * 
+	 * @param page
+	 *            页码
 	 * @param id
 	 *            申请id,就是usership的id
 	 * @param userid
@@ -282,9 +289,11 @@ public class ActivityAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void getHistory(int id, int userid, int activityid,
+	public void getHistory(int page, int id, int userid, int activityid,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
+		if (page > 0)
+			params.add("page", page + "");
 		if (id > 0)
 			params.add("id", id + "");
 		if (userid > 0)
@@ -297,13 +306,15 @@ public class ActivityAPI {
 	/**
 	 * 获取一用户曾经参加过的活动
 	 * 
+	 * @param page
+	 *            页码
 	 * @param userid
 	 *            user用户id
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void getUserHistory(int userid,
+	public void getUserHistory(int page, int userid,
 			AsyncHttpResponseHandler responseHandler) {
-		getHistory(userid, 0, 0, responseHandler);
+		getHistory(page, userid, 0, 0, responseHandler);
 	}
 }
