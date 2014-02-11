@@ -219,7 +219,7 @@ public class UserAPI {
 	 * @param backgroupData
 	 * @param responseHandler
 	 */
-	public void updateCover(int id, byte[] backgroupData,
+	public void updateCover(int id, byte[] backgroupData,   
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.put("id", id + "");
