@@ -15,7 +15,7 @@ import com.loopj.android.http.RequestParams;
  */
 public class RestClient {
 	public static final String BASE_URL = "http://61.174.8.62";
-	private static int HTTP_Timeout = 6 * 1000;
+	private static int HTTP_Timeout = 12 * 1000;
 	public static Context context;
 
 	private static AsyncHttpClient client = new AsyncHttpClient();

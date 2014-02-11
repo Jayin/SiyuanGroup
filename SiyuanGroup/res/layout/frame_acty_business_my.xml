@@ -3,10 +3,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    
-    <com.alumnigroup.widget.PullAndLoadListView
+
+
+    <com.alumnigroup.widget.XListView
         android:id="@+id/frame_acty_business_my"
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
-    </com.alumnigroup.widget.PullAndLoadListView>
+    </com.alumnigroup.widget.XListView>
+
 </LinearLayout>
