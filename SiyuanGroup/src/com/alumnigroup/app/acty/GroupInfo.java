@@ -10,9 +10,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -27,7 +25,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
-import com.alumnigroup.entity.MGroup.Memberships;
+import com.alumnigroup.entity.MMemberships;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
@@ -55,6 +53,7 @@ public class GroupInfo extends BaseActivity {
 	private GroupAPI api;
 	private PullAndLoadListView lv_member;
 	private List<User> data_user;
+	private int page = 1;
 	private MemberAdapter adapter_member;
 	private PopupWindow mPopupWindow;
 
@@ -76,16 +75,14 @@ public class GroupInfo extends BaseActivity {
 		(view.findViewById(R.id.join)).setOnClickListener(this);
 		(view.findViewById(R.id.exit)).setOnClickListener(this);
 		(view.findViewById(R.id.createActivity)).setOnClickListener(this);
-		 mPopupWindow = new PopupWindow(view);
-		 mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
-		 mPopupWindow.setOutsideTouchable(true);
-		
-		
-		 // 控制popupwindow的宽度和高度自适应
-		 view.measure(View.MeasureSpec.UNSPECIFIED,
-		 View.MeasureSpec.UNSPECIFIED);
-		 mPopupWindow.setWidth(view.getMeasuredWidth());
-		 mPopupWindow.setHeight(view.getMeasuredHeight());
+		mPopupWindow = new PopupWindow(view);
+		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+		mPopupWindow.setOutsideTouchable(true);
+
+		// 控制popupwindow的宽度和高度自适应
+		view.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+		mPopupWindow.setWidth(view.getMeasuredWidth());
+		mPopupWindow.setHeight(view.getMeasuredHeight());
 
 	}
 
@@ -95,32 +92,29 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-				api.view(group.getId(), new JsonResponseHandler() {
+				api.getMembers(1, group.getId(), new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						boolean canRefresh = true;
-						MGroup mGroup = MGroup.create_by_json(obj.toString());
+						List<MMemberships> memberships = MMemberships
+								.create_by_jsonarray(obj.toString());
 						List<User> newData = new ArrayList<User>();
-						for (Memberships ms : mGroup.getMemberships()) {
-							newData.add(ms.getUser());
-						}
-						if (newData != null) {
+						if (memberships == null) {
+							toast("网络异常  解析错误");
+						} else {
+							for (MMemberships mm : memberships) {
+								newData.add(mm.getUser());
+							}
 							if (newData.size() == 0) {
 								toast("还没有会员!");
-								canRefresh = false;
 							} else {
+								page = 1;
 								data_user.clear();
 								data_user.addAll(newData);
 								adapter_member.notifyDataSetChanged();
-								canRefresh = false;
 							}
 						}
-						if (!canRefresh)
-							lv_member.setCanRefresh(false, false);
 						lv_member.onRefreshComplete();
-						// if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
-						// if(canRefresh)lv_member.setCanRefresh(false, false);
 
 					}
 
@@ -128,15 +122,83 @@ public class GroupInfo extends BaseActivity {
 					public void onFaild(int errorType, int errorCode) {
 						toast("网络异常 错误代码:" + errorCode);
 						lv_member.onRefreshComplete();
+
 					}
 				});
+				// api.view(group.getId(), new JsonResponseHandler() {
+				//
+				// @Override
+				// public void onOK(Header[] headers, JSONObject obj) {
+				// boolean canRefresh = true;
+				// MGroup mGroup = MGroup.create_by_json(obj.toString());
+				// List<User> newData = new ArrayList<User>();
+				// for (Memberships ms : mGroup.getMemberships()) {
+				// newData.add(ms.getUser());
+				// }
+				// if (newData != null) {
+				// if (newData.size() == 0) {
+				// toast("还没有会员!");
+				// canRefresh = false;
+				// } else {
+				// data_user.clear();
+				// data_user.addAll(newData);
+				// adapter_member.notifyDataSetChanged();
+				// canRefresh = false;
+				// }
+				// }
+				// if (!canRefresh)
+				// lv_member.setCanRefresh(false, false);
+				// lv_member.onRefreshComplete();
+				// // if(canRefresh)lv_member.setCanRefresh(false, "没有更多");
+				// // if(canRefresh)lv_member.setCanRefresh(false, false);
+				//
+				// }
+				//
+				// @Override
+				// public void onFaild(int errorType, int errorCode) {
+				// toast("网络异常 错误代码:" + errorCode);
+				// lv_member.onRefreshComplete();
+				// }
+				// });
 			}
 		});
 		lv_member.setOnLoadMoreListener(new OnLoadMoreListener() {
 
 			@Override
 			public void onLoadMore() {
+				api.getMembers(page + 1, group.getId(),
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<MMemberships> memberships = MMemberships
+										.create_by_jsonarray(obj.toString());
+								List<User> newData = new ArrayList<User>();
+								if (memberships == null) {
+									toast("网络异常  解析错误");
+								} else {
+									for (MMemberships mm : memberships) {
+										newData.add(mm.getUser());
+									}
+									if (newData.size() == 0) {
+										toast("还没有会员!");
+									} else {
+										page++;
+										data_user.clear();
+										data_user.addAll(newData);
+										adapter_member.notifyDataSetChanged();
+									}
+								}
+								lv_member.onRefreshComplete();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 错误代码:" + errorCode);
+								lv_member.onLoadMoreComplete();
+
+							}
+						});
 			}
 		});
 		lv_member.setCanLoadMore(false);
