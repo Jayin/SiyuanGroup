@@ -9,19 +9,16 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alumnigroup.adapter.CommentAdapter;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.acty.CommunicationDetail.CommentAdapter;
-import com.alumnigroup.app.acty.CommunicationDetail.CommentAdapter.ViewHolder;
 import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
@@ -118,7 +115,7 @@ public class GroupShareDetail extends BaseActivity {
 		btn_edit.setOnClickListener(this);
 
 		lv_comment = (CommentView) _getView(R.id.item_lv_acty_comminication_lv_comment);
-		adapter_commet = new CommentAdapter(data_commet);
+		adapter_commet = new CommentAdapter(getContext(),data_commet);
 		lv_comment.setAdapter(adapter_commet);
 
 		api.view(issue.getId(), new AsyncHttpResponseHandler() {
@@ -145,7 +142,7 @@ public class GroupShareDetail extends BaseActivity {
 							.create_by_jsonarray(json);
 					if (newData_comment != null && newData_comment.size() > 0) {
 						data_commet.addAll(newData_comment);
-						lv_comment.setAdapter(new CommentAdapter(data_commet));
+						lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
 					} else {
 						if (newData_comment == null) {
 							tv_notify.setVisibility(View.VISIBLE);
@@ -242,62 +239,5 @@ public class GroupShareDetail extends BaseActivity {
 
 	}
 
-	class CommentAdapter extends BaseAdapter {
-
-		private List<Comment> data;
-
-		public CommentAdapter(List<Comment> data) {
-			this.data = data;
-		}
-
-		@Override
-		public int getCount() {
-			return data.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder h = null;
-			if (convertView == null) {
-				h = new ViewHolder();
-				convertView = getLayoutInflater().inflate(
-						R.layout.item_lv_acty_communicationdetail, null);
-				h.name = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_communicationdetai_name);
-				h.positime = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_communicationdetai_posttime);
-				h.body = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_communicationdetai_body);
-				h.avater = (ImageView) convertView
-						.findViewById(R.id.item_lv_acty_communicationdetai_avater);
-				convertView.setTag(h);
-			} else {
-				h = (ViewHolder) convertView.getTag();
-			}
-			h.name.setText(data.get(position).getUser().getProfile().getName());
-			h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
-					.getPosttime(), CalendarUtils.TYPE_timeline));
-			h.body.setText(data.get(position).getBody());
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL
-							+ data.get(position).getUser().getAvatar(),
-					h.avater);
-			return convertView;
-		}
-
-		class ViewHolder {
-			TextView name, positime, body;
-			ImageView avater;
-		}
-	}
+	
 }
