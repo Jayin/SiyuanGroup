@@ -188,6 +188,10 @@
             android:name=".acty.GroupShareCompose"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.GroupShareDetail"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
