@@ -174,15 +174,16 @@ public class ActivityAPI {
 	}
 
 	/**
-	 * 更新活动图片
-	 * params包含ken="avatar"
-	 * @param id 活动id
+	 * 更新活动图片 params包含ken="avatar"
+	 * 
+	 * @param id
+	 *            活动id
 	 * @param params
 	 *            avatar-File
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void updateAvatar(int id,RequestParams params,
+	public void updateAvatar(int id, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
 		RestClient.post("/api/activities/avatar/update", params,
 				responseHandler);
@@ -316,5 +317,36 @@ public class ActivityAPI {
 	public void getUserHistory(int page, int userid,
 			AsyncHttpResponseHandler responseHandler) {
 		getHistory(page, userid, 0, 0, responseHandler);
+	}
+    /**
+     * 活动搜索
+     * @param page 页码
+     * @param ownerid 作者id
+     * @param name  标题关键字
+     * @param content 内容关键字
+     * @param responseHandler
+     */
+	public void search(int page, int ownerid, String name, String content,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		if (page > 0)
+			params.add("page", page + "");
+		if (ownerid > 0)
+			params.add("ownerid", ownerid + "");
+		if (name != null)
+			params.add("name", name);
+		if (content != null)
+			params.add("content", content);
+		RestClient.get("/api/activities/search", params, responseHandler);
+	}
+    
+	/**
+	 * 获得用户的主策活动
+	 * @param page
+	 * @param ownerid
+	 * @param responseHandler
+	 */
+	public void getMyActivity(int page,int ownerid,AsyncHttpResponseHandler responseHandler) {
+          search(page, ownerid, null, null, responseHandler);
 	}
 }

@@ -79,7 +79,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						if (newData_all == null) {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
-							toast("没有去更多");
+							toast("没有更多");
 						} else {
 							page_all = 1;
 							data_all.clear();

@@ -6,7 +6,8 @@
 
     <com.alumnigroup.widget.XListView
         android:id="@+id/frame_acty_activities_all_listview"
-        style="@style/ListView.PullAndLoadListView" android:background="@color/white">
+        style="@style/ListView.PullAndLoadListView"
+        android:background="@color/white" >
     </com.alumnigroup.widget.XListView>
 
 </LinearLayout>
