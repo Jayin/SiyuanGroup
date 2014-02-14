@@ -1,18 +1,17 @@
 package com.alumnigroup.app.acty;
 
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.apache.http.client.ClientProtocolException;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ContentResolver;
+import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -24,46 +23,36 @@ import android.widget.TextView;
 import com.alumnigroup.api.DynamicAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.UserAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 个人空间,进来要传递一个user 对象，用来代表自己, key = myself,，不然就不要进了
- * 
  * @author vector
  * 
  */
 public class SpacePersonal extends BaseActivity {
-	/**
-	 * 代表自己的对象
-	 */
-	private User myself;
-	/**
-	 * 整个界面
-	 */
-	private View viewParent;
 
-	/**
-	 * header
-	 */
+	private User myself;
+
 	private View btnBack, btnMore;
 	private TextView tvHeaderTitle;
 
 	/**
 	 * 顶部
 	 */
-	private TextView etLeave2Visitor;
-	private String oldLeave2VisitorContent;
+	private TextView tvLeave2Visitor;
 	private ImageView ivBackgroup;
 	private Bitmap backgroupBitmap;
-	private byte[] backgroupData;
 
 	private ImageView ivPortrait;
 	private TextView tvUsername;
@@ -89,61 +78,60 @@ public class SpacePersonal extends BaseActivity {
 	 */
 	private LinearLayout llNewDynamic;
 
-	/**
-	 * 访客
-	 */
-	private OutoLinefeedLayout lyVisitors;
-
-	private UserAPI api = new UserAPI();
+	private UserAPI api;
+	private AlertDialog dialog;
 
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_space_personal);
-		initData();
 		initLayout();
-		addData();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		initData();
 	}
 
 	protected void initData() {
-		myself = (User) getIntent().getSerializableExtra("myself");
-		if (myself == null) {
-			toast("出错了，需要myself 为key的user");
-			finish();
-		}
+		myself = (User) AppInfo.getUser(SpacePersonal.this);
+
+		tvLeave2Visitor.setText(myself.getProfile().getSummary());
+		ImageLoader.getInstance().displayImage(
+				RestClient.BASE_URL + myself.getCover(), ivBackgroup);
+		ImageLoader.getInstance().displayImage(
+				RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
+		tvUsername.setText(myself.getUsername());
+
+		addData();
 	}
 
 	protected void initLayout() {
+		api = new UserAPI();
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle("更新中...");
+		dialog = builder.create();
 
-		viewParent = _getView(R.id.viewparent);
-
-		/**
-		 * header
-		 */
 		btnBack = _getView(R.id.acty_head_btn_back);
 		btnBack.setOnClickListener(this);
+
 		btnMore = _getView(R.id.acty_head_btn_more);
 		btnMore.setOnClickListener(this);
+
 		tvHeaderTitle = (TextView) _getView(R.id.acty_head_tv_title);
 		tvHeaderTitle.setText("我的空间");
 
 		/**
 		 * 顶部
 		 */
-		etLeave2Visitor = (TextView) _getView(R.id.acty_space_personal_top_et_leave2visitor);
-		// etLeave2Visitor.setText(myself.getSignature());
-		etLeave2Visitor.setText(myself.getProfile().getSummary()); // 签名已经移除
-		oldLeave2VisitorContent = etLeave2Visitor.getText().toString();
+		tvLeave2Visitor = (TextView) _getView(R.id.acty_space_personal_top_et_leave2visitor);
+
 		ivBackgroup = (ImageView) _getView(R.id.acty_space_personal_top_iv_backgroup);
 		ivBackgroup.setOnClickListener(this);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + myself.getCover(), ivBackgroup);
 
 		ivPortrait = (ImageView) _getView(R.id.acty_space_personal_top_iv_portrait);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
 
 		tvUsername = (TextView) _getView(R.id.acty_space_personal_top_tv_name);
-		tvUsername.setText(myself.getUsername());
 
 		/**
 		 * 个人资料
@@ -172,61 +160,36 @@ public class SpacePersonal extends BaseActivity {
 		 * 新动态
 		 */
 		llNewDynamic = (LinearLayout) _getView(R.id.acty_space_personal_new_dynamic_ll_content);
-
-		/**
-		 * 最近访客
-		 */
-		lyVisitors = (OutoLinefeedLayout) _getView(R.id.acty_space_personal_visitor_outoLinefeed);
-
 	}
 
-	/**
-	 * 测试用的
-	 */
 	private void addData() {
 		initPersonalData();
-		for (int i = 0; i < 5; i++) {
-			addKeyWord("sdfsdfsdfsdfsd", i % 2);
+
+		if (myself.getProfile().getTag() != null
+				&& !myself.getProfile().getTag().equals("")) {
+			String tags[] = myself.getProfile().getTag().split(",");
+			int color = 0;
+			for (String tag : tags) {
+				addKeyWord(tag, color++ % 2);
+			}
 		}
+		lyAlbum.removeAllViews();
 		for (int i = 0; i < 5; i++) {
 			addAlbum(i);
 		}
-		for (int i = 0; i < 5; i++) {
-			addNewDynamic(i);
-		}
-		for (int i = 0; i < 5; i++) {
-			addVisitor(i);
-		}
+		addNewDynamic();
 	}
 
 	/**
-	 * 增加访客 , 参数使用来测试的，到时候填充数据的时候要改
+	 * 增加最新动态 , 到时候填充数据的时候要改
 	 */
-	private void addVisitor(int id) {
-		/**
-		 * 装上TextView
-		 */
-		LayoutInflater inflater = null;
-		inflater = LayoutInflater.from(this);
-		View convertView = null;
-
-		convertView = inflater.inflate(R.layout.item_space_other_visitor, null);
-
-		/**
-		 * 加入新的关键字
-		 */
-		lyVisitors.addView(convertView);
-	}
-
-	/**
-	 * 增加最新动态 , 参数使用来测试的，到时候填充数据的时候要改
-	 */
-	private void addNewDynamic(int i) {
+	private void addNewDynamic() {
 		DynamicAPI api = new DynamicAPI();
+		llNewDynamic.removeAllViews();
 		/**
 		 */
 		final LayoutInflater inflater = LayoutInflater.from(this);
-		api.getAll(1, 13/* myself.getId() */, new AsyncHttpResponseHandler() {
+		api.getAll(1, myself.getId(), new AsyncHttpResponseHandler() {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
@@ -338,10 +301,16 @@ public class SpacePersonal extends BaseActivity {
 	 * 初始化个人资料
 	 */
 	private void initPersonalData() {
-
-		addPersonalData("昵称", myself.getProfile().getNickname());
-		addPersonalData("用户名", myself.getProfile().getName());
-		addPersonalData("性别", myself.getProfile().getGender());
+		llPersonalData.removeAllViews();
+		addPersonalData("真实姓名", myself.getProfile().getName());
+		String gender = null;
+		if ("m".equalsIgnoreCase(myself.getProfile().getGender())) {
+			gender = "男";
+		}
+		if ("f".equalsIgnoreCase(myself.getProfile().getGender())) {
+			gender = "女";
+		}
+		addPersonalData("性别", gender);
 		addPersonalData("年龄", myself.getProfile().getAge() + "");
 		addPersonalData("大学", myself.getProfile().getUniversity());
 		addPersonalData("毕业届数", myself.getProfile().getGrade() + "");
@@ -349,7 +318,7 @@ public class SpacePersonal extends BaseActivity {
 	}
 
 	/**
-	 * 增加,
+	 * 增加
 	 */
 	private void addPersonalData(String name, String value) {
 		/**
@@ -376,75 +345,80 @@ public class SpacePersonal extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 
-		ContentResolver resolver = getContentResolver();
+		dialog.show();
+
 		/**
 		 * 因为两种方式都用到了startActivityForResult方法， 这个方法执行完后都会执行onActivityResult方法，
 		 * 所以为了区别到底选择了那个方式获取图片要进行判断，
 		 * 这里的requestCode跟startActivityForResult里面第二个参数对应
 		 */
-		if (requestCode == 0) {
-			try {
-				// 获得图片的uri
-				Uri originalUri = data.getData();
-				// 将图片内容解析成字节数组
-				backgroupData = readStream(resolver.openInputStream(Uri
-						.parse(originalUri.toString())));
-				// 将字节数组转换为ImageView可调用的Bitmap对象
-				backgroupBitmap = getPicFromBytes(backgroupData, null);
-				// 把得到的图片绑定在控件上显示
-				ivBackgroup.setImageBitmap(backgroupBitmap);
-			} catch (Exception e) {
-				System.out.println(e.getMessage());
-			}
+		try {
+			if (requestCode == 0) {
+				Uri uri = data.getData();
+				backgroupBitmap = BitmapUtils.getPicFromUri(uri, this);
 
-		} else if (requestCode == 1) {
-			try {
-				super.onActivityResult(requestCode, resultCode, data);
+			} else if (requestCode == 1) {
 				Bundle extras = data.getExtras();
 				backgroupBitmap = (Bitmap) extras.get("data");
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				backgroupBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-				backgroupData = baos.toByteArray();
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-			// 把得到的图片绑定在控件上显示
-			ivBackgroup.setImageBitmap(backgroupBitmap);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
 		}
-		api.updateCover(myself.getId(), backgroupData,
-				new AsyncHttpResponseHandler() {
-			
-			
 
-					@Override
-					public void onFinish() {
-						toast("finish");
-					}
+		api.updateCover(BitmapUtils.getBitmapInputStream(backgroupBitmap),
+				new AsyncHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
 						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
 					}
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
 						String json = new String(data);// jsonarray
-						System.out.println(json);
 						if (JsonUtils.isOK(json)) {
-							toast("更新完成"+json);
-						}else{
-							toast("更新失败"+json);
+							updatePdUser();
+							// ImageLoader.getInstance().displayImage(
+							// RestClient.BASE_URL + myself.getCover(),
+							// ivBackgroup);
+							ivBackgroup.setImageBitmap(backgroupBitmap);
+							toast("更新成功");
+						} else {
+							toast("更新失败");
 						}
-						
+
+					}
+
+				});
+	}
+
+	/**
+	 * 更新user 数据
+	 */
+	private void updatePdUser() {
+		api.find(new RequestParams("id", myself.getId()),
+				new AsyncHttpResponseHandler() {
+					@Override
+					public void onFinish() {
+						dialog.cancel();
+					}
+
+					public void onSuccess(int statusCode, Header[] headers,
+							byte[] data) {
+						String json = new String(data);
+						if (JsonUtils.isOK(json)) {
+							try {
+								AppInfo.setUser(json, SpacePersonal.this);
+							} catch (ClientProtocolException e) {
+								e.printStackTrace();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
 					}
 				});
-
 	}
 
 	@Override
@@ -506,31 +480,6 @@ public class SpacePersonal extends BaseActivity {
 		default:
 			break;
 		}
-	}
-
-	public static byte[] readStream(InputStream inStream) throws Exception {
-		byte[] buffer = new byte[1024];
-		int len = -1;
-		ByteArrayOutputStream outStream = new ByteArrayOutputStream();
-		while ((len = inStream.read(buffer)) != -1) {
-			outStream.write(buffer, 0, len);
-		}
-		byte[] data = outStream.toByteArray();
-		outStream.close();
-		inStream.close();
-		return data;
-
-	}
-
-	public static Bitmap getPicFromBytes(byte[] bytes,
-			BitmapFactory.Options opts) {
-		if (bytes != null)
-			if (opts != null)
-				return BitmapFactory.decodeByteArray(bytes, 0, bytes.length,
-						opts);
-			else
-				return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-		return null;
 	}
 
 }

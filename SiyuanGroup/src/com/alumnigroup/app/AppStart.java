@@ -25,7 +25,6 @@ public class AppStart extends BaseActivity {
 			@Override
 			public void run() {
 				Intent intent = new Intent(AppStart.this, Login.class);
-				// startActivity(intent);
 				if (checkLoginInfo()) {
 					openActivity(Main.class);
 				} else {

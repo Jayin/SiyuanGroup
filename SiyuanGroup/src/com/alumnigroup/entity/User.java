@@ -92,7 +92,7 @@ public class User implements Serializable {
 	private int numEvents;
 	/** 个人资料 */
 	private Profile profile;
-	/** 封面图片*/
+	/** 空间背景图片*/
 	private String cover;
 
 	public String getCover() {
@@ -238,6 +238,19 @@ public class User implements Serializable {
 		private String university;
 		/** 专业 **/
 		private String major;
+		/**
+		 * 关键字，用， 号隔开
+		 */
+		private String tag;
+		
+		public String getTag() {
+			return tag;
+		}
+
+		public void setTag(String tag) {
+			this.tag = tag;
+		}
+
 		public String getSummary() {
 			return summary;
 		}
