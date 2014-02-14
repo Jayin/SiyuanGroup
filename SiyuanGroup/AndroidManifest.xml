@@ -184,6 +184,10 @@
             android:screenOrientation="portrait"
             android:theme="@style/AcivityTheme_dialog" >
         </activity>
+        <activity
+            android:name=".acty.GroupShareCompose"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>

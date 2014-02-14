@@ -6,9 +6,11 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -242,9 +244,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		lv_favourit = (XListView) favourit
 				.findViewById(R.id.frame_acty_communication_favourite_listview);
 
-		adapter_all = new IssueAdapter(data_all);
-		adapter_my = new IssueAdapter(data_my);
-		adapter_favourite = new IssueAdapter(data_favourite);
+		adapter_all = new IssueAdapter(getContext(),data_all);
+		adapter_my = new IssueAdapter(getContext(),data_my);
+		adapter_favourite = new IssueAdapter(getContext(),data_favourite);
 
 		lv_all.setAdapter(adapter_all);
 		lv_my.setAdapter(adapter_my);
@@ -304,84 +306,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		}
 	}
 
-	class IssueAdapter extends BaseAdapter {
-		private List<Issue> data;
-
-		public IssueAdapter(List<Issue> data) {
-			this.data = data;
-		}
-
-		@Override
-		public int getCount() {
-			return data.size();
-		}
-
-		@Override
-		public Object getItem(int position) {
-			return data.get(position);
-		}
-
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder h = null;
-			if (convertView == null) {
-				h = new ViewHolder();
-				convertView = getLayoutInflater().inflate(
-						R.layout.item_lv_acty_communication, null);
-				h.name = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_name);
-				h.major = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_major);
-				h.posttime = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_posttime);
-				h.title = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_title);
-				h.body = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_body);
-				h.numComment = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_numComment);
-				h.favourite = (TextView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_favourite);
-				h.avatar = (ImageView) convertView
-						.findViewById(R.id.item_lv_acty_comminication_avatar);
-				convertView.setTag(h);
-			} else {
-				h = (ViewHolder) convertView.getTag();
-			}
-			h.name.setText(data.get(position).getUser().getProfile().getName());
-			h.major.setText(data.get(position).getUser().getProfile()
-					.getMajor());
-			h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
-					.getPosttime(), CalendarUtils.TYPE_timeline));
-			h.title.setText(data.get(position).getTitle());
-			h.body.setText(data.get(position).getBody());
-			h.numComment.setText(data.get(position).getNumComments() + "");
-			// h.favourite.setText(data.get(position).getFavourite()+"");
-			if (data.get(position).getUser().getAvatar() != null) {
-				ImageLoader.getInstance().displayImage(
-						RestClient.BASE_URL
-								+ data.get(position).getUser().getAvatar(),
-						h.avatar);
-			} else {
-				ImageLoader.getInstance().displayImage(
-						"drawable://" + R.drawable.ic_image_load_normal,
-						h.avatar);
-			}
-
-			return convertView;
-		}
-
-		class ViewHolder {
-			TextView name, major, posttime, title, body, numComment, favourite;
-			ImageView avatar;
-		}
-
-	}
 
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -397,6 +321,86 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			intent.putExtra("issue", data_favourite.get(position - 1));
 		}
 		openActivity(intent);
+	}
+
+}
+
+class IssueAdapter extends BaseAdapter {
+	private List<Issue> data;
+private Context context;
+	public IssueAdapter(Context context,List<Issue> data) {
+		this.data = data;
+		this.context = context;
+	}
+
+	@Override
+	public int getCount() {
+		return data.size();
+	}
+
+	@Override
+	public Object getItem(int position) {
+		return data.get(position);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		return position;
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder h = null;
+		if (convertView == null) {
+			h = new ViewHolder();
+			convertView = LayoutInflater.from(context).inflate(
+					R.layout.item_lv_acty_communication, null);
+			h.name = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_name);
+			h.major = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_major);
+			h.posttime = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_posttime);
+			h.title = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_title);
+			h.body = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_body);
+			h.numComment = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_numComment);
+			h.favourite = (TextView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_favourite);
+			h.avatar = (ImageView) convertView
+					.findViewById(R.id.item_lv_acty_comminication_avatar);
+			convertView.setTag(h);
+		} else {
+			h = (ViewHolder) convertView.getTag();
+		}
+		h.name.setText(data.get(position).getUser().getProfile().getName());
+		h.major.setText(data.get(position).getUser().getProfile()
+				.getMajor());
+		h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
+				.getPosttime(), CalendarUtils.TYPE_timeline));
+		h.title.setText(data.get(position).getTitle());
+		h.body.setText(data.get(position).getBody());
+		h.numComment.setText(data.get(position).getNumComments() + "");
+		// h.favourite.setText(data.get(position).getFavourite()+"");
+		if (data.get(position).getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL
+							+ data.get(position).getUser().getAvatar(),
+					h.avatar);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal,
+					h.avatar);
+		}
+
+		return convertView;
+	}
+
+	class ViewHolder {
+		TextView name, major, posttime, title, body, numComment, favourite;
+		ImageView avatar;
 	}
 
 }
