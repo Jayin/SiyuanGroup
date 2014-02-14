@@ -32,7 +32,8 @@
 
             <include
                 android:id="@+id/acty_space_personal_album"
-                layout="@layout/frame_acty_space_personal_album" />
+                layout="@layout/frame_acty_space_personal_album"
+                android:visibility="gone" />
 
             <include
                 android:id="@+id/acty_space_personal_new_dynamic"
@@ -40,10 +41,12 @@
 
             <include
                 android:id="@+id/acty_space_personal_visitor"
-                layout="@layout/frame_acty_space_personal_visitor" />
+                layout="@layout/frame_acty_space_personal_visitor"
+                android:visibility="gone" />
             <include
                 android:id="@+id/acty_space_personal_look_leave_message"
-                layout="@layout/frame_acty_space_personal_look_leave_message" />
+                layout="@layout/frame_acty_space_personal_look_leave_message"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

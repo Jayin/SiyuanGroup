@@ -155,9 +155,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.frame_main_one_myspace:
-			intent.setClass(Main.this, SpacePersonal.class);
-			intent.putExtra("myself", dp.get(DataPool.SP_Key_User));
-			startActivity(intent);
+			openActivity(SpacePersonal.class);
 			break;
 
 		case R.id.frame_main_one_setting:
@@ -184,13 +182,7 @@ public class Main extends BaseActivity implements OnClickListener {
 			break;
 
 		case R.id.frame_main_one_allactivity:
-			/**
-			 * 如果改就全部改成这样的模式吧，还有APPstart 在直接进入这个acty 的时候要传一个User 对象，key ==
-			 * myself
-			 */
-			intent = getIntent();
-			intent.setClass(Main.this, Alldynamic.class);
-			startActivity(intent);
+			openActivity(Alldynamic.class);
 			break;
 		default:
 			break;

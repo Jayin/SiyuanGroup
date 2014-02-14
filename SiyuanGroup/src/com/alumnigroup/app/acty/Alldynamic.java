@@ -23,12 +23,9 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.DynamicAdapter;
 import com.alumnigroup.api.DynamicAPI;
-import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
-import com.alumnigroup.entity.Tweet;
-import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;

@@ -228,7 +228,6 @@ public class Login extends BaseActivity {
 										userList.get(0))) {
 									Intent intent = new Intent(Login.this,
 											Main.class);
-									intent.putExtra("myself", userList.get(0));
 									openActivity(intent);
 									closeActivity();
 								}
@@ -245,61 +244,9 @@ public class Login extends BaseActivity {
 
 	}
 
-	/**
-	 * 请求成功后
-	 */
-	private void succeed(String json) {
-		System.out.println(json);
-		final Intent intent = new Intent(Login.this, Main.class);
-		int id = -1;
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = new JSONObject(json);
-			id = JsonUtils.getInt(jsonObject, "id");
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		api.find(new RequestParams("id", id), new AsyncHttpResponseHandler() {
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					byte[] data, Throwable arg3) {
-				dialog.dismiss();
-				toast("网络异常  错误码:" + statusCode);
-				if (data != null)
-					L.i(new String(data));
-			}
-
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-				String json = new String(data);
-				User myself = new Gson().fromJson(getJsonEmement(json),
-						User.class);
-				intent.putExtra("myself", myself);
-				startActivity(intent);
-				dialog.dismiss();
-				finish();
-			}
-
-		});
-	}
-
 	private void initFlipper() {
 		flipper = (ViewFlipper) _getView(R.id.acty_login_flipper);
 		flipper.setInAnimation(this, R.anim.push_up_in);
 		flipper.setOutAnimation(this, R.anim.push_up_out);
 	}
-
-	private String getJsonEmement(String json) {
-		String jsonJsonEmement = "";
-		JSONObject jsonObject = null;
-		try {
-			jsonObject = new JSONObject(json);
-			jsonJsonEmement = jsonObject.getJSONArray("users").getJSONObject(0)
-					.toString();
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return jsonJsonEmement;
-	}
-
 }

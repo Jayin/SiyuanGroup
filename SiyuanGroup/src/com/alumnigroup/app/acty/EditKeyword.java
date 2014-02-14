@@ -1,8 +1,13 @@
 package com.alumnigroup.app.acty;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.http.Header;
+import org.apache.http.client.ClientProtocolException;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,9 +15,16 @@ import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.alumnigroup.api.UserAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
+import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 
 /**
  * 修改关键字
@@ -27,7 +39,7 @@ public class EditKeyword extends BaseActivity {
 	 */
 	private OutoLinefeedLayout lyContent, lyHot;
 	private EditText etAdd;
-	private View btnAdd;
+	private View btnAdd,btnRelease;
 
 	/**
 	 * 关键字
@@ -44,6 +56,10 @@ public class EditKeyword extends BaseActivity {
 	 * 热门关键字
 	 */
 	private ArrayList<Keyword> alHotKeyword;
+	
+	private UserAPI api;
+	private User myself;
+	private AlertDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +72,13 @@ public class EditKeyword extends BaseActivity {
 	@Override
 	protected void initData() {
 		alMyKeyword = new ArrayList<EditKeyword.Keyword>();
+		api = new UserAPI();
+		myself = AppInfo.getUser(EditKeyword.this);
+		
+		AlertDialog.Builder builder = new AlertDialog.Builder(
+				EditKeyword.this);
+		builder.setTitle("更新中···");
+		dialog = builder.create();
 	}
 
 	@Override
@@ -69,6 +92,9 @@ public class EditKeyword extends BaseActivity {
 		etAdd = (EditText) _getView(R.id.acty_edit_keywork_et_add);
 		btnAdd = _getView(R.id.acty_edit_keywork_btn_add);
 		btnAdd.setOnClickListener(this);
+		
+		btnRelease = _getView(R.id.acty_head_btn_release);
+		btnRelease.setOnClickListener(this);
 	}
 
 	/**
@@ -142,6 +168,11 @@ public class EditKeyword extends BaseActivity {
 			backgroupcolor = (backgroupcolor + 1) % 2;
 			updateKeyWord(alMyKeyword, lyContent);
 			updateKeyWord(alMyKeyword, lyContent);
+			etAdd.setText("");
+			break;
+		case R.id.acty_head_btn_release:
+			dialog.show();
+			updateKeyWord();
 			break;
 
 		default:
@@ -170,6 +201,70 @@ public class EditKeyword extends BaseActivity {
 		}
 
 	}
+	
+	private void updateKeyWord(){
+		String tags = "";
+		for (Keyword keyword : alMyKeyword) {
+			tags = keyword.getContent()+",";
+		}
+		api.updateTag(tags, new AsyncHttpResponseHandler(){
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					byte[] data, Throwable err) {
+				if (data != null)
+					L.i(new String(data));
+				if (err != null)
+					L.i(err.toString());
+				toast("更新失败");
+			}
+
+			@Override
+			public void onSuccess(int statusCode, Header[] headers,
+					byte[] data) {
+				String json = new String(data);// jsonarray
+				if (JsonUtils.isOK(json)) {
+					toast("更新完成");
+					updateSPUser();
+					finish();
+				} else {
+					toast("更新失败"+json);
+				}
+			}
+
+			@Override
+			public void onFinish() {
+				dialog.cancel();
+			}
+		});
+		
+	}
+
+/**
+ * 更新user 数据
+ */
+private void updateSPUser() {
+	api.find(new RequestParams("id", myself.getId()),
+			new AsyncHttpResponseHandler() {
+				@Override
+				public void onFinish() {
+					dialog.cancel();
+				}
+
+				public void onSuccess(int statusCode, Header[] headers,
+						byte[] data) {
+					String json = new String(data);
+					if (JsonUtils.isOK(json)) {
+						try {
+							AppInfo.setUser(json, EditKeyword.this);
+						} catch (ClientProtocolException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			});
+}
 
 	/**
 	 * 封装一个关键字

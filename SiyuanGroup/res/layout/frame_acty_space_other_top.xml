@@ -56,6 +56,7 @@
         android:orientation="horizontal" >
 
         <TextView
+            android:id="@+id/acty_space_other_top_btn_add_friend_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

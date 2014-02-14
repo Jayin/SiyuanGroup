@@ -31,18 +31,22 @@
 
             <include
                 android:id="@+id/acty_space_other_album"
-                layout="@layout/frame_acty_space_other_album" />
+                layout="@layout/frame_acty_space_other_album"
+                android:visibility="gone" />
 
             <include
                 android:id="@+id/acty_space_other_new_dynamic"
                 layout="@layout/frame_acty_space_other_new_dynamic" />
-            
+
             <include
                 android:id="@+id/acty_space_other_visitor"
-                layout="@layout/frame_acty_space_other_visitor" />
+                layout="@layout/frame_acty_space_other_visitor"
+                android:visibility="gone" />
+
             <include
                 android:id="@+id/acty_space_other_leave_message"
-                layout="@layout/frame_acty_space_other_leave_message" />
+                layout="@layout/frame_acty_space_other_leave_message"
+                android:visibility="gone" />
         </LinearLayout>
     </ScrollView>
 

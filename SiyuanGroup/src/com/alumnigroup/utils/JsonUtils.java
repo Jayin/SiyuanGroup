@@ -7,9 +7,8 @@ import org.json.JSONObject;
 import com.google.gson.JsonObject;
 
 /**
- * JSON工具类 <li>1.复写所有get方法，对于基本类型,即使数据返回是null 会有自动默认值 <li>2.引用类型，数据返回null or NULL
- * <li>3.对请求返回的信息解析的一些封装 get(key)
- * 均返回null
+ * JSON工具类 <li>1.复写所有get方法，对于基本类型,即使数据返回是null 会有自动默认值 <li>2.引用类型，数据返回null or
+ * NULL <li>3.对请求返回的信息解析的一些封装 get(key) 均返回null
  * 
  * @author Jayin Ton
  * 
@@ -17,12 +16,15 @@ import com.google.gson.JsonObject;
 public class JsonUtils {
 	/**
 	 * 根据给定的json对象字符串获取对应的int类型值
-	 * @param jsonobj json对象字符串
-	 * @param name  key
+	 * 
+	 * @param jsonobj
+	 *            json对象字符串
+	 * @param name
+	 *            key
 	 * @return int
 	 */
-	public static int getInt(String jsonobj,String name){
-		JSONObject obj  = null;
+	public static int getInt(String jsonobj, String name) {
+		JSONObject obj = null;
 		try {
 			obj = new JSONObject(jsonobj);
 			return getInt(obj, name);
@@ -31,14 +33,18 @@ public class JsonUtils {
 			return -1;
 		}
 	}
+
 	/**
 	 * 根据给定的json对象字符串获取对应的String类型值
-	 * @param jsonobj json对象字符串
-	 * @param name key
+	 * 
+	 * @param jsonobj
+	 *            json对象字符串
+	 * @param name
+	 *            key
 	 * @return String
 	 */
-	public static String getString(String jsonobj,String name){
-		JSONObject obj  = null;
+	public static String getString(String jsonobj, String name) {
+		JSONObject obj = null;
 		try {
 			obj = new JSONObject(jsonobj);
 			return getString(obj, name);
@@ -47,6 +53,7 @@ public class JsonUtils {
 			return null;
 		}
 	}
+
 	/**
 	 * 复写JSONObject。getInt()
 	 * 
@@ -216,12 +223,16 @@ public class JsonUtils {
 		}
 		return null;
 	}
+
 	/**
 	 * 获取请求返回的error_code
-	 * @param json 请求返回体json
+	 * 
+	 * @param json
+	 *            请求返回体json
 	 * @return error_code
 	 */
-	public static int  getErrorCode(String json){
-	   return getInt(json, "errorCode");
+	public static int getErrorCode(String json) {
+		return getInt(json, "errorCode");
 	}
+
 }

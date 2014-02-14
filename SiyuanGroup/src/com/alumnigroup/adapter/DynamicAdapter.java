@@ -96,7 +96,7 @@ public class DynamicAdapter extends BaseAdapter {
 		@Override
 		public void onClick(View v) {
 			Intent intent = new Intent(context,SpaceOther.class);
-			intent.putExtra("user", dynamics.get(position-1).getUser());
+			intent.putExtra("user", dynamics.get(position).getUser());
 			context.startActivity(intent);
 		}
 		
