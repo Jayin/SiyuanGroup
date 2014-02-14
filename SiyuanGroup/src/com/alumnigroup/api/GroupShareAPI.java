@@ -21,7 +21,7 @@ public class GroupShareAPI {
 	public void getShareList(int page,int groupid, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		if(page>0)params.add("page", page + "");
-        if(groupid>0)params.add("groupdid", groupid+"");  
+        if(groupid>0)params.add("groupid", groupid+"");  
 		RestClient.get("/api/issues/find", params, responseHandler);
 	}
 	/**
