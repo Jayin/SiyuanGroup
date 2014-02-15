@@ -382,7 +382,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			}
 			Cooperation c = data.get(position);
 			h.name_project.setText(c.getName());
-			h.deadline.setText(CalendarUtils.getTimeFromat(c.getDeadline(),
+			h.deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
 					CalendarUtils.TYPE_TWO));
 			h.major.setText(c.getUser().getProfile().getMajor());
 			h.name_user.setText(c.getUser().getProfile().getName());

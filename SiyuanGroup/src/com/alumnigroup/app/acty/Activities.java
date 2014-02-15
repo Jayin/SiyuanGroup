@@ -139,7 +139,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-				api.getUserHistory(1, user.getId(), new JsonResponseHandler() {
+				api.getMyActivity(1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -164,6 +164,8 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 						lv_myjoin.stopRefresh();
 					}
 				});
+				
+				 
 			}
 
 			@Override
@@ -173,32 +175,57 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 					lv_myjoin.startRefresh();
 					return;
 				}
-				api.getUserHistory(page_myjoin + 1, user.getId(),
-						new JsonResponseHandler() {
+				api.getMyActivity(page_myjoin + 1, new JsonResponseHandler() {
 
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								List<MActivity> newData_myjoin = MActivity
-										.create_by_jsonarray(obj.toString());
-								if (newData_myjoin == null) {
-									toast("网络异常，解析错误");
-								} else if (newData_myjoin.size() == 0) {
-									toast("没有更多");
-								} else {
-									page_myjoin++;
-									data_myjoin.addAll(newData_myjoin);
-									adapter_myjoin.notifyDataSetChanged();
-								}
-								lv_myjoin.stopLoadMore();
-							}
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<MActivity> newData_myjoin = MActivity
+								.create_by_jsonarray(obj.toString());
+						if (newData_myjoin == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_myjoin.size() == 0) {
+							toast("没有更多");
+						} else {
+							page_myjoin++;
+							data_myjoin.addAll(newData_myjoin);
+							adapter_myjoin.notifyDataSetChanged();
+						}
+						lv_myjoin.stopLoadMore();
+					}
 
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
-								lv_myjoin.stopLoadMore();
-							}
-						});
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("网络异常 "
+								+ ErrorCode.errorList.get(errorCode));
+						lv_myjoin.stopLoadMore();
+					}
+				});
+//				api.getUserHistory(page_myjoin + 1, user.getId(),
+//						new JsonResponseHandler() {
+//
+//							@Override
+//							public void onOK(Header[] headers, JSONObject obj) {
+//								List<MActivity> newData_myjoin = MActivity
+//										.create_by_jsonarray(obj.toString());
+//								if (newData_myjoin == null) {
+//									toast("网络异常，解析错误");
+//								} else if (newData_myjoin.size() == 0) {
+//									toast("没有更多");
+//								} else {
+//									page_myjoin++;
+//									data_myjoin.addAll(newData_myjoin);
+//									adapter_myjoin.notifyDataSetChanged();
+//								}
+//								lv_myjoin.stopLoadMore();
+//							}
+//
+//							@Override
+//							public void onFaild(int errorType, int errorCode) {
+//								toast("网络异常 "
+//										+ ErrorCode.errorList.get(errorCode));
+//								lv_myjoin.stopLoadMore();
+//							}
+//						});
 
 			}
 		});

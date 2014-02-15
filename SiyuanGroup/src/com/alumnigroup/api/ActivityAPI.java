@@ -346,7 +346,11 @@ public class ActivityAPI {
 	 * @param ownerid
 	 * @param responseHandler
 	 */
-	public void getMyActivity(int page,int ownerid,AsyncHttpResponseHandler responseHandler) {
-          search(page, ownerid, null, null, responseHandler);
+	public void getMyActivity(int page ,AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		if(page>0)params.add("page", page+"");
+		RestClient.get("/api/activities/my", params, responseHandler);
 	}
+	
+ 
 }
