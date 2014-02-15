@@ -36,7 +36,6 @@ public class GroupManage extends BaseActivity {
 		setContentView(R.layout.acty_groupmanage);
 		initData();
 		initLayout();
-		uploadFile();
 	}
 
 	@Override

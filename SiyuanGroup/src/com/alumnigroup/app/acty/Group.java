@@ -289,11 +289,9 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			viewpager.setCurrentItem(1, true);
 			break;
 		case R.id.search:
-			//toast("search");
 			mPopupWindow.dismiss();
 			break;
 		case R.id.create:
-			toast("create");
 			openActivity(GroupCreate.class);
 			mPopupWindow.dismiss();
 			break;

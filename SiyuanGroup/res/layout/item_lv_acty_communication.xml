@@ -12,10 +12,10 @@
 
         <ImageView
             android:id="@+id/item_lv_acty_comminication_avatar"
+            style="@style/ImageView.avatar"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="8dp"
-            android:scaleType="centerInside"
             android:src="@drawable/ic_image_load_loading" />
 
         <TextView
