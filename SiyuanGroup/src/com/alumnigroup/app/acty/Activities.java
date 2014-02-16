@@ -21,10 +21,12 @@ import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -51,6 +53,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private ActivitiesAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 0, page_myjoin = 0, page_favourit = 0;
 	private ActivityAPI api;
+	private StarAPI starAPI;
 	private User user;
 
 	@Override
@@ -164,8 +167,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 						lv_myjoin.stopRefresh();
 					}
 				});
-				
-				 
+
 			}
 
 			@Override
@@ -195,56 +197,100 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 "
-								+ ErrorCode.errorList.get(errorCode));
+						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
 						lv_myjoin.stopLoadMore();
 					}
 				});
-//				api.getUserHistory(page_myjoin + 1, user.getId(),
-//						new JsonResponseHandler() {
-//
-//							@Override
-//							public void onOK(Header[] headers, JSONObject obj) {
-//								List<MActivity> newData_myjoin = MActivity
-//										.create_by_jsonarray(obj.toString());
-//								if (newData_myjoin == null) {
-//									toast("网络异常，解析错误");
-//								} else if (newData_myjoin.size() == 0) {
-//									toast("没有更多");
-//								} else {
-//									page_myjoin++;
-//									data_myjoin.addAll(newData_myjoin);
-//									adapter_myjoin.notifyDataSetChanged();
-//								}
-//								lv_myjoin.stopLoadMore();
-//							}
-//
-//							@Override
-//							public void onFaild(int errorType, int errorCode) {
-//								toast("网络异常 "
-//										+ ErrorCode.errorList.get(errorCode));
-//								lv_myjoin.stopLoadMore();
-//							}
-//						});
-
 			}
 		});
 		lv_favourit.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
+				starAPI.getMyStarList(1, StarAPI.Item_type_activity,
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<MActivity> newData_faviour = new ArrayList<MActivity>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((MActivity) s
+												.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+									} else {
+										page_favourit = 1;
+										data_favourite.clear();
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopRefresh();
+							}
+						});
 			}
 
 			@Override
 			public void onLoadMore() {
+				if (page_favourit == 0) {
+					lv_favourit.stopLoadMore();
+					lv_favourit.startRefresh();
+					return;
+				}
+				starAPI.getMyStarList(page_favourit + 1,
+						StarAPI.Item_type_activity, new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<MActivity> newData_faviour = new ArrayList<MActivity>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((MActivity) s
+												.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+									} else {
+										page_favourit++;
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopLoadMore();
+							}
+						});
 			}
 		});
 		lv_all.setOnItemClickListener(this);
 		lv_myjoin.setOnItemClickListener(this);
 		lv_favourit.setOnItemClickListener(this);
-		
+
 		lv_all.startRefresh();
 	}
 
@@ -253,6 +299,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, getContext());
 		user = (User) dp.get(DataPool.SP_Key_User);
 		api = new ActivityAPI();
+		starAPI = new StarAPI();
 		if (user == null) {
 			L.i("muser is null");
 			toast("lol");

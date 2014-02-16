@@ -16,7 +16,7 @@ import com.google.gson.Gson;
  * 
  */
 public class MActivity implements Serializable {
-	public static MActivity creat_by_json(String json) {
+	public static MActivity create_by_json(String json) {
 		MActivity acty = null;
 		Gson gson = new Gson();
 		try {
@@ -36,7 +36,7 @@ public class MActivity implements Serializable {
 			obj = new JSONObject(jsonarray);
 			array = obj.getJSONArray("activities");
 			for (int i = 0; i < array.length(); i++) {
-				list.add(creat_by_json(array.getJSONObject(i).toString()));
+				list.add(create_by_json(array.getJSONObject(i).toString()));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

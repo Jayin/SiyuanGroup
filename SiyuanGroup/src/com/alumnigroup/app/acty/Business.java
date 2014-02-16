@@ -20,10 +20,14 @@ import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -48,6 +52,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	private BusinessAPI api;
 	private User user;
 	private XListView lv_myjoin,lv_all,  lv_favourit;
+	private StarAPI starAPI;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -205,14 +210,84 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			
 			@Override
 			public void onRefresh() {
-				// TODO Auto-generated method stub
-				
+				starAPI.getMyStarList(1, StarAPI.Item_type_business,
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<Cooperation> newData_faviour = new ArrayList<Cooperation>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((Cooperation) s
+												.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+									} else {
+										page_favourit = 1;
+										data_favourite.clear();
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopRefresh();
+							}
+						});
 			}
 			
 			@Override
 			public void onLoadMore() {
-				// TODO Auto-generated method stub
-				
+				if (page_favourit == 0) {
+					lv_favourit.stopLoadMore();
+					lv_favourit.startRefresh();
+					return;
+				}
+				starAPI.getMyStarList(page_favourit + 1,
+						StarAPI.Item_type_business, new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<Cooperation> newData_faviour = new ArrayList<Cooperation>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((Cooperation) s
+												.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+									} else {
+										page_favourit++;
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopLoadMore();
+							}
+						});
 			}
 		});
 		
@@ -226,6 +301,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			toast("无用户信息，请登录");
 		}
 		api = new BusinessAPI();
+		starAPI = new StarAPI();
 		data_all = new ArrayList<Cooperation>();
 		data_myjoin = new ArrayList<Cooperation>();
 		data_favourite = new ArrayList<Cooperation>();

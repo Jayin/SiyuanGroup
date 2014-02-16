@@ -23,11 +23,14 @@ import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -50,6 +53,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private IssueAdapter adapter_all, adapter_my, adapter_favourite;
 	private int page_all = 0, page_my = 0, page_favourit = 0;
 	private IssuesAPI api;
+	private StarAPI starAPI;
 	private User user;
 
 	@Override
@@ -201,12 +205,84 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
+				starAPI.getMyStarList(1, StarAPI.Item_type_issue,
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<Issue> newData_faviour = new ArrayList<Issue>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((Issue) s
+												.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+									} else {
+										page_favourit = 1;
+										data_favourite.clear();
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopRefresh();
+							}
+						});
 			}
 
 			@Override
 			public void onLoadMore() {
+				if (page_favourit == 0) {
+					lv_favourit.stopLoadMore();
+					lv_favourit.startRefresh();
+					return;
+				}
+				starAPI.getMyStarList(page_favourit + 1,
+						StarAPI.Item_type_issue, new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<Issue> newData_faviour = new ArrayList<Issue>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((Issue) s
+												.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+									} else {
+										page_favourit++;
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("网络异常 "
+										+ ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopLoadMore();
+							}
+						});
 			}
 		});
 		lv_all.setOnItemClickListener(this);
@@ -224,6 +300,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 		}
 		api = new IssuesAPI();
+		starAPI = new StarAPI();
 		data_all = new ArrayList<Issue>();
 		data_my = new ArrayList<Issue>();
 		data_favourite = new ArrayList<Issue>();
