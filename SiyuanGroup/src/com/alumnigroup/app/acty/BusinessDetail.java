@@ -262,7 +262,7 @@ public class BusinessDetail extends BaseActivity {
 			h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
 					.getPosttime(), CalendarUtils.TYPE_timeline));
 			h.body.setText(data.get(position).getBody());
-			if (data.get(position).getUser().getAvatar() == null) {
+			if (data.get(position).getUser().getAvatar() != null) {
 				ImageLoader.getInstance().displayImage(
 						RestClient.BASE_URL
 								+ data.get(position).getUser().getAvatar(),
