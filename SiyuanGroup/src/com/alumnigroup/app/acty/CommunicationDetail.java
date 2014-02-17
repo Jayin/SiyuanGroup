@@ -69,6 +69,7 @@ public class CommunicationDetail extends BaseActivity {
 		mReceiver = new BroadcastReceiver(){@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(Constants.Action_Issue_Comment_Ok)){
+				if(data_commet.isEmpty())tv_notify.setVisibility(View.GONE);
 				Comment comment = (Comment)intent.getSerializableExtra("comment");
 				CommonUtils.reverse(data_commet);
 				data_commet.add(comment);

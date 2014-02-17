@@ -261,6 +261,7 @@ public class GroupInfo extends BaseActivity {
 					int position, long id) {
                        Intent intent = new Intent(getContext(), GroupShareDetail.class);
                        intent.putExtra("issue", data_share.get(position-1));
+                       intent.putExtra("group", group);
                        openActivity(intent);
 			}
 		});

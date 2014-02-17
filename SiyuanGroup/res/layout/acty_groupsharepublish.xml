@@ -5,7 +5,7 @@
     android:background="@color/grey"
     android:orientation="vertical" >
 
-    <include layout="@layout/acty_groupsharecompose_header" />
+    <include layout="@layout/acty_groupsharepublish_header" />
 
     <ScrollView
         android:layout_width="match_parent"

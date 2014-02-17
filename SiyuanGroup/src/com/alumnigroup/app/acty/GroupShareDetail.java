@@ -25,6 +25,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -49,7 +50,7 @@ public class GroupShareDetail extends BaseActivity {
 	private User user;
 	private View vistor, owner;
 	private BroadcastReceiver mReceiver;
-
+    private MGroup group;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,6 +65,7 @@ public class GroupShareDetail extends BaseActivity {
 		mReceiver = new BroadcastReceiver(){@Override
 		public void onReceive(Context context, Intent intent) {
 			if(intent.getAction().equals(Constants.Action_Issue_Comment_Ok)){
+				if(data_commet.isEmpty())tv_notify.setVisibility(View.GONE);
 				Comment comment = (Comment)intent.getSerializableExtra("comment");
 				CommonUtils.reverse(data_commet);
 				data_commet.add(comment);
@@ -86,6 +88,7 @@ public class GroupShareDetail extends BaseActivity {
 	@Override
 	protected void initData() {
 		issue = (Issue) getSerializableExtra("issue");
+		group = (MGroup)getSerializableExtra("group");
 		user = AppInfo.getUser(getContext());
 		if (user == null) {
 			toast("无用户信息，请重新登录");
@@ -245,8 +248,9 @@ public class GroupShareDetail extends BaseActivity {
 	}
 
 	private void edit() {
-		Intent intent = new Intent(this, CommunicationPublish.class);
+		Intent intent = new Intent(this, GroupSharePublish.class);
 		intent.putExtra("issue", issue);
+		intent.putExtra("group", group);
 		openActivity(intent);
 	}
 
