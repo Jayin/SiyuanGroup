@@ -78,12 +78,14 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						if (newData_all == null) {
 							toast("网络异常 解析错误");
 						} else if (newData_all.size() == 0) {
-							toast("没有更多");
+							toast("还没有圈子");
+							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all = 1;
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
+							lv_all.setPullLoadEnable(true);
 						}
 						lv_all.stopRefresh();
 
@@ -95,7 +97,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						lv_all.stopRefresh();
 					}
 				});
-
 			}
 
 			@Override
@@ -115,6 +116,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							toast("网络异常,解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("没有更多了!");
+							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all++;
 							data_all.addAll(newData_all);
@@ -148,12 +150,14 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						if (newData_my == null) {
 							toast("网络异常 解析错误");
 						} else if (newData_my.size() == 0) {
-							toast("没有更多");
+							toast("你还没有加入任何圈子");
+							lv_myjoin.setPullLoadEnable(false);
 						} else {
 							page_myjoin= 1;
 							data_myjoin.clear();
 							data_myjoin.addAll(newData_my);
 							adapter_myjoin.notifyDataSetChanged();
+							lv_myjoin.setPullLoadEnable(true);
 						}
 						lv_myjoin.stopRefresh();
 					}
@@ -183,6 +187,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							toast("网络异常,解析错误");
 						} else if (newData_my.size() == 0) {
 							toast("没有更多了!");
+							lv_myjoin.setPullLoadEnable(false);
 						} else {
 							page_myjoin++;
 							data_myjoin.addAll(newData_my);

@@ -84,19 +84,21 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						if (newData_all == null) {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
-							toast("没有更多");
+							toast("还没有人发布项目");
+							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all = 1;
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
+							lv_all.setPullLoadEnable(true);
 						}
 						lv_all.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常  错误码:" + errorCode);
+						toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
 						lv_all.stopRefresh();
 					}
 				});
@@ -119,7 +121,8 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						if (newData_all == null) {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
-							toast("没有更多了");
+							toast("没有更多");
+							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all++;
 							data_all.addAll(newData_all);
@@ -130,7 +133,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常  错误码:" + errorCode);
+						toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
 						lv_all.stopLoadMore();
 					}
 				});
@@ -152,12 +155,14 @@ public class Business extends BaseActivity implements OnItemClickListener {
 								if (newData_myjoin == null) {
 									toast("网络异常，解析错误");
 								} else if (newData_myjoin.size() == 0) {
-									toast("没有更多");
+									toast("你还没有发布任何项目");
+									lv_myjoin.setPullLoadEnable(false);
 								} else {
 									page_myjoin = 1;
 									data_myjoin.clear();
 									data_myjoin.addAll(newData_myjoin);
 									adapter_myjoin.notifyDataSetChanged();
+									lv_myjoin.setPullLoadEnable(true);
 								}
 								lv_myjoin.stopRefresh();
 
@@ -165,7 +170,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常  错误码:" + errorCode);
+								toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
 								lv_myjoin.stopRefresh();
 							}
 						});
@@ -189,7 +194,8 @@ public class Business extends BaseActivity implements OnItemClickListener {
 								if (newData_myjoin == null) {
 									toast("网络异常，解析错误");
 								} else if (newData_myjoin.size() == 0) {
-									toast("没有更多了");
+									toast("没有更多");
+									lv_myjoin.setPullLoadEnable(false);
 								} else {
 									page_myjoin++;
 									data_myjoin.addAll(newData_myjoin);
@@ -200,7 +206,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常  错误码:" + errorCode);
+								toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
 								lv_myjoin.stopLoadMore();
 							}
 						});
@@ -226,13 +232,15 @@ public class Business extends BaseActivity implements OnItemClickListener {
 												.getItem());
 									}
 									if (newData_faviour.size() == 0) {
-										toast("没有更多");
+										toast("你还没有收藏任何项目");
+										lv_favourit.setPullLoadEnable(false);
 									} else {
 										page_favourit = 1;
 										data_favourite.clear();
 										data_favourite.addAll(newData_faviour);
 										adapter_favourite
 												.notifyDataSetChanged();
+										lv_favourit.setPullLoadEnable(true);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -271,6 +279,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 									}
 									if (newData_faviour.size() == 0) {
 										toast("没有更多");
+										lv_favourit.setPullLoadEnable(false);
 									} else {
 										page_favourit++;
 										data_favourite.addAll(newData_faviour);
