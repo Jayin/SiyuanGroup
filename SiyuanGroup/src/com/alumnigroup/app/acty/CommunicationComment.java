@@ -3,18 +3,22 @@ package com.alumnigroup.app.acty;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.alumnigroup.api.IssuesAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.StringUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
+import com.alumnigroup.utils.StringUtils;
 
 /**
  * 校友交流，评论页面
@@ -62,7 +66,7 @@ public class CommunicationComment extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_post:
-			String body = EditTextUtils.getTextTrim(et_content);
+			final String body = EditTextUtils.getTextTrim(et_content);
 			if (body == null || StringUtils.isEmpty(body)) {
 				toast("还是写点东西吧！");
 				return;
@@ -73,6 +77,14 @@ public class CommunicationComment extends BaseActivity {
 				public void onOK(Header[] headers, JSONObject obj) {
                        toast("评论成功");
                        closeActivity();
+                       //发送广播通知更新
+                       Comment comment = new Comment();
+                       comment.setBody(body);
+                       comment.setPosttime(System.currentTimeMillis());
+                       comment.setUser(AppInfo.getUser(getContext()));
+                       Intent intent = new Intent(Constants.Action_Issue_Comment_Ok);
+                       intent.putExtra("comment", comment);
+                       sendBroadcast(intent);
 				}
 
 				@Override

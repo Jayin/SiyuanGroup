@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +28,8 @@ import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.CommonUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.CommentView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -43,6 +48,7 @@ public class GroupShareDetail extends BaseActivity {
 	private IssuesAPI api;
 	private User user;
 	private View vistor, owner;
+	private BroadcastReceiver mReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +56,31 @@ public class GroupShareDetail extends BaseActivity {
 		setContentView(R.layout.acty_groupsharedetail);
 		initData();
 		initLayout();
+		openReceiver();
+	}
+	
+    //评论成功后添加评论条目
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver(){@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().equals(Constants.Action_Issue_Comment_Ok)){
+				Comment comment = (Comment)intent.getSerializableExtra("comment");
+				CommonUtils.reverse(data_commet);
+				data_commet.add(comment);
+				CommonUtils.reverse(data_commet);
+//				adapter_commet.notifyDataSetChanged();
+				lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
+				
+			}
+			
+		}};
+		registerReceiver(mReceiver, new IntentFilter(Constants.Action_Issue_Comment_Ok));
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mReceiver!=null)unregisterReceiver(mReceiver);
 	}
 
 	@Override
@@ -57,7 +88,7 @@ public class GroupShareDetail extends BaseActivity {
 		issue = (Issue) getSerializableExtra("issue");
 		user = AppInfo.getUser(getContext());
 		if (user == null) {
-			toast("用户信息不存在，请重新登录");
+			toast("无用户信息，请重新登录");
 			closeActivity();
 		}
 		api = new IssuesAPI();

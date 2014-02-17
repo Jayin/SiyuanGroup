@@ -6,10 +6,13 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.text.BoringLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +37,8 @@ import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.CommonUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -55,7 +60,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private IssuesAPI api;
 	private StarAPI starAPI;
 	private User user;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,8 +67,8 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+	
 	}
-
 	private void initController() {
 		lv_all.setPullRefreshEnable(true);
 		lv_all.setPullLoadEnable(true);
@@ -99,7 +103,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast( ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_all.stopRefresh();
 					}
 				});
@@ -199,7 +203,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast( ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_my.stopLoadMore();
 							}
 						});
@@ -222,8 +226,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 									toast("网络异常，解析错误");
 								} else {
 									for (Starring s : stars) {
-										newData_faviour.add((Issue) s
-												.getItem());
+										newData_faviour.add((Issue) s.getItem());
 									}
 									if (newData_faviour.size() == 0) {
 										toast("还没有收藏任何话题");
@@ -267,8 +270,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 									toast("网络异常，解析错误");
 								} else {
 									for (Starring s : stars) {
-										newData_faviour.add((Issue) s
-												.getItem());
+										newData_faviour.add((Issue) s.getItem());
 									}
 									if (newData_faviour.size() == 0) {
 										toast("没有更多");
@@ -285,7 +287,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast( ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_favourit.stopLoadMore();
 							}
 						});
@@ -327,9 +329,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		lv_favourit = (XListView) favourit
 				.findViewById(R.id.frame_acty_communication_favourite_listview);
 
-		adapter_all = new IssueAdapter(getContext(),data_all);
-		adapter_my = new IssueAdapter(getContext(),data_my);
-		adapter_favourite = new IssueAdapter(getContext(),data_favourite);
+		adapter_all = new IssueAdapter(getContext(), data_all);
+		adapter_my = new IssueAdapter(getContext(), data_my);
+		adapter_favourite = new IssueAdapter(getContext(), data_favourite);
 
 		lv_all.setAdapter(adapter_all);
 		lv_my.setAdapter(adapter_my);
@@ -389,7 +391,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		}
 	}
 
-
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
@@ -412,8 +413,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 class IssueAdapter extends BaseAdapter {
 	private List<Issue> data;
-private Context context;
-	public IssueAdapter(Context context,List<Issue> data) {
+	private Context context;
+
+	public IssueAdapter(Context context, List<Issue> data) {
 		this.data = data;
 		this.context = context;
 	}
@@ -461,8 +463,7 @@ private Context context;
 			h = (ViewHolder) convertView.getTag();
 		}
 		h.name.setText(data.get(position).getUser().getProfile().getName());
-		h.major.setText(data.get(position).getUser().getProfile()
-				.getMajor());
+		h.major.setText(data.get(position).getUser().getProfile().getMajor());
 		h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
 				.getPosttime(), CalendarUtils.TYPE_timeline));
 		h.title.setText(data.get(position).getTitle());
@@ -476,8 +477,7 @@ private Context context;
 					h.avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal,
-					h.avatar);
+					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
 		}
 
 		return convertView;

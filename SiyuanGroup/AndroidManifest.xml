@@ -185,7 +185,7 @@
             android:theme="@style/AcivityTheme_dialog" >
         </activity>
         <activity
-            android:name=".acty.GroupShareCompose"
+            android:name=".acty.GroupSharePublish"
             android:screenOrientation="portrait" >
         </activity>
         <activity

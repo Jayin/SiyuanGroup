@@ -400,7 +400,7 @@ public class GroupInfo extends BaseActivity {
 
 		case R.id.btn_share:
 			mPopupWindow.dismiss();
-			intent = new Intent(this, GroupShareCompose.class);
+			intent = new Intent(this, GroupSharePublish.class);
 			intent.putExtra("group", group);
 			openActivity(intent);
 			break;
