@@ -21,8 +21,9 @@ public class ErrorCode {
 		errorList.put(502, "错误网关 ");
 		errorList.put(503, "服务器无法处理请求");
 
-		errorList.put(10001, "System error");
-		errorList.put(10008, "请求参数有无");
+
+		errorList.put(10001, "服务器系统错误");//服务器系统错误System error
+		errorList.put(10008, "请求参数错误");//Parameter error
 		errorList.put(10020, "非法API");
 
 		errorList.put(20003, "没有找到该用户");

@@ -363,7 +363,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			}
 			MGroup group = data.get(position);
 			h.name.setText(group.getName());
-			h.username.setText("ownid" + group.getOwnerid());
+			h.username.setText(group.getOwner().getProfile().getName());
 			h.memberCount.setText(group.getNumMembers() + "名会员");
 			h.description.setText(group.getDescription());
 			if (group.getAvatar() != null) {
