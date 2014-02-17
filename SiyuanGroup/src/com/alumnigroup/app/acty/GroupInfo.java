@@ -119,12 +119,14 @@ public class GroupInfo extends BaseActivity {
 								newData.add(mm.getUser());
 							}
 							if (newData.size() == 0) {
-								toast("还没有会员!");
+								toast("还没有会员");
+								lv_member.setPullLoadEnable(false);
 							} else {
 								page_member = 1;
 								data_user.clear();
 								data_user.addAll(newData);
 								adapter_member.notifyDataSetChanged();
+								lv_member.setPullLoadEnable(true);
 							}
 						}
 						lv_member.stopRefresh();
@@ -163,6 +165,7 @@ public class GroupInfo extends BaseActivity {
 									}
 									if (newData.size() == 0) {
 										toast("没有更多了");
+										lv_member.setPullLoadEnable(false);
 									} else {
 										page_member++;
 										data_user.clear();
@@ -198,12 +201,14 @@ public class GroupInfo extends BaseActivity {
 								if (newData_share == null) {
 									toast("网络异常 解析错误");
 								} else if (newData_share.size() == 0) {
-									toast("没有更多");
+									toast("还没有分享");
+									lv_share.setPullLoadEnable(false);
 								} else {
 									page_share = 1;
 									data_share.clear();
 									data_share.addAll(newData_share);
 									adapter_share.notifyDataSetChanged();
+									lv_share.setPullLoadEnable(true);
 								}
 								lv_share.stopRefresh();
 							}
@@ -233,7 +238,8 @@ public class GroupInfo extends BaseActivity {
 								if (newData_share == null) {
 									toast("网络异常,解析错误");
 								} else if (newData_share.size() == 0) {
-									toast("没有更多了!");
+									toast("没有更多");
+									lv_share.setPullLoadEnable(false);
 								} else {
 									page_share++;
 									data_share.addAll(newData_share);
@@ -244,8 +250,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast( ErrorCode.errorList.get(errorCode));
 								lv_share.stopLoadMore();
 
 							}

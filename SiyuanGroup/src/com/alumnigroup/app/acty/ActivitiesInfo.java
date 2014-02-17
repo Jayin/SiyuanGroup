@@ -11,20 +11,24 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
+import com.alumnigroup.api.ActivityShareAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.Userships;
@@ -51,11 +55,15 @@ public class ActivitiesInfo extends BaseActivity {
 	private ActivityAPI api;
 	private List<View> btns = new ArrayList<View>();
 	private XListView lv_member, lv_share;
-	private List<User> data_member, data_share;
-	private MemberAdapter adapter_member, adapter_share;
+	private List<User> data_member;
+	private MemberAdapter adapter_member;
 	private ViewPager viewpager;
 	private PopupWindow mPopupWindow;
 	private User user;
+	private ActivityShareAPI shareAPI;
+	private List<Issue> data_share;
+	private IssueAdapter adapter_share;
+	private int page_share = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,10 +79,12 @@ public class ActivitiesInfo extends BaseActivity {
 		View view = getLayoutInflater().inflate(
 				R.layout.popup_acty_activitiesinfo, null);
 
-		(view.findViewById(R.id.manage)).setOnClickListener(this);
-		(view.findViewById(R.id.join)).setOnClickListener(this);
-		(view.findViewById(R.id.exit)).setOnClickListener(this);
-		(view.findViewById(R.id.favourite)).setOnClickListener(this);
+		(view.findViewById(R.id.btn_manage)).setOnClickListener(this);
+		(view.findViewById(R.id.btn_join)).setOnClickListener(this);
+		(view.findViewById(R.id.btn_exit)).setOnClickListener(this);
+		(view.findViewById(R.id.btn_favourite)).setOnClickListener(this);
+		(view.findViewById(R.id.btn_activity_share)).setOnClickListener(this);
+		
 
 		mPopupWindow = new PopupWindow(view);
 		mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -90,7 +100,11 @@ public class ActivitiesInfo extends BaseActivity {
 		lv_member.setPullRefreshEnable(true);
 		lv_member.setPullLoadEnable(false);//一次性加载全部用户
 		
+		lv_share.setPullRefreshEnable(true);
+		lv_share.setPullLoadEnable(true); 
+		
 		lv_member.setAdapter(adapter_member);
+		lv_share.setAdapter(adapter_share);
 		lv_member.setXListViewListener(new IXListViewListener() {
 			
 			@Override
@@ -131,6 +145,90 @@ public class ActivitiesInfo extends BaseActivity {
 				
 			}
 		});
+		
+		lv_share.setXListViewListener(new IXListViewListener() {
+			
+			@Override
+			public void onRefresh() {
+				shareAPI.getShareList(1, acty.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Issue> newData_share = Issue
+										.create_by_jsonarray(obj.toString());
+								if (newData_share == null) {
+									toast("网络异常 解析错误");
+								} else if (newData_share.size() == 0) {
+									toast("还没有分享");
+									lv_share.setPullLoadEnable(false);
+								} else {
+									page_share = 1;
+									data_share.clear();
+									data_share.addAll(newData_share);
+									adapter_share.notifyDataSetChanged();
+									lv_share.setPullLoadEnable(true);
+								}
+								lv_share.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast( ErrorCode.errorList.get(errorCode));
+								lv_share.stopRefresh();
+							}
+						});
+				
+			}
+			
+			@Override
+			public void onLoadMore() {
+				if (page_share == 0) {
+					lv_share.stopLoadMore();
+					lv_share.startRefresh();
+					return;
+				}
+				shareAPI.getShareList(page_share + 1, acty.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Issue> newData_share = Issue
+										.create_by_jsonarray(obj.toString());
+								if (newData_share == null) {
+									toast("网络异常,解析错误");
+								} else if (newData_share.size() == 0) {
+									toast("没有更多");
+									lv_share.setPullLoadEnable(false);
+								} else {
+									page_share++;
+									data_share.addAll(newData_share);
+									adapter_share.notifyDataSetChanged();
+								}
+								lv_share.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_share.stopLoadMore();
+
+							}
+						});
+				
+			}
+		});
+		lv_share.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+                       Intent intent = new Intent(getContext(), ActivitiesShareDetail.class);
+                       intent.putExtra("issue", data_share.get(position-1));
+                       intent.putExtra("activity", acty);
+                       openActivity(intent);
+			}
+		});
 		lv_member.startRefresh();
 	}
 
@@ -143,8 +241,11 @@ public class ActivitiesInfo extends BaseActivity {
 			closeActivity();
 		}
 		api = new ActivityAPI();
+		shareAPI = new ActivityShareAPI();
 		data_member = new ArrayList<User>();
+		data_share = new ArrayList<Issue>();
 		adapter_member = new MemberAdapter(data_member, getContext());
+		adapter_share= new IssueAdapter(getContext(), data_share);
 	}
 
 	private void initViewPager() {
@@ -179,8 +280,6 @@ public class ActivitiesInfo extends BaseActivity {
 			ImageLoader.getInstance().displayImage(
 					"drawable://"+R.drawable.ic_image_load_normal, iv_avatar);
 		}
-		
-
 		tv_starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
 				CalendarUtils.TYPE_TWO));
 		tv_site.setText(acty.getSite());
@@ -220,6 +319,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 	@Override
 	public void onClick(View v) {
+		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
@@ -237,27 +337,33 @@ public class ActivitiesInfo extends BaseActivity {
 			if (!mPopupWindow.isShowing())
 				mPopupWindow.showAsDropDown(btn_more);
 			break;
-		case R.id.manage:
+		case R.id.btn_manage:
 			mPopupWindow.dismiss();
 			if(acty.getOwnerid()==user.getId()){
-				Intent intent = new Intent(getContext(), ActivitiesManage.class);
+				intent = new Intent(getContext(), ActivitiesManage.class);
 				intent.putExtra("activity", acty);
 				openActivity(intent);
 			}else{
 				toast("无权管理该活动");
 			}
 			break;
-		case R.id.join:
+		case R.id.btn_join:
 			mPopupWindow.dismiss();
 			joinActivity();
 			break;
-		case R.id.exit:
+		case R.id.btn_exit:
 			mPopupWindow.dismiss();
 			cancelActivity();
 			break;
-		case R.id.favourite:
+		case R.id.btn_favourite:
 			mPopupWindow.dismiss();
 			favourite();
+			break;
+		case R.id.btn_activity_share:
+			mPopupWindow.dismiss();
+			intent = new Intent(this, ActivitiesSharePublish.class);
+			intent.putExtra("activity",acty);
+			openActivity(intent);
 			break;
 		default:
 			break;

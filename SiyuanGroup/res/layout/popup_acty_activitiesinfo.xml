@@ -6,13 +6,19 @@
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/manage"
+        android:id="@+id/btn_manage"
         style="@style/TextView.base"
         android:layout_width="100dp"
         android:layout_height="54dp"
         android:background="@drawable/btn_popup_item_black"
         android:text="管    理" />
-
+<Button
+        android:id="@+id/btn_activity_share"
+        style="@style/TextView.base"
+        android:layout_width="100dp"
+        android:layout_height="54dp"
+        android:background="@drawable/btn_popup_item_black"
+        android:text="分    享" />
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -21,7 +27,7 @@
         android:layout_marginRight="6dp"
         android:background="@color/grey_lv_third" />
      <Button
-        android:id="@+id/favourite"
+        android:id="@+id/btn_favourite"
         style="@style/TextView.base"
         android:layout_width="100dp"
         android:layout_height="54dp"
@@ -36,7 +42,7 @@
         android:layout_marginRight="6dp"
         android:background="@color/grey_lv_third" />
     <Button
-        android:id="@+id/join"
+        android:id="@+id/btn_join"
         style="@style/TextView.base"
         android:layout_width="100dp"
         android:layout_height="54dp"
@@ -52,7 +58,7 @@
         android:background="@color/grey_lv_third" />
 
     <Button
-        android:id="@+id/exit"
+        android:id="@+id/btn_exit"
         style="@style/TextView.base"
         android:layout_width="100dp"
         android:layout_height="54dp"
