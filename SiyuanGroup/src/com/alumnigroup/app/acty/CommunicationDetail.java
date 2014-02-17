@@ -196,7 +196,14 @@ public class CommunicationDetail extends BaseActivity {
 			break;
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
-			// toast("to personal space");
+			Intent intent = null;
+			if(issue.getUser().getId()==AppInfo.getUser(getContext()).getId()){
+				intent=new Intent(this, SpacePersonal.class);
+			}else{
+				intent=new Intent(this, SpaceOther.class);
+			}
+			intent.putExtra("user", issue.getUser());
+			openActivity(intent);
 			break;
 		case R.id.acty_communicationdetail_footer_share:
 			// 分享到圈子
