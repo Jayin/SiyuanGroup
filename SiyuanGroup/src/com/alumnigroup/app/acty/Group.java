@@ -42,7 +42,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class Group extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_all,  btn_myjoin, btn_more;
+	private View btn_back, btn_all, btn_myjoin, btn_more;
 	private XListView lv_all, lv_myjoin;
 	private ViewPager viewpager;
 	private List<MGroup> data_all, data_myjoin;
@@ -153,7 +153,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							toast("你还没有加入任何圈子");
 							lv_myjoin.setPullLoadEnable(false);
 						} else {
-							page_myjoin= 1;
+							page_myjoin = 1;
 							data_myjoin.clear();
 							data_myjoin.addAll(newData_my);
 							adapter_myjoin.notifyDataSetChanged();
@@ -207,7 +207,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 
 		lv_all.setOnItemClickListener(this);
 		lv_myjoin.setOnItemClickListener(this);
-		
+
 		lv_all.startRefresh();
 	}
 
@@ -216,11 +216,10 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		View all = getLayoutInflater().inflate(R.layout.frame_acty_group, null);
 		View myjoin = getLayoutInflater().inflate(R.layout.frame_acty_group,
 				null);
-		 
+
 		lv_all = (XListView) all.findViewById(R.id.frame_acty_group_listview);
 		lv_myjoin = (XListView) myjoin
 				.findViewById(R.id.frame_acty_group_listview);
-	 
 
 		adapter_all = new GroupAdapter(data_all);
 		adapter_myjoin = new GroupAdapter(data_myjoin);
@@ -308,10 +307,12 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (position - 1 == -1)
+			return;
 		Intent intent = new Intent(this, GroupInfo.class);
 		if (parent == lv_all) {
 			intent.putExtra("group", data_all.get(position - 1));
-		}  else {
+		} else {
 			intent.putExtra("group", data_myjoin.get(position - 1));
 		}
 		openActivity(intent);

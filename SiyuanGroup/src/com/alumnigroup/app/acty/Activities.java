@@ -468,10 +468,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		int real_position = position - 1;
+		if (position - 1 == -1)
+			return;
 		if (parent == lv_all) {
 			Intent intent = new Intent(this, ActivitiesInfo.class);
-			intent.putExtra("activity", data_all.get(real_position));
+			intent.putExtra("activity", data_all.get(position - 1));
 			openActivity(intent);
 		}
 		if (parent == lv_myjoin) {

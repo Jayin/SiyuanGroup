@@ -396,6 +396,8 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (position - 1 == -1)
+			return;
 		Intent intent = new Intent(this, CommunicationDetail.class);
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));

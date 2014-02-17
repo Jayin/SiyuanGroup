@@ -398,18 +398,16 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		int real_position = position - 1;
-		
-		toast("position-->"+position);
-		L.i("position-->"+position);
+		if (position - 1 == -1)
+			return;
 		if (parent == lv_all) {
 			Intent intent = new Intent(this, BusinessDetail.class);
-			intent.putExtra("cooperation", data_all.get(real_position));
+			intent.putExtra("cooperation", data_all.get(position - 1));
 			openActivity(intent);
 		}
 		if (parent == lv_favourit) {
 			Intent intent = new Intent(this, BusinessDetail.class);
-			intent.putExtra("cooperation", data_myjoin.get(real_position));
+			intent.putExtra("cooperation", data_myjoin.get(position - 1));
 			openActivity(intent);
 		}
 		if (parent == lv_myjoin) {
