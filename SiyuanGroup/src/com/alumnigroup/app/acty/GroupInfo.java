@@ -132,7 +132,7 @@ public class GroupInfo extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误代码:" + errorCode);
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_member.stopRefresh();
 
 					}
@@ -175,7 +175,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 错误代码:" + errorCode);
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_member.stopLoadMore();
 
 							}
@@ -210,8 +210,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast( ErrorCode.errorList.get(errorCode));
 								lv_share.stopRefresh();
 							}
 						});
@@ -426,7 +425,7 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("网络异常 错误代码:" + errorCode);
+				toast("加入失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 	}
@@ -442,7 +441,7 @@ public class GroupInfo extends BaseActivity {
 			@Override
 			public void onFaild(int errorType, int errorCode) {
 				// toast("退出失败 错误码:" + errorCode);
-				toast(ErrorCode.errorList.get(errorCode));
+				toast("退出失败"+ErrorCode.errorList.get(errorCode));
 			}
 		});
 

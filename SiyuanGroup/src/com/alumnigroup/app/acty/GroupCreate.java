@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.EditTextUtils;
@@ -106,7 +107,7 @@ public class GroupCreate extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("创建失败 错误码:" + errorCode);
+				toast("创建失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 
@@ -125,7 +126,7 @@ public class GroupCreate extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("创建失败 错误码:" + errorCode);
+						toast("修改失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 	}

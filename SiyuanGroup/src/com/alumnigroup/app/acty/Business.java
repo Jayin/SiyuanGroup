@@ -98,7 +98,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_all.stopRefresh();
 					}
 				});
@@ -133,7 +133,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_all.stopLoadMore();
 					}
 				});
@@ -170,7 +170,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_myjoin.stopRefresh();
 							}
 						});
@@ -206,7 +206,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常  错误码:" + ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_myjoin.stopLoadMore();
 							}
 						});
@@ -248,8 +248,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_favourit.stopRefresh();
 							}
 						});
@@ -292,8 +291,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_favourit.stopLoadMore();
 							}
 						});
@@ -405,13 +403,15 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			intent.putExtra("cooperation", data_all.get(position - 1));
 			openActivity(intent);
 		}
-		if (parent == lv_favourit) {
+		if (parent == lv_myjoin) {
 			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_myjoin.get(position - 1));
 			openActivity(intent);
 		}
-		if (parent == lv_myjoin) {
-
+		if (parent == lv_favourit) {
+			Intent intent = new Intent(this, BusinessDetail.class);
+			intent.putExtra("cooperation", data_favourite.get(position - 1));
+			openActivity(intent);
 		}
 	}
 

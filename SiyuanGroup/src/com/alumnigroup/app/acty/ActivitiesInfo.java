@@ -117,7 +117,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误代码:" + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_member.stopRefresh();
 
 					}
@@ -276,7 +276,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("退出活动失败,错误码:" + errorCode);
+				toast("退出活动失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 
@@ -292,7 +292,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("报名失败,错误码:" + errorCode);
+				toast("报名失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 
@@ -314,7 +314,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 错误码:" + errorCode);
+						toast("收藏失败 "+ErrorCode.errorList.get(errorCode));
 
 					}
 				});

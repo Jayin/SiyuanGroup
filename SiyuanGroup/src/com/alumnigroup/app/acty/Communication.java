@@ -99,7 +99,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + ErrorCode.errorList.get(errorCode));
+						toast( ErrorCode.errorList.get(errorCode));
 						lv_all.stopRefresh();
 					}
 				});
@@ -134,7 +134,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_all.stopLoadMore();
 					}
 				});
@@ -169,7 +169,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_my.stopRefresh();
 					}
 				});
@@ -199,8 +199,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast( ErrorCode.errorList.get(errorCode));
 								lv_my.stopLoadMore();
 							}
 						});
@@ -243,8 +242,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_favourit.stopRefresh();
 							}
 						});
@@ -287,8 +285,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast( ErrorCode.errorList.get(errorCode));
 								lv_favourit.stopLoadMore();
 							}
 						});

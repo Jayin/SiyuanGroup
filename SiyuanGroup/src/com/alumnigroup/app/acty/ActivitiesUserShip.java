@@ -23,6 +23,7 @@ import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.Userships;
@@ -90,7 +91,7 @@ public class ActivitiesUserShip extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
+						toast(ErrorCode.errorList.get(errorCode));
 						lv.onRefreshComplete();
 					}
 				});
@@ -125,7 +126,7 @@ public class ActivitiesUserShip extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 错误码:" + errorCode);
+								toast(ErrorCode.errorList.get(errorCode));
 								lv.onLoadMoreComplete();
 							}
 						});

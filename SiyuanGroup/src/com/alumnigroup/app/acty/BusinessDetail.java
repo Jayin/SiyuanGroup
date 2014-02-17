@@ -23,6 +23,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cocomment;
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -131,7 +132,7 @@ public class BusinessDetail extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("网络异常 错误码:" + errorCode);
+				toast( ErrorCode.errorList.get(errorCode));
 			}
 		});
 		// 用户和发布者有不同的显示
@@ -187,12 +188,12 @@ public class BusinessDetail extends BaseActivity {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-				toast("项目一结束");
+				toast("项目已结束");
 			}
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("结束项目失败 错误码:" + errorCode);
+				toast("结束项目失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 
@@ -211,7 +212,7 @@ public class BusinessDetail extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 错误码:" + errorCode);
+						toast("收藏失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 	}

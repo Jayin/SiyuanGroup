@@ -77,7 +77,7 @@ public class CommunicationComment extends BaseActivity {
 
 				@Override
 				public void onFaild(int errorType, int errorCode) {
-                    toast("网络异常 错误代码:"+ErrorCode.errorList.get(errorCode));
+                    toast("评论失败 "+ErrorCode.errorList.get(errorCode));
 				}
 			});
 			break;

@@ -186,7 +186,7 @@ public class ActivitiesPublish extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
+						toast("更新失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 
@@ -220,7 +220,7 @@ public class ActivitiesPublish extends BaseActivity {
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						//toast("网络异常 错误码:" + errorCode);
-						toast(ErrorCode.errorList.get(errorCode));
+						toast("活动发起失败 "+ErrorCode.errorList.get(errorCode));
 					}
 				});
 

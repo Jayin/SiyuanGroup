@@ -238,7 +238,7 @@ public class CommunicationDetail extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 错误码:" + errorCode);
+						toast("收藏失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 

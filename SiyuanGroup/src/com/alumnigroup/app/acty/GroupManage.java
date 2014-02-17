@@ -98,7 +98,7 @@ public class GroupManage extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("邀请失败  错误码:" + errorCode);
+						toast("邀请失败  " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 			}
@@ -128,7 +128,7 @@ public class GroupManage extends BaseActivity {
 
 				@Override
 				public void onFaild(int errorType, int errorCode) {
-					toast("网络异常 "+ErrorCode.errorList.get(errorCode));
+					toast("头像上传失败 "+ErrorCode.errorList.get(errorCode));
 				}
 			});
 
