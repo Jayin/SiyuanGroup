@@ -24,16 +24,16 @@ import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
-
 import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.Userships;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
-import com.loopj.android.http.JsonHttpResponseHandler;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -50,7 +50,7 @@ public class ActivitiesInfo extends BaseActivity {
 	private MActivity acty;
 	private ActivityAPI api;
 	private List<View> btns = new ArrayList<View>();
-	private PullAndLoadListView lv_member, lv_share;
+	private XListView lv_member, lv_share;
 	private List<User> data_member, data_share;
 	private MemberAdapter adapter_member, adapter_share;
 	private ViewPager viewpager;
@@ -87,8 +87,12 @@ public class ActivitiesInfo extends BaseActivity {
 	}
 
 	private void initController() {
+		lv_member.setPullRefreshEnable(true);
+		lv_member.setPullLoadEnable(false);//一次性加载全部用户
+		
 		lv_member.setAdapter(adapter_member);
-		lv_member.setOnRefreshListener(new OnRefreshListener() {
+		lv_member.setXListViewListener(new IXListViewListener() {
+			
 			@Override
 			public void onRefresh() {
 				//一次性加载全部用户
@@ -104,31 +108,30 @@ public class ActivitiesInfo extends BaseActivity {
 						if (newData_member.size() == 0) {
 							toast("还没人参加这活动");
 						} else {
+							data_member.clear();
 							data_member.addAll(newData_member);
 							adapter_member.notifyDataSetChanged();
 						}
-						lv_member.setCanRefresh(false, false);
-						lv_member.onRefreshComplete();
+						lv_member.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误代码:" + errorCode);
-						lv_member.onRefreshComplete();
+						toast("网络异常 错误代码:" + ErrorCode.errorList.get(errorCode));
+						lv_member.stopRefresh();
 
 					}
 				});
+				
 			}
-		});
-		lv_member.setOnLoadMoreListener(new OnLoadMoreListener() {
-
+			
 			@Override
 			public void onLoadMore() {
-
+			      
+				
 			}
 		});
-		lv_member.setCanLoadMore(false);
-		lv_member.toRefresh();
+		lv_member.startRefresh();
 	}
 
 	@Override
@@ -153,9 +156,9 @@ public class ActivitiesInfo extends BaseActivity {
 		View share = getLayoutInflater().inflate(
 				R.layout.frame_acty_activitiesinfo_share, null);
 
-		lv_member = (PullAndLoadListView) member
+		lv_member = (XListView) member
 				.findViewById(R.id.frame_acty_activitiesinfo_userlist_listview);
-		lv_share = (PullAndLoadListView) share
+		lv_share = (XListView) share
 				.findViewById(R.id.frame_acty_activitiesinfo_share_listview);
 
 		tv_starttime = (TextView) info.findViewById(R.id.tv_starttime);
