@@ -149,45 +149,37 @@ public class GroupShareDetail extends BaseActivity {
 		adapter_commet = new CommentAdapter(getContext(),data_commet);
 		lv_comment.setAdapter(adapter_commet);
 
-		api.view(issue.getId(), new AsyncHttpResponseHandler() {
+		api.view(issue.getId(), new JsonResponseHandler() {
 			@Override
 			public void onStart() {
 				tv_notify.setText("评论加载中....");
 				tv_notify.setVisibility(View.VISIBLE);
 			}
-
 			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-				toast("网络异常 错误码:" + arg0);
+			public void onOK(Header[] headers, JSONObject obj) {
 				tv_notify.setVisibility(View.GONE);
-			}
-
-			@Override
-			public void onSuccess(int statusCode, Header[] header, byte[] data) {
-				tv_notify.setVisibility(View.GONE);
-				boolean canRefresh = true;
-				String json = new String(data);
-				if (JsonUtils.isOK(json)) {
-					List<Comment> newData_comment = Comment
-							.create_by_jsonarray(json);
-					if (newData_comment != null && newData_comment.size() > 0) {
-						data_commet.addAll(newData_comment);
-						lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
-					} else {
-						if (newData_comment == null) {
-							tv_notify.setVisibility(View.VISIBLE);
-							tv_notify.setText("网络异常,解析错误");
-							toast("网络异常,解析错误");
-						} else if (newData_comment.size() == 0) {
-							toast("还没有人评论!");
-							tv_notify.setText("还没有人评论!");
-							tv_notify.setVisibility(View.VISIBLE);
-						}
-					}
+				List<Comment> newData_comment = Comment
+						.create_by_jsonarray(obj.toString());
+				if (newData_comment != null && newData_comment.size() > 0) {
+					data_commet.addAll(newData_comment);
+					lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
 				} else {
-					toast("Error:" + JsonUtils.getErrorString(json));
+					if (newData_comment == null) {
+						tv_notify.setVisibility(View.VISIBLE);
+						tv_notify.setText("网络异常,解析错误");
+						toast("网络异常,解析错误");
+					} else if (newData_comment.size() == 0) {
+						toast("还没有人评论!");
+						tv_notify.setText("还没有人评论!");
+						tv_notify.setVisibility(View.VISIBLE);
+					}
 				}
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast(ErrorCode.errorList.get(errorCode));
+				tv_notify.setVisibility(View.GONE);
 			}
 		});
 	}
