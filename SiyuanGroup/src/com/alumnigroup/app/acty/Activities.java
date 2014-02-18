@@ -440,7 +440,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			h.starttime.setText("时间:"
 					+ CalendarUtils.getTimeFromat(acty.getStarttime(),
 							CalendarUtils.TYPE_TWO));
-			h.ownername.setText("name" + acty.getOwnerid());
+			h.ownername.setText(acty.getUser().getProfile().getName());
 			h.applyCount.setText(acty.getNumUsership() + "人报名");
 			h.status.setImageResource(acty.getStatus().getId() == 1 ? R.drawable.ic_image_status_on
 					: R.drawable.ic_image_status_off);
