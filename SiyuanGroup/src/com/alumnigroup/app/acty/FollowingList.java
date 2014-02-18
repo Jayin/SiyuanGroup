@@ -17,16 +17,20 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.alumnigroup.api.FollowshipAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Following;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.PullAndLoadListView;
 import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
 import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -36,12 +40,12 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class FollowingList extends BaseActivity {
-	private PullAndLoadListView lv;
+	private XListView lv;
 	private View btn_back, btn_comfrim;
 	private FollowingAdapter adapter;
 	private List<User> data;
 	private FollowshipAPI api;
-	private int page;
+	private int page = 0;
 	private int userid;
 	private List<Boolean> selected;
 
@@ -56,11 +60,12 @@ public class FollowingList extends BaseActivity {
 
 	private void initController() {
 		lv.setAdapter(adapter);
-		lv.setOnRefreshListener(new OnRefreshListener() {
-
+		lv.setPullLoadEnable(true);
+		lv.setPullRefreshEnable(true);
+		lv.setXListViewListener(new IXListViewListener() {
+			
 			@Override
 			public void onRefresh() {
-
 				api.getFollowingList(1, userid, new JsonResponseHandler() {
 
 					@Override
@@ -71,7 +76,7 @@ public class FollowingList extends BaseActivity {
 							toast("网络异常 解析错误");
 						} else if (newData.size() == 0) {
 							toast("你还没有关注任何人");
-							page = 1;
+							lv.setPullLoadEnable(false);
 						} else {
 							page = 1;
 							data.clear();
@@ -79,56 +84,56 @@ public class FollowingList extends BaseActivity {
 							selected.clear();
 							increaseList(newData);
 							adapter.notifyDataSetChanged();
+							lv.setPullLoadEnable(true);
 						}
-						lv.setCanRefresh(false, false);
-						lv.onRefreshComplete();
-						lv.setCanLoadMore(true);
+						lv.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
-						lv.onRefreshComplete();
+						toast(ErrorCode.errorList.get(errorCode));
+						lv.stopRefresh();
 					}
 				});
+				
 			}
-		});
-
-		lv.setOnLoadMoreListener(new OnLoadMoreListener() {
-
+			
 			@Override
 			public void onLoadMore() {
+				if(page==0){
+					lv.stopLoadMore();
+					lv.startRefresh();
+					return;
+				}
 				api.getFollowingList(page + 1, userid,
 						new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								boolean canLoadMore = true;
-								List<User> newData = User
-										.create_by_jsonarray(obj.toString());
+								List<User> newData = Following.getUsesList(Following
+										.create_by_jsonarray(obj.toString()));
 								if (newData == null) {
 									toast("网络异常 解析错误");
 								} else if (newData.size() == 0) {
 									toast("没有更多");
-									canLoadMore = false;
+									lv.setPullLoadEnable(false);
 								} else {
 									page++;
 									data.addAll(newData);
 									increaseList(newData);
 									adapter.notifyDataSetChanged();
 								}
-								lv.onLoadMoreComplete();
-								if (!canLoadMore)
-									lv.setCanLoadMore(false);
+								lv.stopLoadMore();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 错误码:" + errorCode);
-								lv.onLoadMoreComplete();
+								toast(ErrorCode.errorList.get(errorCode));
+								lv.stopLoadMore();
 							}
 						});
 
+				
 			}
 		});
 
@@ -148,7 +153,7 @@ public class FollowingList extends BaseActivity {
 				}
 			}
 		});
-
+		lv.startRefresh();
 	}
 
 	// 根据新数据来增长队列
@@ -174,7 +179,7 @@ public class FollowingList extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		lv = (PullAndLoadListView) _getView(R.id.lv_listivew);
+		lv = (XListView) _getView(R.id.lv_listivew);
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_comfrim = _getView(R.id.acty_head_btn_comfirm);
 
@@ -265,8 +270,13 @@ public class FollowingList extends BaseActivity {
 				h = (ViewHolder) convertView.getTag();
 			}
 			User u = data.get(position);
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + u.getAvatar(), h.avatar);
+			if(u.getAvatar()!=null){
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + u.getAvatar(), h.avatar);
+			}else{
+				ImageLoader.getInstance().displayImage(
+						"drawable://"+R.drawable.ic_image_load_normal, h.avatar);
+			}
 			h.name.setText(u.getProfile().getName());
 			h.major.setText(u.getProfile().getMajor());
 			h.ischeck.setVisibility(View.VISIBLE);

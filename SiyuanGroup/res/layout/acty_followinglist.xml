@@ -7,9 +7,9 @@
 
     <include layout="@layout/acty_followinglist_header" />
 
-    <com.alumnigroup.widget.PullAndLoadListView
+    <com.alumnigroup.widget.XListView
         android:id="@+id/lv_listivew"
         style="@style/ListView.PullAndLoadListView" >
-    </com.alumnigroup.widget.PullAndLoadListView>
+    </com.alumnigroup.widget.XListView>
 
 </LinearLayout>
