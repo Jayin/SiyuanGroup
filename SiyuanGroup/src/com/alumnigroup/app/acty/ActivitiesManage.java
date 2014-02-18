@@ -121,7 +121,6 @@ public class ActivitiesManage extends BaseActivity {
 				fin = new FileInputStream(f);
 				RequestParams params = new RequestParams();
 				params.put("avatar", f, "image/jpeg");
-				toast(FilePath.getImageFilePath() + "cache_face.jpg");
 				api.updateAvatar(acty.getId(), params,
 						new JsonResponseHandler() {
 							@Override

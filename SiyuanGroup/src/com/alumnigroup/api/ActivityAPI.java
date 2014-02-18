@@ -185,6 +185,7 @@ public class ActivityAPI {
 	 */
 	public void updateAvatar(int id, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
+		params.put("id", id + "");
 		RestClient.post("/api/activities/avatar/update", params,
 				responseHandler);
 	}
