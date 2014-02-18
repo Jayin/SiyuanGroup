@@ -54,8 +54,8 @@ public class CalendarUtils {
 				}
 				break;
 			case 1:
-				sb.append("昨日 ").append(pre.get(Calendar.HOUR_OF_DAY))
-						.append(":").append(pre.get(Calendar.MINUTE));
+				sb.append("昨日 ").append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
+						.append(":").append(_formatNmber(pre.get(Calendar.MINUTE)));
 				break;
 			default:
 				sb.append(pre.get(Calendar.YEAR)).append("-").append(pre.get(Calendar.MONTH) + 1).append("-")
