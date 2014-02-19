@@ -32,8 +32,8 @@ public class ErrorCode {
 		errorList.put(20007, "没有文件输入");//没有文件输入No file input
 
 		errorList.put(20102, "不是属于你的");//不是属于你的Not your own
-		errorList.put(20506, "录不存在");//记录不存在Record not exists  <!--怎么相同有2个？
-		errorList.put(20603, "录不存在");//记录不存在Record not exists
+		errorList.put(20506, "用户已存在");//记录不存在Record  already exists  <!--怎么相同有2个？
+		errorList.put(20603, "记录不存在");//记录不存在Record not exists
 		errorList.put(20604, "资源类型不存在");//资源类型不存在Resource type not exists
 		errorList.put(20605, "资源不存在");//资源不存在Resource not exists
 
