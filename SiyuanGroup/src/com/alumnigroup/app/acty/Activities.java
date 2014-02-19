@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -342,8 +343,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		views.add(all);
 		views.add(myjoin);
 		views.add(favourit);
+		
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(lv_all);listviews.add(lv_myjoin);listviews.add(lv_favourit);
+		
+		List<ActivitiesAdapter>  adapters = new ArrayList<ActivitiesAdapter>();
+		adapters.add(adapter_all);adapters.add(adapter_myjoin);adapters.add(adapter_favourite);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,listviews,adapters));
 	}
 
 	@Override

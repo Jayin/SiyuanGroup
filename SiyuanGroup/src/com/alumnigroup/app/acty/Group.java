@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
@@ -230,8 +231,15 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		List<View> views = new ArrayList<View>();
 		views.add(all);
 		views.add(myjoin);
+		
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(lv_all);listviews.add(lv_myjoin); 
+		
+		List<GroupAdapter>  adapters = new ArrayList<GroupAdapter>();
+		adapters.add(adapter_all);adapters.add(adapter_myjoin); 
+		
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,listviews,adapters));
 	}
 
 	@Override

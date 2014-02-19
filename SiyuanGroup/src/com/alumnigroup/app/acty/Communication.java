@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -347,8 +348,14 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		views.add(all);
 		views.add(myjoin);
 		views.add(favourit);
+		
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(lv_all);listviews.add(lv_my);listviews.add(lv_favourit);
+		
+		List<IssueAdapter>  adapters = new ArrayList<IssueAdapter>();
+		adapters.add(adapter_all);adapters.add(adapter_my);adapters.add(adapter_favourite);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
 	}
 
 	@Override
@@ -384,13 +391,26 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			openActivity(CommunicationPublish.class);
 			break;
 		case R.id.acty_comunication_footer_all:
-			viewpager.setCurrentItem(0, true);
+			if(viewpager.getCurrentItem()==0){
+				lv_all.startRefresh();
+			}else{
+				viewpager.setCurrentItem(0, true);
+			}
+			
 			break;
 		case R.id.acty_comunication_footer_my:
-			viewpager.setCurrentItem(1, true);
+			if(viewpager.getCurrentItem()==1){
+				lv_my.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1, true);
+			}
 			break;
 		case R.id.acty_comunication_footer_favourite:
-			viewpager.setCurrentItem(2, true);
+			if(viewpager.getCurrentItem()==2){
+				lv_favourit.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2, true);
+			}
 			break;
 		default:
 			break;
