@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -26,6 +27,7 @@ import com.alumnigroup.api.DynamicAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
@@ -99,8 +101,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 页卡的适配器
 	 */
 	private DynamicViewPagerAdapter viewAdapter;
-	
-	
+
 	private DynamicAPI api = new DynamicAPI();
 	private int page_all = 1;
 	private int page_myfriend = 1;
@@ -124,7 +125,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		loadMyFriendData(alFriendDynamicContent);
 
 	}
-	
+
 	/**
 	 * 保存缓存数据进sharepreferenses 中,最多保存20 条记录
 	 */
@@ -153,7 +154,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			}
 		}
 	}
-	
+
 	/**
 	 * 保存缓存数据进sharepreferenses 中,最多保存20 条记录
 	 */
@@ -176,7 +177,8 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			return;
 		}
 		for (int i = 1; i <= 20; i++) {
-			Dynamic dynamic = (Dynamic) dp.get(DataPool.SP_KEY_FRIEND_DUNAMIC + i);
+			Dynamic dynamic = (Dynamic) dp.get(DataPool.SP_KEY_FRIEND_DUNAMIC
+					+ i);
 			if (dynamic != null) {
 				dynamics.add(dynamic);
 			}
@@ -310,6 +312,12 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			Animation animation = new TranslateAnimation(one * currIndex, one
 					* arg0, 0, 0);// 显然这个比较简洁，只有一行代码。
 			currIndex = arg0;
+			if(arg0==0){
+				tvHeadTitle.setText("全站动态");
+			}
+			if(arg0 == 1){
+				tvHeadTitle.setText("好友动态");
+			}
 			animation.setFillAfter(true);// True:图片停在动画结束位置
 			animation.setDuration(300);
 			ivCursor.startAnimation(animation);
@@ -363,7 +371,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		case R.id.acty_alldynamic_frienddynamic_name:
 			vpDynamicContent.setCurrentItem(1);
 			break;
-			
+
 		case R.id.acty_head_btn_back:
 			finish();
 			break;
@@ -378,7 +386,6 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 */
 	private void initController() {
 		lvAllDynamic.setOnRefreshListener(new OnRefreshListener() {
-
 
 			@Override
 			public void onRefresh() {
@@ -412,7 +419,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 								aptAllDynamic.notifyDataSetChanged();
 							}
 						} else {
-							toast("Error:" + JsonUtils.getErrorString(json));
+							toast("网络异常 ");
 						}
 						lvAllDynamic.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
 						lvAllDynamic.onRefreshComplete();
@@ -425,60 +432,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getAll(page_all + 1,
-						new AsyncHttpResponseHandler() {
-
-							@Override
-							public void onFailure(int statusCode,
-									Header[] headers, byte[] data, Throwable err) {
-								toast("网络异常 错误码:" + statusCode);
-								if (data != null)
-									L.i(new String(data));
-								if (err != null)
-									L.i(err.toString());
-								lvAllDynamic.onLoadMoreComplete();
-							}
-
-							@Override
-							public void onSuccess(int statusCode,
-									Header[] headers, byte[] data) {
-
-								// L.i(new String(data));
-								String json = new String(data);// json array
-								if (JsonUtils.isOK(json)) {
-									List<Dynamic> newData_allmember = Dynamic
-											.create_by_jsonarray(json);
-									if (newData_allmember != null
-											&& newData_allmember.size() > 0) {
-										page_all++;
-										alAllDynamicContent
-												.addAll(newData_allmember);
-										aptAllDynamic
-												.notifyDataSetChanged();
-									} else {
-										if (newData_allmember == null) {
-											toast("网络异常,解析错误");
-										} else if (newData_allmember.size() == 0) {
-											toast("没有更多了!");
-											lvAllDynamic.setCanLoadMore(false);
-										}
-									}
-								} else {
-									toast("Error:"
-											+ JsonUtils.getErrorString(json));
-								}
-								lvAllDynamic.onLoadMoreComplete();
-
-							}
-						});
-			}
-		});
-
-		lvFriendDynamic.setOnRefreshListener(new OnRefreshListener() {
-
-			@Override
-			public void onRefresh() {
-				api.getAll(1, new AsyncHttpResponseHandler() {
+				api.getAll(page_all + 1, new AsyncHttpResponseHandler() {
 
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
@@ -488,29 +442,68 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 							L.i(new String(data));
 						if (err != null)
 							L.i(err.toString());
-						lvFriendDynamic.onRefreshComplete();
+						lvAllDynamic.onLoadMoreComplete();
 					}
 
-					// page=1?
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							byte[] data) {
-						// 还要判断是否有error_code
-						String json = new String(data);// jsonarray
+
+						// L.i(new String(data));
+						String json = new String(data);// json array
 						if (JsonUtils.isOK(json)) {
-							List<Dynamic> newData_myfriend = Dynamic
+							List<Dynamic> newData_allmember = Dynamic
 									.create_by_jsonarray(json);
-							if (newData_myfriend != null) {
-								page_myfriend = 1;
-								alFriendDynamicContent.clear();
-								alFriendDynamicContent.addAll(newData_myfriend);
-								saveMyFriendData2SP(newData_myfriend);
-								aptFriendDynamic.notifyDataSetChanged();
+							if (newData_allmember != null
+									&& newData_allmember.size() > 0) {
+								page_all++;
+								alAllDynamicContent.addAll(newData_allmember);
+								aptAllDynamic.notifyDataSetChanged();
+							} else {
+								if (newData_allmember == null) {
+									toast("网络异常,解析错误");
+								} else if (newData_allmember.size() == 0) {
+									toast("没有更多了!");
+									lvAllDynamic.setCanLoadMore(false);
+								}
 							}
 						} else {
-							toast("Error:" + JsonUtils.getErrorString(json));
+							toast("网络异常 ");
+						}
+						lvAllDynamic.onLoadMoreComplete();
+
+					}
+				});
+			}
+		});
+
+		lvFriendDynamic.setOnRefreshListener(new OnRefreshListener() {
+
+			@Override
+			public void onRefresh() {
+				api.getMyFollowing(1, new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						// TODO Auto-generated method stub
+						List<Dynamic> newData_myfriend = Dynamic
+								.create_by_jsonarray(obj);
+						if (newData_myfriend != null) {
+							page_myfriend = 1;
+							alFriendDynamicContent.clear();
+							alFriendDynamicContent.addAll(newData_myfriend);
+							saveMyFriendData2SP(newData_myfriend);
+							aptFriendDynamic.notifyDataSetChanged();
 						}
 						lvFriendDynamic.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
+						lvFriendDynamic.onRefreshComplete();
+
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						// TODO Auto-generated method stub
+						toast("网络异常 错误码:" + errorCode);
 						lvFriendDynamic.onRefreshComplete();
 					}
 				});
@@ -521,7 +514,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getAll(page_myfriend + 1,
+				api.getMyFollowing(page_myfriend + 1,
 						new AsyncHttpResponseHandler() {
 
 							@Override
@@ -547,19 +540,20 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 									if (newData_myFriend != null
 											&& newData_myFriend.size() > 0) {
 										page_myfriend++;
-										alFriendDynamicContent.addAll(newData_myFriend);
+										alFriendDynamicContent
+												.addAll(newData_myFriend);
 										aptFriendDynamic.notifyDataSetChanged();
 									} else {
 										if (newData_myFriend == null) {
-											toast("网络异常,解析错误");
+											toast("网络异常");
 										} else if (newData_myFriend.size() == 0) {
 											toast("没有更多了!");
-											lvFriendDynamic.setCanLoadMore(false);
+											lvFriendDynamic
+													.setCanLoadMore(false);
 										}
 									}
 								} else {
-									toast("Error:"
-											+ JsonUtils.getErrorString(json));
+									toast("网络异常 ");
 								}
 								lvFriendDynamic.onLoadMoreComplete();
 

@@ -26,7 +26,7 @@
         <TextView
             style="@style/TextView.base"
             android:padding="6dp"
-            android:text="功能反馈"
+            android:text="功能介绍"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>

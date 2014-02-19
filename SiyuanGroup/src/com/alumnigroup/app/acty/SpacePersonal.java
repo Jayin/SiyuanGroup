@@ -109,7 +109,7 @@ public class SpacePersonal extends BaseActivity {
 	protected void initLayout() {
 		api = new UserAPI();
 		AlertDialog.Builder builder = new Builder(this);
-		builder.setTitle("更新中...");
+		builder.setMessage("更新中···");
 		dialog = builder.create();
 
 		btnBack = _getView(R.id.acty_head_btn_back);
@@ -165,6 +165,7 @@ public class SpacePersonal extends BaseActivity {
 	private void addData() {
 		initPersonalData();
 
+		lyKeyword.removeAllViews();
 		if (myself.getProfile().getTag() != null
 				&& !myself.getProfile().getTag().equals("")) {
 			String tags[] = myself.getProfile().getTag().split(",");
@@ -189,7 +190,7 @@ public class SpacePersonal extends BaseActivity {
 		/**
 		 */
 		final LayoutInflater inflater = LayoutInflater.from(this);
-		api.getAll(1, myself.getId(), new AsyncHttpResponseHandler() {
+		api.getLimit(5, myself.getId(), new AsyncHttpResponseHandler() {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers,

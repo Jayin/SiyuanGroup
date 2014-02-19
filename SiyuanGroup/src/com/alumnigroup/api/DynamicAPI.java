@@ -17,18 +17,39 @@ public class DynamicAPI {
 	public void getAll(int page, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("page", page + "");
-		RestClient.get("/api/events/find", params, responseHandler);
+		RestClient.get("/api/events/list", params, responseHandler);
 	}
 	/**
-	 * 空间时候拿全站动态的列表
-	 * @param page
-	 * @param responseHandler
+	 * 拿到指定用户的动态
 	 */
-	public void getAll(int page, int userid,AsyncHttpResponseHandler responseHandler) {
+	public void get(int page, int userid,AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("page", page + "");
 		params.add("userid", userid + "");
-		params.add("limit", 5 + "");
-		RestClient.get("/api/events/find", params, responseHandler);
+		RestClient.get("/api/events/list", params, responseHandler);
 	}
+	/**
+	 * 拿到指定用户的签名 limit 条动态
+	 * @param limit
+	 * @param userid
+	 * @param responseHandler
+	 */
+	public void getLimit(int limit, int userid,AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("userid", userid + "");
+		params.add("limit", limit + "");
+		RestClient.get("/api/events/list", params, responseHandler);
+	}
+	/**
+	 * 拿到我关注的用户的动态
+	 * @param page
+	 * @param responseHandler
+	 */
+	public void getMyFollowing(int page ,AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("page", page + "");
+		RestClient.get("/api/events/following", params, responseHandler);
+	}
+	
+	
 }

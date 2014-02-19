@@ -221,7 +221,7 @@ public class SpaceOther extends BaseActivity {
 		/**
 		 */
 		final LayoutInflater inflater = LayoutInflater.from(this);
-		api.getAll(1, user.getId(), new AsyncHttpResponseHandler() {
+		api.getLimit(5, user.getId(), new AsyncHttpResponseHandler() {
 
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
@@ -418,6 +418,7 @@ public class SpaceOther extends BaseActivity {
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
 						toast("关注失败");
+						tvBtnFollowContent.setText("关 注");
 					}
 
 					public void onSuccess(int statusCode, Header[] headers,
@@ -427,6 +428,7 @@ public class SpaceOther extends BaseActivity {
 							tvBtnFollowContent.setText("取消关注");
 						} else {
 							toast("关注失败");
+							tvBtnFollowContent.setText("关 注");
 						}
 					}
 				});
@@ -447,6 +449,7 @@ public class SpaceOther extends BaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] data, Throwable err) {
 				toast("取消失败");
+				tvBtnFollowContent.setText("取消关注");
 			}
 
 			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
@@ -455,6 +458,7 @@ public class SpaceOther extends BaseActivity {
 					tvBtnFollowContent.setText("关 注");
 				} else {
 					toast("取消失败");
+					tvBtnFollowContent.setText("取消关注");
 				}
 			}
 		});

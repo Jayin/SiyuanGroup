@@ -1,17 +1,12 @@
 package com.alumnigroup.app.acty;
 
-import org.apache.http.Header;
-import org.json.JSONObject;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.App;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.imple.JsonResponseHandler;
 
 /**
  * 设置
@@ -20,7 +15,8 @@ import com.alumnigroup.imple.JsonResponseHandler;
  */
 public class Setting extends BaseActivity {
 	
-	private View btnIntroduce,btnTickling,btnAbout,btnQuit;
+	
+	private View btnIntroduce,btnTickling,btnAbout,btnQuit,btnBack;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +31,10 @@ public class Setting extends BaseActivity {
 	}
 
 	protected void initLayout() {
+		
+		btnBack =_getView(R.id.acty_head_btn_back);
+		btnBack.setOnClickListener(this);
+		
 		btnAbout = _getView(R.id.acty_setting_btn_about);
 		btnAbout.setOnClickListener(this);
 		
@@ -54,6 +54,11 @@ public class Setting extends BaseActivity {
 		int id = v.getId();
 		Intent intent = new Intent();
 		switch (id) {
+		
+		case R.id.acty_head_btn_back:
+			finish();
+			break;
+		
 		case R.id.acty_setting_btn_about:
 			intent.setClass(Setting.this, About.class);
 			startActivity(intent);

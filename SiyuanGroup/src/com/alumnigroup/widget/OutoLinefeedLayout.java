@@ -69,7 +69,7 @@ public class OutoLinefeedLayout extends ViewGroup {
 			/**
 			 * 如果现在的位置不能把这个ChildView 放下，就换行
 			 */
-			if (i>0&&drawX + marginRight+widthChild > r - l) {
+			if (drawX + marginRight+widthChild > r - l) {
 				drawX = 0;
 				drawY += lineHeight;
 			}
