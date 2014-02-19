@@ -145,8 +145,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			
 			@Override
 			public void onRefresh() {
-				api.search(1, user.getId(), null, null,
-						new JsonResponseHandler() {
+				api.getMyCooperationList(1,new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
@@ -184,8 +183,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 					lv_myjoin.stopLoadMore();
 					return;
 				}
-				api.search(page_myjoin + 1, user.getId(), null, null,
-						new JsonResponseHandler() {
+				api.getMyCooperationList(page_myjoin + 1,new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
