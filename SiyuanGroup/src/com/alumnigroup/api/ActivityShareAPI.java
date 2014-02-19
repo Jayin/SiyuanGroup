@@ -17,7 +17,7 @@ public class ActivityShareAPI {
 		RequestParams params = new RequestParams();
 		if(page>0)params.add("page", page + "");
         if(activityid>0)params.add("activityid", activityid+"");  
-		RestClient.get("/api/issues/find", params, responseHandler);
+		RestClient.get("/api/issues/list", params, responseHandler);
 	}
 	/**
 	 * 发起话题<br>

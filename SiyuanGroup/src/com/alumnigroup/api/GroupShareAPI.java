@@ -22,7 +22,7 @@ public class GroupShareAPI {
 		RequestParams params = new RequestParams();
 		if(page>0)params.add("page", page + "");
         if(groupid>0)params.add("groupid", groupid+"");  
-		RestClient.get("/api/issues/find", params, responseHandler);
+		RestClient.get("/api/issues/list", params, responseHandler);
 	}
 	/**
 	 * 发起话题<br>

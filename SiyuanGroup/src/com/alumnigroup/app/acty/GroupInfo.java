@@ -98,9 +98,10 @@ public class GroupInfo extends BaseActivity {
 		lv_share.setAdapter(adapter_share);
 
 		lv_member.setPullRefreshEnable(true);
-		lv_member.setPullLoadEnable(true);
+		lv_member.setPullLoadEnable(false);//一次性加载
 		lv_share.setPullRefreshEnable(true);
 		lv_share.setPullLoadEnable(true);
+		//一次性加载
 		lv_member.setXListViewListener(new IXListViewListener() {
 
 			@Override
@@ -120,13 +121,11 @@ public class GroupInfo extends BaseActivity {
 							}
 							if (newData.size() == 0) {
 								toast("还没有会员");
-								lv_member.setPullLoadEnable(false);
 							} else {
 								page_member = 1;
 								data_user.clear();
 								data_user.addAll(newData);
 								adapter_member.notifyDataSetChanged();
-								lv_member.setPullLoadEnable(true);
 							}
 						}
 						lv_member.stopRefresh();
@@ -149,7 +148,7 @@ public class GroupInfo extends BaseActivity {
 					lv_member.startRefresh();
 					return;
 				}
-				api.getMembers(page_member + 1, group.getId(),
+				api.getMembers(group.getNumMembers(), group.getId(),
 						new JsonResponseHandler() {
 
 							@Override
@@ -191,34 +190,34 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-				shareAPI.getShareList(1, group.getId(),
-						new JsonResponseHandler() {
-
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								List<Issue> newData_share = Issue
-										.create_by_jsonarray(obj.toString());
-								if (newData_share == null) {
-									toast("网络异常 解析错误");
-								} else if (newData_share.size() == 0) {
-									toast("还没有分享");
-									lv_share.setPullLoadEnable(false);
-								} else {
-									page_share = 1;
-									data_share.clear();
-									data_share.addAll(newData_share);
-									adapter_share.notifyDataSetChanged();
-									lv_share.setPullLoadEnable(true);
-								}
-								lv_share.stopRefresh();
-							}
-
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast( ErrorCode.errorList.get(errorCode));
-								lv_share.stopRefresh();
-							}
-						});
+//				shareAPI.getShareList(1, group.getId(),
+//						new JsonResponseHandler() {
+//
+//							@Override
+//							public void onOK(Header[] headers, JSONObject obj) {
+//								List<Issue> newData_share = Issue
+//										.create_by_jsonarray(obj.toString());
+//								if (newData_share == null) {
+//									toast("网络异常 解析错误");
+//								} else if (newData_share.size() == 0) {
+//									toast("还没有分享");
+//									lv_share.setPullLoadEnable(false);
+//								} else {
+//									page_share = 1;
+//									data_share.clear();
+//									data_share.addAll(newData_share);
+//									adapter_share.notifyDataSetChanged();
+//									lv_share.setPullLoadEnable(true);
+//								}
+//								lv_share.stopRefresh();
+//							}
+//
+//							@Override
+//							public void onFaild(int errorType, int errorCode) {
+//								toast( ErrorCode.errorList.get(errorCode));
+//								lv_share.stopRefresh();
+//							}
+//						});
 			}
 
 			@Override
