@@ -28,8 +28,8 @@ public class MActivity implements Serializable {
 		return acty;
 	}
 
-	public static List<MActivity> create_by_jsonarray(String jsonarray) {
-		List<MActivity> list = new ArrayList<MActivity>();
+	public static ArrayList<MActivity> create_by_jsonarray(String jsonarray) {
+		ArrayList<MActivity> list = new ArrayList<MActivity>();
 		JSONObject obj = null;
 		JSONArray array = null;
 		try {

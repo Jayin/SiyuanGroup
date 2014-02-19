@@ -23,6 +23,7 @@ import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
@@ -50,7 +51,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private View btn_back, btn_all, btn_favourite, btn_myjoin;
 	private XListView lv_all, lv_myjoin, lv_favourit;
 	private ViewPager viewpager;
-	private List<MActivity> data_all, data_myjoin, data_favourite;
+	private ArrayList<MActivity> data_all, data_myjoin, data_favourite;
 	private ActivitiesAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 0, page_myjoin = 0, page_favourit = 0;
 	private ActivityAPI api;
@@ -81,7 +82,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						List<MActivity> newData_all = MActivity
+						ArrayList<MActivity> newData_all = MActivity
 								.create_by_jsonarray(obj.toString());
 						if (newData_all == null) {
 							toast("网络异常，解析错误");
@@ -94,6 +95,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 							lv_all.setPullLoadEnable(true);
+							AppCache.setActivityAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
 					}
@@ -162,6 +164,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							data_myjoin.addAll(newData_myjoin);
 							adapter_myjoin.notifyDataSetChanged();
 							lv_myjoin.setPullLoadEnable(true);
+							AppCache.setActivityMy(getContext(), data_myjoin);
 						}
 						lv_myjoin.stopRefresh();
 					}
@@ -238,6 +241,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 										adapter_favourite
 												.notifyDataSetChanged();
 										lv_favourit.setPullLoadEnable(true);
+										AppCache.setActivityFavourite(getContext(), data_favourite);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -310,10 +314,24 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		if (user == null) {
 			toast("无用户信息，请重新登录");
 		}
-
-		data_all = new ArrayList<MActivity>();
-		data_myjoin = new ArrayList<MActivity>();
-		data_favourite = new ArrayList<MActivity>();
+        if(AppCache.getActivityAll(getContext())!=null)
+        	data_all = AppCache.getActivityAll(getContext());
+        else{
+        	data_all = new ArrayList<MActivity>();
+        }
+        
+        if(AppCache.getActivityMy(getContext())!=null)
+        	data_myjoin = AppCache.getActivityMy(getContext());
+        else{
+        	data_myjoin = new ArrayList<MActivity>();
+        }
+        
+        if(AppCache.getActivityFavourite(getContext())!=null)
+        	data_favourite = AppCache.getActivityFavourite(getContext());
+        else{
+        	data_favourite = new ArrayList<MActivity>();
+        }
+		
 	}
 
 	private void initViewPager() {
@@ -380,13 +398,25 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 			break;
 		case R.id.acty_activities_footer_all:
-			viewpager.setCurrentItem(0, true);
+			if(viewpager.getCurrentItem()==0){
+				lv_all.startRefresh();
+			}else{
+				viewpager.setCurrentItem(0, true);
+			}
 			break;
 		case R.id.acty_activities_footer_myjoin:
-			viewpager.setCurrentItem(1, true);
+			if(viewpager.getCurrentItem()==1){
+				lv_myjoin.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1, true);
+			}
 			break;
 		case R.id.acty_activities_footer_favourite:
-			viewpager.setCurrentItem(2, true);
+			if(viewpager.getCurrentItem()==2){
+				lv_favourit.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2, true);
+			}
 			break;
 
 		default:

@@ -265,16 +265,16 @@ public class ActivityAPI {
 	/**
 	 * 获得全部的活动人员名单
 	 * 
-	 * @param limit
+	 * @param limit 总人数
 	 * @param id
 	 * @param responseHandler
 	 */
 	public void getUserListAll(int limit, int id,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("page", limit + "");
+		params.add("limit", limit + "");
 		params.add("id", id + "");
-		RestClient.post("/api/activities/userslist", params, responseHandler);
+		RestClient.get("/api/activities/userslist", params, responseHandler);
 	}
 
 	/**
