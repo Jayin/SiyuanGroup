@@ -60,6 +60,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private IssuesAPI api;
 	private StarAPI starAPI;
 	private User user;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -67,8 +68,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
-	
+
 	}
+
 	private void initController() {
 		lv_all.setPullRefreshEnable(true);
 		lv_all.setPullLoadEnable(true);
@@ -150,7 +152,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-				api.getUserIssue(1, user.getId(), new JsonResponseHandler() {
+				api.getMyIssueList(1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -181,32 +183,36 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getUserIssue(page_my + 1, user.getId(),
-						new JsonResponseHandler() {
+				if (page_my == 0) { // 因为网络原因没有加载到第一页
+					lv_my.startRefresh();
+					lv_my.stopLoadMore();
+					return;
+				}
+				api.getMyIssueList(page_my + 1, new JsonResponseHandler() {
 
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								List<Issue> newData_my = Issue
-										.create_by_jsonarray(obj.toString());
-								if (newData_my == null) {
-									toast("网络异常,解析错误");
-								} else if (newData_my.size() == 0) {
-									toast("没有更多");
-									lv_my.setPullLoadEnable(false);
-								} else {
-									page_my++;
-									data_my.addAll(newData_my);
-									adapter_my.notifyDataSetChanged();
-								}
-								lv_my.stopLoadMore();
-							}
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Issue> newData_my = Issue.create_by_jsonarray(obj
+								.toString());
+						if (newData_my == null) {
+							toast("网络异常,解析错误");
+						} else if (newData_my.size() == 0) {
+							toast("没有更多");
+							lv_my.setPullLoadEnable(false);
+						} else {
+							page_my++;
+							data_my.addAll(newData_my);
+							adapter_my.notifyDataSetChanged();
+						}
+						lv_my.stopLoadMore();
+					}
 
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast(ErrorCode.errorList.get(errorCode));
-								lv_my.stopLoadMore();
-							}
-						});
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast(ErrorCode.errorList.get(errorCode));
+						lv_my.stopLoadMore();
+					}
+				});
 			}
 		});
 

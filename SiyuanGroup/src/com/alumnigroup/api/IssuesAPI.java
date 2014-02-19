@@ -164,4 +164,14 @@ public class IssuesAPI {
 	public void getUserIssue(int page,int userid,AsyncHttpResponseHandler responseHandler){
 		search(page, userid, null, null, responseHandler);
 	}
+	/**
+	 * 获得我的话题列表
+	 * @param page
+	 * @param responseHandler
+	 */
+	public void getMyIssueList(int page,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("page", page+"");
+		RestClient.get("/api/issues/my", params, responseHandler);
+	}
 }
