@@ -7,21 +7,21 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:orientation="horizontal"
-         >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <ImageView
             android:id="@+id/item_lv_acty_activities_iv_avater"
             android:layout_width="74dp"
             android:layout_height="74dp"
             android:layout_gravity="center"
-            android:layout_marginTop="4dp"      android:layout_marginLeft="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/ic_image_load_loading" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:orientation="vertical" >
 
@@ -45,8 +45,8 @@
                     android:singleLine="true"
                     android:text="马达拉斯加"
                     android:textColor="@color/grey_lv_forth"
-                    android:textSize="12sp"  android:textStyle="bold"
-                    />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
                 <ImageView
                     android:id="@+id/item_lv_acty_activities_iv_status"
@@ -60,18 +60,20 @@
                     style="@style/TextView.base"
                     android:layout_width="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginRight="2dp"
+                    android:layout_marginRight="4dp"
                     android:ellipsize="end"
                     android:gravity="right"
                     android:singleLine="true"
                     android:text="活动时间:2014-4-5"
                     android:textColor="@color/grey_lv_forth"
-                    android:textSize="12sp" android:textStyle="bold"/>
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/item_lv_acty_activities_actyname"
                 style="@style/TextView.black"
+                android:layout_marginRight="4dp"
                 android:layout_marginTop="8dp"
                 android:singleLine="true"
                 android:text="马达拉斯加旅游考察活动马达拉斯加旅游考察活动"
@@ -121,8 +123,8 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
         android:background="@drawable/ic_image_line" />
 
 </LinearLayout>

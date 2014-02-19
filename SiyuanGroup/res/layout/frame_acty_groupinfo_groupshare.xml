@@ -3,10 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-      <ListView
-        android:id="@+id/frame_acty_circle_groupshare_listview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
-    </ListView>
+
+    <com.alumnigroup.widget.XListView
+        android:id="@+id/lv_listview"
+        style="@style/ListView.PullAndLoadListView" >
+    </com.alumnigroup.widget.XListView>
 
 </LinearLayout>

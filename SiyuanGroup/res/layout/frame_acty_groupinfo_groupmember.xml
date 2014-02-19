@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.alumnigroup.widget.PullAndLoadListView
-        android:id="@+id/frame_acty_groupinfo_groupmember_listview"
+    <com.alumnigroup.widget.XListView
+        android:id="@+id/lv_listview"
         style="@style/ListView.PullAndLoadListView" >
-    </com.alumnigroup.widget.PullAndLoadListView>
+    </com.alumnigroup.widget.XListView>
 
 </LinearLayout>

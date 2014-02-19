@@ -7,7 +7,7 @@
 
     <include
         android:id="@+id/header"
-        layout="@layout/acty_communicationdetail_header" />
+        layout="@layout/acty_groupsharedetail_header" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -23,8 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/item_listview_bg_whitetogrey"
-                android:orientation="vertical"
                 android:clickable="true"
+                android:orientation="vertical"
                 android:padding="4dp" >
 
                 <LinearLayout
@@ -112,9 +112,9 @@
             <TextView
                 android:id="@+id/acty_communicationdetail_tv_notify"
                 style="@style/TextView.black"
+                android:layout_gravity="center_horizontal"
                 android:text="网络异常"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal" />
+                android:visibility="gone" />
 
             <com.alumnigroup.widget.CommentView
                 android:id="@+id/item_lv_acty_comminication_lv_comment"

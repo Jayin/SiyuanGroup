@@ -30,13 +30,7 @@ import com.alumnigroup.widget.CommentView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-/**
- * 话题详情
- * 
- * @author Jayin Ton
- * 
- */
-public class CommunicationDetail extends BaseActivity {
+public class GroupShareDetail extends BaseActivity {
 	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space,
 			btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
@@ -53,7 +47,7 @@ public class CommunicationDetail extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_communicationdetail);
+		setContentView(R.layout.acty_groupsharedetail);
 		initData();
 		initLayout();
 	}
@@ -141,6 +135,7 @@ public class CommunicationDetail extends BaseActivity {
 			@Override
 			public void onSuccess(int statusCode, Header[] header, byte[] data) {
 				tv_notify.setVisibility(View.GONE);
+				boolean canRefresh = true;
 				String json = new String(data);
 				if (JsonUtils.isOK(json)) {
 					List<Comment> newData_comment = Comment
@@ -244,4 +239,5 @@ public class CommunicationDetail extends BaseActivity {
 
 	}
 
+	
 }

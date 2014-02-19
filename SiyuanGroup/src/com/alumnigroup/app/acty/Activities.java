@@ -202,57 +202,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 			}
 		});
-		// lv_myjoin.setOnRefreshListener(new OnRefreshListener() {
-		//
-		// @Override
-		// public void onRefresh() {
-		// api.getUserHistory(mUser.getId(), new JsonResponseHandler() {
-		//
-		// @Override
-		// public void onOK(Header[] headers, JSONObject obj) {
-		// List<MActivity> newData_myjoin = MActivity
-		// .create_by_jsonarray(obj.toString());
-		// if (newData_myjoin == null) {
-		// toast("网络异常，解析错误");
-		// } else if (newData_myjoin.size() == 0) {
-		// toast("没有更多");
-		// } else {
-		// data_myjoin.addAll(newData_myjoin);
-		// adapter_myjoin.notifyDataSetChanged();
-		// }
-		// lv_myjoin.onRefreshComplete();
-		// }
-		//
-		// @Override
-		// public void onFaild(int errorType, int errorCode) {
-		// toast("网络异常 错误码:" + errorCode);
-		// lv_myjoin.onRefreshComplete();
-		// }
-		// });
-		// }
-		// });
-		// lv_myjoin.setOnLoadMoreListener(new OnLoadMoreListener() {
-		//
-		// @Override
-		// public void onLoadMore() {
-		// // nothing to do?
-		// }
-		// });
-		//
-		// lv_favourit.setOnRefreshListener(new OnRefreshListener() {
-		//
-		// @Override
-		// public void onRefresh() {
-		//
-		// }
-		// });
-		// lv_favourit.setOnLoadMoreListener(new OnLoadMoreListener() {
-		//
-		// @Override
-		// public void onLoadMore() {
-		//
-		// }
-		// });
 		lv_favourit.setXListViewListener(new IXListViewListener() {
 
 			@Override

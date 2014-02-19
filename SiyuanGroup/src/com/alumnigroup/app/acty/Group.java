@@ -189,7 +189,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							adapter_myjoin.notifyDataSetChanged();
 						}
 						lv_myjoin.stopLoadMore();
-
 					}
 
 					@Override
