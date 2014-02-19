@@ -64,7 +64,7 @@ public class EditPersonalData extends BaseActivity {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				EditPersonalData.this);
-		builder.setTitle("更新中···");
+		builder.setMessage("更新中···");
 		dialog = builder.create();
 	}
 

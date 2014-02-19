@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.L;
@@ -59,6 +60,28 @@ public class Dynamic implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			list = null;
+		}
+		return list;
+	}
+
+	/**
+	 * 解析一个动态列表的列表
+	 * 
+	 * @param jsonarray
+	 *            动态列表json字符串
+	 * @return List<Dynamic> return null if parse faild
+	 */
+	public static List<Dynamic> create_by_jsonarray(JSONObject jsonoObj) {
+		List<Dynamic> list = new ArrayList<Dynamic>();
+		JSONArray array = null;
+		try {
+			array = jsonoObj.getJSONArray("events");
+
+			for (int i = 0; i < array.length(); i++) {
+				list.add(create_by_json(array.getJSONObject(i).toString()));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
 		return list;
 	}
@@ -130,5 +153,5 @@ public class Dynamic implements Serializable {
 	public void setUser(User user) {
 		this.user = user;
 	}
-	
+
 }

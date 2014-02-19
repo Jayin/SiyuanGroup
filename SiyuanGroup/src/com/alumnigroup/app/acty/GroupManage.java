@@ -7,11 +7,12 @@ import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ImageView;
+
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
@@ -23,7 +24,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.FilePath;
 import com.loopj.android.http.RequestParams;
 
-public class GroupManage extends BaseActivity {
+public class GroupManage extends BaseActivity {	
 	private int RequestCode_invite = 1;
 	private int RequestCode_Pick_image = 2;
 	private View btn_back, btn_invite, btn_edit, btn_updateAvatar;

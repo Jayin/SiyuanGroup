@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/acty_edit_keywork_ly_edit"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:orientation="horizontal" >
+
+    <EditText
+        android:id="@+id/acty_edit_keywork_et_add"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/ic_edittext_normal_2"
+        android:hint="请输入你需要增加的关键字" >
+    </EditText>
+
+    <Button
+        android:id="@+id/acty_edit_keywork_btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:background="@drawable/btn_simple_selected"
+        android:text="增加"
+        android:textColor="@color/grey_lv_third" />
+
+</LinearLayout>
