@@ -237,7 +237,8 @@ public class BusinessAPI {
 			params.add("name", name);
 		if (description != null)
 			params.add("description", description);
-		RestClient.get("/api/cooperations/search", params, responseHandler);
+		params.add("fuzzy", "1");  
+		RestClient.get("/api/cooperations/list", params, responseHandler);
 	}
 
 	/**
@@ -353,5 +354,15 @@ public class BusinessAPI {
  	 */
 	public void getUserCooperationList(int page ,int ownerid,AsyncHttpResponseHandler responseHandler){
 		search(page, ownerid, null, null, responseHandler);
+	}
+	/**
+	 * 获得我的合作列表
+	 * @param page 页码 
+	 * @param responseHandler
+	 */
+	public void getMyCooperationList(int page,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("page",page+"");
+		RestClient.get("/api/cooperations/my", params, responseHandler);
 	}
 }

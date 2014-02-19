@@ -338,7 +338,8 @@ public class ActivityAPI {
 			params.add("name", name);
 		if (content != null)
 			params.add("content", content);
-		RestClient.get("/api/activities/search", params, responseHandler);
+		params.add("fuzzy", "1"); 
+		RestClient.get("/api/activities/list", params, responseHandler);
 	}
     
 	/**
