@@ -57,7 +57,7 @@ public class ActivityAPI {
 			params.add("name", name);
 		if (content != null)
 			params.add("content", content);
-		RestClient.get("/api/activities/find", params, responseHandler);
+		RestClient.get("/api/activities/list", params, responseHandler);
 	}
 
 	/**

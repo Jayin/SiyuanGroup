@@ -203,7 +203,7 @@ public class BusinessAPI {
 			params.add("id", id + "");
 		if (name != null)
 			params.add("name", name);
-		RestClient.get("/api/cooperations/find", params, responseHandler);
+		RestClient.get("/api/cooperations/list", params, responseHandler);
 	}
 
 	/**
@@ -335,7 +335,7 @@ public class BusinessAPI {
 		if(id>0)params.add("id", id + "");
 		if(cooperationid>0)params.add("cooperationid", cooperationid + "");
 		if(userid>0)params.add("userid", userid + "");
-		RestClient.get("/api/cooperations/comments/find", params, responseHandler);
+		RestClient.get("/api/cooperations/comments/list", params, responseHandler);
 	}
 	/**
 	 * 获得一个合作的评论列表
