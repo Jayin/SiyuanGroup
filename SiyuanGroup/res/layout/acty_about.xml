@@ -3,15 +3,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-    <include 
-        layout="@layout/acty_about_header"/>
 
-    <ImageView
-        android:id="@+id/acty_about_iv_about"
+    <include layout="@layout/acty_about_header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical" >
+
+        <ImageView
+            android:layout_width="74dp"
+            android:layout_height="74dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="60dp"
+            android:src="@drawable/icon" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="校友群"
+            android:textColor="@color/black"
+            android:textSize="24sp"
+            android:layout_marginTop="6dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_verisonCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="version 1.1"
+            android:textColor="@color/grey_lv_one"
+            android:textSize="14sp"
+              android:layout_marginTop="6dp"
+           />
+
+        <LinearLayout
+            android:id="@+id/btn_checkversion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/btn_preference_sigle" >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="6dp"
+                android:text="检查更新"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+         
+        </LinearLayout>
+           <TextView
+        style="@style/TextView.base"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:scaleType="centerCrop"
-        android:src="@drawable/a_lyh_4" />
-    
+        android:layout_marginBottom="2dp"
+        android:gravity="bottom|center_horizontal"
+        android:text="©2013-2014 袂卓工作室 All Rights Reserved"
+        android:textColor="@color/black"
+        android:textSize="10sp"
+/>
+    </LinearLayout>
+
 </LinearLayout>

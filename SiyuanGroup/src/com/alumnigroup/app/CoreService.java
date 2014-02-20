@@ -64,6 +64,11 @@ public class CoreService extends Service {
 						intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
+					//发送收到结果的广播
+					Intent intent = new Intent(Constants.Action_Receive_VersionInfo);
+					intent.putExtra("versioncode", versioncode);
+					intent.putExtra("description", updateInfo);
+					sendBroadcast(intent);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				} catch (NameNotFoundException e) {
