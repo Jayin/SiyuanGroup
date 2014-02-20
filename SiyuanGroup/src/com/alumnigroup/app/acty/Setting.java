@@ -70,6 +70,7 @@ public class Setting extends BaseActivity {
 			break;
 			
 		case R.id.acty_setting_btn_quit:
+			toast("正在退出");
 			((App)getApplication()).cleanUpInfo();
 			toast("已经退出当前用户");
 			openActivity(Login.class);
