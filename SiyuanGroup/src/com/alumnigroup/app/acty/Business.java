@@ -312,7 +312,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		starAPI = new StarAPI();
 		if(AppCache.getBusinessAll(getContext())!=null){
 			data_all  = AppCache.getBusinessAll(getContext());
-			debug("getBusinessAll");
 		}else{
 			data_all = new ArrayList<Cooperation>();
 		}

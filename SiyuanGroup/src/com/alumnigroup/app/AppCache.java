@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.content.Context;
 
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.utils.DataPool;
 
@@ -27,6 +28,10 @@ public class AppCache {
 	public static final String Key_Business_all = "Business_all";
 	public static final String Key_Business_my = "Key_Business_my";
 	public static final String Key_Business_favourite = "Business_favourite";
+	//话题-校友交流3种数据
+	public static final String Key_Communication_all = "Communication_all";
+	public static final String Key_Communication_my = "Communication_my";
+	public static final String Key_Communication_favourite = "Communication_favourite";
 
 	private static DataPool getDataPool(Context context) {
 		return new DataPool(Cache_Name, context);
@@ -98,6 +103,36 @@ public class AppCache {
 	/** 保存商务合作favourite列表*/
 	public static void setBusinessFavourite(Context context,ArrayList<Cooperation> value){
 		save(context, Key_Business_favourite, value);
+	}
+	
+	/**获得校友交流话题all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Issue> getCommunicationAll(Context context){
+		return (ArrayList<Issue>)get(context, Key_Communication_all);
+	}
+	/** 保存校友交流话题all列表*/
+	public static void setCommunicationAll(Context context,ArrayList<Issue> value){
+		save(context, Key_Communication_all, value);
+	}
+	
+	/**获得校友交流话题all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Issue> getCommunicationMy(Context context){
+		return (ArrayList<Issue>)get(context, Key_Communication_my);
+	}
+	/** 保存校友交流话题all列表*/
+	public static void setCommunicationMy(Context context,ArrayList<Issue> value){
+		save(context, Key_Communication_my, value);
+	}
+	
+	/**获得校友交流话题all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Issue> getCommunicationFavourite(Context context){
+		return (ArrayList<Issue>)get(context, Key_Communication_favourite);
+	}
+	/** 保存校友交流话题all列表*/
+	public static void setCommunicationFavourite(Context context,ArrayList<Issue> value){
+		save(context, Key_Communication_favourite, value);
 	}
 	
 }

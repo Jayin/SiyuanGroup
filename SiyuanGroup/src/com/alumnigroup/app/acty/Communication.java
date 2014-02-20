@@ -28,6 +28,7 @@ import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
@@ -55,7 +56,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private View btn_back, btn_post, btn_all, btn_my, btn_favourite;
 	private XListView lv_all, lv_my, lv_favourit;
 	private ViewPager viewpager;
-	private List<Issue> data_all, data_my, data_favourite;
+	private ArrayList<Issue> data_all, data_my, data_favourite;
 	private IssueAdapter adapter_all, adapter_my, adapter_favourite;
 	private int page_all = 0, page_my = 0, page_favourit = 0;
 	private IssuesAPI api;
@@ -100,6 +101,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 							lv_all.setPullLoadEnable(true);
+							AppCache.setCommunicationAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
 					}
@@ -170,6 +172,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							data_my.addAll(newData_my);
 							adapter_my.notifyDataSetChanged();
 							lv_my.setPullLoadEnable(true);
+							AppCache.setCommunicationMy(getContext(), data_my);
 						}
 						lv_my.stopRefresh();
 					}
@@ -245,6 +248,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 										adapter_favourite
 												.notifyDataSetChanged();
 										lv_favourit.setPullLoadEnable(true);
+										AppCache.setCommunicationFavourite(getContext(), data_favourite);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -316,9 +320,23 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		}
 		api = new IssuesAPI();
 		starAPI = new StarAPI();
-		data_all = new ArrayList<Issue>();
-		data_my = new ArrayList<Issue>();
-		data_favourite = new ArrayList<Issue>();
+		
+		if(AppCache.getCommunicationAll(getContext())!=null){
+			data_all  = AppCache.getCommunicationAll(getContext());
+		}else{
+			data_all = new ArrayList<Issue>();
+		}
+		if(AppCache.getCommunicationMy(getContext())!=null){
+			data_my  = AppCache.getCommunicationMy(getContext());
+		}else{
+			data_my = new ArrayList<Issue>();
+		}
+		if(AppCache.getCommunicationFavourite(getContext())!=null){
+			data_favourite  = AppCache.getCommunicationFavourite(getContext());
+		}else{
+			data_favourite = new ArrayList<Issue>();
+		}
+	 
 	}
 
 	private void initViewPager() {
