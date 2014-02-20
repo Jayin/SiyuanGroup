@@ -5,11 +5,13 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
+import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.utils.DataPool;
 
 /**
- * 数据缓存
+ * 数据缓存<br>
+ * 活动 商务合作 
  * 
  * @author Jayin Ton
  * 
@@ -21,6 +23,10 @@ public class AppCache {
 	public static final String Key_Activity_all = "Activity_all";
 	public static final String Key_Activity_my = "Activity_my";
 	public static final String Key_Activity_favourite = "Activity_favourite";
+	//商务合作3种数据
+	public static final String Key_Business_all = "Business_all";
+	public static final String Key_Business_my = "Key_Business_my";
+	public static final String Key_Business_favourite = "Business_favourite";
 
 	private static DataPool getDataPool(Context context) {
 		return new DataPool(Cache_Name, context);
@@ -66,6 +72,32 @@ public class AppCache {
 	public static void setActivityFavourite(Context context,ArrayList<MActivity> value){
 		save(context, Key_Activity_favourite, value);
 	}
-	
+	/**获得商务合作all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Cooperation> getBusinessAll(Context context){
+		return (ArrayList<Cooperation>)get(context, Key_Business_all);
+	}
+	/** 保存商务合作all列表*/
+	public static void setBusinessAll(Context context,ArrayList<Cooperation> value){
+		save(context, Key_Business_all, value);
+	}
+	/**获得商务合作My列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Cooperation> getBusinessMy(Context context){
+		return (ArrayList<Cooperation>)get(context, Key_Business_my);
+	}
+	/** 保存商务合作My列表*/
+	public static void setBusinessMy(Context context,ArrayList<Cooperation> value){
+		save(context, Key_Business_my, value);
+	}
+	/**获得商务合作favourite列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Cooperation> getBusinessFavourite(Context context){
+		return (ArrayList<Cooperation>)get(context, Key_Business_favourite);
+	}
+	/** 保存商务合作favourite列表*/
+	public static void setBusinessFavourite(Context context,ArrayList<Cooperation> value){
+		save(context, Key_Business_favourite, value);
+	}
 	
 }

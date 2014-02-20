@@ -16,23 +16,22 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.alumnigroup.adapter.BaseOnPageChangeListener;
+
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
-import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -47,7 +46,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_all, btn_favourite, btn_myjoin, btn_compose;
 	private ViewPager viewpager;
-	private List<Cooperation> data_all, data_myjoin, data_favourite;
+	private ArrayList<Cooperation> data_all, data_myjoin, data_favourite;
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
 	private int page_all = 0, page_myjoin = 0, page_favourit = 0;//可能因为网络原因没有加载到第一页
 	private BusinessAPI api;
@@ -93,6 +92,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 							lv_all.setPullLoadEnable(true);
+							AppCache.setBusinessAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
 					}
@@ -163,6 +163,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 									data_myjoin.addAll(newData_myjoin);
 									adapter_myjoin.notifyDataSetChanged();
 									lv_myjoin.setPullLoadEnable(true);
+									AppCache.setBusinessMy(getContext(), data_myjoin);
 								}
 								lv_myjoin.stopRefresh();
 
@@ -240,6 +241,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 										adapter_favourite
 												.notifyDataSetChanged();
 										lv_favourit.setPullLoadEnable(true);
+										AppCache.setBusinessFavourite(getContext(), data_favourite);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -308,10 +310,22 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		}
 		api = new BusinessAPI();
 		starAPI = new StarAPI();
-		data_all = new ArrayList<Cooperation>();
-		data_myjoin = new ArrayList<Cooperation>();
-		data_favourite = new ArrayList<Cooperation>();
-
+		if(AppCache.getBusinessAll(getContext())!=null){
+			data_all  = AppCache.getBusinessAll(getContext());
+			debug("getBusinessAll");
+		}else{
+			data_all = new ArrayList<Cooperation>();
+		}
+		if(AppCache.getBusinessMy(getContext())!=null){
+			data_myjoin  = AppCache.getBusinessMy(getContext());
+		}else{
+			data_myjoin = new ArrayList<Cooperation>();
+		}
+		if(AppCache.getBusinessFavourite(getContext())!=null){
+			data_favourite  = AppCache.getBusinessFavourite(getContext());
+		}else{
+			data_favourite = new ArrayList<Cooperation>();
+		}
 	}
 
 	private void initViewPager() {
@@ -385,13 +399,25 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			openActivity(BusinessPublish.class);
 			break;
 		case R.id.acty_business_footer_all:
-			viewpager.setCurrentItem(0, true);
+			if(viewpager.getCurrentItem()==0){
+				lv_all.startRefresh();
+			}else{
+				viewpager.setCurrentItem(0, true);
+			}
 			break;
 		case R.id.acty_business_footer_myjoin:
-			viewpager.setCurrentItem(1, true);
+			if(viewpager.getCurrentItem()==1){
+				lv_myjoin.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1, true);
+			}
 			break;
 		case R.id.acty_business_footer_favourite:
-			viewpager.setCurrentItem(2, true);
+			if(viewpager.getCurrentItem()==2){
+				lv_favourit.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2, true);
+			}
 			break;
 		default:
 			break;
