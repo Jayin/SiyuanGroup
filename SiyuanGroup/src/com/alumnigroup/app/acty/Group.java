@@ -19,18 +19,16 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -46,7 +44,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	private View btn_back, btn_all, btn_myjoin, btn_more;
 	private XListView lv_all, lv_myjoin;
 	private ViewPager viewpager;
-	private List<MGroup> data_all, data_myjoin;
+	private ArrayList<MGroup> data_all, data_myjoin;
 	private GroupAdapter adapter_all, adapter_myjoin;
 	private int page_all = 0, page_myjoin = 0;
 	private GroupAPI api;
@@ -87,6 +85,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
 							lv_all.setPullLoadEnable(true);
+							AppCache.setGroupAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
 
@@ -159,6 +158,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							data_myjoin.addAll(newData_my);
 							adapter_myjoin.notifyDataSetChanged();
 							lv_myjoin.setPullLoadEnable(true);
+							AppCache.setGroupMy(getContext(), data_myjoin);
 						}
 						lv_myjoin.stopRefresh();
 					}
@@ -295,10 +295,18 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.acty_group_footer_all:
-			viewpager.setCurrentItem(0, true);
+			if(viewpager.getCurrentItem()==0){
+				lv_all.startRefresh();
+			}else{
+				viewpager.setCurrentItem(0, true);
+			}
 			break;
 		case R.id.acty_group_footer_myjoin:
-			viewpager.setCurrentItem(1, true);
+			if(viewpager.getCurrentItem()==1){
+				lv_myjoin.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1, true);
+			}
 			break;
 		case R.id.search:
 			mPopupWindow.dismiss();

@@ -8,11 +8,12 @@ import android.content.Context;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.utils.DataPool;
 
 /**
  * 数据缓存<br>
- * 活动 商务合作 
+ * 活动 商务合作  话题交流 圈子
  * 
  * @author Jayin Ton
  * 
@@ -32,6 +33,10 @@ public class AppCache {
 	public static final String Key_Communication_all = "Communication_all";
 	public static final String Key_Communication_my = "Communication_my";
 	public static final String Key_Communication_favourite = "Communication_favourite";
+	// 圈子3种数据
+	public static final String Key_Group_all = "Group_all";
+	public static final String Key_Group_my = "Group_my";
+	public static final String Key_Group_favourite = "Group_favourite";
 
 	private static DataPool getDataPool(Context context) {
 		return new DataPool(Cache_Name, context);
@@ -115,24 +120,50 @@ public class AppCache {
 		save(context, Key_Communication_all, value);
 	}
 	
-	/**获得校友交流话题all列表 */
+	/**获得校友交流话题My列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Issue> getCommunicationMy(Context context){
 		return (ArrayList<Issue>)get(context, Key_Communication_my);
 	}
-	/** 保存校友交流话题all列表*/
+	/** 保存校友交流话题My列表*/
 	public static void setCommunicationMy(Context context,ArrayList<Issue> value){
 		save(context, Key_Communication_my, value);
 	}
 	
-	/**获得校友交流话题all列表 */
+	/**获得校友交流话题Favourite列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Issue> getCommunicationFavourite(Context context){
 		return (ArrayList<Issue>)get(context, Key_Communication_favourite);
 	}
-	/** 保存校友交流话题all列表*/
+	/** 保存校友交流话题Favourite列表*/
 	public static void setCommunicationFavourite(Context context,ArrayList<Issue> value){
 		save(context, Key_Communication_favourite, value);
 	}
 	
+	/**获得圈子all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<MGroup> getGroupAll(Context context){
+		return (ArrayList<MGroup>)get(context, Key_Group_all);
+	}
+	/** 保存圈子all列表*/
+	public static void setGroupAll(Context context,ArrayList<MGroup> value){
+		save(context, Key_Group_all, value);
+	}
+	/**获得圈子My列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<MGroup> getGroupMy(Context context){
+		return (ArrayList<MGroup>)get(context, Key_Group_my);
+	}
+	/** 保存圈子My列表*/
+	public static void setGroupMy(Context context,ArrayList<MGroup> value){
+		save(context, Key_Group_my, value);
+	}
 }
+
+
+
+
+
+
+
+
