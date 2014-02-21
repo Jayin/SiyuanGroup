@@ -12,45 +12,45 @@ import com.google.gson.Gson;
 
 
 /**
- * 关注实体类 为了方便解析才用到这类
+ * 粉丝实体类 为了方便解析才用到这类
  * 
  * @author Jayin Ton
  * 
  */
 @SuppressWarnings("serial")
-public class Following implements Serializable {
+public class Follower implements Serializable {
 	/**
 	 * helper that get user list from  List<Following>
 	 * @param list
 	 * @return
 	 */
-	public static List<User> getUsesList(List<Following> list) {
+	public static List<User> getUsesList(List<Follower> list) {
 		if (list == null)
 			return null;
 		List<User> res = new ArrayList<User>();
-		for (Following f : list) {
+		for (Follower f : list) {
 			res.add(f.getFollowee());
 		}
 		return res;
 	}
 
-	public static Following create_by_json(String json) {
+	public static Follower create_by_json(String json) {
 		Gson gson = new Gson();
 		try {
-			return (Following) gson.fromJson(json, Following.class);
+			return (Follower) gson.fromJson(json, Follower.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
 
-	public static List<Following> create_by_jsonarray(String jsonarray) {
-		List<Following> list = new ArrayList<Following>();
+	public static List<Follower> create_by_jsonarray(String jsonarray) {
+		List<Follower> list = new ArrayList<Follower>();
 		JSONObject obj = null;
 		JSONArray array = null;
 		try {
 			obj = new JSONObject(jsonarray);
-			array = obj.getJSONArray("following");
+			array = obj.getJSONArray("followers");
 			for (int i = 0; i < array.length(); i++) {
 				list.add(create_by_json(array.getJSONObject(i).toString()));
 			}

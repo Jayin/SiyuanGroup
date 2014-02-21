@@ -25,6 +25,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.app.acty.Group.GroupAdapter;
 import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.Follower;
 import com.alumnigroup.entity.Following;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -48,15 +49,15 @@ import com.alumnigroup.widget.XListView.IXListViewListener;
  */
 public class Allmember extends BaseActivity implements OnItemClickListener {
 	private TextView tv_title;
-	private View btn_back, btn_allmenmber, btn_myfriend;//, btn_pressed
-	private XListView lv_allmember, lv_myfriend;
-	private ArrayList<User> data_allmember = null, data_myfriend = null;
+	private View btn_back, btn_allmenmber, btn_following,btn_followers;//following 关注 ；follower粉丝
+	private XListView lv_allmember, lv_following, lv_followers;
+	private ArrayList<User> data_allmember = null, data_following = null,data_followers = null;
 	private List<View> btns;
 	private DataPool dp;
 	private ViewPager viewpager;
 	private UserAPI api;
-	private int page_allmember = 0, page_myfriend = 0;
-	private MemberAdapter adapter_allmember, adapter_myfriend;
+	private int page_allmember = 0, page_following = 0,page_followers = 0;
+	private MemberAdapter adapter_allmember, adapter_following,adapter_followers;
 	private User user;
 	private FollowshipAPI followshipAPI;
 
@@ -72,8 +73,11 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 	private void initController() {
 		lv_allmember.setPullLoadEnable(true);
 		lv_allmember.setPullLoadEnable(true);
-		lv_myfriend.setPullLoadEnable(true);
-		lv_myfriend.setPullLoadEnable(true);
+		lv_following.setPullLoadEnable(true);
+		lv_following.setPullLoadEnable(true);
+		lv_followers.setPullLoadEnable(true);
+		lv_followers.setPullLoadEnable(true);
+		
 		lv_allmember.setXListViewListener(new IXListViewListener() {
 			
 			@Override
@@ -144,7 +148,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 				
 			}
 		});
-		lv_myfriend.setXListViewListener(new IXListViewListener() {
+		lv_following.setXListViewListener(new IXListViewListener() {
 			
 			@Override
 			public void onRefresh() {
@@ -161,23 +165,23 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 									toast("网络异常 解析错误");
 								} else if (newData.size() == 0) {
 									toast("你还没有关注任何人");
-									lv_myfriend.setPullLoadEnable(false);
+									lv_following.setPullLoadEnable(false);
 								} else {
-									page_myfriend = 1;
-									data_myfriend.clear();
-									data_myfriend.addAll(newData);
-									adapter_myfriend.notifyDataSetChanged();
-									//saveMyFriendData2SP(newData_myfriend);
-									lv_myfriend.setPullLoadEnable(true);
+									page_following = 1;
+									data_following.clear();
+									data_following.addAll(newData);
+									adapter_following.notifyDataSetChanged();
+									//saveMyFriendData2SP(newdata_following);
+									lv_following.setPullLoadEnable(true);
 								}
-								//lv_myfriend.setCanRefresh(false, false);  //好友应该加载一次就ok？
-								lv_myfriend.stopRefresh();
+								//lv_following.setCanRefresh(false, false);  //好友应该加载一次就ok？
+								lv_following.stopRefresh();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
 								toast(ErrorCode.errorList.get(errorCode));
-								lv_myfriend.stopRefresh();
+								lv_following.stopRefresh();
 							}
 						});
 				
@@ -185,7 +189,12 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 			
 			@Override
 			public void onLoadMore() {
-				followshipAPI.getFollowingList(page_myfriend + 1, user.getId(),
+				if(page_following==0){
+					lv_following.stopLoadMore();
+					lv_following.startRefresh();
+					return;
+				}
+				followshipAPI.getFollowingList(page_following + 1, user.getId(),
 						new JsonResponseHandler() {
 
 							@Override
@@ -199,25 +208,103 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 									toast("网络异常 解析错误");
 								} else if (newData.size() == 0) {
 									toast("没有更多");
-									lv_myfriend.setPullLoadEnable(false);
+									lv_following.setPullLoadEnable(false);
 								} else {
-									page_myfriend++;
-									data_myfriend.addAll(newData);
-									adapter_myfriend.notifyDataSetChanged();
+									page_following++;
+									data_following.addAll(newData);
+									adapter_following.notifyDataSetChanged();
 								}
-								lv_myfriend.stopLoadMore();
+								lv_following.stopLoadMore();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
 								toast(ErrorCode.errorList.get(errorCode));
-								lv_myfriend.stopLoadMore();
+								lv_following.stopLoadMore();
+							}
+						});
+			}
+		});
+lv_followers.setXListViewListener(new IXListViewListener() {
+			
+			@Override
+			public void onRefresh() {
+				followshipAPI.getFollowerList(1, user.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<User> newData = Follower
+										.getUsesList(Follower
+												.create_by_jsonarray(obj
+														.toString()));
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("你还没有关注任何人");
+									lv_followers.setPullLoadEnable(false);
+								} else {
+									page_followers = 1;
+									data_followers.clear();
+									data_followers.addAll(newData);
+									adapter_followers.notifyDataSetChanged();
+									//saveMyFriendData2SP(newdata_followers);
+									lv_followers.setPullLoadEnable(true);
+								}
+								//lv_followers.setCanRefresh(false, false);  //好友应该加载一次就ok？
+								lv_followers.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_followers.stopRefresh();
+							}
+						});
+				
+			}
+			
+			@Override
+			public void onLoadMore() {
+				if(page_followers==0){
+					lv_followers.stopLoadMore();
+					lv_following.startRefresh();
+					return;
+				}
+				followshipAPI.getFollowerList(page_followers + 1, user.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								debug(obj.toString());
+								List<User> newData = Follower
+										.getUsesList(Follower
+												.create_by_jsonarray(obj
+														.toString()));
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("没有更多");
+									lv_followers.setPullLoadEnable(false);
+								} else {
+									page_followers++;
+									data_followers.addAll(newData);
+									adapter_followers.notifyDataSetChanged();
+								}
+								lv_followers.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_followers.stopLoadMore();
 							}
 						});
 			}
 		});
 		lv_allmember.setOnItemClickListener(this);
-		lv_myfriend.setOnItemClickListener(this);
+		lv_following.setOnItemClickListener(this);
+		lv_followers.setOnItemClickListener(this);
 		lv_allmember.startRefresh();
 	}
 
@@ -233,8 +320,9 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		api = new UserAPI();
 		data_allmember = new ArrayList<User>();
 		//loadAllMemberData(data_allmember);
-		data_myfriend = new ArrayList<User>();
-		// loadMyFriendData(data_myfriend);
+		data_following = new ArrayList<User>();
+		// loadMyFriendData(data_following);
+		data_followers = new ArrayList<User>();
 	}
 
 	@Override
@@ -243,15 +331,18 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		tv_title = (TextView) _getView(R.id.acty_head_tv_title);
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_allmenmber = _getView(R.id.acty_allmember_footer_allmember);
-		btn_myfriend = _getView(R.id.acty_allmember_footer_myfriend);
+		btn_following = _getView(R.id.acty_allmember_footer_following);
+		btn_followers = _getView(R.id.acty_allmember_footer_followers);
 
 		btns = new ArrayList<View>();
 		btns.add(btn_allmenmber);
-		btns.add(btn_myfriend);
+		btns.add(btn_following);
+		btns.add(btn_followers);
 		
 		btn_back.setOnClickListener(this);
 		btn_allmenmber.setOnClickListener(this);
-		btn_myfriend.setOnClickListener(this);
+		btn_following.setOnClickListener(this);
+		btn_followers.setOnClickListener(this);
 		
 		initViewPager();
 	}
@@ -260,29 +351,36 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		viewpager = (ViewPager) _getView(R.id.acty_allmember_content);
 		View allmember = getLayoutInflater().inflate(
 				R.layout.frame_acty_allmember_allmember, null);
-		View myfriend = getLayoutInflater().inflate(
-				R.layout.frame_acty_allmember_myfriend, null);
+		View following = getLayoutInflater().inflate(
+				R.layout.frame_acty_allmember_following, null);
+		View followers = getLayoutInflater().inflate(
+				R.layout.frame_acty_allmember_followers, null);
 
 		lv_allmember = (XListView) allmember
 				.findViewById(R.id.acty_allmember_lv_allmember);
-		lv_myfriend = (XListView) myfriend
-				.findViewById(R.id.acty_allmember_lv_myfriend);
+		lv_following = (XListView) following
+				.findViewById(R.id.acty_allmember_lv_following);
+		lv_followers = (XListView) followers
+				.findViewById(R.id.acty_allmember_lv_followers);
 		
 		adapter_allmember = new MemberAdapter(data_allmember, getContext());
-		adapter_myfriend = new MemberAdapter(data_myfriend, getContext());
+		adapter_following = new MemberAdapter(data_following, getContext());
+		adapter_followers = new MemberAdapter(data_followers, getContext());
 
 		lv_allmember.setAdapter(adapter_allmember);
-		lv_myfriend.setAdapter(adapter_myfriend);
+		lv_following.setAdapter(adapter_following);
+		lv_followers.setAdapter(adapter_followers);
 		
 		List<View> views = new ArrayList<View>();
 		views.add(allmember);
-		views.add(myfriend);
+		views.add(following);
+		views.add(followers);
 
 		List<XListView> listviews = new ArrayList<XListView>();
-		listviews.add(lv_allmember);listviews.add(lv_myfriend); 
+		listviews.add(lv_allmember);listviews.add(lv_following); listviews.add(lv_followers); 
 		
 		List<MemberAdapter>  adapters = new ArrayList<MemberAdapter>();
-		adapters.add(adapter_allmember);adapters.add(adapter_myfriend); 
+		adapters.add(adapter_allmember);adapters.add(adapter_following); adapters.add(adapter_followers); 
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
 		viewpager.setCurrentItem(0);
 		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,listviews,adapters));
@@ -295,19 +393,24 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 			break;
 		case R.id.acty_allmember_footer_allmember:
-			tv_title.setText("全站会员");
 			if(viewpager.getCurrentItem()==0){
 				lv_allmember.startRefresh();
 			}else{
 				viewpager.setCurrentItem(0);
 			}
 			break;
-		case R.id.acty_allmember_footer_myfriend:
-			tv_title.setText("我的好友");
+		case R.id.acty_allmember_footer_following:
 			if(viewpager.getCurrentItem()==1){
-				lv_myfriend.startRefresh();
+				lv_following.startRefresh();
 			}else{
 				viewpager.setCurrentItem(1);
+			}
+			break;
+		case R.id.acty_allmember_footer_followers:
+			if(viewpager.getCurrentItem()==2){
+				lv_following.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2);
 			}
 			break;
 		default:
@@ -373,35 +476,6 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		}
 	}
 
-	class MyOnPageChangeListener implements OnPageChangeListener {
-
-		@Override
-		public void onPageScrollStateChanged(int arg0) {
-
-		}
-
-		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-		}
-
-		@Override
-		public void onPageSelected(int position) {
-			if (position == 0) {
-				tv_title.setText("全站会员");
-				btn_allmenmber.setBackgroundResource(R.color.blue_nav_bg_press);
-				btn_myfriend.setBackgroundResource(R.color.blue_nav_bg_nomal);
-			}
-
-			if (position == 1) {
-				tv_title.setText("我的好友");
-				btn_allmenmber.setBackgroundResource(R.color.blue_nav_bg_nomal);
-				btn_myfriend.setBackgroundResource(R.color.blue_nav_bg_press);
-			}
-
-		}
-	}
-
 	/**
 	 * 单击每一个item 进入空间，传入一个user 对象，代表要进入谁的空间
 	 */
@@ -413,9 +487,9 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 			intent.putExtra("user", data_allmember.get(position - 1));
 			openActivity(intent);
 		}
-		if (parent == lv_myfriend) {
+		if (parent == lv_following) {
 			Intent intent = new Intent(this, SpaceOther.class);
-			intent.putExtra("user", data_myfriend.get(position - 1));
+			intent.putExtra("user", data_following.get(position - 1));
 			openActivity(intent);
 		}
 	}

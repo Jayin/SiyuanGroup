@@ -5,7 +5,7 @@
     android:orientation="vertical" >
 
     <com.alumnigroup.widget.XListView
-        android:id="@+id/acty_allmember_lv_myfriend"
+        android:id="@+id/acty_allmember_lv_following"
         style="@style/ListView.PullAndLoadListView" >
     </com.alumnigroup.widget.XListView>
 
