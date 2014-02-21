@@ -9,6 +9,7 @@ import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.DataPool;
 
 /**
@@ -21,6 +22,10 @@ import com.alumnigroup.utils.DataPool;
 public class AppCache {
 
 	public static final String Cache_Name = "AppCache";
+	//全站会员3中数据
+	public static final String Key_Allmember_all = "Allmember_all";
+	public static final String Key_Allmember_following = "Allmember_following";
+	public static final String Key_Allmember_followers = "Allmember_followers";
 	// 活动的3种数据
 	public static final String Key_Activity_all = "Activity_all";
 	public static final String Key_Activity_my = "Activity_my";
@@ -53,6 +58,34 @@ public class AppCache {
    
 	public static void remove(Context context, String key) {
 		getDataPool(context).remove(key);
+	}
+	
+	/**获得全站会员all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<User> getAllmemberAll(Context context){
+		return (ArrayList<User>)get(context, Key_Allmember_all);
+	}
+	/** 保存全站会员all列表*/
+	public static void setAllmemberAll(Context context,ArrayList<User> value){
+		save(context, Key_Allmember_all, value);
+	}
+	/**获得全站会员follow关注列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<User> getAllmemberFollowing(Context context){
+		return (ArrayList<User>)get(context, Key_Allmember_following);
+	}
+	/** 保存全站会员follow关注列表*/
+	public static void setAllmemberFollowing(Context context,ArrayList<User> value){
+		save(context, Key_Allmember_following, value);
+	}
+	/**获得全站会员followers关注列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<User> getAllmemberFollowers(Context context){
+		return (ArrayList<User>)get(context, Key_Allmember_followers);
+	}
+	/** 保存全站会员followers关注列表*/
+	public static void setAllmemberFollowers(Context context,ArrayList<User> value){
+		save(context, Key_Allmember_followers, value);
 	}
 	/**获得活动all列表 */
 	@SuppressWarnings("unchecked")
