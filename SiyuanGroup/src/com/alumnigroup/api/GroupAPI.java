@@ -139,7 +139,7 @@ public class GroupAPI {
 	/**
 	 * 更新圈子信息
 	 * 
-	 * @param id
+	 * @param groupid 
 	 *            圈子id
 	 * @param name
 	 *            圈子名字
@@ -148,10 +148,10 @@ public class GroupAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void updateInfo(int id, String name, String description,
+	public void updateInfo(int groupid , String name, String description,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", id + "");
+		params.add("groupid", groupid  + "");
 		params.add("name", name);
 		params.add("description", description);
 		RestClient.post("/api/groups/update", params, responseHandler);

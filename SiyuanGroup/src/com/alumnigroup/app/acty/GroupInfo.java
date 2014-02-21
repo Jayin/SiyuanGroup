@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -32,6 +35,7 @@ import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MMemberships;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
@@ -62,6 +66,7 @@ public class GroupInfo extends BaseActivity {
 	private int page_share = 0, page_member = 0;
 	private List<Issue> data_share;
 	private GroupShareAPI shareAPI;
+	private BroadcastReceiver mReceiver = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +76,38 @@ public class GroupInfo extends BaseActivity {
 		initPopupWindow();
 		initLayout();
 		initController();
+		openReceiver();
+	}
+   //修改圈子分享 刷新UI
+	private void openReceiver() {
+		 mReceiver = new BroadcastReceiver() {
+				
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					 MGroup g =(MGroup)intent.getSerializableExtra("group");
+					 if (g.getAvatar() != null) {
+							ImageLoader.getInstance().displayImage(
+									RestClient.BASE_URL + g.getAvatar(), iv_avatar);
+						} else {
+							ImageLoader.getInstance().displayImage(
+									"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+						}
+						tv_owner.setText(g.getOwner().getProfile().getName());
+						tv_numMember.setText(g.getNumMembers() + "");
+						tv_description.setText(g.getDescription());
+						tv_groupName.setText(g.getName());
+				}
+			};
+		registerReceiver(mReceiver, new IntentFilter(Constants.Action_GroupInfo_Edit));
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mReceiver!=null){
+			unregisterReceiver(mReceiver);
+		}
+	}
 	private void initPopupWindow() {
 		View view = getLayoutInflater().inflate(R.layout.popup_acty_groupinfo,
 				null);
