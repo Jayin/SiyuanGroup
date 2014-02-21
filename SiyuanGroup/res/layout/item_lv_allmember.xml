@@ -17,6 +17,7 @@
 
             <ImageView
                 android:id="@+id/item_lv_allmember_avatar"
+                style="@style/ImageView.avatar"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"

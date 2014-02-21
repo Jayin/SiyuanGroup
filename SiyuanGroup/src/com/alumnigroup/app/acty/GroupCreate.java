@@ -117,7 +117,6 @@ public class GroupCreate extends BaseActivity {
 
 	// 编辑更新
 	private void update(final String name, final String description) {
-		toast(group.getId()+"---"+name+"---"+description);
 		api.updateInfo(group.getId(), name, description,
 				new JsonResponseHandler() {
 
