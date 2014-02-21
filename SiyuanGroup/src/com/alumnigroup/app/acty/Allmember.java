@@ -57,7 +57,6 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 	private UserAPI api;
 	private int page_allmember = 0, page_myfriend = 0;
 	private MemberAdapter adapter_allmember, adapter_myfriend;
-	private MenuDialog dialog;
 	private User user;
 	private FollowshipAPI followshipAPI;
 
@@ -254,45 +253,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		btn_allmenmber.setOnClickListener(this);
 		btn_myfriend.setOnClickListener(this);
 		
-		initMenuDialog();
 		initViewPager();
-	}
-
-	private void initMenuDialog() {
-		dialog = new MenuDialog(getContext());
-		List<String> strings = new ArrayList<String>();
-		strings.add("关注");
-		strings.add("进入空间");
-		dialog.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,
-					int position, long id) {
-				dialog.dismiss();
-				if (position == 0) {
-					FollowshipAPI api = new FollowshipAPI();
-					api.follow(data_allmember.get(dialog.getParentPosition())
-							.getId(), "following", new JsonResponseHandler() {
-
-						@Override
-						public void onOK(Header[] headers, JSONObject obj) {
-							toast("已关注");
-						}
-
-						@Override
-						public void onFaild(int errorType, int errorCode) {
-							toast("关注失败,错误码:" + errorCode);
-						}
-					});
-				}
-				if (position == 1) {
-					Intent intent =new Intent(Allmember.this,SpaceOther.class);
-					intent.putExtra("user", data_allmember.get(dialog.getParentPosition()));
-					openActivity(intent);
-				}
-			}
-		});
-		dialog.setData(strings);
 	}
 
 	private void initViewPager() {
@@ -448,7 +409,9 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
 		if (parent == lv_allmember) {
-			dialog.show(position - 1);
+			Intent intent = new Intent(this, SpaceOther.class);
+			intent.putExtra("user", data_allmember.get(position - 1));
+			openActivity(intent);
 		}
 		if (parent == lv_myfriend) {
 			Intent intent = new Intent(this, SpaceOther.class);
