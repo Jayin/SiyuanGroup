@@ -2,26 +2,34 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/aa_main_screent"
     android:orientation="vertical" >
 
-    <WebView
-        android:id="@+id/acty_main_webview"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="150px"
-     
-        android:background="#00000000"
-        />
+        android:layout_height="match_parent" >
 
-    <RelativeLayout
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            android:src="@drawable/aa_bg_main1" />
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/acty_main_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="8dp" >
+        android:layout_height="match_parent" android:orientation="vertical" >
+
+        <WebView
+            android:id="@+id/acty_main_webview"
+            android:layout_width="match_parent"
+            android:layout_height="150px"
+            android:background="#00000000" />
 
         <include
             android:id="@+id/acty_main_content_one"
+            android:layout_margin="8dp"
             layout="@layout/frame_main_one" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

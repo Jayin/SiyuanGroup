@@ -31,7 +31,7 @@ import com.alumnigroup.widget.ADView;
 public class Main extends BaseActivity implements OnClickListener {
 	private WebView webview;
 	private LinearLayout content;
-	private RelativeLayout parent_content;
+	private LinearLayout parent_content;
 	private int width = 0, height = 0;
 	private DataPool dp;
 
@@ -138,15 +138,11 @@ public class Main extends BaseActivity implements OnClickListener {
 	private void adapteScreent() {
 
 		content = (LinearLayout) _getView(R.id.acty_main_content_one);
-		parent_content = (RelativeLayout) _getView(R.id.acty_main_content);
+		parent_content = (LinearLayout) _getView(R.id.acty_main_content);
 		android.view.ViewGroup.LayoutParams params = content.getLayoutParams();
 		params.height = width;
-		RelativeLayout.LayoutParams rely_params = (RelativeLayout.LayoutParams) content
-				.getLayoutParams();
-		rely_params.addRule(RelativeLayout.CENTER_VERTICAL);
 
 		content.setLayoutParams(params);
-		content.setLayoutParams(rely_params);
 	}
 
 	@Override
