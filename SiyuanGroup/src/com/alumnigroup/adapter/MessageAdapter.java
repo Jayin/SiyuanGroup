@@ -71,7 +71,7 @@ public class MessageAdapter extends BaseAdapter{
 		 * 解析布局,填充数据
 		 */
 		convertView = inflater.inflate(
-				R.layout.item_lv_message, null);
+				R.layout.item_lv_message2, null);
 		convertView.setOnClickListener(new OnClickListener() {
 			
 			@Override
