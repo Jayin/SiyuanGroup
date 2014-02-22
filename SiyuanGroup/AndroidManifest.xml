@@ -97,7 +97,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".acty.Message"
+            android:name=".acty.MessageCenter"
             android:screenOrientation="portrait" >
         </activity>
         <activity

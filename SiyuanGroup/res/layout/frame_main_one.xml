@@ -14,53 +14,66 @@
             android:id="@+id/frame_main_one_allmember"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv1"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_frame_main_allmember" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv1"
-                android:layout_centerHorizontal="true"
-                android:text="全站会员" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv1"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_allmember" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="全站会员" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/frame_main_one_allactivity"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv2"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/ic_frame_main_allactivity" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv2"
-                android:layout_centerHorizontal="true"
-                android:text="全站动态" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv2"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_allactivity" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="全站动态" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/frame_main_one_communication"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv3"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/ic_frame_main_discuss" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv3"
-                android:layout_centerHorizontal="true"
-                android:text="校友交流" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv3"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_discuss" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="校友交流" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
@@ -74,53 +87,66 @@
             android:id="@+id/frame_main_one_myspace"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv4"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_frame_main_myspace" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv4"
-                android:layout_centerHorizontal="true"
-                android:text="个人空间" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv4"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_myspace" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="个人空间" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/frame_main_one_activities"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv5"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/ic_frame_main_activity" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv5"
-                android:layout_centerHorizontal="true"
-                android:text="活动" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv5"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_activity" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="活    动" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/frame_main_one_group"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv6"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/ic_frame_main_group" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv6"
-                android:layout_centerHorizontal="true"
-                android:text="圈子" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv6"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_group" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="圈    子" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 
@@ -134,53 +160,65 @@
             android:id="@+id/frame_main_one_business"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv7"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:background="@drawable/ic_frame_main_business" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv7"
-                android:layout_centerHorizontal="true"
-                android:text="商务合作" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv7"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_business" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="商务合作" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/frame_main_one_message"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv8"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/ic_frame_main_message" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv8"
-                android:layout_centerHorizontal="true"
-                android:text="消息" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv8"
+                    style="@style/ImageView"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/ic_frame_main_message" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="消息中心" />
+            </LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/frame_main_one_setting"
             style="@style/RelativeLayout.frame_main_item" >
 
-            <ImageView
-                android:id="@+id/frame_main_one_iv9"
-                style="@style/ImageView"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="18dp"
-                android:background="@drawable/ic_frame_main_setting" />
+                android:orientation="vertical" >
 
-            <TextView
-                style="@style/TextView.item_main"
-                android:layout_below="@+id/frame_main_one_iv9"
-                android:layout_centerHorizontal="true"
-                android:text="设置" />
+                <ImageView
+                    android:id="@+id/frame_main_one_iv9"
+                    style="@style/ImageView"
+                    android:background="@drawable/ic_frame_main_setting" />
+
+                <TextView
+                    style="@style/TextView.item_main"
+                    android:text="设    置" />
+            </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
 

@@ -29,7 +29,6 @@ import com.alumnigroup.widget.ADView;
  * 
  */
 public class Main extends BaseActivity implements OnClickListener {
-	private ADView adview;
 	private WebView webview;
 	private LinearLayout content;
 	private RelativeLayout parent_content;
@@ -163,7 +162,7 @@ public class Main extends BaseActivity implements OnClickListener {
 			break;
 
 		case R.id.frame_main_one_message:
-			openActivity(Message.class);
+			openActivity(MessageCenter.class);
 			break;
 		case R.id.frame_main_one_allmember:
 			openActivity(Allmember.class);
