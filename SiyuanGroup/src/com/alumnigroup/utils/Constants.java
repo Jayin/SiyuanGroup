@@ -7,8 +7,15 @@ package com.alumnigroup.utils;
  * 
  */
 public class Constants {
-	/** 服务Action 检测新版本 */
+	/** 服务Action */
+	/** 检测新版本 */
 	public static final String Action_checkVersion = "check_version";
+	/** 取出未读消息 */
+	public static final String Action_Get_Unread = "Get_Unread";
+ 	/** 得到未读消息 */
+ 	public static final String Action_receiver = "Get_Unread";
+	
+	
 	// 广播Action 
 	/** 话题(包含圈子分享 )发布成功*/
 	public static final String Action_Issue_Comment_Ok = "Issue_Comment_Ok";

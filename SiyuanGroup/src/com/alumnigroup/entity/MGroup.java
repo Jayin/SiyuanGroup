@@ -30,8 +30,8 @@ public class MGroup implements Serializable {
 		}
 	}
 
-	public static List<MGroup> create_by_jsonarray(String jsonarray) {
-		List<MGroup> list = new ArrayList<MGroup>();
+	public static ArrayList<MGroup> create_by_jsonarray(String jsonarray) {
+		ArrayList<MGroup> list = new ArrayList<MGroup>();
 		JSONObject obj = null;
 		JSONArray array = null;
 		try {
