@@ -203,7 +203,7 @@ public class BusinessAPI {
 			params.add("id", id + "");
 		if (name != null)
 			params.add("name", name);
-		RestClient.get("/api/cooperations/find", params, responseHandler);
+		RestClient.get("/api/cooperations/list", params, responseHandler);
 	}
 
 	/**
@@ -237,7 +237,8 @@ public class BusinessAPI {
 			params.add("name", name);
 		if (description != null)
 			params.add("description", description);
-		RestClient.get("/api/cooperations/search", params, responseHandler);
+		params.add("fuzzy", "1");  
+		RestClient.get("/api/cooperations/list", params, responseHandler);
 	}
 
 	/**
@@ -335,7 +336,7 @@ public class BusinessAPI {
 		if(id>0)params.add("id", id + "");
 		if(cooperationid>0)params.add("cooperationid", cooperationid + "");
 		if(userid>0)params.add("userid", userid + "");
-		RestClient.get("/api/cooperations/comments/find", params, responseHandler);
+		RestClient.get("/api/cooperations/comments/list", params, responseHandler);
 	}
 	/**
 	 * 获得一个合作的评论列表
@@ -353,5 +354,15 @@ public class BusinessAPI {
  	 */
 	public void getUserCooperationList(int page ,int ownerid,AsyncHttpResponseHandler responseHandler){
 		search(page, ownerid, null, null, responseHandler);
+	}
+	/**
+	 * 获得我的合作列表
+	 * @param page 页码 
+	 * @param responseHandler
+	 */
+	public void getMyCooperationList(int page,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("page",page+"");
+		RestClient.get("/api/cooperations/my", params, responseHandler);
 	}
 }

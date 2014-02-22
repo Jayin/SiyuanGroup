@@ -17,10 +17,11 @@
 
             <ImageView
                 android:id="@+id/iv_avatar"
+                style="@style/ImageView.avatar"
                 android:layout_width="45dp"
                 android:layout_height="45dp"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_image_load_loading" />
+                 />
         </RelativeLayout>
 
         <RelativeLayout

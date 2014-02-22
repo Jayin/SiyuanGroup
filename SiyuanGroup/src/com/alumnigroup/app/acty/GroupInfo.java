@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -32,6 +35,7 @@ import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MMemberships;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
@@ -62,6 +66,7 @@ public class GroupInfo extends BaseActivity {
 	private int page_share = 0, page_member = 0;
 	private List<Issue> data_share;
 	private GroupShareAPI shareAPI;
+	private BroadcastReceiver mReceiver = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +76,38 @@ public class GroupInfo extends BaseActivity {
 		initPopupWindow();
 		initLayout();
 		initController();
+		openReceiver();
+	}
+   //修改圈子分享 刷新UI
+	private void openReceiver() {
+		 mReceiver = new BroadcastReceiver() {
+				
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					 MGroup g =(MGroup)intent.getSerializableExtra("group");
+					 if (g.getAvatar() != null) {
+							ImageLoader.getInstance().displayImage(
+									RestClient.BASE_URL + g.getAvatar(), iv_avatar);
+						} else {
+							ImageLoader.getInstance().displayImage(
+									"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+						}
+						tv_owner.setText(g.getOwner().getProfile().getName());
+						tv_numMember.setText(g.getNumMembers() + "");
+						tv_description.setText(g.getDescription());
+						tv_groupName.setText(g.getName());
+				}
+			};
+		registerReceiver(mReceiver, new IntentFilter(Constants.Action_GroupInfo_Edit));
 	}
 
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mReceiver!=null){
+			unregisterReceiver(mReceiver);
+		}
+	}
 	private void initPopupWindow() {
 		View view = getLayoutInflater().inflate(R.layout.popup_acty_groupinfo,
 				null);
@@ -98,9 +133,10 @@ public class GroupInfo extends BaseActivity {
 		lv_share.setAdapter(adapter_share);
 
 		lv_member.setPullRefreshEnable(true);
-		lv_member.setPullLoadEnable(true);
+		lv_member.setPullLoadEnable(false);//一次性加载
 		lv_share.setPullRefreshEnable(true);
 		lv_share.setPullLoadEnable(true);
+		//一次性加载
 		lv_member.setXListViewListener(new IXListViewListener() {
 
 			@Override
@@ -119,7 +155,7 @@ public class GroupInfo extends BaseActivity {
 								newData.add(mm.getUser());
 							}
 							if (newData.size() == 0) {
-								toast("还没有会员!");
+								toast("还没有会员");
 							} else {
 								page_member = 1;
 								data_user.clear();
@@ -132,7 +168,7 @@ public class GroupInfo extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误代码:" + errorCode);
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_member.stopRefresh();
 
 					}
@@ -147,7 +183,7 @@ public class GroupInfo extends BaseActivity {
 					lv_member.startRefresh();
 					return;
 				}
-				api.getMembers(page_member + 1, group.getId(),
+				api.getMembers(group.getNumMembers(), group.getId(),
 						new JsonResponseHandler() {
 
 							@Override
@@ -163,6 +199,7 @@ public class GroupInfo extends BaseActivity {
 									}
 									if (newData.size() == 0) {
 										toast("没有更多了");
+										lv_member.setPullLoadEnable(false);
 									} else {
 										page_member++;
 										data_user.clear();
@@ -175,7 +212,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 错误代码:" + errorCode);
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_member.stopLoadMore();
 
 							}
@@ -188,33 +225,34 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-				shareAPI.getShareList(1, group.getId(),
-						new JsonResponseHandler() {
-
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								List<Issue> newData_share = Issue
-										.create_by_jsonarray(obj.toString());
-								if (newData_share == null) {
-									toast("网络异常 解析错误");
-								} else if (newData_share.size() == 0) {
-									toast("没有更多");
-								} else {
-									page_share = 1;
-									data_share.clear();
-									data_share.addAll(newData_share);
-									adapter_share.notifyDataSetChanged();
-								}
-								lv_share.stopRefresh();
-							}
-
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
-								lv_share.stopRefresh();
-							}
-						});
+//				shareAPI.getShareList(1, group.getId(),
+//						new JsonResponseHandler() {
+//
+//							@Override
+//							public void onOK(Header[] headers, JSONObject obj) {
+//								List<Issue> newData_share = Issue
+//										.create_by_jsonarray(obj.toString());
+//								if (newData_share == null) {
+//									toast("网络异常 解析错误");
+//								} else if (newData_share.size() == 0) {
+//									toast("还没有分享");
+//									lv_share.setPullLoadEnable(false);
+//								} else {
+//									page_share = 1;
+//									data_share.clear();
+//									data_share.addAll(newData_share);
+//									adapter_share.notifyDataSetChanged();
+//									lv_share.setPullLoadEnable(true);
+//								}
+//								lv_share.stopRefresh();
+//							}
+//
+//							@Override
+//							public void onFaild(int errorType, int errorCode) {
+//								toast( ErrorCode.errorList.get(errorCode));
+//								lv_share.stopRefresh();
+//							}
+//						});
 			}
 
 			@Override
@@ -234,7 +272,8 @@ public class GroupInfo extends BaseActivity {
 								if (newData_share == null) {
 									toast("网络异常,解析错误");
 								} else if (newData_share.size() == 0) {
-									toast("没有更多了!");
+									toast("没有更多");
+									lv_share.setPullLoadEnable(false);
 								} else {
 									page_share++;
 									data_share.addAll(newData_share);
@@ -245,8 +284,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast( ErrorCode.errorList.get(errorCode));
 								lv_share.stopLoadMore();
 
 							}
@@ -262,6 +300,7 @@ public class GroupInfo extends BaseActivity {
 					int position, long id) {
                        Intent intent = new Intent(getContext(), GroupShareDetail.class);
                        intent.putExtra("issue", data_share.get(position-1));
+                       intent.putExtra("group", group);
                        openActivity(intent);
 			}
 		});
@@ -401,7 +440,7 @@ public class GroupInfo extends BaseActivity {
 
 		case R.id.btn_share:
 			mPopupWindow.dismiss();
-			intent = new Intent(this, GroupShareCompose.class);
+			intent = new Intent(this, GroupSharePublish.class);
 			intent.putExtra("group", group);
 			openActivity(intent);
 			break;
@@ -426,7 +465,7 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("网络异常 错误代码:" + errorCode);
+				toast("加入失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 	}
@@ -442,7 +481,7 @@ public class GroupInfo extends BaseActivity {
 			@Override
 			public void onFaild(int errorType, int errorCode) {
 				// toast("退出失败 错误码:" + errorCode);
-				toast(ErrorCode.errorList.get(errorCode));
+				toast("退出失败"+ErrorCode.errorList.get(errorCode));
 			}
 		});
 

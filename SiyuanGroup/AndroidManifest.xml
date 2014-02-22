@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alumnigroup.app"
-    android:versionCode="2"
+    android:versionCode="6"
     android:versionName="1.1" >
 
     <uses-sdk
@@ -16,6 +16,7 @@
     <application
         android:name=".App"
         android:allowBackup="true"
+        android:debuggable="true"
         android:icon="@drawable/icon"
         android:label="@string/app_name"
         android:theme="@style/ActivityTheme_base" >
@@ -185,11 +186,19 @@
             android:theme="@style/AcivityTheme_dialog" >
         </activity>
         <activity
-            android:name=".acty.GroupShareCompose"
+            android:name=".acty.GroupSharePublish"
             android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".acty.GroupShareDetail"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesShareDetail"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".acty.ActivitiesSharePublish"
             android:screenOrientation="portrait" >
         </activity>
     </application>

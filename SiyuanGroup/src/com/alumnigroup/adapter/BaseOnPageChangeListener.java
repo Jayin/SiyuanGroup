@@ -2,24 +2,30 @@ package com.alumnigroup.adapter;
 
 import java.util.List;
 
-import com.alumnigroup.app.R;
-
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 
+import com.alumnigroup.app.R;
+import com.alumnigroup.widget.XListView;
+/**
+ * 即将废弃 使用 FootOnPageChangelistener来替换
+ * @author Jayin Ton
+ *
+ */
 public class BaseOnPageChangeListener implements OnPageChangeListener {
 	private List<View> btns;
 
 	public BaseOnPageChangeListener(List<View> btns){
 		this.btns = btns;
+		
 	}
 	@Override
-	public void onPageScrollStateChanged(int arg0) {
+	public void onPageScrollStateChanged(int state) {
 
 	}
 
 	@Override
-	public void onPageScrolled(int arg0, float arg1, int arg2) {
+	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
 	}
 

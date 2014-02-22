@@ -3,11 +3,13 @@ package com.alumnigroup.app.acty;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
@@ -30,9 +32,22 @@ public class Introduce extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		vgImages4Introduce = (ViewPager) _getView(R.id.acty_introduce_vg_images);
-		vgImages4Introduce.setAdapter(new ImagePagerAdapter());
-		vgImages4Introduce.setCurrentItem(0);
+//		vgImages4Introduce = (ViewPager) _getView(R.id.acty_introduce_vg_images);
+//		vgImages4Introduce.setAdapter(new ImagePagerAdapter());
+//		vgImages4Introduce.setCurrentItem(0);
+		((TextView)_getView(R.id.tv_introduce)).setText(Html.fromHtml("<p>全站会员<br>在这里你可以查看全部校友信息，看过信息后如果你对该校友感兴趣可以加为好友</p><p>全站动态<br>在这里你可以看到全站最新的动态，你也可以搜索你喜欢的动态</p><p> 校友交流区<br>你可以在这个发送自己的微博，如果你想到一个话题，你可以发起话题邀请校友一起讨论，让校友交流更具有针对性</p><p>我的空间<br>标志性的签名，个性化的标签让你的门面更有特色</p><p>圈子系统<br>寻找你的志同道合朋友</p><p>活动系统<br>增进与统一圈子的朋友感情 </p><p>商务合作<br>校友之间相互帮助，合作共赢</p>"));
+        _getView(R.id.acty_head_btn_back).setOnClickListener(this);
+	}
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.acty_head_btn_back:
+			closeActivity();
+			break;
+
+		default:
+			break;
+		}
 	}
 
 	

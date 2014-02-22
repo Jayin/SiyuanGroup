@@ -7,7 +7,10 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.alumnigroup.adapter.CommentAdapter;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -23,9 +27,12 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cocomment;
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.CommonUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.widget.CommentView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -43,6 +50,7 @@ public class BusinessDetail extends BaseActivity {
 	private BusinessAPI api;
 	private List<Cocomment> data;
 	private CocommentAdapter adatper;
+	private BroadcastReceiver mReceiver;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +58,36 @@ public class BusinessDetail extends BaseActivity {
 		setContentView(R.layout.acty_businessdetail);
 		initData();
 		initLayout();
+		openReceiver();
+	}
+	// 评论成功后添加评论条目
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals(
+						Constants.Action_Bussiness_Comment_Ok)) {
+					if (data.isEmpty())
+						tv_notify.setVisibility(View.GONE);
+					Cocomment cocomment = (Cocomment) intent
+							.getSerializableExtra("cocomment");
+					CommonUtils.reverse(data);
+					data.add(cocomment);
+					CommonUtils.reverse(data);
+					commentView.setAdapter(new CocommentAdapter(data));
+				}
+
+			}
+		};
+		registerReceiver(mReceiver, new IntentFilter(
+				Constants.Action_Bussiness_Comment_Ok));
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if (mReceiver != null)
+			unregisterReceiver(mReceiver);
 	}
 
 	@Override
@@ -74,7 +112,7 @@ public class BusinessDetail extends BaseActivity {
 
 		tv_username.setText(c.getUser().getProfile().getName());
 		tv_projectname.setText(c.getName());
-		tv_deadline.setText(CalendarUtils.getTimeFromat(c.getDeadline(),
+		tv_deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
 				CalendarUtils.TYPE_TWO));
 		tv_description.setText(c.getDescription());
 
@@ -131,7 +169,7 @@ public class BusinessDetail extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("网络异常 错误码:" + errorCode);
+				toast(ErrorCode.errorList.get(errorCode));
 			}
 		});
 		// 用户和发布者有不同的显示
@@ -157,7 +195,7 @@ public class BusinessDetail extends BaseActivity {
 			end();
 			break;
 		case R.id.btn_space:
-			//toast("to space");
+			// toast("to space");
 			break;
 		case R.id.btn_comment:
 			comment();
@@ -187,12 +225,12 @@ public class BusinessDetail extends BaseActivity {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-				toast("项目一结束");
+				toast("项目已结束");
 			}
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("结束项目失败 错误码:" + errorCode);
+				toast("结束项目失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 
@@ -211,7 +249,7 @@ public class BusinessDetail extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 错误码:" + errorCode);
+						toast("收藏失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 	}
@@ -252,7 +290,7 @@ public class BusinessDetail extends BaseActivity {
 						.findViewById(R.id.item_lv_acty_communicationdetai_posttime);
 				h.body = (TextView) convertView
 						.findViewById(R.id.item_lv_acty_communicationdetai_body);
-				h.avater = (ImageView) convertView
+				h.avatar = (ImageView) convertView
 						.findViewById(R.id.item_lv_acty_communicationdetai_avater);
 				convertView.setTag(h);
 			} else {
@@ -262,15 +300,15 @@ public class BusinessDetail extends BaseActivity {
 			h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
 					.getPosttime(), CalendarUtils.TYPE_timeline));
 			h.body.setText(data.get(position).getBody());
-			if (data.get(position).getUser().getAvatar() == null) {
+			if (data.get(position).getUser().getAvatar() != null) {
 				ImageLoader.getInstance().displayImage(
 						RestClient.BASE_URL
 								+ data.get(position).getUser().getAvatar(),
-						h.avater);
+								h.avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
 						"drawable://" + R.drawable.ic_image_load_normal,
-						iv_avatar);
+						h.avatar);
 			}
 
 			return convertView;
@@ -278,7 +316,7 @@ public class BusinessDetail extends BaseActivity {
 
 		class ViewHolder {
 			TextView name, positime, body;
-			ImageView avater;
+			ImageView avatar;
 		}
 	}
 

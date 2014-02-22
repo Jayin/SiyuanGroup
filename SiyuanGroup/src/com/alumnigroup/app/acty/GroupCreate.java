@@ -3,6 +3,7 @@ package com.alumnigroup.app.acty;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -11,8 +12,10 @@ import android.widget.TextView;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
 
@@ -106,14 +109,14 @@ public class GroupCreate extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("创建失败 错误码:" + errorCode);
+				toast("创建失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 
 	}
 
 	// 编辑更新
-	private void update(String name, String description) {
+	private void update(final String name, final String description) {
 		api.updateInfo(group.getId(), name, description,
 				new JsonResponseHandler() {
 
@@ -121,11 +124,17 @@ public class GroupCreate extends BaseActivity {
 					public void onOK(Header[] headers, JSONObject obj) {
 						toast("修改成功");
 						closeActivity();
+						//发送更新的广播
+						group.setName(name);
+						group.setDescription(description);
+						Intent intent = new Intent(Constants.Action_GroupInfo_Edit);
+						intent.putExtra("group", group);
+						sendBroadcast(intent);
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("创建失败 错误码:" + errorCode);
+						toast("修改失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 	}

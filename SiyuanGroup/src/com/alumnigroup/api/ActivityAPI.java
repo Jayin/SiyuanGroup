@@ -57,7 +57,7 @@ public class ActivityAPI {
 			params.add("name", name);
 		if (content != null)
 			params.add("content", content);
-		RestClient.get("/api/activities/find", params, responseHandler);
+		RestClient.get("/api/activities/list", params, responseHandler);
 	}
 
 	/**
@@ -185,6 +185,7 @@ public class ActivityAPI {
 	 */
 	public void updateAvatar(int id, RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
+		params.put("id", id + "");
 		RestClient.post("/api/activities/avatar/update", params,
 				responseHandler);
 	}
@@ -264,16 +265,16 @@ public class ActivityAPI {
 	/**
 	 * 获得全部的活动人员名单
 	 * 
-	 * @param limit
+	 * @param limit 总人数
 	 * @param id
 	 * @param responseHandler
 	 */
 	public void getUserListAll(int limit, int id,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("page", limit + "");
+		params.add("limit", limit + "");
 		params.add("id", id + "");
-		RestClient.post("/api/activities/userslist", params, responseHandler);
+		RestClient.get("/api/activities/userslist", params, responseHandler);
 	}
 
 	/**
@@ -337,7 +338,8 @@ public class ActivityAPI {
 			params.add("name", name);
 		if (content != null)
 			params.add("content", content);
-		RestClient.get("/api/activities/search", params, responseHandler);
+		params.add("fuzzy", "1"); 
+		RestClient.get("/api/activities/list", params, responseHandler);
 	}
     
 	/**
@@ -346,7 +348,11 @@ public class ActivityAPI {
 	 * @param ownerid
 	 * @param responseHandler
 	 */
-	public void getMyActivity(int page,int ownerid,AsyncHttpResponseHandler responseHandler) {
-          search(page, ownerid, null, null, responseHandler);
+	public void getMyActivity(int page ,AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		if(page>0)params.add("page", page+"");
+		RestClient.get("/api/activities/my", params, responseHandler);
 	}
+	
+ 
 }

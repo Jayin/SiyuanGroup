@@ -21,7 +21,7 @@ import com.alumnigroup.utils.EditTextUtils;
  * @author Jayin Ton
  * 
  */
-public class GroupShareCompose extends BaseActivity {
+public class GroupSharePublish extends BaseActivity {
 	private View btn_back, btn_post, btn_permission, btn_mention;
 	private EditText et_title, et_content;
 	private GroupShareAPI api;
@@ -31,7 +31,7 @@ public class GroupShareCompose extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_groupsharecompose);
+		setContentView(R.layout.acty_groupsharepublish);
 		initData();
 		initLayout();
 	}
@@ -96,13 +96,13 @@ public class GroupShareCompose extends BaseActivity {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								toast("发布成功");
+								toast("更新成功");
 								closeActivity();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("发布失败 "
+								toast("更新失败 "
 										+ ErrorCode.errorList.get(errorCode));
 							}
 						});

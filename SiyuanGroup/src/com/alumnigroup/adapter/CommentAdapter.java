@@ -82,4 +82,5 @@ public class CommentAdapter extends BaseAdapter {
 		TextView name, positime, body;
 		ImageView avater;
 	}
+	
 }

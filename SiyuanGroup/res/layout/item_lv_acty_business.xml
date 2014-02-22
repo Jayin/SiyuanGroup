@@ -17,7 +17,8 @@
             android:id="@+id/iv_avater"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:src="@drawable/ic_image_load_loading" />
+            style="@style/ImageView.avatar"
+         />
 
         <LinearLayout
             android:layout_width="match_parent"

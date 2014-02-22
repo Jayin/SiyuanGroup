@@ -7,21 +7,21 @@
         android:id="@+id/acty_allmember_footer_allmember"
         android:layout_width="1dp"
         android:layout_height="match_parent"
-        android:background="@color/blue_nav_bg_press"
-        android:layout_weight="1" >
+        android:layout_weight="1"
+        android:background="@color/blue_nav_bg_press" >
 
         <TextView
             style="@style/TextView.base"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="全站会员"
+            android:text="全站"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/acty_allmember_footer_myfriend"
+        android:id="@+id/acty_allmember_footer_following"
         android:layout_width="1dp"
         android:layout_height="match_parent"
         android:layout_weight="1" >
@@ -31,7 +31,23 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="我的好友"
+            android:text="关注"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/acty_allmember_footer_followers"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" >
+
+        <TextView
+            style="@style/TextView.base"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="粉丝"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </RelativeLayout>

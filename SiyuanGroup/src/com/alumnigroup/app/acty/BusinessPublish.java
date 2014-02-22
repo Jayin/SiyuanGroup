@@ -12,6 +12,7 @@ import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.EditTextUtils;
@@ -136,7 +137,7 @@ public class BusinessPublish extends BaseActivity {
 			
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("网络异常 错误码:" + errorCode);
+				toast("更新失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 		
@@ -154,7 +155,7 @@ public class BusinessPublish extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
+						toast("发布失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 		

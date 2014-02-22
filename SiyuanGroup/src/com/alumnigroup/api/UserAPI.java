@@ -138,7 +138,7 @@ public class UserAPI {
 	 */
 	public void find(RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
-		RestClient.get("/api/users/find", params, responseHandler);
+		RestClient.get("/api/users/list", params, responseHandler);
 	}
 
 	/**

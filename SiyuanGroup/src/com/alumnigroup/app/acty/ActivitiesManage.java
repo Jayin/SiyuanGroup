@@ -121,7 +121,6 @@ public class ActivitiesManage extends BaseActivity {
 				fin = new FileInputStream(f);
 				RequestParams params = new RequestParams();
 				params.put("avatar", f, "image/jpeg");
-				toast(FilePath.getImageFilePath() + "cache_face.jpg");
 				api.updateAvatar(acty.getId(), params,
 						new JsonResponseHandler() {
 							@Override
@@ -136,8 +135,7 @@ public class ActivitiesManage extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 							}
 						});
 
@@ -169,7 +167,7 @@ public class ActivitiesManage extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("结束活动失败,错误码:" + errorCode);
+				toast("结束活动失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 	}

@@ -21,7 +21,7 @@ public class IssuesAPI {
 	public void getIssueList(int page, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("page", page + "");
-		RestClient.get("/api/issues/find", params, responseHandler);
+		RestClient.get("/api/issues/list", params, responseHandler);
 	}
 
 	/**
@@ -35,12 +35,12 @@ public class IssuesAPI {
 	 */
 	public void getIssueList(RequestParams params,
 			AsyncHttpResponseHandler responseHandler) {
-		RestClient.get("/api/issues/find", params, responseHandler);
+		RestClient.get("/api/issues/list", params, responseHandler);
 	}
 
 	/**
 	 * 搜索
-	 * 
+	 * params.add("fuzzy", "1"); 启用模糊搜索
 	 * @param page
 	 *            第几页
 	 * @param userid
@@ -63,7 +63,8 @@ public class IssuesAPI {
 			params.add("title", title);
 		if (body != null && body.trim().length() > 0)
 			params.add("body", body);
-		RestClient.get("/api/issues/search", params, responseHandler);
+		params.add("fuzzy", "1");
+		RestClient.get("/api/issues/list", params, responseHandler);
 	}
 
 	/**
@@ -162,5 +163,15 @@ public class IssuesAPI {
 	 */
 	public void getUserIssue(int page,int userid,AsyncHttpResponseHandler responseHandler){
 		search(page, userid, null, null, responseHandler);
+	}
+	/**
+	 * 获得我的话题列表
+	 * @param page
+	 * @param responseHandler
+	 */
+	public void getMyIssueList(int page,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("page", page+"");
+		RestClient.get("/api/issues/my", params, responseHandler);
 	}
 }

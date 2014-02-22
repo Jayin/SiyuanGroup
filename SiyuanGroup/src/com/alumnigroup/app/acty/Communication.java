@@ -19,15 +19,18 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -46,10 +49,11 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private View btn_back, btn_post, btn_all, btn_my, btn_favourite;
 	private XListView lv_all, lv_my, lv_favourit;
 	private ViewPager viewpager;
-	private List<Issue> data_all, data_my, data_favourite;
+	private ArrayList<Issue> data_all, data_my, data_favourite;
 	private IssueAdapter adapter_all, adapter_my, adapter_favourite;
 	private int page_all = 0, page_my = 0, page_favourit = 0;
 	private IssuesAPI api;
+	private StarAPI starAPI;
 	private User user;
 
 	@Override
@@ -59,6 +63,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+
 	}
 
 	private void initController() {
@@ -81,19 +86,22 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 						if (newData_all == null) {
 							toast("网络异常 解析错误");
 						} else if (newData_all.size() == 0) {
-							toast("没有更多");
+							toast("还没有任何讨论");
+							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all = 1;
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
+							lv_all.setPullLoadEnable(true);
+							AppCache.setCommunicationAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_all.stopRefresh();
 					}
 				});
@@ -116,7 +124,8 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 						if (newData_all == null) {
 							toast("网络异常,解析错误");
 						} else if (newData_all.size() == 0) {
-							toast("没有更多了!");
+							toast("没有更多");
+							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all++;
 							data_all.addAll(newData_all);
@@ -127,7 +136,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_all.stopLoadMore();
 					}
 				});
@@ -139,7 +148,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
-				api.getUserIssue(1, user.getId(), new JsonResponseHandler() {
+				api.getMyIssueList(1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -148,19 +157,22 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 						if (newData_my == null) {
 							toast("网络异常 解析错误");
 						} else if (newData_my.size() == 0) {
-							toast("没有更多");
+							toast("还没有参与任何讨论");
+							lv_my.setPullLoadEnable(false);
 						} else {
 							page_my = 1;
 							data_my.clear();
 							data_my.addAll(newData_my);
 							adapter_my.notifyDataSetChanged();
+							lv_my.setPullLoadEnable(true);
+							AppCache.setCommunicationMy(getContext(), data_my);
 						}
 						lv_my.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+						toast(ErrorCode.errorList.get(errorCode));
 						lv_my.stopRefresh();
 					}
 				});
@@ -168,32 +180,36 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onLoadMore() {
-				api.getUserIssue(page_my + 1, user.getId(),
-						new JsonResponseHandler() {
+				if (page_my == 0) { // 因为网络原因没有加载到第一页
+					lv_my.startRefresh();
+					lv_my.stopLoadMore();
+					return;
+				}
+				api.getMyIssueList(page_my + 1, new JsonResponseHandler() {
 
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								List<Issue> newData_my = Issue
-										.create_by_jsonarray(obj.toString());
-								if (newData_my == null) {
-									toast("网络异常,解析错误");
-								} else if (newData_my.size() == 0) {
-									toast("没有更多了!");
-								} else {
-									page_my++;
-									data_my.addAll(newData_my);
-									adapter_my.notifyDataSetChanged();
-								}
-								lv_my.stopLoadMore();
-							}
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Issue> newData_my = Issue.create_by_jsonarray(obj
+								.toString());
+						if (newData_my == null) {
+							toast("网络异常,解析错误");
+						} else if (newData_my.size() == 0) {
+							toast("没有更多");
+							lv_my.setPullLoadEnable(false);
+						} else {
+							page_my++;
+							data_my.addAll(newData_my);
+							adapter_my.notifyDataSetChanged();
+						}
+						lv_my.stopLoadMore();
+					}
 
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 "
-										+ ErrorCode.errorList.get(errorCode));
-								lv_my.stopLoadMore();
-							}
-						});
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast(ErrorCode.errorList.get(errorCode));
+						lv_my.stopLoadMore();
+					}
+				});
 			}
 		});
 
@@ -201,12 +217,84 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onRefresh() {
+				starAPI.getMyStarList(1, StarAPI.Item_type_issue,
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<Issue> newData_faviour = new ArrayList<Issue>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((Issue) s.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("还没有收藏任何话题");
+										lv_favourit.setPullLoadEnable(false);
+									} else {
+										page_favourit = 1;
+										data_favourite.clear();
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+										lv_favourit.setPullLoadEnable(true);
+										AppCache.setCommunicationFavourite(getContext(), data_favourite);
+									}
+								}
+								lv_favourit.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopRefresh();
+							}
+						});
 			}
 
 			@Override
 			public void onLoadMore() {
+				if (page_favourit == 0) {
+					lv_favourit.stopLoadMore();
+					lv_favourit.startRefresh();
+					return;
+				}
+				starAPI.getMyStarList(page_favourit + 1,
+						StarAPI.Item_type_issue, new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Starring> stars = Starring
+										.create_by_jsonarray(obj.toString());
+								List<Issue> newData_faviour = new ArrayList<Issue>();
+								if (stars == null) {
+									toast("网络异常，解析错误");
+								} else {
+									for (Starring s : stars) {
+										newData_faviour.add((Issue) s.getItem());
+									}
+									if (newData_faviour.size() == 0) {
+										toast("没有更多");
+										lv_favourit.setPullLoadEnable(false);
+									} else {
+										page_favourit++;
+										data_favourite.addAll(newData_faviour);
+										adapter_favourite
+												.notifyDataSetChanged();
+									}
+								}
+								lv_favourit.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_favourit.stopLoadMore();
+							}
+						});
 			}
 		});
 		lv_all.setOnItemClickListener(this);
@@ -224,9 +312,24 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 		}
 		api = new IssuesAPI();
-		data_all = new ArrayList<Issue>();
-		data_my = new ArrayList<Issue>();
-		data_favourite = new ArrayList<Issue>();
+		starAPI = new StarAPI();
+		
+		if(AppCache.getCommunicationAll(getContext())!=null){
+			data_all  = AppCache.getCommunicationAll(getContext());
+		}else{
+			data_all = new ArrayList<Issue>();
+		}
+		if(AppCache.getCommunicationMy(getContext())!=null){
+			data_my  = AppCache.getCommunicationMy(getContext());
+		}else{
+			data_my = new ArrayList<Issue>();
+		}
+		if(AppCache.getCommunicationFavourite(getContext())!=null){
+			data_favourite  = AppCache.getCommunicationFavourite(getContext());
+		}else{
+			data_favourite = new ArrayList<Issue>();
+		}
+	 
 	}
 
 	private void initViewPager() {
@@ -244,9 +347,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		lv_favourit = (XListView) favourit
 				.findViewById(R.id.frame_acty_communication_favourite_listview);
 
-		adapter_all = new IssueAdapter(getContext(),data_all);
-		adapter_my = new IssueAdapter(getContext(),data_my);
-		adapter_favourite = new IssueAdapter(getContext(),data_favourite);
+		adapter_all = new IssueAdapter(getContext(), data_all);
+		adapter_my = new IssueAdapter(getContext(), data_my);
+		adapter_favourite = new IssueAdapter(getContext(), data_favourite);
 
 		lv_all.setAdapter(adapter_all);
 		lv_my.setAdapter(adapter_my);
@@ -256,8 +359,14 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		views.add(all);
 		views.add(myjoin);
 		views.add(favourit);
+		
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(lv_all);listviews.add(lv_my);listviews.add(lv_favourit);
+		
+		List<IssueAdapter>  adapters = new ArrayList<IssueAdapter>();
+		adapters.add(adapter_all);adapters.add(adapter_my);adapters.add(adapter_favourite);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
 	}
 
 	@Override
@@ -293,23 +402,36 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			openActivity(CommunicationPublish.class);
 			break;
 		case R.id.acty_comunication_footer_all:
-			viewpager.setCurrentItem(0, true);
+			if(viewpager.getCurrentItem()==0){
+				lv_all.startRefresh();
+			}else{
+				viewpager.setCurrentItem(0, true);
+			}
 			break;
 		case R.id.acty_comunication_footer_my:
-			viewpager.setCurrentItem(1, true);
+			if(viewpager.getCurrentItem()==1){
+				lv_my.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1, true);
+			}
 			break;
 		case R.id.acty_comunication_footer_favourite:
-			viewpager.setCurrentItem(2, true);
+			if(viewpager.getCurrentItem()==2){
+				lv_favourit.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2, true);
+			}
 			break;
 		default:
 			break;
 		}
 	}
 
-
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
+		if (position - 1 == -1)
+			return;
 		Intent intent = new Intent(this, CommunicationDetail.class);
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));
@@ -327,8 +449,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 class IssueAdapter extends BaseAdapter {
 	private List<Issue> data;
-private Context context;
-	public IssueAdapter(Context context,List<Issue> data) {
+	private Context context;
+
+	public IssueAdapter(Context context, List<Issue> data) {
 		this.data = data;
 		this.context = context;
 	}
@@ -376,8 +499,7 @@ private Context context;
 			h = (ViewHolder) convertView.getTag();
 		}
 		h.name.setText(data.get(position).getUser().getProfile().getName());
-		h.major.setText(data.get(position).getUser().getProfile()
-				.getMajor());
+		h.major.setText(data.get(position).getUser().getProfile().getMajor());
 		h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
 				.getPosttime(), CalendarUtils.TYPE_timeline));
 		h.title.setText(data.get(position).getTitle());
@@ -391,8 +513,7 @@ private Context context;
 					h.avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal,
-					h.avatar);
+					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
 		}
 
 		return convertView;

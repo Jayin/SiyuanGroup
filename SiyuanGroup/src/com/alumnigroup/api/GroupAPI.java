@@ -63,7 +63,7 @@ public class GroupAPI {
 			params.add("name", name);
 		if (page > 0)
 			params.add("page", page + "");
-		RestClient.get("/api/groups/find", params, responseHandler);
+		RestClient.get("/api/groups/list", params, responseHandler);
 	}
 
 	/**
@@ -139,7 +139,7 @@ public class GroupAPI {
 	/**
 	 * 更新圈子信息
 	 * 
-	 * @param id
+	 * @param groupid 
 	 *            圈子id
 	 * @param name
 	 *            圈子名字
@@ -148,10 +148,10 @@ public class GroupAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void updateInfo(int id, String name, String description,
+	public void updateInfo(int groupid , String name, String description,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("id", id + "");
+		params.add("groupid", groupid  + "");
 		params.add("name", name);
 		params.add("description", description);
 		RestClient.post("/api/groups/update", params, responseHandler);
@@ -215,15 +215,15 @@ public class GroupAPI {
 	}
     /**
      * 获得圈子的名单
-     * @param page 页码
+     * @param limit 圈子人数
      * @param groupid 圈子id
      * @param responseHandler
      */
-	public void getMembers(int page, int groupid,
+	public void getMembers(int limit, int groupid,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		if (page > 0)
-			params.add("page", page + "");
+		if (limit > 0)
+			params.add("page", limit + "");
 		if (groupid > 0)
 			params.add("id", groupid + "");
 		RestClient.get("/api/groups/members", params, responseHandler);

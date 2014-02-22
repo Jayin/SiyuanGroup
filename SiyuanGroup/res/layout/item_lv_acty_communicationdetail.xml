@@ -15,8 +15,8 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginLeft="8dp"
-            android:scaleType="centerInside"
-            android:src="@drawable/ic_image_load_loading" />
+           style="@style/ImageView.avatar"
+          />
 
         <TextView
             android:id="@+id/item_lv_acty_communicationdetai_posttime"

@@ -81,6 +81,11 @@ public class Following implements Serializable {
 	public void setFollowee(User followee) {
 		this.followee = followee;
 	}
+
+	@Override
+	public String toString() {
+		return "Following [remark=" + remark + ", followee=" + followee + "]";
+	}
 	
 	
 }

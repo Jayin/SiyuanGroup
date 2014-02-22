@@ -5,32 +5,28 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
-
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
-
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.Userships;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.L;
-import com.alumnigroup.widget.PullAndLoadListView;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -41,13 +37,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class ActivitiesUserShip extends BaseActivity {
 	private View btn_back, btn_accept;
-	private PullAndLoadListView lv;
+	private XListView lv;
 	private MActivity acty;
 	private List<Integer> selected;// 0:not accept ;1:accepting 2:accepted
 	private List<Userships> data;
 	private UserShipAdapter adapter;
 	private ActivityAPI api;
-	private int page;
+	private int page = 0;
 	private ProgressBar pb;
 
 	@Override
@@ -61,8 +57,10 @@ public class ActivitiesUserShip extends BaseActivity {
 
 	private void initController() {
 		lv.setAdapter(adapter);
-		lv.setOnRefreshListener(new OnRefreshListener() {
-
+		lv.setPullLoadEnable(true);
+		lv.setPullRefreshEnable(true);
+		lv.setXListViewListener(new IXListViewListener() {
+			
 			@Override
 			public void onRefresh() {
 				api.getUserList(1, acty.getId(), new JsonResponseHandler() {
@@ -75,58 +73,60 @@ public class ActivitiesUserShip extends BaseActivity {
 							toast("网络异常 解析错误");
 						} else if (newData.size() == 0) {
 							toast("还没有人申请参加");
+							lv.setPullLoadEnable(false);
 						} else {
 							page = 1;
 							data.clear();
 							data.addAll(newData);
 							increaseList(newData);
 							adapter.notifyDataSetChanged();
+							lv.setPullLoadEnable(true);
 						}
-						lv.setCanRefresh(false, false);
-						lv.onRefreshComplete();
-						lv.setCanLoadMore(true);
+					lv.stopRefresh();
 
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("网络异常 错误码:" + errorCode);
-						lv.onRefreshComplete();
+						toast(ErrorCode.errorList.get(errorCode));
+						lv.stopRefresh();
 					}
 				});
+				
 			}
-		});
-		lv.setOnLoadMoreListener(new OnLoadMoreListener() {
-
+			
 			@Override
 			public void onLoadMore() {
+				if(page==0){
+					lv.stopLoadMore();
+					lv.startRefresh();
+					return;
+				}
 				api.getUserList(page + 1, acty.getId(),
 						new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								boolean canLoadMore = true;
 								List<Userships> newData = Userships
 										.create_by_jsonarray(obj.toString());
 								if (newData == null) {
 									toast("网络异常 解析错误");
 								} else if (newData.size() == 0) {
 									toast("没有更多");
+									lv.setPullLoadEnable(false);
 								} else {
 									page++;
 									data.addAll(newData);
 									increaseList(newData);
 									adapter.notifyDataSetChanged();
 								}
-								lv.onLoadMoreComplete();
-								if (!canLoadMore)
-									lv.setCanLoadMore(false);
+								lv.stopLoadMore();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("网络异常 错误码:" + errorCode);
-								lv.onLoadMoreComplete();
+								toast(ErrorCode.errorList.get(errorCode));
+								lv.stopLoadMore();
 							}
 						});
 			}
@@ -161,8 +161,6 @@ public class ActivitiesUserShip extends BaseActivity {
 										.setVisibility(View.GONE);
 								(view.findViewById(R.id.tv_status))
 										.setVisibility(View.VISIBLE);
-
-								// ((ImageView)view.findViewById(R.id.iv_ischeck)).setBackgroundResource(R.drawable.ic_check_green_cheked);
 							}
 
 							@Override
@@ -174,20 +172,10 @@ public class ActivitiesUserShip extends BaseActivity {
 										.setVisibility(View.VISIBLE);
 							}
 						});
-				// selected.set(position - 1, !selected.get(position - 1));
-				// if (((ImageView) view.findViewById(R.id.iv_ischeck))
-				// .getVisibility() != View.VISIBLE) {
-				// return;
-				// }
-				// if (selected.get(position - 1)) {
-				// ((ImageView) view.findViewById(R.id.iv_ischeck))
-				// .setBackgroundResource(R.drawable.ic_check_green_cheked);
-				// } else {
-				// ((ImageView) view.findViewById(R.id.iv_ischeck))
-				// .setBackgroundResource(R.drawable.ic_check_green_uncheked);
-				// }
 			}
 		});
+		
+		lv.startRefresh();
 	}
 
 	// 根据新数据来增长队列
@@ -196,17 +184,6 @@ public class ActivitiesUserShip extends BaseActivity {
 			selected.add(0);
 		}
 	}
-
-	// // 获得勾选的列表
-	// private ArrayList<Userships> wrapSelect() {
-	// ArrayList<Userships> result = new ArrayList<Userships>();
-	// for (int i = 0; i < selected.size(); i++) {
-	// if (selected.get(i) && data.get(i) != null) {
-	// result.add(data.get(i));
-	// }
-	// }
-	// return result;
-	// }
 
 	@Override
 	protected void initData() {
@@ -225,7 +202,7 @@ public class ActivitiesUserShip extends BaseActivity {
 	protected void initLayout() {
 		btn_accept = _getView(R.id.btn_accept);
 		btn_back = _getView(R.id.acty_head_btn_back);
-		lv = (PullAndLoadListView) _getView(R.id.lv_listview);
+		lv = (XListView) _getView(R.id.lv_listview);
 
 		btn_accept.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
@@ -235,21 +212,6 @@ public class ActivitiesUserShip extends BaseActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_accept:
-			// if (getIntent() != null) {
-			// Intent intent = getIntent();
-			// if (intent != null) {
-			// // 有选择的才算ok
-			// ArrayList<Userships> result = wrapSelect();
-			// if (result.size() > 0) {
-			// intent.putExtra("result", result);
-			// setResult(RESULT_OK, intent);
-			// } else {
-			// setResult(RESULT_CANCELED);
-			// }
-			// }
-			// } else {
-			// setResult(RESULT_CANCELED);
-			// }
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_back:
@@ -331,16 +293,6 @@ public class ActivitiesUserShip extends BaseActivity {
 					h.pb.setVisibility(View.VISIBLE);
 					h.isCheck.setVisibility(View.GONE);
 				}
-
-				// h.status.setVisibility(View.GONE);
-				// h.isCheck.setVisibility(View.VISIBLE);
-				// if (selected.get(position)) {
-				// h.isCheck
-				// .setBackgroundResource(R.drawable.ic_check_green_cheked);
-				// } else {
-				// h.isCheck
-				// .setBackgroundResource(R.drawable.ic_check_green_uncheked);
-				// }
 			}
 
 			return convertView;

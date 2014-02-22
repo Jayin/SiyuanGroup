@@ -3,16 +3,20 @@ package com.alumnigroup.app.acty;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
 import com.alumnigroup.api.BusinessAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.Cocomment;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
 
@@ -65,7 +69,7 @@ public class BusinessComment extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.acty_head_btn_post:
-			String body = EditTextUtils.getTextTrim(et_content);
+			final String body = EditTextUtils.getTextTrim(et_content);
 			if (body == null || StringUtils.isEmpty(body)) {
 				toast("还是写点东西吧！");
 				return;
@@ -80,11 +84,19 @@ public class BusinessComment extends BaseActivity {
 				public void onOK(Header[] headers, JSONObject obj) {
 					 toast("发布成功");
                      closeActivity();
+                     //发送广播通知更新
+                     Cocomment cocomment = new Cocomment();
+                     cocomment.setBody(body);
+                     cocomment.setPosttime(System.currentTimeMillis());
+                     cocomment.setUser(AppInfo.getUser(getContext()));
+                     Intent intent = new Intent(Constants.Action_Bussiness_Comment_Ok);
+                     intent.putExtra("cocomment", cocomment);
+                     sendBroadcast(intent);
 				}
 				
 				@Override
 				public void onFaild(int errorType, int errorCode) {
-					toast("网络异常 错误代码:"+ErrorCode.errorList.get(errorCode));
+					toast("发布失败 "+ErrorCode.errorList.get(errorCode));
 				}
 			});
 			break;

@@ -14,6 +14,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 
 public class CommunicationPublish extends BaseActivity {
@@ -89,13 +90,13 @@ public class CommunicationPublish extends BaseActivity {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								toast("发布成功");
+								toast("更新成功");
 								closeActivity();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast("发布失败 "
+								toast("更新失败 "
 										+ ErrorCode.errorList.get(errorCode));
 							}
 						});

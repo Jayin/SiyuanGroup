@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +28,8 @@ import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.CommonUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.CommentView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -49,13 +54,39 @@ public class CommunicationDetail extends BaseActivity {
 	private IssuesAPI api;
 	private User user;
 	private View vistor, owner;
-
+	private BroadcastReceiver mReceiver;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_communicationdetail);
 		initData();
 		initLayout();
+		openReceiver();
+	}
+    //评论成功后添加评论条目
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver(){@Override
+		public void onReceive(Context context, Intent intent) {
+			if(intent.getAction().equals(Constants.Action_Issue_Comment_Ok)){
+				if(data_commet.isEmpty())tv_notify.setVisibility(View.GONE);
+				Comment comment = (Comment)intent.getSerializableExtra("comment");
+				CommonUtils.reverse(data_commet);
+				data_commet.add(comment);
+				CommonUtils.reverse(data_commet);
+//				adapter_commet.notifyDataSetChanged();
+				lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
+				
+			}
+			
+		}};
+		registerReceiver(mReceiver, new IntentFilter(Constants.Action_Issue_Comment_Ok));
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mReceiver!=null)unregisterReceiver(mReceiver);
 	}
 
 	@Override
@@ -123,45 +154,37 @@ public class CommunicationDetail extends BaseActivity {
 		lv_comment = (CommentView) _getView(R.id.item_lv_acty_comminication_lv_comment);
 		adapter_commet = new CommentAdapter(getContext(),data_commet);
 		lv_comment.setAdapter(adapter_commet);
-
-		api.view(issue.getId(), new AsyncHttpResponseHandler() {
+		api.view(issue.getId(), new JsonResponseHandler() {
 			@Override
 			public void onStart() {
 				tv_notify.setText("评论加载中....");
 				tv_notify.setVisibility(View.VISIBLE);
 			}
-
 			@Override
-			public void onFailure(int arg0, Header[] arg1, byte[] arg2,
-					Throwable arg3) {
-				toast("网络异常 错误码:" + arg0);
+			public void onOK(Header[] headers, JSONObject obj) {
 				tv_notify.setVisibility(View.GONE);
-			}
-
-			@Override
-			public void onSuccess(int statusCode, Header[] header, byte[] data) {
-				tv_notify.setVisibility(View.GONE);
-				String json = new String(data);
-				if (JsonUtils.isOK(json)) {
-					List<Comment> newData_comment = Comment
-							.create_by_jsonarray(json);
-					if (newData_comment != null && newData_comment.size() > 0) {
-						data_commet.addAll(newData_comment);
-						lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
-					} else {
-						if (newData_comment == null) {
-							tv_notify.setVisibility(View.VISIBLE);
-							tv_notify.setText("网络异常,解析错误");
-							toast("网络异常,解析错误");
-						} else if (newData_comment.size() == 0) {
-							toast("还没有人评论!");
-							tv_notify.setText("还没有人评论!");
-							tv_notify.setVisibility(View.VISIBLE);
-						}
-					}
+				List<Comment> newData_comment = Comment
+						.create_by_jsonarray(obj.toString());
+				if (newData_comment != null && newData_comment.size() > 0) {
+					data_commet.addAll(newData_comment);
+					lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
 				} else {
-					toast("Error:" + JsonUtils.getErrorString(json));
+					if (newData_comment == null) {
+						tv_notify.setVisibility(View.VISIBLE);
+						tv_notify.setText("网络异常,解析错误");
+						toast("网络异常,解析错误");
+					} else if (newData_comment.size() == 0) {
+						toast("还没有人评论!");
+						tv_notify.setText("还没有人评论!");
+						tv_notify.setVisibility(View.VISIBLE);
+					}
 				}
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast(ErrorCode.errorList.get(errorCode));
+				tv_notify.setVisibility(View.GONE);
 			}
 		});
 	}
@@ -174,7 +197,14 @@ public class CommunicationDetail extends BaseActivity {
 			break;
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
-			// toast("to personal space");
+			Intent intent = null;
+			if(issue.getUser().getId()==AppInfo.getUser(getContext()).getId()){
+				intent=new Intent(this, SpacePersonal.class);
+			}else{
+				intent=new Intent(this, SpaceOther.class);
+			}
+			intent.putExtra("user", issue.getUser());
+			openActivity(intent);
 			break;
 		case R.id.acty_communicationdetail_footer_share:
 			// 分享到圈子
@@ -238,7 +268,7 @@ public class CommunicationDetail extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 错误码:" + errorCode);
+						toast("收藏失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
 
