@@ -45,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="活动分享"
+            android:text="活动讨论"
             android:textSize="14sp" />
     </RelativeLayout>
 

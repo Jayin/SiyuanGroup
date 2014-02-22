@@ -259,7 +259,7 @@ public class ActivityAPI {
 		RequestParams params = new RequestParams();
 		params.add("page", page + "");
 		params.add("id", id + "");
-		RestClient.post("/api/activities/userslist", params, responseHandler);
+		RestClient.get("/api/activities/userslist", params, responseHandler);
 	}
 
 	/**
