@@ -30,7 +30,7 @@ public class GroupCreate extends BaseActivity {
 	private EditText et_name, et_description;
 	private GroupAPI api;
 	private MGroup group = null;
-	private TextView tv_title; // 创建圈子/编辑去啊你
+	private TextView tv_title; // 创建圈子/编辑
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

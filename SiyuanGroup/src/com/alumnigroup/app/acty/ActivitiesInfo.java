@@ -269,9 +269,8 @@ public class ActivitiesInfo extends BaseActivity {
 		tv_site = (TextView) info.findViewById(R.id.tv_address);
 		tv_description = (TextView) info.findViewById(R.id.tv_description);
 		tv_duration = (TextView) info.findViewById(R.id.tv_duration);
-		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(
-				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
-
+		tv_name = (TextView)info.findViewById(R.id.frame_acty_activityinfo_introduce_name);
+		
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
 		
 		if(acty.getAvatar()!=null){
@@ -280,6 +279,10 @@ public class ActivitiesInfo extends BaseActivity {
 			ImageLoader.getInstance().displayImage(
 					"drawable://"+R.drawable.ic_image_load_normal, iv_avatar);
 		}
+		
+		tv_name.setText(acty.getName());
+		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(
+				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 		tv_starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
 				CalendarUtils.TYPE_TWO));
 		tv_site.setText(acty.getSite());

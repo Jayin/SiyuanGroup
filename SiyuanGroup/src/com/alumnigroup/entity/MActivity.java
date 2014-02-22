@@ -261,6 +261,12 @@ public class MActivity implements Serializable {
 		public void setName(String name) {
 			this.name = name;
 		}
+
+		@Override
+		public String toString() {
+			return "Status [id=" + id + ", name=" + name + "]";
+		}
+		
 	}
 
 	/**
@@ -311,5 +317,25 @@ public class MActivity implements Serializable {
 			this.isaccepted = isaccepted;
 		}
 
+		@Override
+		public String toString() {
+			return "UserShip [id=" + id + ", userid=" + userid
+					+ ", activityid=" + activityid + ", isaccepted="
+					+ isaccepted + "]";
+		}
+
 	}
+
+	@Override
+	public String toString() {
+		return "MActivity [id=" + id + ", ownerid=" + ownerid + ", groupid="
+				+ groupid + ", content=" + content + ", maxnum=" + maxnum
+				+ ", createtime=" + createtime + ", starttime=" + starttime
+				+ ", duration=" + duration + ", status=" + status
+				+ ", statusid=" + statusid + ", money=" + money + ", avatar="
+				+ avatar + ", name=" + name + ", site=" + site + ", userships="
+				+ userships + ", user=" + user + ", numUsership=" + numUsership
+				+ ", regdeadline=" + regdeadline + "]";
+	}
+	
 }

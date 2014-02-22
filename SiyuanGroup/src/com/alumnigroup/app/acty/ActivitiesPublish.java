@@ -58,6 +58,8 @@ public class ActivitiesPublish extends BaseActivity {
 		if (getSerializableExtra("activity") != null) {
 			acty = (MActivity) getSerializableExtra("activity");
 			hasParams = true;
+			starttime = acty.getStarttime();
+			regdeadline= acty.getRegdeadline();
 		}
 		if (!hasParams) {
 			closeActivity();
@@ -175,7 +177,7 @@ public class ActivitiesPublish extends BaseActivity {
 
 	private void update(int actyid, int maxnum, int duration, int statusid,
 			long money, String name, String content, String site) {
-		api.update(actyid, maxnum, duration, regdeadline, statusid, money,
+		api.update(actyid, maxnum, starttime,duration, regdeadline, statusid, money,
 				name, content, site, new JsonResponseHandler() {
 
 					@Override

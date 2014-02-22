@@ -129,19 +129,22 @@ public class ActivityAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void update(int id, int maxnum, long duration, long regdeadline,
+	public void update(int id, int maxnum,long starttime, long duration, long regdeadline,
 			int statusid, long money, String name, String content, String site,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("id", id + "");
 		params.add("maxnum", maxnum + "");
+		params.add("starttime",CalendarUtils.getTimeFromat(starttime,
+				CalendarUtils.TYPE_THIRD));
 		params.add("duration", duration + "");
 		params.add("statusid", statusid + "");
 		params.add("money", money + "");
 		params.add("name", name);
 		params.add("content", content);
 		params.add("site", site);
-		params.add("regdeadline", regdeadline + "");
+		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
+				CalendarUtils.TYPE_THIRD));
 		RestClient.post("/api/activities/update", params, responseHandler);
 	}
 
