@@ -75,11 +75,11 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 	private void initController() {
 		lv_allmember.setPullLoadEnable(true);
-		lv_allmember.setPullLoadEnable(true);
+		lv_allmember.setPullRefreshEnable(true);
 		lv_following.setPullLoadEnable(true);
-		lv_following.setPullLoadEnable(true);
+		lv_following.setPullRefreshEnable(true);
 		lv_followers.setPullLoadEnable(true);
-		lv_followers.setPullLoadEnable(true);
+		lv_followers.setPullRefreshEnable(true);
 
 		lv_allmember.setXListViewListener(new IXListViewListener() {
 

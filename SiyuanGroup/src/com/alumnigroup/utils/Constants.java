@@ -18,4 +18,6 @@ public class Constants {
 	public static final String Action_Receive_VersionInfo = "Receive_VersionInfo"; 
 	/** 圈子信息修改*/
 	public static final String Action_GroupInfo_Edit = "GroupInfo_Edit";
+	/** 活动分享修改*/
+	public static final String Action_ActivityShare_Edit  = "ActivityShare_Edit";
 }

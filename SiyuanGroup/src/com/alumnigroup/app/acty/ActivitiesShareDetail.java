@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -66,7 +67,7 @@ public class ActivitiesShareDetail extends BaseActivity {
 		openReceiver();
 	}
 
-	// 评论成功后添加评论条目
+	// 评论成功后添加评论条目 & 修改圈子信息
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
 			@Override
@@ -80,16 +81,29 @@ public class ActivitiesShareDetail extends BaseActivity {
 					CommonUtils.reverse(data_commet);
 					data_commet.add(comment);
 					CommonUtils.reverse(data_commet);
+					issue.setNumComments(data_commet.size());//增加评论数
 					// adapter_commet.notifyDataSetChanged();
 					lv_comment.setAdapter(new CommentAdapter(getContext(),
 							data_commet));
 
 				}
-
+				if (intent.getAction().equals(
+						Constants.Action_ActivityShare_Edit)) {
+					Issue mIssue = (Issue) intent
+							.getSerializableExtra("issue");
+					tv_username
+							.setText(mIssue.getUser().getProfile().getName());
+					tv_time.setText(CalendarUtils.getTimeFromat(
+							mIssue.getPosttime(), CalendarUtils.TYPE_timeline));
+					tv_title.setText(mIssue.getTitle());
+					tv_body.setText(mIssue.getBody());
+				}
 			}
 		};
-		registerReceiver(mReceiver, new IntentFilter(
-				Constants.Action_Issue_Comment_Ok));
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Issue_Comment_Ok);
+		filter.addAction(Constants.Action_ActivityShare_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	@Override

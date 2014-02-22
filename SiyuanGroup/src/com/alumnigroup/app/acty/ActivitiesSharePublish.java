@@ -3,6 +3,7 @@ package com.alumnigroup.app.acty;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 /**
  * 活动分享发布
@@ -25,7 +27,7 @@ public class ActivitiesSharePublish extends BaseActivity {
 	private View btn_back, btn_post, btn_permission, btn_mention;
 	private EditText et_title, et_content;
 	private ActivityShareAPI api;
-	private Issue issue;
+	private Issue mIssue;
     private MActivity activity; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,7 @@ public class ActivitiesSharePublish extends BaseActivity {
 
 	@Override
 	protected void initData() {
-		issue = (Issue) getSerializableExtra("issue");
+		mIssue = (Issue) getSerializableExtra("issue");
 		activity = (MActivity) getSerializableExtra("activity");
 		api = new ActivityShareAPI();
 	}
@@ -51,9 +53,9 @@ public class ActivitiesSharePublish extends BaseActivity {
 		et_title = (EditText) _getView(R.id.et_title);
 		et_content = (EditText) _getView(R.id.et_content);
 
-		if (issue != null) {
-			et_title.setText(issue.getTitle());
-			et_content.setText(issue.getBody());
+		if (mIssue != null) {
+			et_title.setText(mIssue.getTitle());
+			et_content.setText(mIssue.getBody());
 		}
 
 		btn_back.setOnClickListener(this);
@@ -75,36 +77,10 @@ public class ActivitiesSharePublish extends BaseActivity {
 			if (title == null || title.equals("")) {
 				toast("标题不能为空!");
 			}
-			if (issue == null) { // 发布
-				api.postShare(activity.getId(),title, body, new JsonResponseHandler() {
-
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						toast("发布成功");
-						closeActivity();
-					}
-
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-						toast("发布失败 " + ErrorCode.errorList.get(errorCode));
-					}
-				});
+			if (mIssue == null) { // 发布
+				 post(title,body);
 			} else { // 更新
-				api.updateShare(activity.getId(),issue.getId(), title, body,
-						new JsonResponseHandler() {
-
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								toast("更新成功");
-								closeActivity();
-							}
-
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast("更新失败 "
-										+ ErrorCode.errorList.get(errorCode));
-							}
-						});
+				updateShare(title,body);
 			}
 			break;
 		case R.id.permission:
@@ -119,5 +95,52 @@ public class ActivitiesSharePublish extends BaseActivity {
 		default:
 			break;
 		}
+	}
+
+	private void post(final String title,final String body) {
+		api.postShare(activity.getId(),title, body, new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("发布成功");
+				closeActivity();
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("发布失败 " + ErrorCode.errorList.get(errorCode));
+			}
+		});
+		
+	}
+
+	private void updateShare(final String title,final String body) {
+		api.updateShare(activity.getId(),mIssue.getId(), title, body,
+				new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("更新成功");
+						closeActivity();
+						//发送修改广播
+						Intent intent = new Intent(Constants.Action_ActivityShare_Edit);
+					    Issue issue = new Issue();
+					    issue.setBody(body);
+					    issue.setId(mIssue.getId());
+					    issue.setNumComments(mIssue.getNumComments());
+					    issue.setPosttime(System.currentTimeMillis());
+					    issue.setTitle(title);
+					    issue.setUser(mIssue.getUser());
+					    intent.putExtra("issue", issue);
+					    sendBroadcast(intent);
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("更新失败 "
+								+ ErrorCode.errorList.get(errorCode));
+					}
+				});
+		
 	}
 }
