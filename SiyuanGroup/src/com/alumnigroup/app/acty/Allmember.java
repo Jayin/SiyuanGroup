@@ -9,11 +9,9 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
@@ -24,16 +22,11 @@ import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.acty.Group.GroupAdapter;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Follower;
 import com.alumnigroup.entity.Following;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.widget.MenuDialog;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 
@@ -312,7 +305,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		lv_followers.setOnItemClickListener(this);
 		lv_allmember.startRefresh();
 	}
-
+	
 	@Override
 	protected void initData() {
 		mUser = AppInfo.getUser(getContext());

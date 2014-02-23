@@ -6,20 +6,14 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.DynamicAdapter;
@@ -27,14 +21,11 @@ import com.alumnigroup.api.DynamicAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
-import com.alumnigroup.widget.PullAndLoadListView;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
-import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.alumnigroup.widget.XListView;
+import com.alumnigroup.widget.XListView.IXListViewListener;
 
 /**
  * 全部动态界面
@@ -53,22 +44,6 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 */
 	private TextView tvHeadTitle;
 	/**
-	 * 改变动态类型，移动的游标
-	 */
-	private ImageView ivCursor;
-	/**
-	 * 动画图片偏移量
-	 */
-	private int offset = 0;
-	/**
-	 * 当前页卡编号
-	 */
-	private int currIndex = 0;
-	/**
-	 * 游标图片宽度
-	 */
-	private int bmpWidth;
-	/**
 	 * 全部动态和好友动态页面
 	 */
 	private View allDynamic, friendDynamic;
@@ -86,7 +61,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	/**
 	 * 页卡的PullAndLoadListView
 	 */
-	private PullAndLoadListView lvAllDynamic, lvFriendDynamic;
+	private XListView lvAllDynamic, lvFriendDynamic;
 	/**
 	 * 页卡的数据 -- listview
 	 */
@@ -106,6 +81,11 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	private int page_all = 1;
 	private int page_myfriend = 1;
 	private DataPool dp;
+	
+	/**
+	 * 我的好友开始时候刷新了
+	 */
+	private boolean isRe = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +171,6 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		 * 主要就是初始化数据，四大步骤
 		 */
 		initHead();
-		initCursor();
 		initDynamicName();
 		initViewPager();
 		initDynamicDate();
@@ -216,27 +195,11 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	}
 
 	/**
-	 * 初始化动画，这个就是页卡滑动时，下面的横线也滑动的效果，在这里需要计算一些数据
-	 */
-	private void initCursor() {
-		ivCursor = (ImageView) findViewById(R.id.cursor);
-		bmpWidth = BitmapFactory.decodeResource(getResources(),
-				R.drawable.alldynamic_cursor).getWidth();// 获取图片宽度
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
-		int screenW = dm.widthPixels;// 获取分辨率宽度
-		offset = (screenW / 2 - bmpWidth) / 2;// 计算偏移量
-		Matrix matrix = new Matrix();
-		matrix.postTranslate(offset, 0);
-		ivCursor.setImageMatrix(matrix);// 设置动画初始位置
-	}
-
-	/**
 	 * 初始化头标, 头标也有点击事件
 	 */
 	private void initDynamicName() {
-		btnAllDynamic = _getView(R.id.acty_alldynamic_alldynamic_name);
-		btnFriendDynamic = _getView(R.id.acty_alldynamic_frienddynamic_name);
+		btnAllDynamic = _getView(R.id.acty_alldynamic_footer_alldynamic);
+		btnFriendDynamic = _getView(R.id.acty_alldynamic_footer_friend_dynamic);
 
 		btnAllDynamic.setOnClickListener(this);
 		btnFriendDynamic.setOnClickListener(this);
@@ -255,7 +218,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		LayoutInflater inflater = getLayoutInflater();
 		allDynamic = inflater.inflate(R.layout.item_lv_acty_alldynamic_content,
 				null);
-		lvAllDynamic = (PullAndLoadListView) allDynamic
+		lvAllDynamic = (XListView) allDynamic
 				.findViewById(R.id.item_lv_alldynamic_content);
 
 		/**
@@ -263,7 +226,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		 */
 		friendDynamic = inflater.inflate(
 				R.layout.item_lv_acty_frienddynamic_content, null);
-		lvFriendDynamic = (PullAndLoadListView) friendDynamic
+		lvFriendDynamic = (XListView) friendDynamic
 				.findViewById(R.id.item_lv_frienddynamic_content);
 
 		alDynamicView.add(allDynamic);
@@ -284,8 +247,6 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 */
 	class DynamicOnPageChangeListener implements OnPageChangeListener {
 
-		int one = offset * 2 + bmpWidth;// 页卡1 -> 页卡2 偏移量
-
 		public void onPageScrollStateChanged(int arg0) {
 
 		}
@@ -294,35 +255,26 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 		}
 
-		public void onPageSelected(int arg0) {
-			/*
-			 * 两种方法，这个是一种，下面还有一种，显然这个比较麻烦 Animation animation = null; switch
-			 * (arg0) { case 0: if (currIndex == 1) { animation = new
-			 * TranslateAnimation(one, 0, 0, 0); } else if (currIndex == 2) {
-			 * animation = new TranslateAnimation(two, 0, 0, 0); } break; case
-			 * 1: if (currIndex == 0) { animation = new
-			 * TranslateAnimation(offset, one, 0, 0); } else if (currIndex == 2)
-			 * { animation = new TranslateAnimation(two, one, 0, 0); } break;
-			 * case 2: if (currIndex == 0) { animation = new
-			 * TranslateAnimation(offset, two, 0, 0); } else if (currIndex == 1)
-			 * { animation = new TranslateAnimation(one, two, 0, 0); } break;
-			 * 
-			 * }
-			 */
-			Animation animation = new TranslateAnimation(one * currIndex, one
-					* arg0, 0, 0);// 显然这个比较简洁，只有一行代码。
-			currIndex = arg0;
-			if(arg0==0){
-				tvHeadTitle.setText("全站动态");
-			}
-			if(arg0 == 1){
-				tvHeadTitle.setText("好友动态");
-			}
-			animation.setFillAfter(true);// True:图片停在动画结束位置
-			animation.setDuration(300);
-			ivCursor.startAnimation(animation);
+		/**
+		 * 滑动变为另外一个View 的时候，改变footer
+		 */
+		public void onPageSelected(int position) {
+			changeFooter(position);
 		}
 
+	}
+
+	private void changeFooter(int position) {
+		if (position == 0) {
+			btnAllDynamic.setBackgroundResource(R.color.blue_nav_bg_press);
+			btnFriendDynamic.setBackgroundResource(R.color.blue_nav_bg_nomal);
+			tvHeadTitle.setText("全站动态");
+		}
+		if (position == 1) {
+			btnAllDynamic.setBackgroundResource(R.color.blue_nav_bg_nomal);
+			btnFriendDynamic.setBackgroundResource(R.color.blue_nav_bg_press);
+			tvHeadTitle.setText("好友动态");
+		}
 	}
 
 	/**
@@ -364,12 +316,18 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	public void onClick(View v) {
 		int id = v.getId();
 		switch (id) {
-		case R.id.acty_alldynamic_alldynamic_name:
+		case R.id.acty_alldynamic_footer_alldynamic:
 			vpDynamicContent.setCurrentItem(0);
+			changeFooter(0);
 			break;
 
-		case R.id.acty_alldynamic_frienddynamic_name:
+		case R.id.acty_alldynamic_footer_friend_dynamic:
+			if(!isRe){
+				lvFriendDynamic.startRefresh();
+				isRe = !isRe;
+			}
 			vpDynamicContent.setCurrentItem(1);
+			changeFooter(1);
 			break;
 
 		case R.id.acty_head_btn_back:
@@ -385,183 +343,164 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 为下拉刷新、加载更多绑定控制器
 	 */
 	private void initController() {
-		lvAllDynamic.setOnRefreshListener(new OnRefreshListener() {
+		lvAllDynamic.setPullLoadEnable(true);
+		lvFriendDynamic.setPullLoadEnable(true);
+
+		lvAllDynamic.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
-				// page=1?
-				api.getAll(1, new AsyncHttpResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
-						lvAllDynamic.onRefreshComplete();
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						// 还要判断是否有error_code
-						String json = new String(data);// jsonarray
-						if (JsonUtils.isOK(json)) {
-							List<Dynamic> newData_all = Dynamic
-									.create_by_jsonarray(json);
-							if (newData_all != null) {
-								page_all = 1;
-								alAllDynamicContent.clear();
-								alAllDynamicContent.addAll(newData_all);
-								saveAllData2SP(newData_all);
-								aptAllDynamic.notifyDataSetChanged();
-							}
-						} else {
-							toast("网络异常 ");
-						}
-						lvAllDynamic.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
-						lvAllDynamic.onRefreshComplete();
-					}
-				});
-			}
-		});
-
-		lvAllDynamic.setOnLoadMoreListener(new OnLoadMoreListener() {
-
-			@Override
-			public void onLoadMore() {
-				api.getAll(page_all + 1, new AsyncHttpResponseHandler() {
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
-						lvAllDynamic.onLoadMoreComplete();
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-
-						// L.i(new String(data));
-						String json = new String(data);// json array
-						if (JsonUtils.isOK(json)) {
-							List<Dynamic> newData_allmember = Dynamic
-									.create_by_jsonarray(json);
-							if (newData_allmember != null
-									&& newData_allmember.size() > 0) {
-								page_all++;
-								alAllDynamicContent.addAll(newData_allmember);
-								aptAllDynamic.notifyDataSetChanged();
-							} else {
-								if (newData_allmember == null) {
-									toast("网络异常,解析错误");
-								} else if (newData_allmember.size() == 0) {
-									toast("没有更多了!");
-									lvAllDynamic.setCanLoadMore(false);
-								}
-							}
-						} else {
-							toast("网络异常 ");
-						}
-						lvAllDynamic.onLoadMoreComplete();
-
-					}
-				});
-			}
-		});
-
-		lvFriendDynamic.setOnRefreshListener(new OnRefreshListener() {
-
-			@Override
-			public void onRefresh() {
-				api.getMyFollowing(1, new JsonResponseHandler() {
+				api.getAll(1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						// TODO Auto-generated method stub
-						List<Dynamic> newData_myfriend = Dynamic
-								.create_by_jsonarray(obj);
-						if (newData_myfriend != null) {
-							page_myfriend = 1;
-							alFriendDynamicContent.clear();
-							alFriendDynamicContent.addAll(newData_myfriend);
-							saveMyFriendData2SP(newData_myfriend);
-							aptFriendDynamic.notifyDataSetChanged();
-						}
-						lvFriendDynamic.setCanLoadMore(true);// 因为下拉到最低的时候，再下拉刷新，相当于继续可以下拉刷新
-						lvFriendDynamic.onRefreshComplete();
+						List<Dynamic> newData_alldynamic = Dynamic
+								.create_by_jsonarray(obj.toString());
+						if (newData_alldynamic == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_alldynamic.size() == 0) {
+							toast("还没有任何动态");
+							lvAllDynamic.setPullLoadEnable(false);
+						} else {
 
+							page_all = 1;
+							alAllDynamicContent.clear();
+							alAllDynamicContent.addAll(newData_alldynamic);
+							saveAllData2SP(newData_alldynamic);
+							aptAllDynamic.notifyDataSetChanged();
+
+							lvAllDynamic.setPullLoadEnable(true);
+						}
+						lvAllDynamic.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						// TODO Auto-generated method stub
-						toast("网络异常 错误码:" + errorCode);
-						lvFriendDynamic.onRefreshComplete();
+						toast(ErrorCode.errorList.get(errorCode));
+						lvAllDynamic.stopRefresh();
 					}
 				});
-			}
-		});
 
-		lvFriendDynamic.setOnLoadMoreListener(new OnLoadMoreListener() {
+			}
 
 			@Override
 			public void onLoadMore() {
-				api.getMyFollowing(page_myfriend + 1,
-						new AsyncHttpResponseHandler() {
 
-							@Override
-							public void onFailure(int statusCode,
-									Header[] headers, byte[] data, Throwable err) {
-								toast("网络异常 错误码:" + statusCode);
-								if (data != null)
-									L.i(new String(data));
-								if (err != null)
-									L.i(err.toString());
-								lvFriendDynamic.onLoadMoreComplete();
-							}
+				if (page_all == 0) {
+					lvAllDynamic.stopLoadMore();
+					lvAllDynamic.startRefresh();
+					return;
+				}
+				api.getAll(page_all + 1, new JsonResponseHandler() {
 
-							@Override
-							public void onSuccess(int statusCode,
-									Header[] headers, byte[] data) {
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Dynamic> newData_alldynamic = Dynamic
+								.create_by_jsonarray(obj.toString());
+						if (newData_alldynamic == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_alldynamic.size() == 0) {
+							toast("没有更多");
+							lvAllDynamic.setPullLoadEnable(false);
+						} else {
 
-								// L.i(new String(data));
-								String json = new String(data);// json array
-								if (JsonUtils.isOK(json)) {
-									List<Dynamic> newData_myFriend = Dynamic
-											.create_by_jsonarray(json);
-									if (newData_myFriend != null
-											&& newData_myFriend.size() > 0) {
-										page_myfriend++;
-										alFriendDynamicContent
-												.addAll(newData_myFriend);
-										aptFriendDynamic.notifyDataSetChanged();
-									} else {
-										if (newData_myFriend == null) {
-											toast("网络异常");
-										} else if (newData_myFriend.size() == 0) {
-											toast("没有更多了!");
-											lvFriendDynamic
-													.setCanLoadMore(false);
-										}
-									}
-								} else {
-									toast("网络异常 ");
-								}
-								lvFriendDynamic.onLoadMoreComplete();
+							page_all = 1;
+							alAllDynamicContent.addAll(newData_alldynamic);
+							aptAllDynamic.notifyDataSetChanged();
+						}
+						lvAllDynamic.stopLoadMore();
+					}
 
-							}
-						});
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast(ErrorCode.errorList.get(errorCode));
+						lvAllDynamic.stopLoadMore();
+					}
+				});
+
 			}
 		});
 
+		lvFriendDynamic.setXListViewListener(new IXListViewListener() {
+
+			@Override
+			public void onRefresh() {
+
+				api.getMyFollowing(1, new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Dynamic> newData_alldynamic = Dynamic
+								.create_by_jsonarray(obj.toString());
+						if (newData_alldynamic == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_alldynamic.size() == 0) {
+							toast("还没有任何动态");
+							lvFriendDynamic.setPullLoadEnable(false);
+						} else {
+
+							page_myfriend = 1;
+							alFriendDynamicContent.clear();
+							alFriendDynamicContent.addAll(newData_alldynamic);
+							saveMyFriendData2SP(newData_alldynamic);
+							aptFriendDynamic.notifyDataSetChanged();
+
+							lvFriendDynamic.setPullLoadEnable(true);
+						}
+						lvFriendDynamic.stopRefresh();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast(ErrorCode.errorList.get(errorCode));
+						lvFriendDynamic.stopRefresh();
+					}
+				});
+
+			}
+
+			@Override
+			public void onLoadMore() {
+
+				if (page_myfriend == 0) {
+					lvFriendDynamic.stopLoadMore();
+					lvFriendDynamic.startRefresh();
+					return;
+				}
+				api.getMyFollowing(page_myfriend + 1,
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Dynamic> newData_alldynamic = Dynamic
+										.create_by_jsonarray(obj.toString());
+								if (newData_alldynamic == null) {
+									toast("网络异常，解析错误");
+								} else if (newData_alldynamic.size() == 0) {
+									toast("没有更多");
+									lvFriendDynamic.setPullLoadEnable(false);
+								} else {
+
+									page_myfriend = 1;
+									alFriendDynamicContent
+											.addAll(newData_alldynamic);
+									aptFriendDynamic.notifyDataSetChanged();
+								}
+								lvFriendDynamic.stopLoadMore();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lvFriendDynamic.stopLoadMore();
+							}
+						});
+
+			}
+		});
+		
+		lvAllDynamic.startRefresh();
 	}
 
 }

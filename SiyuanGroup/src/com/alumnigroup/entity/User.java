@@ -67,7 +67,16 @@ public class User implements Serializable {
 	public User() {
 
 	}
+	/** 是否关注 1：关注 0：还没有关注 **/
+	private int isfollowed;
 
+	public int getIsfollowed() {
+		return isfollowed;
+	}
+
+	public void setIsfollowed(int isfollowed) {
+		this.isfollowed = isfollowed;
+	}
 	/** 用户id **/
 	private int id;
 	/** 用户名(登录) */
