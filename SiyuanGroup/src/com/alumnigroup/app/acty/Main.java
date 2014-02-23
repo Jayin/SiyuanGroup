@@ -1,14 +1,15 @@
 package com.alumnigroup.app.acty;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
@@ -17,9 +18,6 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.utils.L;
-import com.alumnigroup.widget.ADView;
-
 
 /**
  * 主界面
@@ -35,15 +33,11 @@ public class Main extends BaseActivity implements OnClickListener {
 	private int width = 0, height = 0;
 	private DataPool dp;
 
-	private View btn_Message, btn_Setting, btn_OneSpace, btn_allMember,
-			btn_communication, btn_activities, btn_group, acty_business,
-			acty_allactivity;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_main);
-		dp = new DataPool(DataPool.SP_Name_User,this);
+		dp = new DataPool(DataPool.SP_Name_User, this);
 		initData();
 		initLayout();
 		checkVerison();
@@ -65,37 +59,29 @@ public class Main extends BaseActivity implements OnClickListener {
 	protected void initLayout() {
 		adapteScreent();
 
-		btn_OneSpace = _getView(R.id.frame_main_one_myspace);
-		btn_OneSpace.setOnClickListener(this);
+		_getView(R.id.frame_main_one_myspace).setOnClickListener(this);
 
-		btn_Setting = _getView(R.id.frame_main_one_setting);
-		btn_Setting.setOnClickListener(this);
+		_getView(R.id.frame_main_one_setting).setOnClickListener(this);
 
-		btn_Message = _getView(R.id.frame_main_one_message);
-		btn_Message.setOnClickListener(this);
+		_getView(R.id.frame_main_one_message).setOnClickListener(this);
 
-		btn_allMember = _getView(R.id.frame_main_one_allmember);
-		btn_allMember.setOnClickListener(this);
+		_getView(R.id.frame_main_one_allmember).setOnClickListener(this);
 
-		btn_communication = _getView(R.id.frame_main_one_communication);
-		btn_communication.setOnClickListener(this);
+		_getView(R.id.frame_main_one_communication).setOnClickListener(this);
 
-		btn_activities = _getView(R.id.frame_main_one_activities);
-		btn_activities.setOnClickListener(this);
+		_getView(R.id.frame_main_one_activities).setOnClickListener(this);
 
-		btn_group = _getView(R.id.frame_main_one_group);
-		btn_group.setOnClickListener(this);
+		_getView(R.id.frame_main_one_group).setOnClickListener(this);
 
-		acty_business = _getView(R.id.frame_main_one_business);
-		acty_business.setOnClickListener(this);
+		_getView(R.id.frame_main_one_business).setOnClickListener(this);
 
-		acty_allactivity = _getView(R.id.frame_main_one_allactivity);
-		acty_allactivity.setOnClickListener(this);
+		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
 
 		initWebView();
 	}
 
 	// 初始化广告栏
+	@SuppressLint("SetJavaScriptEnabled")
 	private void initWebView() {
 		webview = (WebView) _getView(R.id.acty_main_webview);
 		WebSettings webSettings = webview.getSettings();
@@ -112,7 +98,6 @@ public class Main extends BaseActivity implements OnClickListener {
 
 			@Override
 			public boolean shouldOverrideUrlLoading(WebView view, String url) {
-				// toast("shouldOverrideUrlLoading-->"+url);
 				// 自行处理点击事件！
 				Intent intent = new Intent(Main.this, Browser.class);
 				intent.putExtra("url", url);
@@ -124,39 +109,40 @@ public class Main extends BaseActivity implements OnClickListener {
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) {
 				view.setVisibility(View.INVISIBLE);
-				L.i("failingUrl-->" + failingUrl);
-				L.i("errorCode-->" + errorCode);
 
 			}
 		});
-
+		webview.setWebChromeClient(new WebChromeClient() {
+			@Override
+			public void onProgressChanged(WebView view, int newProgress) {
+				if (newProgress == 100) {
+					webview.setVisibility(View.VISIBLE);
+				} else {
+					webview.setVisibility(View.INVISIBLE);
+				}
+			}
+		});
 		webview.loadUrl(RestClient.BASE_URL + "/ad/index.html");
-
 	}
 
 	// 适配屏幕
 	private void adapteScreent() {
-
 		content = (LinearLayout) _getView(R.id.acty_main_content_one);
 		parent_content = (LinearLayout) _getView(R.id.acty_main_content);
 		android.view.ViewGroup.LayoutParams params = content.getLayoutParams();
 		params.height = width;
-
 		content.setLayoutParams(params);
 	}
 
 	@Override
 	public void onClick(View v) {
-		Intent intent = new Intent();
 		switch (v.getId()) {
 		case R.id.frame_main_one_myspace:
 			openActivity(SpacePersonal.class);
 			break;
-
 		case R.id.frame_main_one_setting:
 			openActivity(Setting.class);
 			break;
-
 		case R.id.frame_main_one_message:
 			openActivity(MessageCenter.class);
 			break;
@@ -175,7 +161,6 @@ public class Main extends BaseActivity implements OnClickListener {
 		case R.id.frame_main_one_business:
 			openActivity(Business.class);
 			break;
-
 		case R.id.frame_main_one_allactivity:
 			openActivity(Alldynamic.class);
 			break;
