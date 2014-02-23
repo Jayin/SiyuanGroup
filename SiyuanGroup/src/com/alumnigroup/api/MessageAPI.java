@@ -69,13 +69,23 @@ public class MessageAPI {
 		RestClient.post("/api/messages/markread", params, responseHandler);
 	}
 	/**
-	 * 收消息列表
-	 * @param limit 请求书
+	 * 根据请求返回书获取收消息列表
+	 * @param limit 请求返回数
 	 * @param responseHandler
 	 */
-	public void getReceiedMessageList(int limit,AsyncHttpResponseHandler responseHandler){
+	public void getReceiedMessageListByLimit(int limit,AsyncHttpResponseHandler responseHandler){
 		RequestParams params =new RequestParams();
 		params.add("limit", limit+"");
+		RestClient.get("/api/messages/receivelist", params, responseHandler);
+	}
+	/**
+	 * 根据页码获取消息列表
+	 * @param page 页码
+	 * @param responseHandler
+	 */
+	public void getReceiedMessageListByPage(int page,AsyncHttpResponseHandler responseHandler){
+		RequestParams params =new RequestParams();
+		params.add("page", page+"");
 		RestClient.get("/api/messages/receivelist", params, responseHandler);
 	}
 	 /**

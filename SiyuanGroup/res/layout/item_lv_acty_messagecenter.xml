@@ -2,20 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" 
-  >
+    android:orientation="vertical" android:background="@drawable/btn_item_whit2grey" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="4dp"
-        android:orientation="horizontal" android:layout_marginBottom="4dp">
+        android:orientation="horizontal" >
 
         <ImageView
-            android:id="@+id/imageView1"
-            style="@style/ImageView.avatar"  />
+            android:id="@+id/iv_avatar"
+            style="@style/ImageView.avatar" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -29,27 +29,33 @@
                 android:orientation="horizontal" >
 
                 <TextView
-                    android:id="@+id/textView1"
+                    android:id="@+id/tv_username"
                     style="@style/TextView.black"
                     android:layout_weight="1"
                     android:text="Jayin Ton" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/tv_time"
                     style="@style/TextView.black"
-                    android:textColor="@color/grey_lv_two"
-                    android:text="1-30" />
+                    android:text="1-30"
+                    android:textSize="12sp"
+                    android:textColor="@color/grey_lv_two" />
             </LinearLayout>
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tv_content"
                 style="@style/TextView.black"
                 android:layout_marginTop="6dp"
+                android:singleLine="true"
                 android:text="双核手机就是流弊。。。"
-                 android:textColor="@color/grey_lv_forth"
+                android:textColor="@color/grey_lv_forth"
                 android:textSize="14sp" />
         </LinearLayout>
     </LinearLayout>
-<ImageView android:layout_width="match_parent"
-            android:layout_height="1dp" android:background="@drawable/ic_line_1"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
 </LinearLayout>

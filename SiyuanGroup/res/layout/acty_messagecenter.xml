@@ -4,10 +4,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <include layout="@layout/acty_message_header" />
+    <include layout="@layout/acty_messagecenter_header" />
 
     <com.alumnigroup.widget.XListView
-        android:id="@+id/acty_message_lv_content"
+        android:id="@+id/lv_messages"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
