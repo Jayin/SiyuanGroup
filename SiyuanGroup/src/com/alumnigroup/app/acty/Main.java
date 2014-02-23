@@ -1,7 +1,10 @@
 package com.alumnigroup.app.acty;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,10 +13,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.CoreService;
+import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
@@ -32,6 +37,8 @@ public class Main extends BaseActivity implements OnClickListener {
 	private LinearLayout parent_content;
 	private int width = 0, height = 0;
 	private DataPool dp;
+	private BroadcastReceiver mRecevier;
+	private TextView tv_unreadCount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +48,39 @@ public class Main extends BaseActivity implements OnClickListener {
 		initData();
 		initLayout();
 		checkVerison();
+		openReceiver();
+		test();
+		
+	}
+    private void test() {
+    	Intent service  = new Intent(Constants.Action_To_Get_Unread);
+    	service.setClass(getContext(), CoreService.class);
+    	startService(service);
+	}
+	//接收到
+	private void openReceiver() {
+		mRecevier = new MainRecevier();
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Receive_UnreadCount);
+		registerReceiver(mRecevier, filter);
+	}
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mRecevier!=null){
+			unregisterReceiver(mRecevier);
+		}
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		if(MessageCache.getUnreadCount(getContext())==0){
+			tv_unreadCount.setVisibility(View.INVISIBLE);
+		}else{
+			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())+"");
+			tv_unreadCount.setVisibility(View.VISIBLE);
+		}
 	}
 
 	private void checkVerison() {
@@ -76,7 +116,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		_getView(R.id.frame_main_one_business).setOnClickListener(this);
 
 		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
-
+		tv_unreadCount =(TextView) _getView(R.id.tv_unreadcount);
 		initWebView();
 	}
 
@@ -169,4 +209,13 @@ public class Main extends BaseActivity implements OnClickListener {
 		}
 	}
 
+	class MainRecevier extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+           if(intent.getAction().equals(Constants.Action_Receive_UnreadCount)){// got unread count
+        	   tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())+"");
+        	   tv_unreadCount.setVisibility(View.VISIBLE);
+           }
+		}
+	}
 }

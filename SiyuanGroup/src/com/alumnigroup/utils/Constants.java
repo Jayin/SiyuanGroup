@@ -10,10 +10,10 @@ public class Constants {
 	/** 服务Action */
 	/** 检测新版本 */
 	public static final String Action_checkVersion = "check_version";
-	/** 取出未读消息 */
-	public static final String Action_Get_Unread = "Get_Unread";
- 	/** 得到未读消息 */
- 	public static final String Action_receiver = "Get_Unread";
+	/** 去取未读消息数量 */
+	public static final String Action_To_Get_Unread = "To_Get_Unread";
+ 	/** 得到未读消息数目 */
+ 	public static final String Action_Receive_UnreadCount = "Receive_UnreadCount";
 	
 	
 	// 广播Action 
@@ -27,4 +27,5 @@ public class Constants {
 	public static final String Action_GroupInfo_Edit = "GroupInfo_Edit";
 	/** 活动分享修改*/
 	public static final String Action_ActivityShare_Edit  = "ActivityShare_Edit";
+
 }

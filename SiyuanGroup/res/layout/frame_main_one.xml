@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" android:layout_margin="8dp">
+    android:layout_margin="8dp"
+    android:orientation="vertical" >
 
     <LinearLayout
         style="@style/LinearLayout"
@@ -181,6 +182,20 @@
         <RelativeLayout
             android:id="@+id/frame_main_one_message"
             style="@style/RelativeLayout.frame_main_item" >
+
+            <TextView
+                android:id="@+id/tv_unreadcount"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="22+" 
+                android:textSize="12sp"
+                android:textColor="@color/white"
+                android:background="@drawable/tv_round_red"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

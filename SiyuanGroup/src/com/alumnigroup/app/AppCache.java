@@ -43,19 +43,16 @@ public class AppCache {
 	public static final String Key_Group_all = "Group_all";
 	public static final String Key_Group_my = "Group_my";
 	public static final String Key_Group_favourite = "Group_favourite";
-	// 消息
-	public static final String Key_Messages_Reveive = "Messages_Reveive"; // 收信息列表
-	public static final String Key_Messages_Send = "Messages_Send"; // 发送信息列表
 
 	private static DataPool getDataPool(Context context) {
 		return new DataPool(Cache_Name, context);
 	}
 
-	private static Serializable get(Context context, String key) {
+	public static Serializable get(Context context, String key) {
 		return getDataPool(context).get(key);
 	}
 
-	private static boolean save(Context context, String key, Serializable value) {
+	public static boolean save(Context context, String key, Serializable value) {
 		DataPool dp = getDataPool(context);
 		return dp.put(key, value);
 	}
@@ -228,16 +225,4 @@ public class AppCache {
 		save(context, Key_Group_my, value);
 	}
 
-	/** 获取收信息列表 */
-	@SuppressWarnings("unchecked")
-	public static ArrayList<MMessage> getReceiveMessages(Context context) {
-		return (ArrayList<MMessage>) get(context, Key_Messages_Reveive) == null ? new ArrayList<MMessage>()
-				: (ArrayList<MMessage>) get(context, Key_Messages_Reveive);
-	}
-
-	/** 获取发送信息列表 */
-	public static void setReceiveMessages(Context context,
-			ArrayList<MMessage> value) {
-		save(context, Key_Messages_Reveive, value);
-	}
 }

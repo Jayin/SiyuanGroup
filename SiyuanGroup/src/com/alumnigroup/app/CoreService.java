@@ -1,6 +1,5 @@
 package com.alumnigroup.app;
 
-import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.json.JSONException;
@@ -18,7 +17,6 @@ import com.alumnigroup.api.MessageAPI;
 import com.alumnigroup.api.VersionAPI;
 import com.alumnigroup.app.acty.AppUpdate;
 import com.alumnigroup.entity.ErrorCode;
-import com.alumnigroup.entity.MMessage;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
@@ -43,11 +41,16 @@ public class CoreService extends Service {
 		super.onCreate();
 		mReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
-				startService(intent);
+				L.i("CoreService-->onReceive-->"+intent.getAction());
+				if(intent!=null && context!=null){
+					intent.setClass(context, CoreService.class);
+					startService(intent);
+				}
+				
 			};
 		};
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(Constants.Action_Get_Unread);// 获取未读消息
+		filter.addAction(Constants.Action_To_Get_Unread);// 去获取未读消息数目
 		registerReceiver(mReceiver, filter);
 	}
 
@@ -56,16 +59,31 @@ public class CoreService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		if (intent != null) {
 			String action = intent.getAction();
+			Runnable runnable = null;
+			L.i("onStartCommand-->"+action);
 			if (Constants.Action_checkVersion.equals(action)) {
-				checkVersion();// 版本检测
-			} else if (Constants.Action_Get_Unread.equals(action)) {
-				getUnread(); // 获取未读消息
+				runnable = new Runnable() {
+					@Override
+					public void run() {
+						checkVersion();// 版本检测
+						
+					}
+				};
+			} else if (Constants.Action_To_Get_Unread.equals(action)) {
+				runnable = new Runnable() {
+					@Override
+					public void run() {
+						getUnread(); // 获取未读消息数目
+					}
+				};
 			}
+			new Thread(runnable).start();
 		}
 		return Service.START_STICKY;
 	}
 
 	protected void getUnread() {
+	
 		final MessageAPI api = new MessageAPI();
 		api.getUnreadCount(new JsonResponseHandler() {
 
@@ -79,27 +97,31 @@ public class CoreService extends Service {
 				}
 				final int mCount = count;
 				// send broadcast after getting all messages
-				if (count > 0) {
-					api.getReceiedMessageList(count, new JsonResponseHandler() {
-
-						@Override
-						public void onOK(Header[] headers, JSONObject obj) {
-							ArrayList<MMessage> new_messages = MMessage
-									.create_by_jsonarray(obj.toString());
-							ArrayList<MMessage> cache_messages= AppCache.getReceiveMessages(getApplicationContext());
-							cache_messages.addAll(new_messages);
-							AppCache.setReceiveMessages(getApplicationContext(), cache_messages);
-							Intent intent = new Intent(Constants.Action_Get_Unread);
-							intent.putExtra("count", mCount);
-							sendBroadcast(intent);
-						}
-
-						@Override
-						public void onFaild(int errorType, int errorCode) {
-							L.e("获取消息错误," + ErrorCode.errorList.get(errorCode));
-						}
-					});
-				}
+				int unreadCount = MessageCache.getUnreadCount(getApplicationContext());
+				MessageCache.setUnreadCount(getApplicationContext(), unreadCount+count);
+				Intent intent = new Intent(Constants.Action_Receive_UnreadCount);
+				intent.putExtra("count", mCount);
+				sendBroadcast(intent);
+				L.i("getUnread-->"+count);
+//				if (count > 0) {
+//					api.getReceiedMessageList(count, new JsonResponseHandler() {
+//
+//						@Override
+//						public void onOK(Header[] headers, JSONObject obj) {
+//							ArrayList<MMessage> new_messages = MMessage
+//									.create_by_jsonarray(obj.toString());
+//							ArrayList<MMessage> cache_messages= MessageCache.getReceiveMessages(getApplicationContext());
+//							cache_messages.addAll(new_messages);
+//							MessageCache.setReceiveMessages(getApplicationContext(), cache_messages);
+//						
+//						}
+//
+//						@Override
+//						public void onFaild(int errorType, int errorCode) {
+//							L.e("获取消息错误," + ErrorCode.errorList.get(errorCode));
+//						}
+//					});
+//				}
 			}
 
 			@Override
