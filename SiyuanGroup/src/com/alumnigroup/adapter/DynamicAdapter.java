@@ -13,9 +13,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.R;
 import com.alumnigroup.app.acty.SpaceOther;
+import com.alumnigroup.app.acty.SpacePersonal;
 import com.alumnigroup.entity.Dynamic;
+import com.alumnigroup.entity.User;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -95,6 +98,15 @@ public class DynamicAdapter extends BaseAdapter {
 
 		@Override
 		public void onClick(View v) {
+			/**
+			 * 如果是自己就进自己的空间，不然就进别人的空间
+			 */
+			User user = dynamics.get(position).getUser();
+			if(user.getId()==AppInfo.getUser(context).getId()){
+				Intent intent = new Intent(context,SpacePersonal.class);
+				context.startActivity(intent);
+				return;
+			}
 			Intent intent = new Intent(context,SpaceOther.class);
 			intent.putExtra("user", dynamics.get(position).getUser());
 			context.startActivity(intent);

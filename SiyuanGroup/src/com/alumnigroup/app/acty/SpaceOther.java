@@ -16,6 +16,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.DynamicAPI;
 import com.alumnigroup.api.FollowshipAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
@@ -126,6 +127,11 @@ public class SpaceOther extends BaseActivity {
 
 		btnFollow = _getView(R.id.acty_space_other_top_btn_add_friend);
 		tvBtnFollowContent = (TextView) _getView(R.id.acty_space_other_top_btn_add_friend_content);
+		if(user.getIsfollowed()==1){
+			tvBtnFollowContent.setText("取消关注");
+		}else{
+			tvBtnFollowContent.setText("关 注");
+		}
 		btnFollow.setOnClickListener(this);
 
 		/**
@@ -426,6 +432,8 @@ public class SpaceOther extends BaseActivity {
 						String json = new String(data);
 						if (JsonUtils.isOK(json)) {
 							tvBtnFollowContent.setText("取消关注");
+							user.setIsfollowed(1);
+							AppCache.changeAllmemberAll(SpaceOther.this, user);
 						} else {
 							toast("关注失败");
 							tvBtnFollowContent.setText("关 注");
@@ -456,6 +464,7 @@ public class SpaceOther extends BaseActivity {
 				String json = new String(data);
 				if (JsonUtils.isOK(json)) {
 					tvBtnFollowContent.setText("关 注");
+					AppCache.removeAllmemberFollowing(SpaceOther.this, user);
 				} else {
 					toast("取消失败");
 					tvBtnFollowContent.setText("取消关注");

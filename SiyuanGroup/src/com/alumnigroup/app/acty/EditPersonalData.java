@@ -1,5 +1,6 @@
 package com.alumnigroup.app.acty;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.http.Header;
@@ -23,6 +24,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.BitmapUtils;
+import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -128,7 +130,7 @@ public class EditPersonalData extends BaseActivity {
 			break;
 
 		case R.id.acty_edit_personaldata_iv_portrait:
-			final CharSequence[] items = { "相册", "拍照" };
+			final CharSequence[] items = { "相册" };
 			AlertDialog dlg = new AlertDialog.Builder(EditPersonalData.this)
 					.setTitle("更新头像")
 					.setItems(items, new DialogInterface.OnClickListener() {
@@ -141,7 +143,16 @@ public class EditPersonalData extends BaseActivity {
 								Intent getImage = new Intent(
 										Intent.ACTION_GET_CONTENT);
 								getImage.addCategory(Intent.CATEGORY_OPENABLE);
-								getImage.setType("image/jpeg");
+								String path = FilePath.getImageFilePath() + "cache_space_back.jpg";
+								File protraitFile = new File(path);
+								Uri uri = Uri.fromFile(protraitFile);
+								getImage.setType("image/*");
+								getImage.putExtra("output", uri);
+								getImage.putExtra("crop", "true");
+								getImage.putExtra("aspectX", 1);
+								getImage.putExtra("aspectY", 1);
+								getImage.putExtra("outputX", 100);
+								getImage.putExtra("outputY", 100);
 								startActivityForResult(getImage, 0);
 							}
 						}
@@ -194,7 +205,6 @@ public class EditPersonalData extends BaseActivity {
 						if (JsonUtils.isOK(json)) {
 							toast("更新完成");
 							updateSPUser();
-							finish();
 						} else {
 							toast("更新失败");
 						}
@@ -268,6 +278,7 @@ public class EditPersonalData extends BaseActivity {
 					@Override
 					public void onFinish() {
 						dialog.cancel();
+						finish();
 					}
 
 					public void onSuccess(int statusCode, Header[] headers,

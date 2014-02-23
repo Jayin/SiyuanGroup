@@ -72,15 +72,37 @@ public class AppCache {
 		save(context, Key_Allmember_all, value);
 	}
 
-	/** 获得全站会员follow关注列表 */
+	/**
+	 * 改变全站会员的一个用户数据
+	 */
+	public static void changeAllmemberAll(Context context,User change){
+		ArrayList<User> all = getAllmemberAll(context);
+		for(int i=0;i<all.size();i++){
+			if(all.get(i).getId()==change.getId()){
+				all.set(i, change);
+			}
+		}
+		setAllmemberAll(context, all);
+	}
+	/**获得全站会员follow关注列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<User> getAllmemberFollowing(Context context) {
 		return (ArrayList<User>) get(context, Key_Allmember_following);
 	}
 
-	/** 保存全站会员follow关注列表 */
-	public static void setAllmemberFollowing(Context context,
-			ArrayList<User> value) {
+	/** 删除关注的一个**/
+	public static void removeAllmemberFollowing(Context context,User remove){
+		ArrayList<User> followers = getAllmemberFollowers(context);
+		for(int i=0;i<followers.size();i++){
+			if(followers.get(i).getId()==remove.getId()){
+				followers.remove(i);
+			}
+		}
+		setAllmemberFollowing(context, followers);
+	}
+	
+	/** 保存全站会员follow关注列表*/
+	public static void setAllmemberFollowing(Context context,ArrayList<User> value){
 		save(context, Key_Allmember_following, value);
 	}
 
