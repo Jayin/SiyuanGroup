@@ -57,69 +57,74 @@ public class MessageCenter extends BaseActivity {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-                       ArrayList<MMessage> newData = MMessage.create_by_jsonarray(obj.toString());
-                       if(newData==null){
-                    	   toast("网络异常 解析错误");
-                       }else if(newData.size()==0){
-                    	   toast("没有消息");
-                       }else{
-                    	   page=1;
-                    	   data_message.clear();
-                    	   data_message.addAll(newData);
-                    	   adapter.notifyDataSetChanged();
-                       }
-                       lv_message.stopRefresh();
+						ArrayList<MMessage> newData = MMessage
+								.create_by_jsonarray(obj.toString());
+						if (newData == null) {
+							toast("网络异常 解析错误");
+						} else if (newData.size() == 0) {
+							toast("没有消息");
+						} else {
+							page = 1;
+							data_message.clear();
+							data_message.addAll(newData);
+							adapter.notifyDataSetChanged();
+						}
+						lv_message.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-                         toast(ErrorCode.errorList.get(errorCode));
-                         lv_message.stopRefresh();
+						toast(ErrorCode.errorList.get(errorCode));
+						lv_message.stopRefresh();
 					}
 				});
 			}
 
 			@Override
 			public void onLoadMore() {
-				if(page==0){
+				if (page == 0) {
 					lv_message.stopLoadMore();
 					lv_message.startRefresh();
 					return;
 				}
-				api.getReceiedMessageListByPage(page+1, new JsonResponseHandler() {
+				api.getReceiedMessageListByPage(page + 1,
+						new JsonResponseHandler() {
 
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						   ArrayList<MMessage> newData = MMessage.create_by_jsonarray(obj.toString());
-	                       if(newData==null){
-	                    	   toast("网络异常 解析错误");
-	                       }else if(newData.size()==0){
-	                    	   toast("没有消息");
-	                       }else{
-	                    	   page++;
-	                    	   data_message.addAll(newData);
-	                    	   adapter.notifyDataSetChanged();
-	                       }
-	                       lv_message.stopLoadMore();
-					}
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								ArrayList<MMessage> newData = MMessage
+										.create_by_jsonarray(obj.toString());
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("没有消息");
+								} else {
+									page++;
+									data_message.addAll(newData);
+									adapter.notifyDataSetChanged();
+								}
+								lv_message.stopLoadMore();
+							}
 
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-						  toast(ErrorCode.errorList.get(errorCode));
-	                         lv_message.stopLoadMore();
-					}
-				});
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_message.stopLoadMore();
+							}
+						});
 			}
 		});
-		
+
 		lv_message.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-                 Intent intent = new Intent(getContext(),MessageDetail.class);
-                 intent.putExtra("message", data_message.get(position-1));
-                 openActivity(intent);
+				if (position - 1 == -1)
+					return;
+				Intent intent = new Intent(getContext(), MessageDetail.class);
+				intent.putExtra("message", data_message.get(position - 1));
+				openActivity(intent);
 			}
 		});
 		lv_message.startRefresh();
@@ -186,8 +191,8 @@ public class MessageCenter extends BaseActivity {
 			}
 			User u = data_message.get(position).getSender();
 			if (u.getAvatar() != null) {
-				ImageLoader.getInstance().displayImage(RestClient.BASE_URL+u.getAvatar(),
-						h.iv_avatar);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + u.getAvatar(), h.iv_avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
 						"drawalbe://" + R.drawable.ic_image_load_normal,

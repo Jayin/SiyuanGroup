@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="horizontal" >
+
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        style="@style/ProgressBar.black"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginRight="10dp"
+         android:layout_marginLeft="10dp"
+        android:visibility="invisible" />
 
     <RelativeLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
         android:layout_marginTop="6dp"
         android:layout_weight="1"
         android:background="@drawable/bg_chat_right" >
@@ -16,6 +25,7 @@
             android:id="@+id/tv_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxWidth="200dp"
             android:text="好饿啊 ！！好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊"
             android:textColor="@color/black"
             android:textSize="16sp" />

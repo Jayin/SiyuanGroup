@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@android:color/transparent"
     android:orientation="horizontal" >
 
@@ -13,19 +13,28 @@
         android:layout_margin="6dp" />
 
     <RelativeLayout
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
         android:background="@drawable/bg_chat_left" >
 
         <TextView
             android:id="@+id/tv_content"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="好饿啊 ！！好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊"
+            android:maxWidth="200dp"
+            android:text="好饿好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊啊"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </RelativeLayout>
+
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        style="@style/ProgressBar.black"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="10dp"
+        android:visibility="invisible" />
 
 </LinearLayout>
