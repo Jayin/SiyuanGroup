@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/transparent"
     android:orientation="horizontal" >
 
     <ImageView
@@ -14,16 +15,17 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
         android:layout_marginTop="6dp"
-        android:background="@drawable/bg_chat_left" android:layout_marginRight="20dp">
+        android:background="@drawable/bg_chat_left" >
 
         <TextView
-             android:id="@+id/tv_content"
+            android:id="@+id/tv_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="好饿啊 ！！好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            android:text="好饿啊 ！！好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊" />
+            android:textSize="16sp" />
     </RelativeLayout>
 
 </LinearLayout>

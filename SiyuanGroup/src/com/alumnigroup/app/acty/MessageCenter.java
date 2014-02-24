@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,8 +67,8 @@ public class MessageCenter extends BaseActivity {
                     	   data_message.clear();
                     	   data_message.addAll(newData);
                     	   adapter.notifyDataSetChanged();
-                    	   lv_message.stopRefresh();
                        }
+                       lv_message.stopRefresh();
 					}
 
 					@Override
@@ -98,8 +99,8 @@ public class MessageCenter extends BaseActivity {
 	                    	   page++;
 	                    	   data_message.addAll(newData);
 	                    	   adapter.notifyDataSetChanged();
-	                    	   lv_message.stopLoadMore();
 	                       }
+	                       lv_message.stopLoadMore();
 					}
 
 					@Override
@@ -116,7 +117,9 @@ public class MessageCenter extends BaseActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-                 				
+                 Intent intent = new Intent(getContext(),MessageDetail.class);
+                 intent.putExtra("message", data_message.get(position-1));
+                 openActivity(intent);
 			}
 		});
 		lv_message.startRefresh();

@@ -143,4 +143,12 @@ public class MMessage implements Serializable {
 		this.receiver = receiver;
 	}
 
+	@Override
+	public String toString() {
+		return "MMessage [id=" + id + ", title=" + title + ", isread=" + isread
+				+ ", isreplied=" + isreplied + ", sendtime=" + sendtime
+				+ ", sender=" + sender + ", receiver=" + receiver + ", body="
+				+ body + "]";
+	}
+
 }

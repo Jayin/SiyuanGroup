@@ -179,6 +179,7 @@
         <item name="android:divider">@null</item>
         <item name="android:cacheColorHint">#00000000</item>
         <item name="android:scrollbarStyle">outsideOverlay</item>
+        <item name="android:listSelector">@android:color/transparent</item>
     </style>
 
     <!-- allmember -->

@@ -12,7 +12,7 @@
 
         <RelativeLayout
             android:id="@+id/acty_communicationdetail_footer_share"
-            android:layout_width="1dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="0"
             android:background="@drawable/item_listview_bg_whitetogrey" >
