@@ -238,7 +238,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 								if (newData == null) {
 									toast("网络异常 解析错误");
 								} else if (newData.size() == 0) {
-									toast("你还没有关注任何人");
+									toast("还没有粉丝");
 									lv_followers.setPullLoadEnable(false);
 								} else {
 									page_followers = 1;
@@ -419,7 +419,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 			break;
 		case R.id.acty_allmember_footer_followers:
 			if (viewpager.getCurrentItem() == 2) {
-				lv_following.startRefresh();
+				lv_followers.startRefresh();
 			} else {
 				viewpager.setCurrentItem(2);
 			}

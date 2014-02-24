@@ -39,6 +39,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	private DataPool dp;
 	private BroadcastReceiver mRecevier;
 	private TextView tv_unreadCount;
+	private boolean isError = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,35 +51,39 @@ public class Main extends BaseActivity implements OnClickListener {
 		checkVerison();
 		openReceiver();
 		test();
-		
+
 	}
-    private void test() {
-    	Intent service  = new Intent(Constants.Action_To_Get_Unread);
-    	service.setClass(getContext(), CoreService.class);
-    	startService(service);
+
+	private void test() {
+		Intent service = new Intent(Constants.Action_To_Get_Unread);
+		service.setClass(getContext(), CoreService.class);
+		startService(service);
 	}
-	//接收到
+
+	// 接收到
 	private void openReceiver() {
 		mRecevier = new MainRecevier();
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_Receive_UnreadCount);
 		registerReceiver(mRecevier, filter);
 	}
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if(mRecevier!=null){
+		if (mRecevier != null) {
 			unregisterReceiver(mRecevier);
 		}
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if(MessageCache.getUnreadCount(getContext())==0){
+		if (MessageCache.getUnreadCount(getContext()) == 0) {
 			tv_unreadCount.setVisibility(View.INVISIBLE);
-		}else{
-			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())+"");
+		} else {
+			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())
+					+ "");
 			tv_unreadCount.setVisibility(View.VISIBLE);
 		}
 	}
@@ -116,7 +121,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		_getView(R.id.frame_main_one_business).setOnClickListener(this);
 
 		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
-		tv_unreadCount =(TextView) _getView(R.id.tv_unreadcount);
+		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
 		initWebView();
 	}
 
@@ -148,14 +153,14 @@ public class Main extends BaseActivity implements OnClickListener {
 			@Override
 			public void onReceivedError(WebView view, int errorCode,
 					String description, String failingUrl) {
-				view.setVisibility(View.INVISIBLE);
-
+				webview.setVisibility(View.INVISIBLE);
+				isError = true;
 			}
 		});
 		webview.setWebChromeClient(new WebChromeClient() {
 			@Override
 			public void onProgressChanged(WebView view, int newProgress) {
-				if (newProgress == 100) {
+				if (newProgress == 100 && !isError) {
 					webview.setVisibility(View.VISIBLE);
 				} else {
 					webview.setVisibility(View.INVISIBLE);
@@ -212,10 +217,13 @@ public class Main extends BaseActivity implements OnClickListener {
 	class MainRecevier extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-           if(intent.getAction().equals(Constants.Action_Receive_UnreadCount)){// got unread count
-        	   tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())+"");
-        	   tv_unreadCount.setVisibility(View.VISIBLE);
-           }
+			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got
+																					// unread
+																					// count
+				tv_unreadCount.setText(MessageCache
+						.getUnreadCount(getContext()) + "");
+				tv_unreadCount.setVisibility(View.VISIBLE);
+			}
 		}
 	}
 }
