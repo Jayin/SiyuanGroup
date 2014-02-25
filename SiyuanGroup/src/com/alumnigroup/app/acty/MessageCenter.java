@@ -148,7 +148,6 @@ public class MessageCenter extends BaseActivity {
 		case R.id.acty_head_btn_back:
 			closeActivity();
 			break;
-
 		default:
 			break;
 		}

@@ -37,7 +37,7 @@
             android:background="@drawable/ic_edittext_bg"
             android:maxLines="4"
             android:paddingLeft="4dp"
-            android:text="123333"
+            android:hint="回复"
             android:textColor="@color/black"
             android:textSize="16sp" />
 

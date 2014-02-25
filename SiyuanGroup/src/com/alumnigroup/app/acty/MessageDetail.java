@@ -2,12 +2,16 @@ package com.alumnigroup.app.acty;
 
 import java.util.ArrayList;
 
+import org.apache.http.Header;
+import org.json.JSONObject;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.alumnigroup.api.MessageAPI;
@@ -16,6 +20,7 @@ import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.MMessage;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -27,6 +32,10 @@ public class MessageDetail extends BaseActivity {
 	private ChatAdapter adapter;
 	private EditText et_body;
 	private MessageAPI api;
+	private ArrayList<Integer> status;
+	private final int Finished = 0;
+	private final int Sending = 1;
+	private final int Faild = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,9 +67,12 @@ public class MessageDetail extends BaseActivity {
 	@Override
 	protected void initData() {
 		message = getSerializableExtra("message");
+		api = new MessageAPI();
 		data = new ArrayList<MMessage>();
 		adapter = new ChatAdapter();
 		data.add(message);
+		status = new ArrayList<Integer>();
+		status.add(Finished);
 	}
 
 	@Override
@@ -78,15 +90,37 @@ public class MessageDetail extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.btn_send:
-			MMessage mm = new MMessage();
-			mm.setSender(AppInfo.getUser(getContext()));
-			mm.setBody(et_body.getText().toString());
-			data.add(mm);
-			adapter.notifyDataSetChanged();
-			lv.setSelection(data.size() - 1);
-			debug(mm.toString());
-			debug(data.size() + "");
-			debug(data.toString());
+			api.send(message.getId(), "", et_body.getText().toString(),
+					new JsonResponseHandler() {
+						int position = 0;
+
+						@Override
+						public void onStart() {
+							status.add(Sending);
+							position = status.size() - 1;
+							MMessage mm = new MMessage();
+							mm.setSender(AppInfo.getUser(getContext()));
+							mm.setBody(et_body.getText().toString());
+							data.add(mm);
+							adapter.notifyDataSetChanged();
+							lv.setSelection(data.size() - 1);
+						}
+
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							status.set(position, Finished);
+							adapter.notifyDataSetInvalidated();
+							lv.setSelection(data.size() - 1);
+						}
+
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							status.set(position, Finished);
+							adapter.notifyDataSetInvalidated();
+							lv.setSelection(data.size() - 1);
+						}
+					});
+
 			break;
 		default:
 			break;
@@ -129,6 +163,10 @@ public class MessageDetail extends BaseActivity {
 							.findViewById(R.id.iv_avatar);
 					h.tv_content = (TextView) convertView
 							.findViewById(R.id.tv_content);
+					h.iv_faild = (ImageView) convertView
+							.findViewById(R.id.iv_faild);
+					h.progress = (ProgressBar) convertView
+							.findViewById(R.id.progress_loading);
 					break;
 				case RIGHT:
 					convertView = getLayoutInflater().inflate(
@@ -137,6 +175,10 @@ public class MessageDetail extends BaseActivity {
 							.findViewById(R.id.iv_avatar);
 					h.tv_content = (TextView) convertView
 							.findViewById(R.id.tv_content);
+					h.iv_faild = (ImageView) convertView
+							.findViewById(R.id.iv_faild);
+					h.progress = (ProgressBar) convertView
+							.findViewById(R.id.progress_loading);
 					break;
 				default:
 					break;
@@ -157,6 +199,16 @@ public class MessageDetail extends BaseActivity {
 							"drawable://" + R.drawable.ic_image_load_normal,
 							h.iv_avatar);
 				}
+				if (status.get(position) == Finished) {
+					h.iv_faild.setVisibility(View.GONE);
+					h.progress.setVisibility(View.GONE);
+				} else if (status.get(position) == Sending) {
+					h.iv_faild.setVisibility(View.GONE);
+					h.progress.setVisibility(View.VISIBLE);
+				} else { // faild
+					h.iv_faild.setVisibility(View.VISIBLE);
+					h.progress.setVisibility(View.GONE);
+				}
 				break;
 			case RIGHT:
 				h.tv_content.setText(m.getBody());
@@ -170,10 +222,21 @@ public class MessageDetail extends BaseActivity {
 									+ R.drawable.ic_image_load_normal,
 							h.iv_avatar);
 				}
+				if (status.get(position) == Finished) {
+					h.iv_faild.setVisibility(View.INVISIBLE);
+					h.progress.setVisibility(View.INVISIBLE);
+				} else if (status.get(position) == Sending) {
+					h.iv_faild.setVisibility(View.INVISIBLE);
+					h.progress.setVisibility(View.VISIBLE);
+				} else { // faild
+					h.iv_faild.setVisibility(View.VISIBLE);
+					h.progress.setVisibility(View.INVISIBLE);
+				}
 				break;
 			default:
 				break;
 			}
+
 			return convertView;
 		}
 
@@ -196,7 +259,8 @@ public class MessageDetail extends BaseActivity {
 
 		class ViewHolder {
 			TextView tv_content;
-			ImageView iv_avatar;
+			ImageView iv_avatar, iv_faild;
+			ProgressBar progress;
 		}
 	}
 
