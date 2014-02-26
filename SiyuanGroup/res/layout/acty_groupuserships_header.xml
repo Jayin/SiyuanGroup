@@ -40,7 +40,7 @@
         android:id="@+id/acty_head_iv_hr2"
         android:layout_width="2px"
         android:layout_height="match_parent"
-        android:background="@drawable/ic_acty_head_hr" android:visibility="invisible"/>
+        android:background="@drawable/ic_acty_head_hr"  android:clickable="true" android:visibility="invisible"/>
 
     <RelativeLayout
         android:id="@+id/btn_accept"

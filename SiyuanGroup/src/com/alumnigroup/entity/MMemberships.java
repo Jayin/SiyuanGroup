@@ -37,7 +37,8 @@ public class MMemberships implements Serializable {
 		}
 		return list;
 	}
-
+    /**membership id */
+	private int id;
 	/** 用户id */
 	private int userid;
 	/** 是否圈子拥有者 */
@@ -50,6 +51,26 @@ public class MMemberships implements Serializable {
 	private String restrict;
 	/** 用户信息 */
 	private User user;
+	/** 是否已被审核通过*/
+	private int isaccepted;
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public int getIsaccepted() {
+		return isaccepted;
+	}
+
+	public void setIsaccepted(int isaccepted) {
+		this.isaccepted = isaccepted;
+	}
+
 
 	public int getUserid() {
 		return userid;
@@ -97,6 +118,14 @@ public class MMemberships implements Serializable {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	@Override
+	public String toString() {
+		return "MMemberships [id=" + id + ", userid=" + userid + ", isowner="
+				+ isowner + ", isadmin=" + isadmin + ", remark=" + remark
+				+ ", restrict=" + restrict + ", user=" + user + ", isaccepted="
+				+ isaccepted + "]";
 	}
 
 }

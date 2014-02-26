@@ -63,8 +63,6 @@ public class MGroup implements Serializable {
 	private long createtime;
 	/** 圈子图标 */
 	private String avatar;
-	/** 圈子名单 */
-	private List<Memberships> memberships;
 	/** 圈子拥有者 */
 	private User owner;
 	/** 圈子人数 */
@@ -134,85 +132,16 @@ public class MGroup implements Serializable {
 		this.avatar = avatar;
 	}
 
-	public List<Memberships> getMemberships() {
-		return memberships;
+	@Override
+	public String toString() {
+		return "MGroup [id=" + id + ", ownerid=" + ownerid + ", name=" + name
+				+ ", description=" + description + ", createtime=" + createtime
+				+ ", avatar=" + avatar + ", owner=" + owner + ", numMembers="
+				+ numMembers + "]";
 	}
 
-	public void setMemberships(List<Memberships> memberships) {
-		this.memberships = memberships;
-	}
+ 
 
-	/**
-	 * 一条 成员名单数据
-	 * 
-	 * @author Jayin Ton
-	 * 
-	 */
-	public class Memberships implements Serializable {
-
-		/** 用户id */
-		private int userid;
-		/** 是否是圈子拥有者 */
-		private int isowner;
-		/** 是否是管理员 */
-		private int isadmin;
-		/** 备注 */
-		private String remark;
-		/** 限制 */
-		private String restrict;
-		/** 成员信息 */
-		private User user;
-
-		public Memberships() {
-
-		}
-
-		public int getUserid() {
-			return userid;
-		}
-
-		public void setUserid(int userid) {
-			this.userid = userid;
-		}
-
-		public int getIsowner() {
-			return isowner;
-		}
-
-		public void setIsowner(int isowner) {
-			this.isowner = isowner;
-		}
-
-		public int getIsadmin() {
-			return isadmin;
-		}
-
-		public void setIsadmin(int isadmin) {
-			this.isadmin = isadmin;
-		}
-
-		public String getRemark() {
-			return remark;
-		}
-
-		public void setRemark(String remark) {
-			this.remark = remark;
-		}
-
-		public String getRestrict() {
-			return restrict;
-		}
-
-		public void setRestrict(String restrict) {
-			this.restrict = restrict;
-		}
-
-		public User getUser() {
-			return user;
-		}
-
-		public void setUser(User user) {
-			this.user = user;
-		}
-	}
+	 
+	
 }

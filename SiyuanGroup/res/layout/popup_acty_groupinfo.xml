@@ -27,7 +27,7 @@
         android:layout_width="100dp"
         android:layout_height="54dp"
         android:background="@drawable/btn_popup_item_black"
-        android:text="分    享" />
+        android:text="发起讨论" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -43,7 +43,7 @@
         android:layout_width="100dp"
         android:layout_height="54dp"
         android:background="@drawable/btn_popup_item_black"
-        android:text="加入圈子" />
+        android:text="申请加入" />
 
     <ImageView
         android:layout_width="match_parent"

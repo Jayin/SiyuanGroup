@@ -27,7 +27,7 @@ import com.loopj.android.http.RequestParams;
 public class GroupManage extends BaseActivity {	
 	private int RequestCode_invite = 1;
 	private int RequestCode_Pick_image = 2;
-	private View btn_back, btn_invite, btn_edit, btn_updateAvatar;
+	private View btn_back, btn_invite, btn_edit, btn_updateAvatar,btn_managerUserlist;
 	private MGroup group;
 	private GroupAPI api;
 
@@ -55,11 +55,13 @@ public class GroupManage extends BaseActivity {
 		btn_invite = _getView(R.id.btn_invite);
 		btn_edit = _getView(R.id.btn_edit);
 		btn_updateAvatar = _getView(R.id.btn_updateAvater);
+		btn_managerUserlist = _getView(R.id.btn_manage_userlist);
 
 		btn_invite.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
 		btn_updateAvatar.setOnClickListener(this);
 		btn_back.setOnClickListener(this);
+		btn_managerUserlist.setOnClickListener(this);
 	}
 
 	@Override
@@ -77,9 +79,18 @@ public class GroupManage extends BaseActivity {
 		case R.id.btn_invite:
 			invite();
 			break;
+		case R.id.btn_manage_userlist:
+			manageUserlist();
+			break;
 		default:
 			break;
 		}
+	}
+
+	private void manageUserlist() {
+		Intent intent = new Intent(getContext(), GroupUsership.class);
+		intent.putExtra("group", group);
+		openActivity(intent);
 	}
 
 	@SuppressWarnings("unchecked")

@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
+
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,41 +17,37 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import com.alumnigroup.api.ActivityAPI;
+
+import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
-import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.MGroup;
+import com.alumnigroup.entity.MMemberships;
 import com.alumnigroup.entity.User;
-import com.alumnigroup.entity.Userships;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
-/**
- * 用户列表
- * 
- * @author Jayin Ton
- * 
- */
-public class ActivitiesUserShip extends BaseActivity {
+public class GroupUsership extends BaseActivity {
 	private XListView lv;
-	private MActivity acty;
+	private MGroup group;
 	private List<Integer> selected;// 0:not accept ;1:accepting 2:accepted
-	private List<Userships> data;
-	private UserShipAdapter adapter;
-	private ActivityAPI api;
+	private List<MMemberships> data;
+	private MemberShipsAdapter adapter;
+	private GroupAPI api;
 	private int page = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_activitiesuserships);
+		setContentView(R.layout.acty_groupuserships);
 		initData();
 		initLayout();
 		initController();
+
 	}
 
 	private void initController() {
@@ -61,35 +58,36 @@ public class ActivitiesUserShip extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-				api.getUserList(1, acty.getId(), new JsonResponseHandler() {
+				api.getMembersUnAccepted(1, group.getId(),
+						new JsonResponseHandler() {
 
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						List<Userships> newData = Userships
-								.create_by_jsonarray(obj.toString());
-						if (newData == null) {
-							toast("网络异常 解析错误");
-						} else if (newData.size() == 0) {
-							toast("还没有人申请参加");
-							lv.setPullLoadEnable(false);
-						} else {
-							page = 1;
-							data.clear();
-							data.addAll(newData);
-							increaseList(newData);
-							adapter.notifyDataSetChanged();
-							lv.setPullLoadEnable(true);
-						}
-						lv.stopRefresh();
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<MMemberships> newData = MMemberships
+										.create_by_jsonarray(obj.toString());
+								if (newData == null) {
+									toast("网络异常 解析错误");
+								} else if (newData.size() == 0) {
+									toast("还没有人申请参加");
+									lv.setPullLoadEnable(false);
+								} else {
+									page = 1;
+									data.clear();
+									data.addAll(newData);
+									increaseList(newData);
+									adapter.notifyDataSetChanged();
+									lv.setPullLoadEnable(true);
+								}
+								lv.stopRefresh();
 
-					}
+							}
 
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-						toast(ErrorCode.errorList.get(errorCode));
-						lv.stopRefresh();
-					}
-				});
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv.stopRefresh();
+							}
+						});
 
 			}
 
@@ -100,12 +98,12 @@ public class ActivitiesUserShip extends BaseActivity {
 					lv.startRefresh();
 					return;
 				}
-				api.getUserList(page + 1, acty.getId(),
+				api.getMembersUnAccepted(page + 1, group.getId(),
 						new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								List<Userships> newData = Userships
+								List<MMemberships> newData = MMemberships
 										.create_by_jsonarray(obj.toString());
 								if (newData == null) {
 									toast("网络异常 解析错误");
@@ -139,7 +137,7 @@ public class ActivitiesUserShip extends BaseActivity {
 						|| data.get(position - 1).getIsaccepted() != 0) {
 					return;
 				}
-				api.accept(data.get(position - 1).getId(), acty.getId(),
+				api.accept(data.get(position - 1).getId(),
 						new JsonResponseHandler() {
 							@Override
 							public void onStart() {
@@ -177,7 +175,7 @@ public class ActivitiesUserShip extends BaseActivity {
 	}
 
 	// 根据新数据来增长队列
-	public void increaseList(List<Userships> newData) {
+	public void increaseList(List<MMemberships> newData) {
 		for (int i = 0; i < newData.size(); i++) {
 			selected.add(0);
 		}
@@ -185,22 +183,21 @@ public class ActivitiesUserShip extends BaseActivity {
 
 	@Override
 	protected void initData() {
-		acty = (MActivity) getSerializableExtra("activities");
-		if (acty == null) {
+		group = (MGroup) getSerializableExtra("group");
+		if (group == null) {
 			toast("无数据");
 			closeActivity();
 		}
 		selected = new ArrayList<Integer>();
-		data = new ArrayList<Userships>();
-		adapter = new UserShipAdapter(getContext(), data);
-		api = new ActivityAPI();
+		data = new ArrayList<MMemberships>();
+		adapter = new MemberShipsAdapter(getContext(), data);
+		api = new GroupAPI();
 	}
 
 	@Override
 	protected void initLayout() {
 		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		lv = (XListView) _getView(R.id.lv_listview);
-
 	}
 
 	@Override
@@ -214,11 +211,11 @@ public class ActivitiesUserShip extends BaseActivity {
 		}
 	}
 
-	class UserShipAdapter extends BaseAdapter {
-		private List<Userships> data;
+	class MemberShipsAdapter extends BaseAdapter {
+		private List<MMemberships> data;
 		private Context context;
 
-		public UserShipAdapter(Context context, List<Userships> data) {
+		public MemberShipsAdapter(Context context, List<MMemberships> data) {
 			this.data = data;
 			this.context = context;
 			;

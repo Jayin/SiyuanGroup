@@ -17,6 +17,27 @@ public class GroupAPI {
 	public GroupAPI() {
 
 	}
+	/**
+	 * 接受加入申请（管理员或圈主可以操作
+	 * @param membershipid 申请id
+	 * @param responseHandler
+	 */
+	public void accept(int membershipid ,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("membershipid", membershipid+"");
+		RestClient.post("/api/groups/members/accept", params, responseHandler);
+	}
+	/**
+	 * 拒绝加入申请
+	 * 管理员或圈主可以操作
+	 * @param membershipid 申请id
+	 * @param responseHandler
+	 */
+	public void reject(int membershipid ,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("membershipid", membershipid+"");
+		RestClient.post("/api/groups/members/reject", params, responseHandler);
+	}
 
 	/**
 	 * 创建圈子
@@ -139,7 +160,7 @@ public class GroupAPI {
 	/**
 	 * 更新圈子信息
 	 * 
-	 * @param groupid 
+	 * @param groupid
 	 *            圈子id
 	 * @param name
 	 *            圈子名字
@@ -148,10 +169,10 @@ public class GroupAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void updateInfo(int groupid , String name, String description,
+	public void updateInfo(int groupid, String name, String description,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("groupid", groupid  + "");
+		params.add("groupid", groupid + "");
 		params.add("name", name);
 		params.add("description", description);
 		RestClient.post("/api/groups/update", params, responseHandler);
@@ -213,19 +234,60 @@ public class GroupAPI {
 		params.add("groupid", groupid + "");
 		RestClient.post("/api/groups/pull", params, responseHandler);
 	}
-    /**
-     * 获得圈子的名单
-     * @param limit 圈子人数
-     * @param groupid 圈子id
-     * @param responseHandler
-     */
-	public void getMembers(int limit, int groupid,
+
+	/**
+	 * 获得圈子的名单(包含未通过/已通过)
+	 * 分页
+	 * @param page
+	 *           页码
+	 * @param groupid
+	 *            圈子id
+	 * @param responseHandler
+	 */
+	public void getAllMembers(int page, int groupid,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		if (limit > 0)
-			params.add("page", limit + "");
+		if (page > 0)
+			params.add("page", page + "");
 		if (groupid > 0)
 			params.add("id", groupid + "");
 		RestClient.get("/api/groups/members", params, responseHandler);
 	}
+
+	/**
+	 * 获得圈子的名单(已通过)
+	 * 分页
+	 * @param page 页码
+	 * @param groupid
+	 * @param responseHandler
+	 */
+	public void getMembersAccepted(int page, int groupid,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("isaccepted", "1");
+		if (page > 0)
+			params.add("page", page + "");
+		if (groupid > 0)
+			params.add("id", groupid + "");
+		RestClient.get("/api/groups/members", params, responseHandler);
+	}
+
+	/**
+	 * 获得圈子的名单(未通过)
+	 * 分页
+	 * @param page
+	 * @param groupid
+	 * @param responseHandler
+	 */
+	public void getMembersUnAccepted(int page, int groupid,
+			AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("isaccepted", "0");
+		if (page > 0)
+			params.add("page", page + "");
+		if (groupid > 0)
+			params.add("id", groupid + "");
+		RestClient.get("/api/groups/members", params, responseHandler);
+	}
+
 }

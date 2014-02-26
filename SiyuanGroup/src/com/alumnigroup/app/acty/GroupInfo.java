@@ -136,12 +136,12 @@ public class GroupInfo extends BaseActivity {
 		lv_member.setPullLoadEnable(false);//一次性加载
 		lv_share.setPullRefreshEnable(true);
 		lv_share.setPullLoadEnable(true);
-		//一次性加载
+		
 		lv_member.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
-				api.getMembers(1, group.getId(), new JsonResponseHandler() {
+				api.getMembersAccepted(1, group.getId(), new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -183,7 +183,7 @@ public class GroupInfo extends BaseActivity {
 					lv_member.startRefresh();
 					return;
 				}
-				api.getMembers(group.getNumMembers(), group.getId(),
+				api.getMembersAccepted(page_member, group.getId(),
 						new JsonResponseHandler() {
 
 							@Override
@@ -460,12 +460,12 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-				toast("加入成功");
+				toast("申请成功");
 			}
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("加入失败 " + ErrorCode.errorList.get(errorCode));
+				toast("申请失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
 	}
