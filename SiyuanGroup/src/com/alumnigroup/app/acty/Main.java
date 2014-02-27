@@ -1,10 +1,13 @@
 package com.alumnigroup.app.acty;
 
+import javax.crypto.spec.IvParameterSpec;
+
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,10 +15,12 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.CoreService;
 import com.alumnigroup.app.MessageCache;
@@ -23,6 +28,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 主界面
@@ -34,12 +40,12 @@ import com.alumnigroup.utils.DataPool;
 public class Main extends BaseActivity implements OnClickListener {
 	private WebView webview;
 	private LinearLayout content;
-	private LinearLayout parent_content;
 	private int width = 0, height = 0;
 	private DataPool dp;
 	private BroadcastReceiver mRecevier;
 	private TextView tv_unreadCount;
 	private boolean isError = false;
+	private ImageView iv_backgroud;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +70,8 @@ public class Main extends BaseActivity implements OnClickListener {
 	private void openReceiver() {
 		mRecevier = new MainRecevier();
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(Constants.Action_Receive_UnreadCount);
+		filter.addAction(Constants.Action_Receive_UnreadCount);// 有未读消息
+		filter.addAction(Constants.Action_Backgroud_switch);// 背景图切换
 		registerReceiver(mRecevier, filter);
 	}
 
@@ -106,7 +113,7 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		_getView(R.id.frame_main_one_myspace).setOnClickListener(this);
 
-		_getView(R.id.frame_main_one_setting).setOnClickListener(this);
+		_getView(R.id.frame_main_one_setting).setOnClickListener(this); 
 
 		_getView(R.id.frame_main_one_message).setOnClickListener(this);
 
@@ -122,6 +129,10 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
 		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
+		iv_backgroud =(ImageView)_getView(R.id.iv_main_bg);
+		if (AppInfo.getBackgroudPath(getContext()) != null) {
+			ImageLoader.getInstance().displayImage("file://"+AppInfo.getBackgroudPath(getContext()), iv_backgroud);
+		}
 		initWebView();
 	}
 
@@ -173,7 +184,6 @@ public class Main extends BaseActivity implements OnClickListener {
 	// 适配屏幕
 	private void adapteScreent() {
 		content = (LinearLayout) _getView(R.id.acty_main_content_one);
-		parent_content = (LinearLayout) _getView(R.id.acty_main_content);
 		android.view.ViewGroup.LayoutParams params = content.getLayoutParams();
 		params.height = width;
 		content.setLayoutParams(params);
@@ -213,7 +223,6 @@ public class Main extends BaseActivity implements OnClickListener {
 			break;
 		}
 	}
-
 	class MainRecevier extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -223,6 +232,11 @@ public class Main extends BaseActivity implements OnClickListener {
 				tv_unreadCount.setText(MessageCache
 						.getUnreadCount(getContext()) + "");
 				tv_unreadCount.setVisibility(View.VISIBLE);
+			} else if (intent.getAction().equals(
+					Constants.Action_Backgroud_switch)) {
+				if (AppInfo.getBackgroudPath(getContext()) != null) {
+					ImageLoader.getInstance().displayImage("file://"+AppInfo.getBackgroudPath(getContext()), iv_backgroud);
+				}
 			}
 		}
 	}

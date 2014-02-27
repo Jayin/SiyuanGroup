@@ -9,6 +9,7 @@
         android:layout_height="match_parent" >
 
         <ImageView
+            android:id="@+id/iv_main_bg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -18,7 +19,8 @@
     <LinearLayout
         android:id="@+id/acty_main_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:orientation="vertical" >
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
         <WebView
             android:id="@+id/acty_main_webview"

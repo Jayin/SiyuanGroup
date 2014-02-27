@@ -27,5 +27,7 @@ public class Constants {
 	public static final String Action_GroupInfo_Edit = "GroupInfo_Edit";
 	/** 活动分享修改*/
 	public static final String Action_ActivityShare_Edit  = "ActivityShare_Edit";
+	/** 主页面图片更换*/
+	public static final String Action_Backgroud_switch ="Backgroud_switch";
 
 }

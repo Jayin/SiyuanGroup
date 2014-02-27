@@ -2,9 +2,21 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical" >
 
     <include layout="@layout/acty_setting_header" />
+
+    <RelativeLayout
+        android:id="@+id/acty_setting_btn_changeBackgroud"
+        style="@style/Setting.relativelayout" >
+
+        <TextView
+            style="@style/TextView.setting"
+            android:text="更换背景图" />
+
+        <ImageView style="@style/Setting.imageview" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/acty_setting_btn_introduce"

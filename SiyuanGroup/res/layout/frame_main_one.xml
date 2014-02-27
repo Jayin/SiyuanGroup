@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="30dp"
+    android:layout_marginRight="8dp"
+    android:layout_marginTop="30dp"
     android:orientation="vertical" >
 
     <LinearLayout
@@ -193,11 +193,11 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="4dp"
                 android:layout_marginTop="4dp"
+                android:background="@drawable/tv_round_red"
                 android:gravity="center"
-                android:text="22+" 
-                android:textSize="12sp"
+                android:text="22+"
                 android:textColor="@color/white"
-                android:background="@drawable/tv_round_red"/>
+                android:textSize="12sp" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
