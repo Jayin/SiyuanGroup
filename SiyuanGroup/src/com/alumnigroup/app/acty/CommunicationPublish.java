@@ -6,7 +6,9 @@ import org.json.JSONObject;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.app.BaseActivity;
@@ -16,12 +18,13 @@ import com.alumnigroup.entity.Issue;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
+import com.custom.view.FlowLayout;
 
 public class CommunicationPublish extends BaseActivity {
-	private View btn_back, btn_post, btn_permission, btn_mention;
 	private EditText et_title, et_content;
 	private IssuesAPI api;
 	private Issue issue;
+	private FlowLayout flowLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +42,9 @@ public class CommunicationPublish extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_post = _getView(R.id.acty_head_btn_post);
-		btn_permission = _getView(R.id.permission);
-		btn_mention = _getView(R.id.mention);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
+		_getView(R.id.acty_head_btn_post).setOnClickListener(this);
+		_getView(R.id.btn_add_pic).setOnClickListener(this);
 		et_title = (EditText) _getView(R.id.et_title);
 		et_content = (EditText) _getView(R.id.et_content);
 
@@ -50,12 +52,7 @@ public class CommunicationPublish extends BaseActivity {
 			et_title.setText(issue.getTitle());
 			et_content.setText(issue.getBody());
 		}
-
-		btn_back.setOnClickListener(this);
-		btn_post.setOnClickListener(this);
-		btn_permission.setOnClickListener(this);
-		btn_mention.setOnClickListener(this);
-
+		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
 	}
 
 	@Override
@@ -102,14 +99,18 @@ public class CommunicationPublish extends BaseActivity {
 						});
 			}
 			break;
-		case R.id.permission:
-			toast("permission");
-			break;
-		case R.id.mention:
-			// toast("mention");
-			Intent intent = new Intent(this, FollowingList.class);
-			intent.putExtra("userid", 1);
-			openActivity(intent);
+		// case R.id.mention:
+		// // toast("mention");
+		// Intent intent = new Intent(this, FollowingList.class);
+		// intent.putExtra("userid", 1);
+		// openActivity(intent);
+		// break;
+
+		case R.id.btn_add_pic:
+			ImageView iv = new ImageView(getContext());
+			iv.setBackgroundResource(R.drawable.ic_image_load_normal);
+			flowLayout.addView(iv);
+			// to pick a pic & add...
 			break;
 		default:
 			break;

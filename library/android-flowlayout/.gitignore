@@ -1,0 +1,17 @@
+# IDE #
+.project
+.idea
+*.sublime-project
+*.sublime-workspace
+
+# System #
+.DS_Store
+*.bak
+*~
+~*
+*.desktop
+*.lnk
+*.ini
+/bin
+/assets
+/gen
