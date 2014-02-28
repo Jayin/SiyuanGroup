@@ -30,7 +30,7 @@ import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 用户列表
+ * 用户申请列表
  * 
  * @author Jayin Ton
  * 
