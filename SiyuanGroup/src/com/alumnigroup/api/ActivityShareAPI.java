@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -31,7 +34,8 @@ public class ActivityShareAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void postShare(int activityid,String title, String body,
+	public void postShare(int activityid,String title, String body, File picture1,
+			File picture2, File picture3,
 			AsyncHttpResponseHandler responseHandler) {
 		if (title == null)
 			throw new IllegalArgumentException("title can't be null !");
@@ -40,6 +44,19 @@ public class ActivityShareAPI {
 		params.add("title", title);
 		if (body != null)
 			params.add("body", body);
+		try {
+			if (picture1 != null) {
+				params.put("picture1", picture1, "image/jpeg");
+			}
+			if (picture2 != null) {
+				params.put("picture2", picture2, "image/jpeg");
+			}
+			if (picture3 != null) {
+				params.put("picture3", picture3, "image/jpeg");
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		RestClient.post("/api/issues/post", params, responseHandler);
 	}
 
