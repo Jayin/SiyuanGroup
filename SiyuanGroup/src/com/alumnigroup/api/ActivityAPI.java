@@ -106,6 +106,16 @@ public class ActivityAPI {
 		params.add("activityid", activityid + "");
 		RestClient.post("/api/activities/accept", params, responseHandler);
 	}
+	/**
+	 * 拒绝加入申请
+	 * @param id -usership id
+	 * @param responseHandler
+	 */
+	public void reject(int id,AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("id", id+"");
+		RestClient.post("/api/activities/accept", params, responseHandler);
+	}
 
 	/**
 	 * 发起者更新活动资料

@@ -7,6 +7,7 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -183,7 +184,6 @@ public class GroupUsership extends BaseActivity {
 		public MemberShipsAdapter(Context context, List<MMemberships> data) {
 			this.data = data;
 			this.context = context;
-			;
 		}
 
 		@Override
@@ -270,6 +270,8 @@ public class GroupUsership extends BaseActivity {
 							h.accept.setVisibility(View.GONE);
 							h.status.setVisibility(View.VISIBLE);
 							selected.set(p, finished);
+							h.status.setText("已接受");
+							h.status.setTextColor(Color.GREEN);
 						}
 
 						@Override
@@ -306,6 +308,8 @@ public class GroupUsership extends BaseActivity {
 							h.accept.setVisibility(View.GONE);
 							h.status.setVisibility(View.VISIBLE);
 							selected.set(p, finished);
+							h.status.setText("已拒绝");
+							h.status.setTextColor(Color.RED);
 						}
 
 						@Override

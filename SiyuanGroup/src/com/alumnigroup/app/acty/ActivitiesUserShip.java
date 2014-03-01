@@ -5,10 +5,13 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
+
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -16,6 +19,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.BaseActivity;
@@ -38,7 +42,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class ActivitiesUserShip extends BaseActivity {
 	private XListView lv;
 	private MActivity acty;
-	private List<Integer> selected;// 0:not accept ;1:accepting 2:accepted
+	private List<Integer> selected;// 0:用户未操作 ;1:正在发请求 2:请求已完成
+	private int nomal=0,onGoing =1,finished=2;// 0:用户未操作 ;1:正在发请求 2:请求已完成
 	private List<Userships> data;
 	private UserShipAdapter adapter;
 	private ActivityAPI api;
@@ -130,48 +135,48 @@ public class ActivitiesUserShip extends BaseActivity {
 			}
 		});
 
-		lv.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> parent, final View view,
-					final int position, long id) {
-				if (selected.get(position - 1) == 2
-						|| data.get(position - 1).getIsaccepted() != 0) {
-					return;
-				}
-				api.accept(data.get(position - 1).getId(), acty.getId(),
-						new JsonResponseHandler() {
-							@Override
-							public void onStart() {
-								selected.set(position - 1, 1);
-								((ProgressBar) view.findViewById(R.id.progress))
-										.setVisibility(View.VISIBLE);
-								((ImageView) view.findViewById(R.id.iv_ischeck))
-										.setVisibility(View.GONE);
-							}
-
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								selected.set(position - 1, 2);
-								((ProgressBar) view.findViewById(R.id.progress))
-										.setVisibility(View.GONE);
-								((ImageView) view.findViewById(R.id.iv_ischeck))
-										.setVisibility(View.GONE);
-								(view.findViewById(R.id.tv_status))
-										.setVisibility(View.VISIBLE);
-							}
-
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								selected.set(position - 1, 0);
-								((ProgressBar) view.findViewById(R.id.progress))
-										.setVisibility(View.GONE);
-								((ImageView) view.findViewById(R.id.iv_ischeck))
-										.setVisibility(View.VISIBLE);
-							}
-						});
-			}
-		});
+//		lv.setOnItemClickListener(new OnItemClickListener() {
+//
+//			@Override
+//			public void onItemClick(AdapterView<?> parent, final View view,
+//					final int position, long id) {
+//				if (selected.get(position - 1) == 2
+//						|| data.get(position - 1).getIsaccepted() != 0) {
+//					return;
+//				}
+//				api.accept(data.get(position - 1).getId(), acty.getId(),
+//						new JsonResponseHandler() {
+//							@Override
+//							public void onStart() {
+//								selected.set(position - 1, 1);
+//								((ProgressBar) view.findViewById(R.id.progress))
+//										.setVisibility(View.VISIBLE);
+//								((ImageView) view.findViewById(R.id.iv_ischeck))
+//										.setVisibility(View.GONE);
+//							}
+//
+//							@Override
+//							public void onOK(Header[] headers, JSONObject obj) {
+//								selected.set(position - 1, 2);
+//								((ProgressBar) view.findViewById(R.id.progress))
+//										.setVisibility(View.GONE);
+//								((ImageView) view.findViewById(R.id.iv_ischeck))
+//										.setVisibility(View.GONE);
+//								(view.findViewById(R.id.tv_status))
+//										.setVisibility(View.VISIBLE);
+//							}
+//
+//							@Override
+//							public void onFaild(int errorType, int errorCode) {
+//								selected.set(position - 1, 0);
+//								((ProgressBar) view.findViewById(R.id.progress))
+//										.setVisibility(View.GONE);
+//								((ImageView) view.findViewById(R.id.iv_ischeck))
+//										.setVisibility(View.VISIBLE);
+//							}
+//						});
+//			}
+//		});
 
 		lv.startRefresh();
 	}
@@ -241,7 +246,7 @@ public class ActivitiesUserShip extends BaseActivity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			ViewHolder h;
+			final ViewHolder h;
 			if (convertView == null) {
 				convertView = LayoutInflater.from(context).inflate(
 						R.layout.item_lv_activitiesusership, null);
@@ -250,9 +255,9 @@ public class ActivitiesUserShip extends BaseActivity {
 				h.status = (TextView) convertView.findViewById(R.id.tv_status);
 				h.name = (TextView) convertView.findViewById(R.id.tv_name);
 				h.major = (TextView) convertView.findViewById(R.id.tv_major);
-				h.isCheck = (ImageView) convertView
-						.findViewById(R.id.iv_ischeck);
 				h.pb = (ProgressBar) convertView.findViewById(R.id.progress);
+				h.accept = convertView.findViewById(R.id.btn_accept);
+				h.refuse = convertView.findViewById(R.id.btn_refuse);
 				convertView.setTag(h);
 			} else {
 				h = (ViewHolder) convertView.getTag();
@@ -269,31 +274,111 @@ public class ActivitiesUserShip extends BaseActivity {
 
 			h.name.setText(u.getProfile().getName());
 			h.major.setText(u.getProfile().getMajor());
-			if (data.get(position).getIsaccepted() != 0
-					|| selected.get(position) == 2) {// 用户被接受参加
-				h.status.setVisibility(View.VISIBLE);
-				h.isCheck.setVisibility(View.GONE);
+			
+			
+			if(selected.get(position)==finished){
 				h.pb.setVisibility(View.GONE);
-			} else {
+				h.refuse.setVisibility(View.GONE);
+				h.accept.setVisibility(View.GONE);
+				h.status.setVisibility(View.VISIBLE);
+			}else if(selected.get(position)==onGoing){
+				h.pb.setVisibility(View.VISIBLE);
+				h.refuse.setVisibility(View.GONE);
+				h.accept.setVisibility(View.GONE);
 				h.status.setVisibility(View.GONE);
-				if (selected.get(position) == 0) { // not accept
-					h.isCheck.setVisibility(View.VISIBLE);
-					h.isCheck
-							.setBackgroundResource(R.drawable.ic_check_green_uncheked);
-					h.pb.setVisibility(View.GONE);
-				} else { // accepting
-					h.pb.setVisibility(View.VISIBLE);
-					h.isCheck.setVisibility(View.GONE);
-				}
+			}else{     //nomal
+				h.pb.setVisibility(View.GONE);
+				h.refuse.setVisibility(View.VISIBLE);
+				h.accept.setVisibility(View.VISIBLE);
+				h.status.setVisibility(View.GONE);
 			}
+			
+			final int p = position;
+			h.accept.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					api.accept(data.get(p).getId(), acty.getId(),
+							new JsonResponseHandler() {
+								@Override
+								public void onStart() {
+									h.pb.setVisibility(View.VISIBLE);
+									h.refuse.setVisibility(View.GONE);
+									h.accept.setVisibility(View.GONE);
+									h.status.setVisibility(View.GONE);
+									selected.set(p, onGoing);
+								}
 
+								@Override
+								public void onOK(Header[] headers, JSONObject obj) {
+									h.pb.setVisibility(View.GONE);
+									h.refuse.setVisibility(View.GONE);
+									h.accept.setVisibility(View.GONE);
+									h.status.setVisibility(View.VISIBLE);
+									selected.set(p, finished);
+									h.status.setText("已接受");
+									h.status.setTextColor(Color.GREEN);
+								}
+
+								@Override
+								public void onFaild(int errorType, int errorCode) {
+									toast(ErrorCode.errorList.get(errorCode));
+									h.pb.setVisibility(View.GONE);
+									h.refuse.setVisibility(View.VISIBLE);
+									h.accept.setVisibility(View.VISIBLE);
+									h.status.setVisibility(View.GONE);
+									selected.set(p, nomal);
+								}
+							});
+				}
+			});
+			
+			h.refuse.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					 api.reject(data.get(p).getId(), new JsonResponseHandler() {
+							@Override
+							public void onStart() {
+								h.pb.setVisibility(View.VISIBLE);
+								h.refuse.setVisibility(View.GONE);
+								h.accept.setVisibility(View.GONE);
+								h.status.setVisibility(View.GONE);
+								selected.set(p, onGoing);
+							}
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								h.pb.setVisibility(View.GONE);
+								h.refuse.setVisibility(View.GONE);
+								h.accept.setVisibility(View.GONE);
+								h.status.setVisibility(View.VISIBLE);
+								selected.set(p, finished);
+								h.status.setText("已拒绝");
+								h.status.setTextColor(Color.RED);
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								h.pb.setVisibility(View.GONE);
+								h.refuse.setVisibility(View.VISIBLE);
+								h.accept.setVisibility(View.VISIBLE);
+								h.status.setVisibility(View.GONE);
+								selected.set(p, nomal);
+							}
+						});
+					
+				}
+			});
 			return convertView;
 		}
 
 		class ViewHolder {
-			ImageView avatar, isCheck;
+			ImageView avatar;
 			TextView name, major, status;
 			ProgressBar pb;
+			View accept,refuse;
 		}
 
 	}
