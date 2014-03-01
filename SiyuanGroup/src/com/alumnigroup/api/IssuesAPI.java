@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
@@ -39,8 +42,8 @@ public class IssuesAPI {
 	}
 
 	/**
-	 * 搜索
-	 * params.add("fuzzy", "1"); 启用模糊搜索
+	 * 搜索 params.add("fuzzy", "1"); 启用模糊搜索
+	 * 
 	 * @param page
 	 *            第几页
 	 * @param userid
@@ -58,7 +61,7 @@ public class IssuesAPI {
 		if (page > 0)
 			params.add("page", page + "");
 		if (userid > 0)
-			params.add("userid", userid+"");
+			params.add("userid", userid + "");
 		if (title != null && title.trim().length() > 0)
 			params.add("title", title);
 		if (body != null && body.trim().length() > 0)
@@ -78,14 +81,30 @@ public class IssuesAPI {
 	 * @param responseHandler
 	 *            处理器
 	 */
-	public void postIssue(String title, String body,
+	public void postIssue(String title, String body, File picture1,
+			File picture2, File picture3,
 			AsyncHttpResponseHandler responseHandler) {
 		if (title == null)
 			throw new IllegalArgumentException("title can't be null !");
+
 		RequestParams params = new RequestParams();
-		params.add("title", title);
+		if (title != null)
+			params.put("title", title);
 		if (body != null)
-			params.add("body", body);
+			params.put("body", body);
+		try {
+			if (picture1 != null) {
+				params.put("picture1", picture1, "image/jpeg");
+			}
+			if (picture2 != null) {
+				params.put("picture2", picture2, "image/jpeg");
+			}
+			if (picture3 != null) {
+				params.put("picture3", picture3, "image/jpeg");
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		RestClient.post("/api/issues/post", params, responseHandler);
 	}
 
@@ -155,23 +174,31 @@ public class IssuesAPI {
 		params.add("id", id + "");
 		RestClient.get("/api/issues/view", params, responseHandler);
 	}
+
 	/**
 	 * 获得用户发布的的话题
-	 * @param page  页码
-	 * @param userid 用户id
-	 * @param responseHandler 
+	 * 
+	 * @param page
+	 *            页码
+	 * @param userid
+	 *            用户id
+	 * @param responseHandler
 	 */
-	public void getUserIssue(int page,int userid,AsyncHttpResponseHandler responseHandler){
+	public void getUserIssue(int page, int userid,
+			AsyncHttpResponseHandler responseHandler) {
 		search(page, userid, null, null, responseHandler);
 	}
+
 	/**
 	 * 获得我的话题列表
+	 * 
 	 * @param page
 	 * @param responseHandler
 	 */
-	public void getMyIssueList(int page,AsyncHttpResponseHandler responseHandler){
+	public void getMyIssueList(int page,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("page", page+"");
+		params.add("page", page + "");
 		RestClient.get("/api/issues/my", params, responseHandler);
 	}
 }

@@ -281,7 +281,7 @@ public class ImageUtils{
 	}
 	
 	/**
-	 * 创建缩略图
+	 * 创建缩略图并保存到sd卡
 	 * @param context
 	 * @param largeImagePath 原始大图路径
 	 * @param thumbfilePath 输出缩略图路径
@@ -306,6 +306,23 @@ public class ImageUtils{
 		Bitmap thb_bitmap = zoomBitmap(cur_bitmap, new_img_size[0], new_img_size[1]);
 		//生成缩放后的图片文件
 		saveImageToSD(thumbfilePath, thb_bitmap, quality);
+	}
+	/**
+	 *  创建缩略图
+	 * @param bitmap
+	 * @param square_size 边长
+	 */
+	public static Bitmap createImageThumbnail(Bitmap bitmap,int square_size){
+		Bitmap newbmp = null;
+		if(bitmap!=null){
+			//原始图片的高宽
+			int[] cur_img_size = new int[]{bitmap.getWidth(),bitmap.getHeight()};
+			//计算原始图片缩放后的宽高
+			int[] new_img_size = scaleImageSize(cur_img_size, square_size);
+			return zoomBitmap(bitmap, new_img_size[0], new_img_size[1]);
+		}else{
+			return null;
+		}
 	}
 	
     /**

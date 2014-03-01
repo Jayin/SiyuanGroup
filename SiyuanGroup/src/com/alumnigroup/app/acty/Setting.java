@@ -101,7 +101,6 @@ public class Setting extends BaseActivity {
 		if (resultCode == RESULT_OK && requestCode == Request_Pick_Image) {
 			Bitmap photo = null;
 			Uri photoUri = data.getData();
-			toast(photoUri.getPath());
 				
 			if (photoUri != null) {
 				try {
@@ -114,7 +113,6 @@ public class Setting extends BaseActivity {
 				 
 			}
 			if (photo != null) {
-				toast("photo is not null!");
 			try {
 					ImageUtils.saveImage(getContext(),"main_backgroud.jpg", photo, 75);
 					sendBroadcast(new Intent(Constants.Action_Backgroud_switch));

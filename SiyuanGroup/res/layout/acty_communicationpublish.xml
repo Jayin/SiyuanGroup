@@ -58,8 +58,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
-                layout_horizontalSpacing="32dip"
-                layout_verticalSpacing="32dip" >
+             >
 
                 <ImageButton
                     android:id="@+id/btn_add_pic"

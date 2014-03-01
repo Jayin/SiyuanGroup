@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 
 public class BitmapUtils {
@@ -139,5 +140,35 @@ public class BitmapUtils {
 		byte [] data = baos.toByteArray();
 		return new ByteArrayInputStream(data);
 	}
+	
+	  /**
+     * scale image
+     * 
+     * @param org
+     * @param newWidth
+     * @param newHeight
+     * @return
+     */
+    public static Bitmap scaleImageTo(Bitmap org, int newWidth, int newHeight) {
+        return scaleImage(org, (float)newWidth / org.getWidth(), (float)newHeight / org.getHeight());
+    }
+
+    /**
+     * scale image
+     * 
+     * @param org
+     * @param scaleWidth sacle of width
+     * @param scaleHeight scale of height
+     * @return
+     */
+    public static Bitmap scaleImage(Bitmap org, float scaleWidth, float scaleHeight) {
+        if (org == null) {
+            return null;
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(scaleWidth, scaleHeight);
+        return Bitmap.createBitmap(org, 0, 0, org.getWidth(), org.getHeight(), matrix, true);
+    }
 
 }
