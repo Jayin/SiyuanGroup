@@ -43,52 +43,27 @@
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp"
                 android:minLines="6" />
+            
+             <TextView
+                style="@style/TextView.base"
+                android:layout_marginTop="6dp"
+                android:singleLine="true"
+                android:text="图片"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/permission"
+            <com.custom.view.FlowLayout
+                android:id="@+id/flowlayout_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/btn_preference_sigle"
-                android:clickable="true"
-                android:orientation="horizontal"  android:visibility="invisible">
+                android:layout_marginTop="6dp" >
 
-                <TextView
-                    style="@style/TextView.black"
-                    android:padding="6dp"
-                    android:text="权限" />
-
-                <TextView
-                    style="@style/TextView.base"
-                    android:layout_weight="1"
-                    android:gravity="right"
-                    android:padding="6dp"
-                    android:text="高尔夫小组"
-                    android:textColor="@color/black"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/mention"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/btn_preference_sigle"
-                android:clickable="true"
-                android:orientation="horizontal"  android:visibility="invisible">
-
-                <TextView
-                    style="@style/TextView.black"
-                    android:layout_weight="1"
-                    android:padding="6dp"
-                    android:text="提及@" />
-
-                <ImageView
+                <ImageButton
+                    android:id="@+id/btn_add_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_item_toright_blue" />
-            </LinearLayout>
+                    android:background="@drawable/btn_add" />
+            </com.custom.view.FlowLayout>
         </LinearLayout>
     </ScrollView>
 

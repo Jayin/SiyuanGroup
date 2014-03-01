@@ -34,6 +34,7 @@ public class CommunicationPublish extends BaseActivity {
 	private IssuesAPI api;
 	private Issue issue;
 	private FlowLayout flowLayout;
+	private boolean withPic = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,21 +76,24 @@ public class CommunicationPublish extends BaseActivity {
 			if (title == null || title.equals("")) {
 				toast("标题不能为空!");
 			}
-			File pic1 = new File(FilePath.getImageFilePath()+"pic1.jpg");
+			File pic1 = withPic ? new File(FilePath.getImageFilePath()
+					+ "issue_pic1.jpg") : null;
 			if (issue == null) { // 发布
-				api.postIssue(title, body,pic1,null,null, new JsonResponseHandler() {
+				api.postIssue(title, body, pic1, null, null,
+						new JsonResponseHandler() {
 
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						toast("发布成功");
-						closeActivity();
-					}
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								toast("发布成功");
+								closeActivity();
+							}
 
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-						toast("发布失败 " + ErrorCode.errorList.get(errorCode));
-					}
-				});
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast("发布失败 "
+										+ ErrorCode.errorList.get(errorCode));
+							}
+						});
 			} else { // 更新
 				api.updateIssue(issue.getId(), title, body,
 						new JsonResponseHandler() {
@@ -116,10 +120,10 @@ public class CommunicationPublish extends BaseActivity {
 		// break;
 
 		case R.id.btn_add_pic:
-            if(flowLayout.getChildCount()>=2){
-            	toast("目前仅支持发一张图片");
-            	return;
-            }
+			if (flowLayout.getChildCount() >= 2) {
+				toast("目前仅支持发一张图片");
+				return;
+			}
 			// to pick a pic & add...
 			Intent intent = new Intent(Intent.ACTION_PICK);
 			intent.setType("image/*");
@@ -141,20 +145,26 @@ public class CommunicationPublish extends BaseActivity {
 			iv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					FileUtils.deleteFile(FilePath.getImageFilePath()+"pic1.jpg");//删除
+					FileUtils.deleteFile(FilePath.getImageFilePath()
+							+ "pic1.jpg");// 删除
 					flowLayout.removeViewAt(1);
+					withPic = false;
 				}
 			});
 			try {
-				Bitmap bitmap = BitmapUtils.getPicFromUri(photoUri, getContext());
+				Bitmap bitmap = BitmapUtils.getPicFromUri(photoUri,
+						getContext());
 				iv.setImageBitmap(ImageUtils.zoomBitmap(bitmap, 100, 100));
-				ImageUtils.saveImageToSD(FilePath.getImageFilePath()+"issue_pic1.jpg", ImageUtils.createImageThumbnail(bitmap,800), 80);
+				ImageUtils.saveImageToSD(FilePath.getImageFilePath()
+						+ "issue_pic1.jpg",
+						ImageUtils.createImageThumbnail(bitmap, 800), 80);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			flowLayout.addView(container);
+			withPic = true;
 		}
 	}
 }
