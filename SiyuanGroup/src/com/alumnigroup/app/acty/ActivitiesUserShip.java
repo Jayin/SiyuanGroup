@@ -134,50 +134,6 @@ public class ActivitiesUserShip extends BaseActivity {
 						});
 			}
 		});
-
-//		lv.setOnItemClickListener(new OnItemClickListener() {
-//
-//			@Override
-//			public void onItemClick(AdapterView<?> parent, final View view,
-//					final int position, long id) {
-//				if (selected.get(position - 1) == 2
-//						|| data.get(position - 1).getIsaccepted() != 0) {
-//					return;
-//				}
-//				api.accept(data.get(position - 1).getId(), acty.getId(),
-//						new JsonResponseHandler() {
-//							@Override
-//							public void onStart() {
-//								selected.set(position - 1, 1);
-//								((ProgressBar) view.findViewById(R.id.progress))
-//										.setVisibility(View.VISIBLE);
-//								((ImageView) view.findViewById(R.id.iv_ischeck))
-//										.setVisibility(View.GONE);
-//							}
-//
-//							@Override
-//							public void onOK(Header[] headers, JSONObject obj) {
-//								selected.set(position - 1, 2);
-//								((ProgressBar) view.findViewById(R.id.progress))
-//										.setVisibility(View.GONE);
-//								((ImageView) view.findViewById(R.id.iv_ischeck))
-//										.setVisibility(View.GONE);
-//								(view.findViewById(R.id.tv_status))
-//										.setVisibility(View.VISIBLE);
-//							}
-//
-//							@Override
-//							public void onFaild(int errorType, int errorCode) {
-//								selected.set(position - 1, 0);
-//								((ProgressBar) view.findViewById(R.id.progress))
-//										.setVisibility(View.GONE);
-//								((ImageView) view.findViewById(R.id.iv_ischeck))
-//										.setVisibility(View.VISIBLE);
-//							}
-//						});
-//			}
-//		});
-
 		lv.startRefresh();
 	}
 
