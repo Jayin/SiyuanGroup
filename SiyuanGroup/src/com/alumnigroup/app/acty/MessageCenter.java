@@ -27,7 +27,10 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+/**
+ * 消息中心
+ * @author Jayin Ton 
+ */
 public class MessageCenter extends BaseActivity {
 	private XListView lv_message;
 	private ArrayList<MMessage> data_message;

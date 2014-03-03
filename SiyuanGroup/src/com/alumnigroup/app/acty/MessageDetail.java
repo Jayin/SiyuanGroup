@@ -24,7 +24,11 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
-
+/**
+ * 消息详情
+ * @author Jayin Ton
+ *
+ */
 public class MessageDetail extends BaseActivity {
 	private MMessage message;
 	private ArrayList<MMessage> data;
