@@ -81,6 +81,16 @@ public class Issue implements Serializable {
 	private long posttime;
 	/** 评论数 */
 	private int numComments;
+	/** 图片*/
+	private ArrayList<String> pictures;
+
+	public ArrayList<String> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(ArrayList<String> pictures) {
+		this.pictures = pictures;
+	}
 
 	public int getId() {
 		return id;

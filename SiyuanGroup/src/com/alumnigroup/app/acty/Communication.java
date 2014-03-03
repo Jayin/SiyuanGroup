@@ -241,7 +241,8 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 										adapter_favourite
 												.notifyDataSetChanged();
 										lv_favourit.setPullLoadEnable(true);
-										AppCache.setCommunicationFavourite(getContext(), data_favourite);
+										AppCache.setCommunicationFavourite(
+												getContext(), data_favourite);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -313,23 +314,23 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		}
 		api = new IssuesAPI();
 		starAPI = new StarAPI();
-		
-		if(AppCache.getCommunicationAll(getContext())!=null){
-			data_all  = AppCache.getCommunicationAll(getContext());
-		}else{
+
+		if (AppCache.getCommunicationAll(getContext()) != null) {
+			data_all = AppCache.getCommunicationAll(getContext());
+		} else {
 			data_all = new ArrayList<Issue>();
 		}
-		if(AppCache.getCommunicationMy(getContext())!=null){
-			data_my  = AppCache.getCommunicationMy(getContext());
-		}else{
+		if (AppCache.getCommunicationMy(getContext()) != null) {
+			data_my = AppCache.getCommunicationMy(getContext());
+		} else {
 			data_my = new ArrayList<Issue>();
 		}
-		if(AppCache.getCommunicationFavourite(getContext())!=null){
-			data_favourite  = AppCache.getCommunicationFavourite(getContext());
-		}else{
+		if (AppCache.getCommunicationFavourite(getContext()) != null) {
+			data_favourite = AppCache.getCommunicationFavourite(getContext());
+		} else {
 			data_favourite = new ArrayList<Issue>();
 		}
-	 
+
 	}
 
 	private void initViewPager() {
@@ -359,14 +360,19 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		views.add(all);
 		views.add(myjoin);
 		views.add(favourit);
-		
+
 		List<XListView> listviews = new ArrayList<XListView>();
-		listviews.add(lv_all);listviews.add(lv_my);listviews.add(lv_favourit);
-		
-		List<IssueAdapter>  adapters = new ArrayList<IssueAdapter>();
-		adapters.add(adapter_all);adapters.add(adapter_my);adapters.add(adapter_favourite);
+		listviews.add(lv_all);
+		listviews.add(lv_my);
+		listviews.add(lv_favourit);
+
+		List<IssueAdapter> adapters = new ArrayList<IssueAdapter>();
+		adapters.add(adapter_all);
+		adapters.add(adapter_my);
+		adapters.add(adapter_favourite);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
+				listviews, adapters));
 	}
 
 	@Override
@@ -402,23 +408,23 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			openActivity(CommunicationPublish.class);
 			break;
 		case R.id.acty_comunication_footer_all:
-			if(viewpager.getCurrentItem()==0){
+			if (viewpager.getCurrentItem() == 0) {
 				lv_all.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(0, true);
 			}
 			break;
 		case R.id.acty_comunication_footer_my:
-			if(viewpager.getCurrentItem()==1){
+			if (viewpager.getCurrentItem() == 1) {
 				lv_my.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(1, true);
 			}
 			break;
 		case R.id.acty_comunication_footer_favourite:
-			if(viewpager.getCurrentItem()==2){
+			if (viewpager.getCurrentItem() == 2) {
 				lv_favourit.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(2, true);
 			}
 			break;
@@ -494,34 +500,44 @@ class IssueAdapter extends BaseAdapter {
 					.findViewById(R.id.item_lv_acty_comminication_favourite);
 			h.avatar = (ImageView) convertView
 					.findViewById(R.id.item_lv_acty_comminication_avatar);
+			h.pic1 = (ImageView) convertView.findViewById(R.id.iv_pic1);
 			convertView.setTag(h);
 		} else {
 			h = (ViewHolder) convertView.getTag();
 		}
-		h.name.setText(data.get(position).getUser().getProfile().getName());
-		h.major.setText(data.get(position).getUser().getProfile().getMajor());
-		h.posttime.setText(CalendarUtils.getTimeFromat(data.get(position)
-				.getPosttime(), CalendarUtils.TYPE_timeline));
-		h.title.setText(data.get(position).getTitle());
-		h.body.setText(data.get(position).getBody());
-		h.numComment.setText(data.get(position).getNumComments() + "");
+		Issue issue = data.get(position);
+		h.name.setText(issue.getUser().getProfile().getName());
+		h.major.setText(issue.getUser().getProfile().getMajor());
+		h.posttime.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
+				CalendarUtils.TYPE_timeline));
+		h.title.setText(issue.getTitle());
+		h.body.setText(issue.getBody());
+		h.numComment.setText(issue.getNumComments() + "");
 		// h.favourite.setText(data.get(position).getFavourite()+"");
-		if (data.get(position).getUser().getAvatar() != null) {
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL
-							+ data.get(position).getUser().getAvatar(),
-					h.avatar);
+		if (issue.getUser().getAvatar() != null) {
+			ImageLoader.getInstance()
+					.displayImage(
+							RestClient.BASE_URL + issue.getUser().getAvatar(),
+							h.avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
 					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
 		}
-
+		//暂时1张图片
+		h.pic1.setVisibility(View.GONE);
+		if (issue.getPictures().size() > 0) {
+			h.pic1.setVisibility(View.VISIBLE);
+			for (String picUrl : issue.getPictures()) {
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + picUrl, h.pic1);
+			}
+		}
 		return convertView;
 	}
 
 	class ViewHolder {
 		TextView name, major, posttime, title, body, numComment, favourite;
-		ImageView avatar;
+		ImageView avatar, pic1, pic2, pic3;
 	}
 
 }
