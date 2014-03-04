@@ -30,10 +30,12 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -523,14 +525,18 @@ class IssueAdapter extends BaseAdapter {
 			ImageLoader.getInstance().displayImage(
 					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
 		}
-		//暂时1张图片
+		// 暂时1张图片
 		h.pic1.setVisibility(View.GONE);
-		if (issue.getPictures().size() > 0) {
+		  L.i(issue.getNumPictures()+"");
+		if (issue.getPictures() != null && issue.getPictures().size() > 0) {
 			h.pic1.setVisibility(View.VISIBLE);
-			for (String picUrl : issue.getPictures()) {
-				ImageLoader.getInstance().displayImage(
-						RestClient.BASE_URL + picUrl, h.pic1);
-			}
+			// for (MPicture pic : issue.getPictures()) {
+			MPicture pic = issue.getPictures().get(0);
+		   L.i(pic.toString());
+			h.pic1.setVisibility(View.VISIBLE);
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + pic.getPath(), h.pic1);
+			// }
 		}
 		return convertView;
 	}

@@ -24,6 +24,7 @@ public class AppStart extends BaseActivity {
 
 			@Override
 			public void run() {
+				init();
 				Intent intent = new Intent(AppStart.this, Login.class);
 				if (checkLoginInfo()) {
 					openActivity(Main.class);
@@ -37,8 +38,14 @@ public class AppStart extends BaseActivity {
 		}, 1000);
 	}
 
+	// 初始化工作
+	protected void init() {
+		Intent intent = new Intent(getContext(), CoreService.class);
+		sendBroadcast(intent);
+	}
+
 	private boolean checkLoginInfo() {
-		DataPool dp = new DataPool(DataPool.SP_Name_User,this);
+		DataPool dp = new DataPool(DataPool.SP_Name_User, this);
 		if (dp.contains(DataPool.SP_Key_User))
 			return true;
 		else

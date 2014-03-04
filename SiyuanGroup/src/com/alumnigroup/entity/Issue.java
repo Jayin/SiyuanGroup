@@ -8,6 +8,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.alumnigroup.utils.JsonUtils;
+import com.google.gson.Gson;
 
 /**
  * 话题
@@ -24,17 +25,10 @@ public class Issue implements Serializable {
 	 * @return Issue实例
 	 */
 	public static Issue create_by_json(String json) {
-		Issue issue = new Issue();
-		JSONObject obj = null;
+		Issue issue = null;
+		Gson gson = new Gson();
 		try {
-			obj = new JSONObject(json);
-			issue.setId(JsonUtils.getInt(obj, "id"));
-			issue.setUser(User.create_by_json(obj.getJSONObject("user")
-					.toString()));
-			issue.setTitle(JsonUtils.getString(obj, "title"));
-			issue.setBody(JsonUtils.getString(obj, "body"));
-			issue.setPosttime(JsonUtils.getLong(obj, "posttime"));
-			issue.setNumComments(JsonUtils.getInt(obj, "numComments"));
+			issue = (Issue) gson.fromJson(json, Issue.class);
 		} catch (Exception e) {
 			e.printStackTrace();
 			issue = null;
@@ -82,13 +76,23 @@ public class Issue implements Serializable {
 	/** 评论数 */
 	private int numComments;
 	/** 图片*/
-	private ArrayList<String> pictures;
+	private ArrayList<MPicture> pictures;
+	/** 图片数*/
+	private int numPictures ;
+	
+	public int getNumPictures() {
+		return numPictures;
+	}
 
-	public ArrayList<String> getPictures() {
+	public void setNumPictures(int numPictures) {
+		this.numPictures = numPictures;
+	}
+
+	public ArrayList<MPicture> getPictures() {
 		return pictures;
 	}
 
-	public void setPictures(ArrayList<String> pictures) {
+	public void setPictures(ArrayList<MPicture> pictures) {
 		this.pictures = pictures;
 	}
 
@@ -138,6 +142,14 @@ public class Issue implements Serializable {
 
 	public void setNumComments(int numComments) {
 		this.numComments = numComments;
+	}
+
+	@Override
+	public String toString() {
+		return "Issue [id=" + id + ", user=" + user + ", title=" + title
+				+ ", body=" + body + ", posttime=" + posttime
+				+ ", numComments=" + numComments + ", pictures=" + pictures
+				+ "]";
 	}
 
 }

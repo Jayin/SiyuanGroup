@@ -1,6 +1,5 @@
 package com.alumnigroup.app;
 
-
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +13,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.IBinder;
 
 import com.alumnigroup.api.MessageAPI;
+import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.api.VersionAPI;
 import com.alumnigroup.app.acty.AppUpdate;
 import com.alumnigroup.entity.ErrorCode;
@@ -41,17 +41,25 @@ public class CoreService extends Service {
 		super.onCreate();
 		mReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
-				L.i("CoreService-->onReceive-->"+intent.getAction());
-				if(intent!=null && context!=null){
+				L.i("CoreService-->onReceive-->" + intent.getAction());
+				if (intent != null && context != null) {
 					intent.setClass(context, CoreService.class);
 					startService(intent);
 				}
-				
+
 			};
 		};
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_To_Get_Unread);// 去获取未读消息数目
 		registerReceiver(mReceiver, filter);
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mReceiver != null) {
+			unregisterReceiver(mReceiver);
+		}
 	}
 
 	// 任务分发
@@ -60,13 +68,13 @@ public class CoreService extends Service {
 		if (intent != null) {
 			String action = intent.getAction();
 			Runnable runnable = null;
-			L.i("onStartCommand-->"+action);
+			L.i("onStartCommand-->" + action);
 			if (Constants.Action_checkVersion.equals(action)) {
 				runnable = new Runnable() {
 					@Override
 					public void run() {
 						checkVersion();// 版本检测
-						
+
 					}
 				};
 			} else if (Constants.Action_To_Get_Unread.equals(action)) {
@@ -82,14 +90,14 @@ public class CoreService extends Service {
 		return Service.START_STICKY;
 	}
 
-	protected void getUnread() {
-	
+	private void getUnread() {
+
 		final MessageAPI api = new MessageAPI();
 		api.getUnreadCount(new JsonResponseHandler() {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-			    int count = 0;// count of unread message
+				int count = 0;// count of unread message
 				try {
 					count = obj.getInt("count");
 				} catch (JSONException e) {
@@ -97,31 +105,35 @@ public class CoreService extends Service {
 				}
 				final int mCount = count;
 				// send broadcast after getting all messages
-				int unreadCount = MessageCache.getUnreadCount(getApplicationContext());
-				MessageCache.setUnreadCount(getApplicationContext(), unreadCount+count);
+				int unreadCount = MessageCache
+						.getUnreadCount(getApplicationContext());
+				MessageCache.setUnreadCount(getApplicationContext(),
+						unreadCount + count);
 				Intent intent = new Intent(Constants.Action_Receive_UnreadCount);
 				intent.putExtra("count", mCount);
 				sendBroadcast(intent);
-				L.i("getUnread-->"+count);
-//				if (count > 0) {
-//					api.getReceiedMessageList(count, new JsonResponseHandler() {
-//
-//						@Override
-//						public void onOK(Header[] headers, JSONObject obj) {
-//							ArrayList<MMessage> new_messages = MMessage
-//									.create_by_jsonarray(obj.toString());
-//							ArrayList<MMessage> cache_messages= MessageCache.getReceiveMessages(getApplicationContext());
-//							cache_messages.addAll(new_messages);
-//							MessageCache.setReceiveMessages(getApplicationContext(), cache_messages);
-//						
-//						}
-//
-//						@Override
-//						public void onFaild(int errorType, int errorCode) {
-//							L.e("获取消息错误," + ErrorCode.errorList.get(errorCode));
-//						}
-//					});
-//				}
+				L.i("getUnread-->" + count);
+				// if (count > 0) {
+				// api.getReceiedMessageList(count, new JsonResponseHandler() {
+				//
+				// @Override
+				// public void onOK(Header[] headers, JSONObject obj) {
+				// ArrayList<MMessage> new_messages = MMessage
+				// .create_by_jsonarray(obj.toString());
+				// ArrayList<MMessage> cache_messages=
+				// MessageCache.getReceiveMessages(getApplicationContext());
+				// cache_messages.addAll(new_messages);
+				// MessageCache.setReceiveMessages(getApplicationContext(),
+				// cache_messages);
+				//
+				// }
+				//
+				// @Override
+				// public void onFaild(int errorType, int errorCode) {
+				// L.e("获取消息错误," + ErrorCode.errorList.get(errorCode));
+				// }
+				// });
+				// }
 			}
 
 			@Override
@@ -161,7 +173,6 @@ public class CoreService extends Service {
 				} catch (NameNotFoundException e) {
 					e.printStackTrace();
 				}
-
 			}
 
 			@Override
@@ -169,12 +180,24 @@ public class CoreService extends Service {
 
 			}
 		});
-
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
+	private void login() {
+		String userid = AppInfo.getUserID(getApplicationContext());
+		String psw = AppInfo.getUserPSW(getApplicationContext());
+		UserAPI api = new UserAPI();
+		api.login(userid, psw, new JsonResponseHandler() {
+
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+                  L.i("login successfully");
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				L.e(ErrorCode.errorList.get(errorCode));
+			}
+		});
 	}
 
 }

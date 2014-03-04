@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ViewFlipper;
 
 import com.alumnigroup.api.UserAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
@@ -95,6 +96,9 @@ public class Login extends BaseActivity {
 							// succeed(json);
 							if (JsonUtils.isOK(json)) {
 								saveLoginInfo(json);
+								//保存用户账号密码
+								AppInfo.setUserID(getContext(), et_log_username.getText().toString());
+								AppInfo.setUserPSW(getContext(), et_login_password.getText().toString());
 							} else {
 								toast("Error:" + JsonUtils.getErrorString(json));
 							}
@@ -207,6 +211,7 @@ public class Login extends BaseActivity {
 		btn_cancle.setOnClickListener(this);
 
 		dialog = new MyProgressDialog(getContext());
+		
 
 	}
 

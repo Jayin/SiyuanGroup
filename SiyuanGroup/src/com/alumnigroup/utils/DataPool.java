@@ -46,6 +46,8 @@ public class DataPool {
 	
     public final static String SP_Name_User = "User"; //SharedPreference's name
     public final static String SP_Key_User = "user";//key name in SharedPreference 
+    public final static String SP_Key_User_Id = "userid"; //登录账号
+    public final static String SP_Key_User_PSW ="psw";   //登录密码
 	private Context context;
 	private String DataPoolName = "DataPool";
 	private SharedPreferences sp;

@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.http.client.ClientProtocolException;
 
 import android.content.Context;
+import android.preference.PreferenceActivity.Header;
 
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.DataPool;
@@ -19,6 +20,26 @@ import com.alumnigroup.utils.JsonUtils;
  * 
  */
 public class AppInfo {
+	/** 保存用户账号*/
+	public static boolean setUserID(Context context,String userid){
+		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
+        return dp.set(DataPool.SP_Key_User_Id, userid);
+	}
+	/**  获得用户账号*/
+	public static String getUserID(Context context){
+		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
+        return (String)dp.get(DataPool.SP_Key_User_Id);
+	}
+	/** 保存用户密码*/
+	public static boolean setUserPSW(Context context,String userpsw){
+		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
+        return dp.set(DataPool.SP_Key_User_PSW, userpsw);
+	}
+	/** 获得用户密码*/
+	public static String getUserPSW(Context context){
+		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
+        return (String)dp.get(DataPool.SP_Key_User_Id);
+	}
 	/**
 	 * 获得用户信息
 	 * 
