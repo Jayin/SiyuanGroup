@@ -80,7 +80,9 @@
                 android:id="@+id/iv_pic1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="center"
+                android:maxWidth="48dp"
+                android:maxHeight="50dp"
+                android:scaleType="fitCenter"
                 android:src="@drawable/ic_image_load_normal"  />
         </com.custom.view.FlowLayout>
     </LinearLayout>

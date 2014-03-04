@@ -9,9 +9,12 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.OpenableColumns;
+import android.sax.StartElementListener;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -531,13 +534,24 @@ class IssueAdapter extends BaseAdapter {
 		if (issue.getPictures() != null && issue.getPictures().size() > 0) {
 			h.pic1.setVisibility(View.VISIBLE);
 			// for (MPicture pic : issue.getPictures()) {
-			MPicture pic = issue.getPictures().get(0);
-		   L.i(pic.toString());
+			final MPicture pic = issue.getPictures().get(0);
+		    L.i(pic.toString());
 			h.pic1.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + pic.getPath(), h.pic1);
 			// }
+			
+			h.pic1.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					 Intent intent = new Intent(context, ImageDisplay.class);
+					 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
+				     context.startActivity(intent);
+				}
+			});
 		}
+		
 		return convertView;
 	}
 

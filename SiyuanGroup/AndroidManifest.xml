@@ -209,6 +209,10 @@
             android:name=".acty.GroupUsership"
             android:screenOrientation="portrait" >
         </activity>
+        <activity
+            android:name=".acty.ImageDisplay"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
