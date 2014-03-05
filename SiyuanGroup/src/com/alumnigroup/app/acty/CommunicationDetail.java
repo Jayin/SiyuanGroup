@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -25,14 +26,13 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.CommonUtils;
 import com.alumnigroup.utils.Constants;
-import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.CommentView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -45,7 +45,7 @@ public class CommunicationDetail extends BaseActivity {
 	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space,
 			btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
-	private ImageView iv_avater;
+	private ImageView iv_avater, iv_pic1;
 	private Issue issue;
 	// private PullAndLoadListView lv_comment;
 	private CommentView lv_comment;
@@ -55,7 +55,7 @@ public class CommunicationDetail extends BaseActivity {
 	private User user;
 	private View vistor, owner;
 	private BroadcastReceiver mReceiver;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,29 +64,38 @@ public class CommunicationDetail extends BaseActivity {
 		initLayout();
 		openReceiver();
 	}
-    //评论成功后添加评论条目
+
+	// 评论成功后添加评论条目
 	private void openReceiver() {
-		mReceiver = new BroadcastReceiver(){@Override
-		public void onReceive(Context context, Intent intent) {
-			if(intent.getAction().equals(Constants.Action_Issue_Comment_Ok)){
-				if(data_commet.isEmpty())tv_notify.setVisibility(View.GONE);
-				Comment comment = (Comment)intent.getSerializableExtra("comment");
-				CommonUtils.reverse(data_commet);
-				data_commet.add(comment);
-				CommonUtils.reverse(data_commet);
-//				adapter_commet.notifyDataSetChanged();
-				lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
-				
+		mReceiver = new BroadcastReceiver() {
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction()
+						.equals(Constants.Action_Issue_Comment_Ok)) {
+					if (data_commet.isEmpty())
+						tv_notify.setVisibility(View.GONE);
+					Comment comment = (Comment) intent
+							.getSerializableExtra("comment");
+					CommonUtils.reverse(data_commet);
+					data_commet.add(comment);
+					CommonUtils.reverse(data_commet);
+					// adapter_commet.notifyDataSetChanged();
+					lv_comment.setAdapter(new CommentAdapter(getContext(),
+							data_commet));
+
+				}
+
 			}
-			
-		}};
-		registerReceiver(mReceiver, new IntentFilter(Constants.Action_Issue_Comment_Ok));
+		};
+		registerReceiver(mReceiver, new IntentFilter(
+				Constants.Action_Issue_Comment_Ok));
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if(mReceiver!=null)unregisterReceiver(mReceiver);
+		if (mReceiver != null)
+			unregisterReceiver(mReceiver);
 	}
 
 	@Override
@@ -109,6 +118,7 @@ public class CommunicationDetail extends BaseActivity {
 		tv_title = (TextView) _getView(R.id.item_lv_acty_comminication_title);
 		tv_body = (TextView) _getView(R.id.item_lv_acty_comminication_body);
 		iv_avater = (ImageView) _getView(R.id.acty_communicationdetail_iv_avater);
+		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
 
 		owner = _getView(R.id.owner);
 		vistor = _getView(R.id.visitor);
@@ -128,6 +138,22 @@ public class CommunicationDetail extends BaseActivity {
 		} else {
 			ImageLoader.getInstance().displayImage(
 					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
+		}
+		// 图片
+		final MPicture pic = issue.getPictures() != null ? issue.getPictures().get(0)
+				: null;
+		if (pic != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + pic.getPath(), iv_pic1);
+			iv_pic1.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					 Intent intent = new Intent(getContext(), ImageDisplay.class);
+					 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
+				     openActivity(intent);
+				}
+			});
 		}
 		tv_username.setText(issue.getUser().getProfile().getName());
 		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
@@ -152,7 +178,7 @@ public class CommunicationDetail extends BaseActivity {
 		btn_edit.setOnClickListener(this);
 
 		lv_comment = (CommentView) _getView(R.id.item_lv_acty_comminication_lv_comment);
-		adapter_commet = new CommentAdapter(getContext(),data_commet);
+		adapter_commet = new CommentAdapter(getContext(), data_commet);
 		lv_comment.setAdapter(adapter_commet);
 		api.view(issue.getId(), new JsonResponseHandler() {
 			@Override
@@ -160,27 +186,28 @@ public class CommunicationDetail extends BaseActivity {
 				tv_notify.setText("评论加载中....");
 				tv_notify.setVisibility(View.VISIBLE);
 			}
+
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				tv_notify.setVisibility(View.GONE);
-				List<Comment> newData_comment = Comment
-						.create_by_jsonarray(obj.toString());
+				List<Comment> newData_comment = Comment.create_by_jsonarray(obj
+						.toString());
 				if (newData_comment != null && newData_comment.size() > 0) {
 					data_commet.addAll(newData_comment);
-					lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
+					lv_comment.setAdapter(new CommentAdapter(getContext(),
+							data_commet));
 				} else {
 					if (newData_comment == null) {
 						tv_notify.setVisibility(View.VISIBLE);
 						tv_notify.setText("网络异常,解析错误");
 						toast("网络异常,解析错误");
 					} else if (newData_comment.size() == 0) {
-						toast("还没有人评论!");
 						tv_notify.setText("还没有人评论!");
 						tv_notify.setVisibility(View.VISIBLE);
 					}
 				}
 			}
-			
+
 			@Override
 			public void onFaild(int errorType, int errorCode) {
 				toast(ErrorCode.errorList.get(errorCode));
@@ -198,10 +225,11 @@ public class CommunicationDetail extends BaseActivity {
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
 			Intent intent = null;
-			if(issue.getUser().getId()==AppInfo.getUser(getContext()).getId()){
-				intent=new Intent(this, SpacePersonal.class);
-			}else{
-				intent=new Intent(this, SpaceOther.class);
+			if (issue.getUser().getId() == AppInfo.getUser(getContext())
+					.getId()) {
+				intent = new Intent(this, SpacePersonal.class);
+			} else {
+				intent = new Intent(this, SpaceOther.class);
 			}
 			intent.putExtra("user", issue.getUser());
 			openActivity(intent);

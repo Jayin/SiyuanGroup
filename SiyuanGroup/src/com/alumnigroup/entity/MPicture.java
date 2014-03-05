@@ -17,8 +17,6 @@ public class MPicture implements Serializable {
 	private int cooperationid;
 	 /** 图片路径*/
 	private String path;
-	 /** 头像*/
-	private String avatar;
 
 	public int getId() {
 		return id;
@@ -60,19 +58,10 @@ public class MPicture implements Serializable {
 		this.path = path;
 	}
 
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
 	@Override
 	public String toString() {
 		return "MPicture [id=" + id + ", issueid=" + issueid + ", activityid="
 				+ activityid + ", cooperationid=" + cooperationid + ", path="
-				+ path + ", avatar=" + avatar + "]";
+				+ path + "]";
 	}
-
 }
