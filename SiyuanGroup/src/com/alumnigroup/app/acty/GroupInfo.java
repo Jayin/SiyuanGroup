@@ -16,12 +16,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.GroupShareAPI;
@@ -29,6 +31,7 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.acty.Group.GroupAdapter;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
@@ -225,34 +228,34 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-//				shareAPI.getShareList(1, group.getId(),
-//						new JsonResponseHandler() {
-//
-//							@Override
-//							public void onOK(Header[] headers, JSONObject obj) {
-//								List<Issue> newData_share = Issue
-//										.create_by_jsonarray(obj.toString());
-//								if (newData_share == null) {
-//									toast("网络异常 解析错误");
-//								} else if (newData_share.size() == 0) {
-//									toast("还没有分享");
-//									lv_share.setPullLoadEnable(false);
-//								} else {
-//									page_share = 1;
-//									data_share.clear();
-//									data_share.addAll(newData_share);
-//									adapter_share.notifyDataSetChanged();
-//									lv_share.setPullLoadEnable(true);
-//								}
-//								lv_share.stopRefresh();
-//							}
-//
-//							@Override
-//							public void onFaild(int errorType, int errorCode) {
-//								toast( ErrorCode.errorList.get(errorCode));
-//								lv_share.stopRefresh();
-//							}
-//						});
+				shareAPI.getShareList(1, group.getId(),
+						new JsonResponseHandler() {
+
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<Issue> newData_share = Issue
+										.create_by_jsonarray(obj.toString());
+								if (newData_share == null) {
+									toast("网络异常 解析错误");
+								} else if (newData_share.size() == 0) {
+									toast("还没有分享");
+									lv_share.setPullLoadEnable(false);
+								} else {
+									page_share = 1;
+									data_share.clear();
+									data_share.addAll(newData_share);
+									adapter_share.notifyDataSetChanged();
+									lv_share.setPullLoadEnable(true);
+								}
+								lv_share.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast( ErrorCode.errorList.get(errorCode));
+								lv_share.stopRefresh();
+							}
+						});
 			}
 
 			@Override
@@ -304,7 +307,6 @@ public class GroupInfo extends BaseActivity {
                        openActivity(intent);
 			}
 		});
-		lv_member.startRefresh();
 	}
 
 	@Override
@@ -388,8 +390,17 @@ public class GroupInfo extends BaseActivity {
 		views.add(info);
 		views.add(member);
 		views.add(share);
+		
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(null);  listviews.add(lv_member);listviews.add(lv_share); 
+		
+		List<BaseAdapter>  adapters = new ArrayList<BaseAdapter>();
+		adapters.add(null);  adapters.add(adapter_member);adapters.add(adapter_share); 
+		
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+//		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
+		
 	}
 
 	@Override
@@ -407,9 +418,11 @@ public class GroupInfo extends BaseActivity {
 			break;
 		case R.id.acty_groupinfo_footer_groupMenber:
 			viewpager.setCurrentItem(1);
+			if(page_member==0)lv_member.startRefresh();
 			break;
 		case R.id.acty_groupinfo_footer_groupShare:
 			viewpager.setCurrentItem(2);
+			if(page_share==0)lv_share.startRefresh();
 			break;
 		case R.id.acty_head_btn_more:
 			mPopupWindow.showAsDropDown(btn_more);
