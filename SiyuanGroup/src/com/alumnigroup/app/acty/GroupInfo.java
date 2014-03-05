@@ -398,7 +398,6 @@ public class GroupInfo extends BaseActivity {
 		adapters.add(null);  adapters.add(adapter_member);adapters.add(adapter_share); 
 		
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-//		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
 		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
 		
 	}
@@ -417,12 +416,18 @@ public class GroupInfo extends BaseActivity {
 			viewpager.setCurrentItem(0);
 			break;
 		case R.id.acty_groupinfo_footer_groupMenber:
-			viewpager.setCurrentItem(1);
-			if(page_member==0)lv_member.startRefresh();
+			if(viewpager.getCurrentItem()==1){
+				lv_member.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1);
+			}
 			break;
 		case R.id.acty_groupinfo_footer_groupShare:
-			viewpager.setCurrentItem(2);
-			if(page_share==0)lv_share.startRefresh();
+			if(viewpager.getCurrentItem()==2){
+				lv_share.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2);
+			}
 			break;
 		case R.id.acty_head_btn_more:
 			mPopupWindow.showAsDropDown(btn_more);

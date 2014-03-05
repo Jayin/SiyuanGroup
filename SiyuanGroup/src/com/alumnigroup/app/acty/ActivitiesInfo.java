@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 
 import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.ActivityShareAPI;
@@ -63,7 +65,7 @@ public class ActivitiesInfo extends BaseActivity {
 	private ActivityShareAPI shareAPI;
 	private List<Issue> data_share;
 	private IssueAdapter adapter_share;
-	private int page_share = 0;
+	private int page_share = 0,page_member = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -125,6 +127,7 @@ public class ActivitiesInfo extends BaseActivity {
 							data_member.clear();
 							data_member.addAll(newData_member);
 							adapter_member.notifyDataSetChanged();
+							page_member =1;
 						}
 						lv_member.stopRefresh();
 					}
@@ -141,7 +144,6 @@ public class ActivitiesInfo extends BaseActivity {
 			
 			@Override
 			public void onLoadMore() {
-			      
 				
 			}
 		});
@@ -229,7 +231,6 @@ public class ActivitiesInfo extends BaseActivity {
                        openActivity(intent);
 			}
 		});
-		lv_member.startRefresh();
 	}
 
 	@Override
@@ -299,8 +300,15 @@ public class ActivitiesInfo extends BaseActivity {
 		views.add(info);
 		views.add(member);
 		views.add(share);
+		
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(null);  listviews.add(lv_member);listviews.add(lv_share); 
+		
+		List<BaseAdapter>  adapters = new ArrayList<BaseAdapter>();
+		adapters.add(null);  adapters.add(adapter_member);adapters.add(adapter_share); 
+		
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new BaseOnPageChangeListener(btns));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
 	}
 
 	@Override
@@ -331,10 +339,18 @@ public class ActivitiesInfo extends BaseActivity {
 			viewpager.setCurrentItem(0);
 			break;
 		case R.id.btn_userlist:
-			viewpager.setCurrentItem(1);
+			if(viewpager.getCurrentItem()==1){
+				lv_member.startRefresh();
+			}else{
+				viewpager.setCurrentItem(1);
+			}
 			break;
 		case R.id.btn_share:
-			viewpager.setCurrentItem(2);
+			if(viewpager.getCurrentItem()==2){
+				lv_share.startRefresh();
+			}else{
+				viewpager.setCurrentItem(2);
+			}
 			break;
 		case R.id.acty_head_btn_more:
 			if (!mPopupWindow.isShowing())
