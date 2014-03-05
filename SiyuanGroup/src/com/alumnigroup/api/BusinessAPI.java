@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import com.alumnigroup.utils.CalendarUtils;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -119,16 +122,27 @@ public class BusinessAPI {
 	 *            处理器
 	 */
 	public void create(String name, String description, String company,
-			long regdeadline, int statusid, int isprivate,
+			long regdeadline, int statusid, int isprivate, File picture1,
+			File picture2, File picture3,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("name", name);
-		params.add("description", description);
-		params.add("company", company);
-		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
+		params.put("name", name);
+		params.put("description", description);
+		params.put("company", company);
+		params.put("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
 				CalendarUtils.TYPE_THIRD));
-		params.add("statusid", statusid + "");
-		params.add("isprivate", isprivate + "");
+		params.put("statusid", statusid + "");
+		params.put("isprivate", isprivate + "");
+		try {
+			if (picture1 != null)
+				params.put("picture1", picture1);
+			if (picture2 != null)
+				params.put("picture2", picture2);
+			if (picture3 != null)
+				params.put("picture3", picture3);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		RestClient.post("/api/cooperations/create", params, responseHandler);
 	}
 
@@ -218,14 +232,20 @@ public class BusinessAPI {
 			AsyncHttpResponseHandler responseHandler) {
 		find(page, 0, null, responseHandler);
 	}
-    /**
-     * 合作搜索
-     * @param page 页码
-     * @param id  作者ID optional
-     * @param name 标题关键字 optional
-     * @param description  内容关键字 optional
-     * @param responseHandler
-     */
+
+	/**
+	 * 合作搜索
+	 * 
+	 * @param page
+	 *            页码
+	 * @param id
+	 *            作者ID optional
+	 * @param name
+	 *            标题关键字 optional
+	 * @param description
+	 *            内容关键字 optional
+	 * @param responseHandler
+	 */
 	public void search(int page, int ownerid, String name, String description,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
@@ -237,7 +257,7 @@ public class BusinessAPI {
 			params.add("name", name);
 		if (description != null)
 			params.add("description", description);
-		params.add("fuzzy", "1");  
+		params.add("fuzzy", "1");
 		RestClient.get("/api/cooperations/list", params, responseHandler);
 	}
 
@@ -324,45 +344,68 @@ public class BusinessAPI {
 		params.add("id", id + "");
 		RestClient.get("/api/cooperations/view", params, responseHandler);
 	}
+
 	/**
 	 * 获取评论列表
-	 * @param id 评论ID
-	 * @param cooperationid 合作ID
-	 * @param userid 用户ID
+	 * 
+	 * @param id
+	 *            评论ID
+	 * @param cooperationid
+	 *            合作ID
+	 * @param userid
+	 *            用户ID
 	 * @param responseHandler
 	 */
-	public void getCommentListBase(int id,int cooperationid,int userid,AsyncHttpResponseHandler responseHandler){
+	public void getCommentListBase(int id, int cooperationid, int userid,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		if(id>0)params.add("id", id + "");
-		if(cooperationid>0)params.add("cooperationid", cooperationid + "");
-		if(userid>0)params.add("userid", userid + "");
-		RestClient.get("/api/cooperations/comments/list", params, responseHandler);
+		if (id > 0)
+			params.add("id", id + "");
+		if (cooperationid > 0)
+			params.add("cooperationid", cooperationid + "");
+		if (userid > 0)
+			params.add("userid", userid + "");
+		RestClient.get("/api/cooperations/comments/list", params,
+				responseHandler);
 	}
+
 	/**
 	 * 获得一个合作的评论列表
-	 * @param cooperationid 合作id
+	 * 
+	 * @param cooperationid
+	 *            合作id
 	 * @param responseHandler
 	 */
-	public void getCommentList(int cooperationid,AsyncHttpResponseHandler responseHandler){
+	public void getCommentList(int cooperationid,
+			AsyncHttpResponseHandler responseHandler) {
 		getCommentListBase(0, cooperationid, 0, responseHandler);
 	}
+
 	/**
 	 * 获得一个用户的合作合作列表
-	 * @param page 页码 ，可选
-	 * @param ownerid 用户的id 必填
-	 * @param responseHandler
- 	 */
-	public void getUserCooperationList(int page ,int ownerid,AsyncHttpResponseHandler responseHandler){
-		search(page, ownerid, null, null, responseHandler);
-	}
-	/**
-	 * 获得我的合作列表
-	 * @param page 页码 
+	 * 
+	 * @param page
+	 *            页码 ，可选
+	 * @param ownerid
+	 *            用户的id 必填
 	 * @param responseHandler
 	 */
-	public void getMyCooperationList(int page,AsyncHttpResponseHandler responseHandler){
+	public void getUserCooperationList(int page, int ownerid,
+			AsyncHttpResponseHandler responseHandler) {
+		search(page, ownerid, null, null, responseHandler);
+	}
+
+	/**
+	 * 获得我的合作列表
+	 * 
+	 * @param page
+	 *            页码
+	 * @param responseHandler
+	 */
+	public void getMyCooperationList(int page,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		params.add("page",page+"");
+		params.add("page", page + "");
 		RestClient.get("/api/cooperations/my", params, responseHandler);
 	}
 }

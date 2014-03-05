@@ -5,8 +5,8 @@
     android:background="@drawable/item_listview_bg_whitetogrey"
     android:orientation="vertical"
     android:paddingLeft="4dp"
-    android:paddingTop="4dp"
-     android:paddingRight="4dp" >
+    android:paddingRight="4dp"
+    android:paddingTop="4dp" >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,10 +15,9 @@
 
         <ImageView
             android:id="@+id/iv_avater"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
             style="@style/ImageView.avatar"
-         />
+            android:layout_width="48dp"
+            android:layout_height="48dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -100,6 +99,23 @@
         android:textColor="@color/black"
         android:textSize="12sp" />
 
+    <com.custom.view.FlowLayout
+        android:id="@+id/flowlayout_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:gravity="left" >
+
+        <ImageView
+            android:id="@+id/iv_pic1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="50dp"
+            android:maxWidth="48dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_image_load_normal" />
+    </com.custom.view.FlowLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -110,7 +126,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" android:visibility="invisible">
+            android:orientation="horizontal"
+            android:visibility="invisible" >
 
             <ImageView
                 android:layout_width="15dp"

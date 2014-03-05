@@ -1,26 +1,41 @@
 package com.alumnigroup.app.acty;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.api.BusinessAPI;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.EditTextUtils;
+import com.alumnigroup.utils.FilePath;
+import com.alumnigroup.utils.FileUtils;
+import com.alumnigroup.utils.ImageUtils;
 import com.alumnigroup.utils.StringUtils;
 import com.alumnigroup.widget.TimePickDialog;
 import com.alumnigroup.widget.TimePickDialog.OnSiglePickFinishedListener;
+import com.custom.view.FlowLayout;
 
 public class BusinessPublish extends BaseActivity {
+	private int RequestCode_Pick_image = 1;
 	private View btn_back, btn_create, btn_deadline, btn_isprivate;
 	private EditText et_name, et_description, et_company;
 	private TextView tv_deadline, tv_isPrivate;
@@ -28,6 +43,8 @@ public class BusinessPublish extends BaseActivity {
 	private long regdeadline;
 	private BusinessAPI api;
 	private Cooperation c;
+	private FlowLayout flowLayout;
+	private boolean withPic = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +68,8 @@ public class BusinessPublish extends BaseActivity {
 		btn_deadline = _getView(R.id.btn_deadline);
 		btn_isprivate = _getView(R.id.isprivate);
 
+		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
+
 		et_name = (EditText) _getView(R.id.et_name);
 		et_description = (EditText) _getView(R.id.et_description);
 		et_company = (EditText) _getView(R.id.et_company);
@@ -58,6 +77,7 @@ public class BusinessPublish extends BaseActivity {
 		tv_deadline = (TextView) _getView(R.id.tv_deadline);
 		tv_isPrivate = (TextView) _getView(R.id.tv_isprivate);
 
+		_getView(R.id.btn_add_pic).setOnClickListener(this);
 		btn_back.setOnClickListener(this);
 		btn_create.setOnClickListener(this);
 		btn_deadline.setOnClickListener(this);
@@ -76,15 +96,20 @@ public class BusinessPublish extends BaseActivity {
 		});
 
 		if (c != null) {
-			regdeadline =c.getRegdeadline();
+			regdeadline = c.getRegdeadline();
 			tv_deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
 					CalendarUtils.TYPE_TWO));
 			tv_isPrivate.setText(c.getIsprivate() == 1 ? "是" : "否");
 			et_name.setText(c.getName());
 			et_description.setText(c.getDescription());
 			et_company.setText(c.getCompany());
+			
+			 //编辑状态下不能换图片?
+			if (c.getUser().getId() != AppInfo.getUser(getContext()).getId()) {
+				_getView(R.id.tv_pic).setVisibility(View.GONE);
+				flowLayout.setVisibility(View.GONE);
+			}
 		}
-
 	}
 
 	@Override
@@ -100,13 +125,12 @@ public class BusinessPublish extends BaseActivity {
 				String company = EditTextUtils.getTextTrim(et_company);
 				int statusid = 1;
 				int isprivate = tv_isPrivate.getText().equals("是") ? 1 : 0;
-				if(c==null){
-					create(name,description,company,statusid,isprivate);
-				}else{
-					update(name,description,company,statusid,isprivate);
+				if (c == null) {
+					create(name, description, company, statusid, isprivate);
+				} else {
+					update(name, description, company, statusid, isprivate);
 				}
-				
-				
+
 			}
 			break;
 		case R.id.btn_deadline:
@@ -119,7 +143,17 @@ public class BusinessPublish extends BaseActivity {
 				tv_isPrivate.setText("是");
 			}
 			break;
-
+		case R.id.btn_add_pic:
+			if (flowLayout.getChildCount() >= 2) {
+				toast("目前仅支持发一张图片");
+				return;
+			}
+			// to pick a pic & add...
+			Intent intent = new Intent(Intent.ACTION_PICK);
+			intent.setType("image/*");
+			// openActivity(intent);
+			startActivityForResult(intent, RequestCode_Pick_image);
+			break;
 		default:
 			break;
 		}
@@ -127,25 +161,30 @@ public class BusinessPublish extends BaseActivity {
 
 	private void update(String name, String description, String company,
 			int statusid, int isprivate) {
-		 api.update(c.getId(),name, description, company, regdeadline, statusid, isprivate, new JsonResponseHandler() {
-			
-			@Override
-			public void onOK(Header[] headers, JSONObject obj) {
-				toast("已更新");
-				closeActivity();
-			}
-			
-			@Override
-			public void onFaild(int errorType, int errorCode) {
-				toast("更新失败 " + ErrorCode.errorList.get(errorCode));
-			}
-		});
-		
+		api.update(c.getId(), name, description, company, regdeadline,
+				statusid, isprivate, new JsonResponseHandler() {
+
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						toast("已更新");
+						closeActivity();
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast("更新失败 " + ErrorCode.errorList.get(errorCode));
+					}
+				});
+
 	}
 
-	private void create(String name,String description,String company,int statusid,int isprivate) {
+	private void create(String name, String description, String company,
+			int statusid, int isprivate) {
+		
+		File pic1 = withPic ? new File(FilePath.getImageFilePath()
+				+ "cooperation_pic1.jpg") : null;
 		api.create(name, description, company, regdeadline, statusid,
-				isprivate, new JsonResponseHandler() {
+				isprivate, pic1,null,null,new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -158,7 +197,7 @@ public class BusinessPublish extends BaseActivity {
 						toast("发布失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
-		
+
 	}
 
 	private boolean check() {
@@ -179,6 +218,39 @@ public class BusinessPublish extends BaseActivity {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RequestCode_Pick_image && resultCode == RESULT_OK) {
+			Uri photoUri = data.getData();
+			View container = getLayoutInflater().inflate(
+					R.layout.item_flowlayout_image, null);
+			ImageView iv = (ImageView) container.findViewById(R.id.iv_image);
+			iv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					FileUtils.deleteFile(FilePath.getImageFilePath()
+							+ "cooperation_pic1.jpg");// 删除
+					flowLayout.removeViewAt(1);
+					withPic = false;
+				}
+			});
+			try {
+				Bitmap bitmap = BitmapUtils.getPicFromUri(photoUri,
+						getContext());
+				iv.setImageBitmap(ImageUtils.zoomBitmap(bitmap, 100, 100));
+				ImageUtils.saveImageToSD(FilePath.getImageFilePath()
+						+ "cooperation_pic1.jpg",
+						ImageUtils.createImageThumbnail(bitmap, 800), 80);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			flowLayout.addView(container);
+			withPic = true;
+		}
 	}
 
 }

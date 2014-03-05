@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -28,10 +29,12 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -489,6 +492,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						.findViewById(R.id.tv_numComment);
 				h.avatar = (ImageView) convertView.findViewById(R.id.iv_avater);
 				h.status = (ImageView) convertView.findViewById(R.id.iv_status);
+				h.pic1 =(ImageView)convertView.findViewById(R.id.iv_pic1);
 				convertView.setTag(h);
 			} else {
 				h = (ViewHolder) convertView.getTag();
@@ -520,13 +524,37 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						"drawable://" + R.drawable.ic_image_status_off,
 						h.status);
 			}
+			
+			// 暂时1张图片
+			h.pic1.setVisibility(View.GONE);
+			  L.i(c.getNumPictures()+"");
+			if (c.getPictures() != null && c.getPictures().size() > 0) {
+				h.pic1.setVisibility(View.VISIBLE);
+				// for (MPicture pic : issue.getPictures()) {
+				final MPicture pic = c.getPictures().get(0);
+			    L.i(pic.toString());
+				h.pic1.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + pic.getPath(), h.pic1);
+				// }
+				
+				h.pic1.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						 Intent intent = new Intent(getContext(), ImageDisplay.class);
+						 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
+					     openActivity(intent);
+					}
+				});
+			}
 			return convertView;
 		}
 
 		class ViewHolder {
 			TextView name_project, deadline, major, name_user, description,
 					numFavour, commentNum;
-			ImageView avatar, status;
+			ImageView avatar, status,pic1,pic2,pic3;
 		}
 
 	}

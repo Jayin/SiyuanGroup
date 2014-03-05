@@ -70,8 +70,29 @@ public class Cooperation implements Serializable {
 	private Status status;
 	/** 评论数 */
 	private int numComments;
+	/** 图片数*/
+	private int numPictures;
 	/** 项目(消息)截止日期*/ 
     private long regdeadline ;
+    /** 图片*/
+    private ArrayList<MPicture> pictures;
+    
+    
+	public int getNumPictures() {
+		return numPictures;
+	}
+
+	public void setNumPictures(int numPictures) {
+		this.numPictures = numPictures;
+	}
+
+	public ArrayList<MPicture> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(ArrayList<MPicture> pictures) {
+		this.pictures = pictures;
+	}
 
 	public long getRegdeadline() {
 		return regdeadline;

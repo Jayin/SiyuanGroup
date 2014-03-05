@@ -23,8 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/item_listview_bg_whitetogrey"
-                android:orientation="vertical"
                 android:clickable="true"
+                android:orientation="vertical"
                 android:padding="4dp" >
 
                 <LinearLayout
@@ -97,22 +97,22 @@
                     android:textColor="@color/black"
                     android:textSize="12sp" />
 
-              <com.custom.view.FlowLayout
-            android:id="@+id/flowlayout_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:gravity="left" >
+                <com.custom.view.FlowLayout
+                    android:id="@+id/flowlayout_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:gravity="left" >
 
-            <ImageView
-                android:id="@+id/iv_pic1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:maxWidth="48dp"
-                android:maxHeight="50dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/ic_image_load_normal"  />
-        </com.custom.view.FlowLayout>
+                    <ImageView
+                        android:id="@+id/iv_pic1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxHeight="50dp"
+                        android:maxWidth="48dp"
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/ic_image_load_normal" />
+                </com.custom.view.FlowLayout>
             </LinearLayout>
 
             <ImageView
@@ -123,9 +123,9 @@
             <TextView
                 android:id="@+id/acty_communicationdetail_tv_notify"
                 style="@style/TextView.black"
+                android:layout_gravity="center_horizontal"
                 android:text="网络异常"
-                android:visibility="gone"
-                android:layout_gravity="center_horizontal" />
+                android:visibility="gone" />
 
             <com.alumnigroup.widget.CommentView
                 android:id="@+id/item_lv_acty_comminication_lv_comment"
