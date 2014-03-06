@@ -44,7 +44,7 @@
                     style="@style/TextView.base"
                     android:text="2013-11-30 21:00:00"
                     android:textColor="@color/grey_lv_third"
-                    android:textSize="12sp" />
+                    android:textSize="12sp" android:layout_marginRight="4dp"/>
             </LinearLayout>
 
             <TextView

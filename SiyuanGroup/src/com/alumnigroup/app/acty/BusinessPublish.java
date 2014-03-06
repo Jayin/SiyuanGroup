@@ -91,7 +91,6 @@ public class BusinessPublish extends BaseActivity {
 				regdeadline = selecttime;
 				tv_deadline.setText(CalendarUtils.getTimeFromat(selecttime,
 						CalendarUtils.TYPE_TWO));
-
 			}
 		});
 
@@ -103,9 +102,8 @@ public class BusinessPublish extends BaseActivity {
 			et_name.setText(c.getName());
 			et_description.setText(c.getDescription());
 			et_company.setText(c.getCompany());
-			
 			 //编辑状态下不能换图片?
-			if (c.getUser().getId() != AppInfo.getUser(getContext()).getId()) {
+			if (c.getUser().getId() == AppInfo.getUser(getContext()).getId()) {
 				_getView(R.id.tv_pic).setVisibility(View.GONE);
 				flowLayout.setVisibility(View.GONE);
 			}
@@ -130,7 +128,6 @@ public class BusinessPublish extends BaseActivity {
 				} else {
 					update(name, description, company, statusid, isprivate);
 				}
-
 			}
 			break;
 		case R.id.btn_deadline:
@@ -175,7 +172,6 @@ public class BusinessPublish extends BaseActivity {
 						toast("更新失败 " + ErrorCode.errorList.get(errorCode));
 					}
 				});
-
 	}
 
 	private void create(String name, String description, String company,

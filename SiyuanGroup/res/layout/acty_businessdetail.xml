@@ -75,7 +75,6 @@
 
             <LinearLayout
                 android:id="@+id/linly_owner"
-            
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
@@ -120,17 +119,15 @@
                         android:textColor="@color/grey_lv_two"
                         android:textSize="16sp" />
                 </RelativeLayout>
-
-            
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linly_common"     android:visibility="gone" 
+                android:id="@+id/linly_common"
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
                 android:background="@drawable/item_listview_bg_whitetogrey"
                 android:orientation="horizontal"
-                >
+                android:visibility="gone" >
 
                 <RelativeLayout
                     android:id="@+id/btn_favourite"
@@ -270,6 +267,33 @@
                     android:textColor="@color/black"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/ic_preference_first_normal"
+                android:orientation="horizontal" >
+
+                <TextView
+                    style="@style/TextView.base"
+                    android:padding="6dp"
+                    android:text="图片"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <com.custom.view.FlowLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/ic_preference_last_normal"
+                android:orientation="horizontal" >
+                <ImageView />
+            </com.custom.view.FlowLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

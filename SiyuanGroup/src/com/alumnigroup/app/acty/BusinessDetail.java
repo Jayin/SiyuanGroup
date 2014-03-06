@@ -196,6 +196,15 @@ public class BusinessDetail extends BaseActivity {
 			break;
 		case R.id.btn_space:
 			// toast("to space");
+			User u = c.getUser();
+			Intent intent = new Intent();
+			if(user.getId() != u.getId()){
+				intent.setClass(getContext(), SpaceOther.class);
+			}else{
+				intent.setClass(getContext(), SpacePersonal.class);
+			}
+			intent.putExtra("user",c.getUser());
+			openActivity(intent);
 			break;
 		case R.id.btn_comment:
 			comment();

@@ -75,6 +75,7 @@ public class CommunicationPublish extends BaseActivity {
 			String body = EditTextUtils.getTextTrim(et_content);
 			if (title == null || title.equals("")) {
 				toast("标题不能为空!");
+				return;
 			}
 			File pic1 = withPic ? new File(FilePath.getImageFilePath()
 					+ "issue_pic1.jpg") : null;
