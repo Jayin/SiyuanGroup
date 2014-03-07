@@ -19,6 +19,7 @@ import com.alumnigroup.app.acty.SpaceOther;
 import com.alumnigroup.app.acty.SpacePersonal;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.CalendarUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -70,28 +71,28 @@ public class DynamicAdapter extends BaseAdapter {
 
 		ImageView portrait = (ImageView) convertView
 				.findViewById(R.id.item_lv_alldynamic_iv_portrait);
-		
+
 		portrait.setOnClickListener(new PortraitOnClick(position));
-		
+
 		ImageLoader.getInstance().displayImage(
 				RestClient.BASE_URL + dynamic.getUser().getAvatar(), portrait);
 		TextView name = (TextView) convertView
 				.findViewById(R.id.item_lv_alldynamic_tv_name);
-		name.setText(dynamic.getUser().getUsername());
+		name.setText(dynamic.getUser().getProfile().getName());
 		TextView content = (TextView) convertView
 				.findViewById(R.id.item_lv_alldynamic_tv_content);
 		content.setText(dynamic.getMessage());
 		TextView time = (TextView) convertView
 				.findViewById(R.id.item_lv_alldynamic_tv_datetime);
-
+		time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(),
+				CalendarUtils.TYPE_timeline));
 		return convertView;
 	}
-	
-	
-	class PortraitOnClick implements OnClickListener{
-		
+
+	class PortraitOnClick implements OnClickListener {
+
 		int position;
-		
+
 		public PortraitOnClick(int position) {
 			this.position = position;
 		}
@@ -102,16 +103,16 @@ public class DynamicAdapter extends BaseAdapter {
 			 * 如果是自己就进自己的空间，不然就进别人的空间
 			 */
 			User user = dynamics.get(position).getUser();
-			if(user.getId()==AppInfo.getUser(context).getId()){
-				Intent intent = new Intent(context,SpacePersonal.class);
+			if (user.getId() == AppInfo.getUser(context).getId()) {
+				Intent intent = new Intent(context, SpacePersonal.class);
 				context.startActivity(intent);
 				return;
 			}
-			Intent intent = new Intent(context,SpaceOther.class);
+			Intent intent = new Intent(context, SpaceOther.class);
 			intent.putExtra("user", dynamics.get(position).getUser());
 			context.startActivity(intent);
 		}
-		
+
 	}
 
 }

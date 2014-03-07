@@ -8,20 +8,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.alumnigroup.utils.L;
 import com.google.gson.Gson;
 
 /**
- * 封装一个动态的属性<br>
+ * 一条动态
  * 
- * @author vector
+ * @author vector;Jayin since 2014.3.7
  */
+@SuppressWarnings("serial")
 public class Dynamic implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
 	/**
 	 * 解析单个动态
@@ -89,14 +84,25 @@ public class Dynamic implements Serializable {
 	public Dynamic() {
 
 	}
-
+    /** 动态id*/
 	private int id;
+	 /** 用户id*/
 	private int userid;
-	private int proupid;
+	 /** 圈子ID*/
+	private int groupid;
+	 /** 类别ID*/
 	private int itemtype;
+	 /** 资源ID*/
 	private int itemid;
+	 /** 动态描述(仅限搜索)*/
 	private String message;
+	 /** 该动态的用户*/
 	private User user;
+	/** 创建时间*/
+	private long createtime;
+	/** 类型名称*/
+	private String typename;
+	
 
 	public int getId() {
 		return id;
@@ -112,14 +118,6 @@ public class Dynamic implements Serializable {
 
 	public void setUserid(int userid) {
 		this.userid = userid;
-	}
-
-	public int getProupid() {
-		return proupid;
-	}
-
-	public void setProupid(int proupid) {
-		this.proupid = proupid;
 	}
 
 	public int getItemtype() {
@@ -154,4 +152,27 @@ public class Dynamic implements Serializable {
 		this.user = user;
 	}
 
+	public int getGroupid() {
+		return groupid;
+	}
+
+	public void setGroupid(int groupid) {
+		this.groupid = groupid;
+	}
+
+	public long getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(long createtime) {
+		this.createtime = createtime;
+	}
+
+	public String getTypename() {
+		return typename;
+	}
+
+	public void setTypename(String typename) {
+		this.typename = typename;
+	}
 }

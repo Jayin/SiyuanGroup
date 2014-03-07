@@ -11,7 +11,7 @@ import com.loopj.android.http.RequestParams;
 public class DynamicAPI {
 	/**
 	 * 拿到全站动态的列表
-	 * @param page
+	 * @param page  页码
 	 * @param responseHandler
 	 */
 	public void getAll(int page, AsyncHttpResponseHandler responseHandler) {
@@ -20,7 +20,10 @@ public class DynamicAPI {
 		RestClient.get("/api/events/list", params, responseHandler);
 	}
 	/**
-	 * 拿到指定用户的动态
+	 *  拿到指定用户的动态
+	 * @param page 页码
+	 * @param userid 用户id
+	 * @param responseHandler
 	 */
 	public void get(int page, int userid,AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();

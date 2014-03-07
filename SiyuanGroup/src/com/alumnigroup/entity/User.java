@@ -230,8 +230,6 @@ public class User implements Serializable {
 		private String summary;
 		/** 邮箱 */
 		private String email;
-		/** 昵称 **/
-		private String nickname;
 		/** 用戶名字 **/
 		private String name;
 		/**
@@ -274,14 +272,6 @@ public class User implements Serializable {
 
 		public void setEmail(String email) {
 			this.email = email;
-		}
-
-		public String getNickname() {
-			return nickname;
-		}
-
-		public void setNickname(String nickname) {
-			this.nickname = nickname;
 		}
 
 		public String getName() {
@@ -334,12 +324,11 @@ public class User implements Serializable {
 
 		@Override
 		public String toString() {
-			return "Profile [email=" + email + ", nickname=" + nickname
+			return "Profile [summary=" + summary + ", email=" + email
 					+ ", name=" + name + ", gender=" + gender + ", age=" + age
 					+ ", grade=" + grade + ", university=" + university
-					+ ", major=" + major + "]";
+					+ ", major=" + major + ", tag=" + tag + "]";
 		}
-
 	}
 
 }

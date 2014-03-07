@@ -61,7 +61,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	/**
 	 * 页卡的PullAndLoadListView
 	 */
-	private XListView lvAllDynamic, lvFriendDynamic;
+	private XListView lv_AllDynamic, lvFriendDynamic;
 	/**
 	 * 页卡的数据 -- listview
 	 */
@@ -181,7 +181,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		aptAllDynamic = new DynamicAdapter(alAllDynamicContent, this);
 		aptFriendDynamic = new DynamicAdapter(alFriendDynamicContent, this);
 
-		lvAllDynamic.setAdapter(aptAllDynamic);
+		lv_AllDynamic.setAdapter(aptAllDynamic);
 		lvFriendDynamic.setAdapter(aptFriendDynamic);
 	}
 
@@ -218,7 +218,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		LayoutInflater inflater = getLayoutInflater();
 		allDynamic = inflater.inflate(R.layout.item_lv_acty_alldynamic_content,
 				null);
-		lvAllDynamic = (XListView) allDynamic
+		lv_AllDynamic = (XListView) allDynamic
 				.findViewById(R.id.item_lv_alldynamic_content);
 
 		/**
@@ -343,10 +343,10 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 为下拉刷新、加载更多绑定控制器
 	 */
 	private void initController() {
-		lvAllDynamic.setPullLoadEnable(true);
+		lv_AllDynamic.setPullLoadEnable(true);
 		lvFriendDynamic.setPullLoadEnable(true);
 
-		lvAllDynamic.setXListViewListener(new IXListViewListener() {
+		lv_AllDynamic.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
@@ -361,7 +361,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 							toast("网络异常，解析错误");
 						} else if (newData_alldynamic.size() == 0) {
 							toast("还没有任何动态");
-							lvAllDynamic.setPullLoadEnable(false);
+							lv_AllDynamic.setPullLoadEnable(false);
 						} else {
 
 							page_all = 1;
@@ -370,15 +370,15 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 							saveAllData2SP(newData_alldynamic);
 							aptAllDynamic.notifyDataSetChanged();
 
-							lvAllDynamic.setPullLoadEnable(true);
+							lv_AllDynamic.setPullLoadEnable(true);
 						}
-						lvAllDynamic.stopRefresh();
+						lv_AllDynamic.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast(ErrorCode.errorList.get(errorCode));
-						lvAllDynamic.stopRefresh();
+						lv_AllDynamic.stopRefresh();
 					}
 				});
 
@@ -388,8 +388,8 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			public void onLoadMore() {
 
 				if (page_all == 0) {
-					lvAllDynamic.stopLoadMore();
-					lvAllDynamic.startRefresh();
+					lv_AllDynamic.stopLoadMore();
+					lv_AllDynamic.startRefresh();
 					return;
 				}
 				api.getAll(page_all + 1, new JsonResponseHandler() {
@@ -402,20 +402,19 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 							toast("网络异常，解析错误");
 						} else if (newData_alldynamic.size() == 0) {
 							toast("没有更多");
-							lvAllDynamic.setPullLoadEnable(false);
+							lv_AllDynamic.setPullLoadEnable(false);
 						} else {
-
-							page_all = 1;
+							page_all++;
 							alAllDynamicContent.addAll(newData_alldynamic);
 							aptAllDynamic.notifyDataSetChanged();
 						}
-						lvAllDynamic.stopLoadMore();
+						lv_AllDynamic.stopLoadMore();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast(ErrorCode.errorList.get(errorCode));
-						lvAllDynamic.stopLoadMore();
+						lv_AllDynamic.stopLoadMore();
 					}
 				});
 
@@ -482,7 +481,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 									lvFriendDynamic.setPullLoadEnable(false);
 								} else {
 
-									page_myfriend = 1;
+									page_myfriend++;
 									alFriendDynamicContent
 											.addAll(newData_alldynamic);
 									aptFriendDynamic.notifyDataSetChanged();
@@ -500,7 +499,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			}
 		});
 		
-		lvAllDynamic.startRefresh();
+		lv_AllDynamic.startRefresh();
 	}
 
 }

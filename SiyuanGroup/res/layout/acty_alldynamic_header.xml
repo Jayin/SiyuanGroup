@@ -13,7 +13,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_acty_head_back_small" />
+            android:src="@drawable/ic_acty_head_back_big" />
     </RelativeLayout>
 
     <ImageView
@@ -23,7 +23,7 @@
         android:background="@drawable/ic_acty_head_hr" />
 
     <RelativeLayout
-        android:layout_width="1dp"
+        android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="4" >
 
@@ -32,10 +32,30 @@
             style="@style/navigtion_head_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="46dp"
+            android:layout_centerInParent="true"
             android:text="全站动态" />
+    </RelativeLayout>
+    
+
+    <ImageView
+        android:id="@+id/acty_head_iv_hr2"
+        android:layout_width="2px"
+        android:layout_height="match_parent"
+        android:background="@drawable/ic_acty_head_hr"
+        android:visibility="invisible" />
+
+    <RelativeLayout
+        android:id="@+id/acty_head_btn_compose"
+        style="@style/RelativeLayout.allmember_header_btn"
+        android:clickable="true"
+        android:visibility="invisible" >
+
+        <ImageView
+            android:id="@+id/acty_head_iv_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_acty_head_compose" />
     </RelativeLayout>
 
 </LinearLayout>
