@@ -36,26 +36,18 @@ import com.loopj.android.http.RequestParams;
  */
 public class EditKeyword extends BaseActivity {
 
-	/**
-	 * 控件
-	 */
+	/** 控件 */
 	private OutoLinefeedLayout lyContent, lyHot;
 	private EditText etAdd;
 	private View btnAdd, btnRelease, parent;
 
-	/**
-	 * 关键字
-	 */
+	/**  关键字 */
 	private int backgroupcolor = 0;
 
-	/**
-	 * 增加的关键字
-	 */
+	/** 增加的关键字 */
 	private ArrayList<Keyword> alMyKeyword;
 
-	/**
-	 * 热门关键字
-	 */
+	/**  热门关键字 */
 	private ArrayList<Keyword> alHotKeyword;
 
 	private UserAPI api;
@@ -126,6 +118,8 @@ public class EditKeyword extends BaseActivity {
 
 		btnRelease = _getView(R.id.acty_head_btn_release);
 		btnRelease.setOnClickListener(this);
+
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 	}
 
 	private void initKeyWord() {
@@ -135,7 +129,7 @@ public class EditKeyword extends BaseActivity {
 			for (String tag : tags) {
 				String content = new String(tag);
 				addKeyWord(content);
-				backgroupcolor = backgroupcolor==0?1:0;
+				backgroupcolor = backgroupcolor == 0 ? 1 : 0;
 			}
 			updateKeyWord();
 		}
@@ -192,10 +186,7 @@ public class EditKeyword extends BaseActivity {
 
 	@Override
 	public void onClick(View v) {
-		int id = v.getId();
-
-		switch (id) {
-
+		switch (v.getId()) {
 		/**
 		 * 增加按钮点下
 		 */
@@ -207,7 +198,9 @@ public class EditKeyword extends BaseActivity {
 			dialog.show();
 			sendKeyWord();
 			break;
-
+		case R.id.acty_head_btn_back:
+			closeActivity();
+			break;
 		default:
 			break;
 		}
@@ -220,7 +213,7 @@ public class EditKeyword extends BaseActivity {
 			return;
 		}
 		addKeyWord(keyworkContent);
-		backgroupcolor = backgroupcolor==0?1:0;
+		backgroupcolor = backgroupcolor == 0 ? 1 : 0;
 		updateKeyWord();
 		etAdd.setText("");
 	}
