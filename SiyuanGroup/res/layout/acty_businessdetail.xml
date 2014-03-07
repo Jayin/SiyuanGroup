@@ -292,7 +292,8 @@
                 android:layout_marginRight="4dp"
                 android:background="@drawable/ic_preference_last_normal"
                 android:orientation="horizontal" >
-                <ImageView />
+<!-- to -->
+                
             </com.custom.view.FlowLayout>
 
             <LinearLayout
