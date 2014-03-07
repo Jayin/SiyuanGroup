@@ -16,13 +16,8 @@ import com.google.gson.Gson;
  * 
  * @author vector /Jayin Ton
  */
+@SuppressWarnings("serial")
 public class User implements Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-
 	/**
 	 * 解析单个用户
 	 * 
@@ -207,10 +202,6 @@ public class User implements Serializable {
 
 	public void setNumEvents(int numEvents) {
 		this.numEvents = numEvents;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
 	}
 
 	@Override

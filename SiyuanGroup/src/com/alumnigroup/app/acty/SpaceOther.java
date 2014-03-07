@@ -21,6 +21,7 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
@@ -264,12 +265,13 @@ public class SpaceOther extends BaseActivity {
 									portrait);
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
-							name.setText(dynamic.getUser().getUsername());
+							name.setText(dynamic.getUser().getProfile().getName());
 							TextView content = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_content);
 							content.setText(dynamic.getMessage());
 							TextView time = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_datetime);
+							time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(), CalendarUtils.TYPE_timeline));
 							/**
 							 */
 							llNewDynamic.addView(convertView);
