@@ -65,26 +65,41 @@ public class DynamicAdapter extends BaseAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+		ViewHolder h = null;
+		if (convertView == null) {
+			h = new ViewHolder();
+			convertView = inflater.inflate(
+					R.layout.item_lv_alldynamic_update_spatial, null);
+
+			h.portrait = (ImageView) convertView
+					.findViewById(R.id.item_lv_alldynamic_iv_portrait);
+			h.name = (TextView) convertView
+					.findViewById(R.id.item_lv_alldynamic_tv_name);
+			h.content = (TextView) convertView
+					.findViewById(R.id.item_lv_alldynamic_tv_content);
+			h.time = (TextView) convertView
+					.findViewById(R.id.item_lv_alldynamic_tv_datetime);
+			convertView.setTag(h);
+		} else {
+			h = (ViewHolder) convertView.getTag();
+		}
 		Dynamic dynamic = dynamics.get(position);
-		convertView = inflater.inflate(
-				R.layout.item_lv_alldynamic_update_spatial, null);
 
-		ImageView portrait = (ImageView) convertView
-				.findViewById(R.id.item_lv_alldynamic_iv_portrait);
+		h.portrait.setOnClickListener(new PortraitOnClick(position));
 
-		portrait.setOnClickListener(new PortraitOnClick(position));
-
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + dynamic.getUser().getAvatar(), portrait);
-		TextView name = (TextView) convertView
-				.findViewById(R.id.item_lv_alldynamic_tv_name);
-		name.setText(dynamic.getUser().getProfile().getName());
-		TextView content = (TextView) convertView
-				.findViewById(R.id.item_lv_alldynamic_tv_content);
-		content.setText(dynamic.getMessage());
-		TextView time = (TextView) convertView
-				.findViewById(R.id.item_lv_alldynamic_tv_datetime);
-		time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(),
+		if (dynamic.getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + dynamic.getUser().getAvatar(),
+					h.portrait);
+		} else {
+			ImageLoader.getInstance()
+					.displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,
+							h.portrait);
+		}
+		h.name.setText(dynamic.getUser().getProfile().getName());
+		h.content.setText(dynamic.getMessage());
+		h.time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(),
 				CalendarUtils.TYPE_timeline));
 		return convertView;
 	}
@@ -112,6 +127,12 @@ public class DynamicAdapter extends BaseAdapter {
 			intent.putExtra("user", dynamics.get(position).getUser());
 			context.startActivity(intent);
 		}
+
+	}
+
+	class ViewHolder {
+		ImageView portrait;
+		TextView name, content, time;
 
 	}
 
