@@ -25,8 +25,8 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.FilePath;
+import com.alumnigroup.utils.ImageUtils;
 import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -130,7 +130,7 @@ public class EditPersonalData extends BaseActivity {
 			break;
 
 		case R.id.acty_edit_personaldata_iv_portrait:
-			final CharSequence[] items = { "相册" };
+			final CharSequence[] items = { "相册", "拍照" };
 			AlertDialog dlg = new AlertDialog.Builder(EditPersonalData.this)
 					.setTitle("更新头像")
 					.setItems(items, new DialogInterface.OnClickListener() {
@@ -140,18 +140,17 @@ public class EditPersonalData extends BaseActivity {
 										"android.media.action.IMAGE_CAPTURE");
 								startActivityForResult(getImageByCamera, 1);
 							} else {
-								Intent getImage = new Intent(
-										Intent.ACTION_GET_CONTENT);
-								getImage.addCategory(Intent.CATEGORY_OPENABLE);
-								String path = FilePath.getImageFilePath() + "cache_space_back.jpg";
+								Intent getImage = new Intent(Intent.ACTION_PICK);
+								String path = FilePath.getImageFilePath()
+										+ "cache_space_back.jpg";
 								File protraitFile = new File(path);
 								Uri uri = Uri.fromFile(protraitFile);
 								getImage.setType("image/*");
 								getImage.putExtra("output", uri);
 								getImage.putExtra("crop", "true");
-								getImage.putExtra("aspectX", 1);
+								getImage.putExtra("aspectX", 2);
 								getImage.putExtra("aspectY", 1);
-								getImage.putExtra("outputX", 100);
+								getImage.putExtra("outputX", 200);
 								getImage.putExtra("outputY", 100);
 								startActivityForResult(getImage, 0);
 							}
@@ -190,10 +189,6 @@ public class EditPersonalData extends BaseActivity {
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
-						if (data != null)
-							L.i(new String(data));
-						if (err != null)
-							L.i(err.toString());
 						toast("更新失败");
 					}
 
@@ -218,55 +213,54 @@ public class EditPersonalData extends BaseActivity {
 		dialog.show();
 	}
 
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
+		if (resultCode == RESULT_OK) {
+			dialog.show();
+			/**
+			 * 因为两种方式都用到了startActivityForResult方法，
+			 * 这个方法执行完后都会执行onActivityResult方法， 所以为了区别到底选择了那个方式获取图片要进行判断，
+			 * 这里的requestCode跟startActivityForResult里面第二个参数对应
+			 */
+			try {
+				if (requestCode == 0) {
+					portraitBitmap=ImageUtils.getBitmapByPath( FilePath.getImageFilePath()
+										+ "cache_space_back.jpg");
+				} else if (requestCode == 1) {
+					Bundle extras = data.getExtras();
+					portraitBitmap = (Bitmap) extras.get("data");
+				}
+			} catch (Exception e) {
 
-		dialog.show();
-
-		/**
-		 * 因为两种方式都用到了startActivityForResult方法， 这个方法执行完后都会执行onActivityResult方法，
-		 * 所以为了区别到底选择了那个方式获取图片要进行判断，
-		 * 这里的requestCode跟startActivityForResult里面第二个参数对应
-		 */
-		try {
-			if (requestCode == 0) {
-				Uri uri = data.getData();
-				portraitBitmap = BitmapUtils.getPicFromUri(uri, this);
-
-			} else if (requestCode == 1) {
-				Bundle extras = data.getExtras();
-				portraitBitmap = (Bitmap) extras.get("data");
 			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
 
-		api.updatePortrait(BitmapUtils.getBitmapInputStream(portraitBitmap),
-				new AsyncHttpResponseHandler() {
+			api.updatePortrait(
+					BitmapUtils.getBitmapInputStream(portraitBitmap),
+					new AsyncHttpResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-							updateSPUser();
-							ivPortrait.setImageBitmap(portraitBitmap);
-							toast("更新成功");
-						} else {
-							toast("更新失败");
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								byte[] data, Throwable err) {
+							toast("网络异常 错误码:" + statusCode);
 						}
 
-					}
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								byte[] data) {
+							String json = new String(data);
+							if (JsonUtils.isOK(json)) {
+								updateSPUser();
+								ivPortrait.setImageBitmap(portraitBitmap);
+								toast("更新成功");
+							} else {
+								toast("更新失败");
+							}
 
-				});
+						}
+
+					});
+		}
 	}
 
 	/**

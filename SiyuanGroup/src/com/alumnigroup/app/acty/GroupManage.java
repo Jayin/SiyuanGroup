@@ -23,7 +23,11 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.FilePath;
 import com.loopj.android.http.RequestParams;
-
+/**
+ * 圈子管理
+ * @author Jayin Ton
+ *
+ */
 public class GroupManage extends BaseActivity {	
 	private int RequestCode_invite = 1;
 	private int RequestCode_Pick_image = 2;

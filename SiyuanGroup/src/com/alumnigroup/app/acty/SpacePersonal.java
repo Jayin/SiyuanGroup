@@ -32,8 +32,8 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.FilePath;
+import com.alumnigroup.utils.ImageUtils;
 import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -199,10 +199,6 @@ public class SpacePersonal extends BaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] data, Throwable err) {
 				toast("网络异常 错误码:" + statusCode);
-				if (data != null)
-					L.i(new String(data));
-				if (err != null)
-					L.i(err.toString());
 			}
 
 			@Override
@@ -230,13 +226,16 @@ public class SpacePersonal extends BaseActivity {
 									portrait);
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
-							name.setText(dynamic.getUser().getProfile().getName());
+							name.setText(dynamic.getUser().getProfile()
+									.getName());
 							TextView content = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_content);
 							content.setText(dynamic.getMessage());
 							TextView time = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_datetime);
-							time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(), CalendarUtils.TYPE_timeline));
+							time.setText(CalendarUtils.getTimeFromat(
+									dynamic.getCreatetime(),
+									CalendarUtils.TYPE_timeline));
 							/**
 							 */
 							llNewDynamic.addView(convertView);
@@ -349,56 +348,54 @@ public class SpacePersonal extends BaseActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (data == null) {
-			return;
-		}
-		dialog.show();
+		if (resultCode == RESULT_OK) {
+			dialog.show();
 
-		/**
-		 * 因为两种方式都用到了startActivityForResult方法， 这个方法执行完后都会执行onActivityResult方法，
-		 * 所以为了区别到底选择了那个方式获取图片要进行判断，
-		 * 这里的requestCode跟startActivityForResult里面第二个参数对应
-		 */
-		try {
-			if (requestCode == 0) {
-				Uri uri = data.getData();
-				backgroupBitmap = BitmapUtils.getPicFromUri(uri, this);
+			/**
+			 * 因为两种方式都用到了startActivityForResult方法，
+			 * 这个方法执行完后都会执行onActivityResult方法， 所以为了区别到底选择了那个方式获取图片要进行判断，
+			 * 这里的requestCode跟startActivityForResult里面第二个参数对应
+			 */
+			try {
+				if (requestCode == 0) {
+					backgroupBitmap=ImageUtils.getBitmapByPath( FilePath.getImageFilePath()
+							+ "cache_space_back.jpg");
 
-			} else if (requestCode == 1) {
-				Bundle extras = data.getExtras();
-				backgroupBitmap = (Bitmap) extras.get("data");
+				} else if (requestCode == 1) {
+					Bundle extras = data.getExtras();
+					backgroupBitmap = (Bitmap) extras.get("data");
+				}
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
 			}
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
 
-		api.updateCover(BitmapUtils.getBitmapInputStream(backgroupBitmap),
-				new AsyncHttpResponseHandler() {
+			api.updateCover(BitmapUtils.getBitmapInputStream(backgroupBitmap),
+					new AsyncHttpResponseHandler() {
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("网络异常 错误码:" + statusCode);
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);// jsonarray
-						if (JsonUtils.isOK(json)) {
-							updatePdUser();
-							// ImageLoader.getInstance().displayImage(
-							// RestClient.BASE_URL + myself.getCover(),
-							// ivBackgroup);
-							ivBackgroup.setImageBitmap(backgroupBitmap);
-							toast("更新成功");
-						} else {
-							toast("更新失败");
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								byte[] data, Throwable err) {
+							toast("网络异常 错误码:" + statusCode);
 						}
 
-					}
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,
+								byte[] data) {
+							String json = new String(data);// jsonarray
+							if (JsonUtils.isOK(json)) {
+								updatePdUser();
+								// ImageLoader.getInstance().displayImage(
+								// RestClient.BASE_URL + myself.getCover(),
+								// ivBackgroup);
+								ivBackgroup.setImageBitmap(backgroupBitmap);
+								toast("更新成功");
+							} else {
+								toast("更新失败");
+							}
 
-				});
+						}
+					});
+		}
 	}
 
 	/**
@@ -427,6 +424,7 @@ public class SpacePersonal extends BaseActivity {
 					}
 				});
 	}
+
 	@Override
 	public void onClick(View v) {
 		int id = v.getId();
@@ -460,7 +458,7 @@ public class SpacePersonal extends BaseActivity {
 			break;
 
 		case R.id.acty_space_personal_top_iv_backgroup:
-			final CharSequence[] items = { "相册"};
+			final CharSequence[] items = { "相册" };
 			AlertDialog dlg = new AlertDialog.Builder(SpacePersonal.this)
 					.setTitle("更新背景图")
 					.setItems(items, new DialogInterface.OnClickListener() {
@@ -472,10 +470,9 @@ public class SpacePersonal extends BaseActivity {
 										"android.media.action.IMAGE_CAPTURE");
 								startActivityForResult(getImageByCamera, 1);
 							} else {
-								Intent getImage = new Intent(
-										Intent.ACTION_GET_CONTENT);
-								getImage.addCategory(Intent.CATEGORY_OPENABLE);
-								String path = FilePath.getImageFilePath() + "cache_space_back.jpg";
+								Intent getImage = new Intent(Intent.ACTION_PICK);
+								String path = FilePath.getImageFilePath()
+										+ "cache_space_back.jpg";
 								File protraitFile = new File(path);
 								Uri uri = Uri.fromFile(protraitFile);
 								getImage.setType("image/*");
