@@ -104,7 +104,7 @@ public class SpacePersonal extends BaseActivity {
 				RestClient.BASE_URL + myself.getCover(), ivBackgroup);
 		ImageLoader.getInstance().displayImage(
 				RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
-		tvUsername.setText(myself.getUsername());
+		tvUsername.setText(myself.getProfile().getName());
 
 		addData();
 	}
@@ -306,7 +306,7 @@ public class SpacePersonal extends BaseActivity {
 	 */
 	private void initPersonalData() {
 		llPersonalData.removeAllViews();
-		addPersonalData("真实姓名", myself.getProfile().getName());
+//		addPersonalData("真实姓名", myself.getProfile().getName());
 		String gender = null;
 		if ("m".equalsIgnoreCase(myself.getProfile().getGender())) {
 			gender = "男";
@@ -358,15 +358,15 @@ public class SpacePersonal extends BaseActivity {
 			 */
 			try {
 				if (requestCode == 0) {
-					backgroupBitmap=ImageUtils.getBitmapByPath( FilePath.getImageFilePath()
-							+ "cache_space_back.jpg");
+					backgroupBitmap = ImageUtils.getBitmapByPath(FilePath
+							.getImageFilePath() + "cache_space_back.jpg");
 
 				} else if (requestCode == 1) {
 					Bundle extras = data.getExtras();
 					backgroupBitmap = (Bitmap) extras.get("data");
 				}
 			} catch (Exception e) {
-				System.out.println(e.getMessage());
+			   e.printStackTrace();
 			}
 
 			api.updateCover(BitmapUtils.getBitmapInputStream(backgroupBitmap),
@@ -478,9 +478,9 @@ public class SpacePersonal extends BaseActivity {
 								getImage.setType("image/*");
 								getImage.putExtra("output", uri);
 								getImage.putExtra("crop", "true");
-								getImage.putExtra("aspectX", 1);
+								getImage.putExtra("aspectX", 2);
 								getImage.putExtra("aspectY", 1);
-								getImage.putExtra("outputX", 100);
+								getImage.putExtra("outputX", 200);
 								getImage.putExtra("outputY", 100);
 								startActivityForResult(getImage, 0);
 							}

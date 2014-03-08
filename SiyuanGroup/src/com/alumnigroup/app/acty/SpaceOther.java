@@ -29,7 +29,8 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * @author vector
+ * 他人空间
+ * @author vector;Jayin Ton sice 2014.3.7
  * 
  */
 public class SpaceOther extends BaseActivity {
@@ -211,7 +212,7 @@ public class SpaceOther extends BaseActivity {
 	 */
 	private void initPersonalData() {
 
-		addPersonalData("真实姓名", user.getProfile().getName());
+//		addPersonalData("真实姓名", user.getProfile().getName());
 		addPersonalData("性别", user.getProfile().getGender());
 		addPersonalData("年龄", user.getProfile().getAge() + "");
 		addPersonalData("大学", user.getProfile().getUniversity());
