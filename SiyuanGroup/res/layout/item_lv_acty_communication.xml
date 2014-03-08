@@ -18,23 +18,25 @@
             android:layout_marginLeft="8dp"
             android:src="@drawable/ic_image_load_loading" />
 
-        <TextView
-            android:id="@+id/item_lv_acty_comminication_name"
-            style="@style/TextView.black"
-            android:layout_alignTop="@+id/item_lv_acty_comminication_avatar"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="10dp"
             android:layout_toRightOf="@+id/item_lv_acty_comminication_avatar"
-            android:text="黄廉温" />
+            android:orientation="vertical" >
 
-        <TextView
-            android:id="@+id/item_lv_acty_comminication_major"
-            style="@style/TextView.black"
-            android:layout_alignBottom="@+id/item_lv_acty_comminication_avatar"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="10dp"
-            android:layout_toRightOf="@+id/item_lv_acty_comminication_avatar"
-            android:text="computer science" />
+            <TextView
+                android:id="@+id/item_lv_acty_comminication_name"
+                style="@style/TextView.black"
+                android:layout_marginTop="2dp"
+                android:text="黄廉温" />
+
+            <TextView
+                android:id="@+id/item_lv_acty_comminication_major"
+                style="@style/TextView.black"
+                android:layout_marginTop="8dp"
+                android:text="computer science" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/item_lv_acty_comminication_posttime"
@@ -78,14 +80,14 @@
 
             <ImageView
                 android:id="@+id/iv_pic1"
-                android:minWidth="20dp"
-                 android:minHeight="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxWidth="48dp"
                 android:maxHeight="50dp"
+                android:maxWidth="48dp"
+                android:minHeight="20dp"
+                android:minWidth="20dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_image_load_normal"  />
+            />
         </com.custom.view.FlowLayout>
     </LinearLayout>
 

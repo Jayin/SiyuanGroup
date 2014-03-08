@@ -98,7 +98,11 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
-							lv_all.setPullLoadEnable(true);
+							if(data_all.size()<10){
+								lv_all.setPullLoadEnable(false);
+							}else{
+								lv_all.setPullLoadEnable(true);
+							}
 							AppCache.setCommunicationAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
@@ -169,7 +173,11 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							data_my.clear();
 							data_my.addAll(newData_my);
 							adapter_my.notifyDataSetChanged();
-							lv_my.setPullLoadEnable(true);
+							if(data_my.size()<10){
+								lv_my.setPullLoadEnable(false);
+							}else{
+								lv_my.setPullLoadEnable(true);
+							}
 							AppCache.setCommunicationMy(getContext(), data_my);
 						}
 						lv_my.stopRefresh();
@@ -245,7 +253,11 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 										data_favourite.addAll(newData_faviour);
 										adapter_favourite
 												.notifyDataSetChanged();
-										lv_favourit.setPullLoadEnable(true);
+										if(data_favourite.size()<10){
+											lv_favourit.setPullLoadEnable(false);
+										}else{
+											lv_favourit.setPullLoadEnable(true);
+										}
 										AppCache.setCommunicationFavourite(
 												getContext(), data_favourite);
 									}
