@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
 
-    <TextView
-        android:id="@+id/item_keyword_tv_value"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_space_keyword_green"
-        android:paddingBottom="15dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="15dp"
-        android:text="sdfsdfsd"
-        android:textColor="#45b97c"
-        android:textSize="18dp" />
+        android:layout_margin="4dp"
+        android:background="@drawable/bg_space_keyword_green" >
+
+        <TextView
+            android:id="@+id/item_keyword_tv_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="keword"
+            android:textColor="#45b97c"
+            android:textSize="18dp" />
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/item_outolinefeedlayout_acty_edit_keywork_btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/item_keyword_tv_value"
+        android:layout_marginRight="-6dp"
+        android:layout_alignRight="@+id/linearLayout1"
         android:src="@drawable/ic_red_delete_mark" />
 
 </RelativeLayout>

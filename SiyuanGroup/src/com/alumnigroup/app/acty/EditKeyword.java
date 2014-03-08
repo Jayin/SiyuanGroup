@@ -23,7 +23,6 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -156,16 +155,14 @@ public class EditKeyword extends BaseActivity {
 		/**
 		 * 装上TextView
 		 */
-		LayoutInflater inflater = null;
-		inflater = LayoutInflater.from(this);
 		View convertView = null;
 
 		if (backgroupcolor == 0) {
-			convertView = inflater.inflate(
+			convertView = LayoutInflater.from(this).inflate(
 					R.layout.item_outolinefeedlayout_acty_edit_keywork_yellow,
 					null);
 		} else {
-			convertView = inflater.inflate(
+			convertView = LayoutInflater.from(this).inflate(
 					R.layout.item_outolinefeedlayout_acty_edit_keywork_green,
 					null);
 
@@ -249,10 +246,6 @@ public class EditKeyword extends BaseActivity {
 			@Override
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] data, Throwable err) {
-				if (data != null)
-					L.i(new String(data));
-				if (err != null)
-					L.i(err.toString());
 				toast("更新失败");
 				dialog.cancel();
 			}

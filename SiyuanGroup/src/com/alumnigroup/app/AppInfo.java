@@ -20,26 +20,30 @@ import com.alumnigroup.utils.JsonUtils;
  * 
  */
 public class AppInfo {
-	/** 保存用户账号*/
-	public static boolean setUserID(Context context,String userid){
+	/** 保存用户账号 */
+	public static boolean setUserID(Context context, String userid) {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
-        return dp.set(DataPool.SP_Key_User_Id, userid);
+		return dp.set(DataPool.SP_Key_User_Id, userid);
 	}
-	/**  获得用户账号*/
-	public static String getUserID(Context context){
+
+	/** 获得用户账号 */
+	public static String getUserID(Context context) {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
-        return (String)dp.get(DataPool.SP_Key_User_Id);
+		return (String) dp.get(DataPool.SP_Key_User_Id);
 	}
-	/** 保存用户密码*/
-	public static boolean setUserPSW(Context context,String userpsw){
+
+	/** 保存用户密码 */
+	public static boolean setUserPSW(Context context, String userpsw) {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
-        return dp.set(DataPool.SP_Key_User_PSW, userpsw);
+		return dp.set(DataPool.SP_Key_User_PSW, userpsw);
 	}
-	/** 获得用户密码*/
-	public static String getUserPSW(Context context){
+
+	/** 获得用户密码 */
+	public static String getUserPSW(Context context) {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
-        return (String)dp.get(DataPool.SP_Key_User_Id);
+		return (String) dp.get(DataPool.SP_Key_User_Id);
 	}
+
 	/**
 	 * 获得用户信息
 	 * 
@@ -49,9 +53,15 @@ public class AppInfo {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
 		return (User) dp.get(DataPool.SP_Key_User);
 	}
-
+    /**
+     * create by vector
+     * @param json
+     * @param context
+     * @return
+     * @throws IOException
+     */
 	public static boolean setUser(String json, Context context)
-			throws ClientProtocolException, IOException {
+			throws IOException {
 
 		final DataPool dp = new DataPool(DataPool.SP_Name_User, context);
 
@@ -59,20 +69,32 @@ public class AppInfo {
 			List<User> listUer = User.create_by_jsonarray(json);
 			if (listUer != null) {
 				dp.remove(DataPool.SP_Key_User);
-				dp.put(DataPool.SP_Key_User, listUer.get(0));
-				return true;
+				return dp.put(DataPool.SP_Key_User, listUer.get(0));
 			}
 		} else {
 		}
 		return false;
 	}
     /**
-     * 获得自定义的主页背景图片
+     * create by Jayin Ton 
      * @param context
+     * @param user
      * @return
      */
+	public static boolean setUser(Context context,User user) {
+		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
+		dp.remove(DataPool.SP_Key_User);
+		return dp.put(DataPool.SP_Key_User, user);
+	}
+
+	/**
+	 * 获得自定义的主页背景图片
+	 * 
+	 * @param context
+	 * @return
+	 */
 	public static String getBackgroudPath(Context context) {
-		//路径
+		// 路径
 		String path = context.getFilesDir() + File.separator
 				+ "main_backgroud.jpg";
 		File file = new File(path);

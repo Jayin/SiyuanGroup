@@ -93,6 +93,11 @@ public class SpacePersonal extends BaseActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
 		initData();
 	}
 
