@@ -84,7 +84,11 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
-							lv_all.setPullLoadEnable(true);
+							if(data_all.size()<10){
+								lv_all.setPullLoadEnable(false);
+							}else{
+								lv_all.setPullLoadEnable(true);
+							}
 							AppCache.setGroupAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
@@ -157,7 +161,11 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							data_myjoin.clear();
 							data_myjoin.addAll(newData_my);
 							adapter_myjoin.notifyDataSetChanged();
-							lv_myjoin.setPullLoadEnable(true);
+							if(data_myjoin.size()<10){
+								lv_myjoin.setPullLoadEnable(false);
+							}else{
+								lv_myjoin.setPullLoadEnable(true);
+							}
 							AppCache.setGroupMy(getContext(), data_myjoin);
 						}
 						lv_myjoin.stopRefresh();

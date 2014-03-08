@@ -90,7 +90,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
-							lv_all.setPullLoadEnable(true);
+							if (data_all.size() < 10) {
+								lv_all.setPullLoadEnable(false);
+							} else {
+								lv_all.setPullLoadEnable(true);
+							}
 							AppCache.setActivityAll(getContext(), data_all);
 						}
 						lv_all.stopRefresh();
@@ -159,7 +163,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							data_myjoin.clear();
 							data_myjoin.addAll(newData_myjoin);
 							adapter_myjoin.notifyDataSetChanged();
-							lv_myjoin.setPullLoadEnable(true);
+							if (data_myjoin.size() < 10) {
+								lv_myjoin.setPullLoadEnable(false);
+							} else {
+								lv_myjoin.setPullLoadEnable(true);
+							}
 							AppCache.setActivityMy(getContext(), data_myjoin);
 						}
 						lv_myjoin.stopRefresh();
@@ -236,8 +244,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 										data_favourite.addAll(newData_faviour);
 										adapter_favourite
 												.notifyDataSetChanged();
-										lv_favourit.setPullLoadEnable(true);
-										AppCache.setActivityFavourite(getContext(), data_favourite);
+										if (data_favourite.size() < 10) {
+											lv_favourit
+													.setPullLoadEnable(false);
+										} else {
+											lv_favourit.setPullLoadEnable(true);
+										}
+										AppCache.setActivityFavourite(
+												getContext(), data_favourite);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -310,24 +324,24 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		if (user == null) {
 			toast("无用户信息，请重新登录");
 		}
-        if(AppCache.getActivityAll(getContext())!=null)
-        	data_all = AppCache.getActivityAll(getContext());
-        else{
-        	data_all = new ArrayList<MActivity>();
-        }
-        
-        if(AppCache.getActivityMy(getContext())!=null)
-        	data_myjoin = AppCache.getActivityMy(getContext());
-        else{
-        	data_myjoin = new ArrayList<MActivity>();
-        }
-        
-        if(AppCache.getActivityFavourite(getContext())!=null)
-        	data_favourite = AppCache.getActivityFavourite(getContext());
-        else{
-        	data_favourite = new ArrayList<MActivity>();
-        }
-		
+		if (AppCache.getActivityAll(getContext()) != null)
+			data_all = AppCache.getActivityAll(getContext());
+		else {
+			data_all = new ArrayList<MActivity>();
+		}
+
+		if (AppCache.getActivityMy(getContext()) != null)
+			data_myjoin = AppCache.getActivityMy(getContext());
+		else {
+			data_myjoin = new ArrayList<MActivity>();
+		}
+
+		if (AppCache.getActivityFavourite(getContext()) != null)
+			data_favourite = AppCache.getActivityFavourite(getContext());
+		else {
+			data_favourite = new ArrayList<MActivity>();
+		}
+
 	}
 
 	private void initViewPager() {
@@ -357,14 +371,19 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		views.add(all);
 		views.add(myjoin);
 		views.add(favourit);
-		
+
 		List<XListView> listviews = new ArrayList<XListView>();
-		listviews.add(lv_all);listviews.add(lv_myjoin);listviews.add(lv_favourit);
-		
-		List<ActivitiesAdapter>  adapters = new ArrayList<ActivitiesAdapter>();
-		adapters.add(adapter_all);adapters.add(adapter_myjoin);adapters.add(adapter_favourite);
+		listviews.add(lv_all);
+		listviews.add(lv_myjoin);
+		listviews.add(lv_favourit);
+
+		List<ActivitiesAdapter> adapters = new ArrayList<ActivitiesAdapter>();
+		adapters.add(adapter_all);
+		adapters.add(adapter_myjoin);
+		adapters.add(adapter_favourite);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,listviews,adapters));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
+				listviews, adapters));
 	}
 
 	@Override
@@ -394,23 +413,23 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			closeActivity();
 			break;
 		case R.id.acty_activities_footer_all:
-			if(viewpager.getCurrentItem()==0){
+			if (viewpager.getCurrentItem() == 0) {
 				lv_all.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(0, true);
 			}
 			break;
 		case R.id.acty_activities_footer_myjoin:
-			if(viewpager.getCurrentItem()==1){
+			if (viewpager.getCurrentItem() == 1) {
 				lv_myjoin.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(1, true);
 			}
 			break;
 		case R.id.acty_activities_footer_favourite:
-			if(viewpager.getCurrentItem()==2){
+			if (viewpager.getCurrentItem() == 2) {
 				lv_favourit.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(2, true);
 			}
 			break;
