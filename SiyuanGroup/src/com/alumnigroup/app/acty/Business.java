@@ -51,10 +51,10 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	private ViewPager viewpager;
 	private ArrayList<Cooperation> data_all, data_myjoin, data_favourite;
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
-	private int page_all = 0, page_myjoin = 0, page_favourit = 0;//可能因为网络原因没有加载到第一页
+	private int page_all = 0, page_myjoin = 0, page_favourit = 0;// 可能因为网络原因没有加载到第一页
 	private BusinessAPI api;
 	private User user;
-	private XListView lv_myjoin,lv_all,  lv_favourit;
+	private XListView lv_myjoin, lv_all, lv_favourit;
 	private StarAPI starAPI;
 
 	@Override
@@ -73,9 +73,9 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		lv_myjoin.setPullLoadEnable(true);
 		lv_favourit.setPullRefreshEnable(true);
 		lv_favourit.setPullLoadEnable(true);
-		
+
 		lv_all.setXListViewListener(new IXListViewListener() {
-			
+
 			@Override
 			public void onRefresh() {
 				api.getCooperationList(1, new JsonResponseHandler() {
@@ -94,9 +94,9 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
-							if(data_all.size()<10){
+							if (data_all.size() < 10) {
 								lv_all.setPullLoadEnable(false);
-							}else{
+							} else {
 								lv_all.setPullLoadEnable(true);
 							}
 							AppCache.setBusinessAll(getContext(), data_all);
@@ -110,12 +110,12 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						lv_all.stopRefresh();
 					}
 				});
-				
+
 			}
-			
+
 			@Override
 			public void onLoadMore() {
-				if(page_all==0){
+				if (page_all == 0) {
 					lv_all.startRefresh();
 					lv_all.stopLoadMore();
 					return;
@@ -145,58 +145,59 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						lv_all.stopLoadMore();
 					}
 				});
-				
+
 			}
 		});
 		// 搜索我发布的
 		lv_myjoin.setXListViewListener(new IXListViewListener() {
-			
+
 			@Override
 			public void onRefresh() {
-				api.getMyCooperationList(1,new JsonResponseHandler() {
+				api.getMyCooperationList(1, new JsonResponseHandler() {
 
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								List<Cooperation> newData_myjoin = Cooperation
-										.create_by_jsonarray(obj.toString());
-								if (newData_myjoin == null) {
-									toast("网络异常，解析错误");
-								} else if (newData_myjoin.size() == 0) {
-									toast("你还没有发布任何项目");
-									lv_myjoin.setPullLoadEnable(false);
-								} else {
-									page_myjoin = 1;
-									data_myjoin.clear();
-									data_myjoin.addAll(newData_myjoin);
-									adapter_myjoin.notifyDataSetChanged();
-									if(data_myjoin.size()<10){
-										lv_myjoin.setPullLoadEnable(false);
-									}else{
-										lv_myjoin.setPullLoadEnable(true);
-									}
-									AppCache.setBusinessMy(getContext(), data_myjoin);
-								}
-								lv_myjoin.stopRefresh();
-
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						List<Cooperation> newData_myjoin = Cooperation
+								.create_by_jsonarray(obj.toString());
+						if (newData_myjoin == null) {
+							toast("网络异常，解析错误");
+						} else if (newData_myjoin.size() == 0) {
+							toast("你还没有发布任何项目");
+							lv_myjoin.setPullLoadEnable(false);
+						} else {
+							page_myjoin = 1;
+							data_myjoin.clear();
+							data_myjoin.addAll(newData_myjoin);
+							adapter_myjoin.notifyDataSetChanged();
+							if (data_myjoin.size() < 10) {
+								lv_myjoin.setPullLoadEnable(false);
+							} else {
+								lv_myjoin.setPullLoadEnable(true);
 							}
+							AppCache.setBusinessMy(getContext(), data_myjoin);
+						}
+						lv_myjoin.stopRefresh();
 
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast(ErrorCode.errorList.get(errorCode));
-								lv_myjoin.stopRefresh();
-							}
-						});
-				
+					}
+
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast(ErrorCode.errorList.get(errorCode));
+						lv_myjoin.stopRefresh();
+					}
+				});
+
 			}
-			
+
 			@Override
 			public void onLoadMore() {
-				if(page_myjoin==0){
+				if (page_myjoin == 0) {
 					lv_myjoin.startRefresh();
 					lv_myjoin.stopLoadMore();
 					return;
 				}
-				api.getMyCooperationList(page_myjoin + 1,new JsonResponseHandler() {
+				api.getMyCooperationList(page_myjoin + 1,
+						new JsonResponseHandler() {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
@@ -224,7 +225,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			}
 		});
 		lv_favourit.setXListViewListener(new IXListViewListener() {
-			
+
 			@Override
 			public void onRefresh() {
 				starAPI.getMyStarList(1, StarAPI.Item_type_business,
@@ -251,12 +252,14 @@ public class Business extends BaseActivity implements OnItemClickListener {
 										data_favourite.addAll(newData_faviour);
 										adapter_favourite
 												.notifyDataSetChanged();
-										if(data_favourite.size()<10){
-											lv_favourit.setPullLoadEnable(false);
-										}else{
+										if (data_favourite.size() < 10) {
+											lv_favourit
+													.setPullLoadEnable(false);
+										} else {
 											lv_favourit.setPullLoadEnable(true);
 										}
-										AppCache.setBusinessFavourite(getContext(), data_favourite);
+										AppCache.setBusinessFavourite(
+												getContext(), data_favourite);
 									}
 								}
 								lv_favourit.stopRefresh();
@@ -269,7 +272,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							}
 						});
 			}
-			
+
 			@Override
 			public void onLoadMore() {
 				if (page_favourit == 0) {
@@ -313,7 +316,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						});
 			}
 		});
-		
+
 		lv_all.startRefresh();
 	}
 
@@ -325,19 +328,19 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		}
 		api = new BusinessAPI();
 		starAPI = new StarAPI();
-		if(AppCache.getBusinessAll(getContext())!=null){
-			data_all  = AppCache.getBusinessAll(getContext());
-		}else{
+		if (AppCache.getBusinessAll(getContext()) != null) {
+			data_all = AppCache.getBusinessAll(getContext());
+		} else {
 			data_all = new ArrayList<Cooperation>();
 		}
-		if(AppCache.getBusinessMy(getContext())!=null){
-			data_myjoin  = AppCache.getBusinessMy(getContext());
-		}else{
+		if (AppCache.getBusinessMy(getContext()) != null) {
+			data_myjoin = AppCache.getBusinessMy(getContext());
+		} else {
 			data_myjoin = new ArrayList<Cooperation>();
 		}
-		if(AppCache.getBusinessFavourite(getContext())!=null){
-			data_favourite  = AppCache.getBusinessFavourite(getContext());
-		}else{
+		if (AppCache.getBusinessFavourite(getContext()) != null) {
+			data_favourite = AppCache.getBusinessFavourite(getContext());
+		} else {
 			data_favourite = new ArrayList<Cooperation>();
 		}
 	}
@@ -372,14 +375,19 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		views.add(all);
 		views.add(myjoin);
 		views.add(favourit);
-		
+
 		List<XListView> listviews = new ArrayList<XListView>();
-		listviews.add(lv_all);listviews.add(lv_myjoin);listviews.add(lv_favourit);
-		
-		List<BusinessAdapter>  adapters = new ArrayList<BusinessAdapter>();
-		adapters.add(adapter_all);adapters.add(adapter_myjoin);adapters.add(adapter_favourite);
+		listviews.add(lv_all);
+		listviews.add(lv_myjoin);
+		listviews.add(lv_favourit);
+
+		List<BusinessAdapter> adapters = new ArrayList<BusinessAdapter>();
+		adapters.add(adapter_all);
+		adapters.add(adapter_myjoin);
+		adapters.add(adapter_favourite);
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,listviews,adapters));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
+				listviews, adapters));
 	}
 
 	@Override
@@ -413,23 +421,23 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			openActivity(BusinessPublish.class);
 			break;
 		case R.id.acty_business_footer_all:
-			if(viewpager.getCurrentItem()==0){
+			if (viewpager.getCurrentItem() == 0) {
 				lv_all.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(0, true);
 			}
 			break;
 		case R.id.acty_business_footer_myjoin:
-			if(viewpager.getCurrentItem()==1){
+			if (viewpager.getCurrentItem() == 1) {
 				lv_myjoin.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(1, true);
 			}
 			break;
 		case R.id.acty_business_footer_favourite:
-			if(viewpager.getCurrentItem()==2){
+			if (viewpager.getCurrentItem() == 2) {
 				lv_favourit.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(2, true);
 			}
 			break;
@@ -504,7 +512,9 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						.findViewById(R.id.tv_numComment);
 				h.avatar = (ImageView) convertView.findViewById(R.id.iv_avater);
 				h.status = (ImageView) convertView.findViewById(R.id.iv_status);
-				h.pic1 =(ImageView)convertView.findViewById(R.id.iv_pic1);
+				h.pic1 = (ImageView) convertView.findViewById(R.id.iv_pic1);
+				h.pic2 = (ImageView) convertView.findViewById(R.id.iv_pic2);
+				h.pic3 = (ImageView) convertView.findViewById(R.id.iv_pic3);
 				convertView.setTag(h);
 			} else {
 				h = (ViewHolder) convertView.getTag();
@@ -518,14 +528,17 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			h.description.setText(c.getDescription());
 			h.numFavour.setText(14 + ""); // should change
 			h.commentNum.setText(c.getNumComments() + "");
-            if(c.getUser().getAvatar()!=null){
-            	ImageLoader.getInstance().displayImage(
-    					RestClient.BASE_URL + c.getUser().getAvatar(), h.avatar);
-            }else{
-            	ImageLoader.getInstance().displayImage(
-    					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
-            }
-			
+			if (c.getUser().getAvatar() != null) {
+				ImageLoader.getInstance()
+						.displayImage(
+								RestClient.BASE_URL + c.getUser().getAvatar(),
+								h.avatar);
+			} else {
+				ImageLoader.getInstance().displayImage(
+						"drawable://" + R.drawable.ic_image_load_normal,
+						h.avatar);
+			}
+
 			if (c.getStatusid() != 2) {
 				ImageLoader.getInstance()
 						.displayImage(
@@ -536,29 +549,72 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						"drawable://" + R.drawable.ic_image_status_off,
 						h.status);
 			}
-			
+
 			// 暂时1张图片
 			h.pic1.setVisibility(View.GONE);
-			  L.i(c.getNumPictures()+"");
+			h.pic2.setVisibility(View.GONE);
+			h.pic3.setVisibility(View.GONE);
 			if (c.getPictures() != null && c.getPictures().size() > 0) {
 				h.pic1.setVisibility(View.VISIBLE);
-				// for (MPicture pic : issue.getPictures()) {
-				final MPicture pic = c.getPictures().get(0);
-			    L.i(pic.toString());
-				h.pic1.setVisibility(View.VISIBLE);
-				ImageLoader.getInstance().displayImage(
-						RestClient.BASE_URL + pic.getPath(), h.pic1);
-				// }
-				
-				h.pic1.setOnClickListener(new OnClickListener() {
-					
-					@Override
-					public void onClick(View v) {
-						 Intent intent = new Intent(getContext(), ImageDisplay.class);
-						 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
-					     openActivity(intent);
+				for (int i = 0; i < c.getNumPictures(); i++) {
+					final MPicture pic = c.getPictures().get(i);
+					switch (i) {
+					case 0:
+						h.pic1.setVisibility(View.VISIBLE);
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL + pic.getPath(), h.pic1);
+						
+						h.pic1.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								Intent intent = new Intent(getContext(),
+										ImageDisplay.class);
+								intent.putExtra("url", RestClient.BASE_URL
+										+ pic.getPath());
+								openActivity(intent);
+							}
+						});
+						break;
+					case 1:
+						h.pic2.setVisibility(View.VISIBLE);
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL
+										+ c.getPictures().get(i).getPath(),
+								h.pic2);
+
+						h.pic2.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								Intent intent = new Intent(getContext(),
+										ImageDisplay.class);
+								intent.putExtra("url", RestClient.BASE_URL
+										+ pic.getPath());
+								openActivity(intent);
+							}
+						});
+						break;
+					case 2:
+						h.pic3.setVisibility(View.VISIBLE);
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL
+										+ c.getPictures().get(i).getPath(),
+								h.pic3);
+						
+						h.pic3.setOnClickListener(new OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								Intent intent = new Intent(getContext(),
+										ImageDisplay.class);
+								intent.putExtra("url", RestClient.BASE_URL
+										+ pic.getPath());
+								openActivity(intent);
+							}
+						});
+						break;
+					default:
+						break;
 					}
-				});
+				}
 			}
 			return convertView;
 		}
@@ -566,7 +622,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		class ViewHolder {
 			TextView name_project, deadline, major, name_user, description,
 					numFavour, commentNum;
-			ImageView avatar, status,pic1,pic2,pic3;
+			ImageView avatar, status, pic1, pic2, pic3;
 		}
 
 	}

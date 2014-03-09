@@ -2,6 +2,9 @@ package com.alumnigroup.app.acty;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -44,7 +47,7 @@ public class BusinessPublish extends BaseActivity {
 	private BusinessAPI api;
 	private Cooperation c;
 	private FlowLayout flowLayout;
-	private boolean withPic = false;
+	private HashMap<View, Uri> bitmaps;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,8 @@ public class BusinessPublish extends BaseActivity {
 	protected void initData() {
 		api = new BusinessAPI();
 		c = (Cooperation) getSerializableExtra("cooperation");
+		bitmaps = new HashMap<View, Uri>();
+
 	}
 
 	@Override
@@ -102,7 +107,7 @@ public class BusinessPublish extends BaseActivity {
 			et_name.setText(c.getName());
 			et_description.setText(c.getDescription());
 			et_company.setText(c.getCompany());
-			 //编辑状态下不能换图片?
+			// 编辑状态下不能换图片?
 			if (c.getUser().getId() == AppInfo.getUser(getContext()).getId()) {
 				_getView(R.id.tv_pic).setVisibility(View.GONE);
 				flowLayout.setVisibility(View.GONE);
@@ -141,8 +146,8 @@ public class BusinessPublish extends BaseActivity {
 			}
 			break;
 		case R.id.btn_add_pic:
-			if (flowLayout.getChildCount() >= 2) {
-				toast("目前仅支持发一张图片");
+			if (flowLayout.getChildCount() >= 4) {
+				toast("目前最多能上传发3张图片");
 				return;
 			}
 			// to pick a pic & add...
@@ -176,11 +181,35 @@ public class BusinessPublish extends BaseActivity {
 
 	private void create(String name, String description, String company,
 			int statusid, int isprivate) {
-		
-		File pic1 = withPic ? new File(FilePath.getImageFilePath()
-				+ "cooperation_pic1.jpg") : null;
+
+		// File pic1 = withPic ? new File(FilePath.getImageFilePath()
+		// + "cooperation_pic1.jpg") : null;
+		final File[] pics = new File[3];
+		if (bitmaps.size() > 0) {
+			int count = 0;
+			for (View v : bitmaps.keySet()) {
+				try {
+					String fileName = FilePath.getImageFilePath()
+							+ "cooperation_pic" + count + ".jpg";
+					ImageUtils.saveImageToSD(fileName, ImageUtils
+							.createImageThumbnail(BitmapUtils.getPicFromUri(
+									bitmaps.get(v), getContext()), 800), 80);
+					pics[count] = new File(fileName);
+					count++;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		if (pics[0] != null)
+			debug("pics[0]!=null");
+		if (pics[1] != null)
+			debug("pics[1]!=null");
+		if (pics[2] != null)
+			debug("pics[2]!=null");
 		api.create(name, description, company, regdeadline, statusid,
-				isprivate, pic1,null,null,new JsonResponseHandler() {
+				isprivate, pics[0], pics[1], pics[2],
+				new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -220,32 +249,29 @@ public class BusinessPublish extends BaseActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == RequestCode_Pick_image && resultCode == RESULT_OK) {
 			Uri photoUri = data.getData();
-			View container = getLayoutInflater().inflate(
+			final View container = getLayoutInflater().inflate(
 					R.layout.item_flowlayout_image, null);
 			ImageView iv = (ImageView) container.findViewById(R.id.iv_image);
 			iv.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					FileUtils.deleteFile(FilePath.getImageFilePath()
-							+ "cooperation_pic1.jpg");// 删除
-					flowLayout.removeViewAt(1);
-					withPic = false;
+					// FileUtils.deleteFile(FilePath.getImageFilePath()
+					// + "cooperation_pic1.jpg");// 删除
+					flowLayout.removeView(container);
+					bitmaps.remove(container);
 				}
 			});
 			try {
 				Bitmap bitmap = BitmapUtils.getPicFromUri(photoUri,
 						getContext());
 				iv.setImageBitmap(ImageUtils.zoomBitmap(bitmap, 100, 100));
-				ImageUtils.saveImageToSD(FilePath.getImageFilePath()
-						+ "cooperation_pic1.jpg",
-						ImageUtils.createImageThumbnail(bitmap, 800), 80);
+				bitmaps.put(container, photoUri);
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			flowLayout.addView(container);
-			withPic = true;
 		}
 	}
 

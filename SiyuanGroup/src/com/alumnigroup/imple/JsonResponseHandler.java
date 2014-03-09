@@ -26,6 +26,7 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 	@Override
 	public void onFailure(int statusCode, Header[] headers, byte[] data,
 			Throwable err) {
+		L.e(new String(data));
 		// IOException
 		if (statusCode == 0) {
 			onFaild(Error_IOException,statusCode);
@@ -45,7 +46,6 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 				if (JsonUtils.isOK(json)) {
 					onOK(headers, obj);
 				} else {
-					L.e(json);
 					//json string include `error_code`
 					onFaild(Error_Response,JsonUtils.getErrorCode(json));
 				}
