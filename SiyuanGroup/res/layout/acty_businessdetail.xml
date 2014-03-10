@@ -265,7 +265,7 @@
                     android:padding="6dp"
                     android:text="XTuOne是一支踏实的，拥有激情和梦想的开发团队。X表示未知，代表对未知事物的探索。Tu 表示突出，提醒不断进取，追求卓越。One 表示是一个团结的团队。专注于移动应用开发，重视用户体验。坚持让用户做最少的思考，做最有价值的事情."
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -299,8 +299,8 @@
                     android:id="@+id/iv_pic1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxHeight="50dp"
-                    android:maxWidth="48dp"
+                    android:maxHeight="70dp"
+                    android:maxWidth="70dp"
                     android:paddingBottom="4dp"
                     android:paddingTop="4dp"
                     android:scaleType="fitCenter"

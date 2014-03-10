@@ -98,7 +98,7 @@
         android:maxLines="3"
         android:text="XTuOne团队成员均由在校大学生为同一个兴趣与梦想构建而成。一路走来，虽然经历过失败，经历过曲折，但只为一份坚持。如今，团队成员已经越趋专业，开发范围包括iPhone、Android、WP7等，针对各种平台的用户体验上有独到设计方案，让用户做最少的思考，做最有价值的事情。"
         android:textColor="@color/black"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
 
     <com.custom.view.FlowLayout
         android:id="@+id/flowlayout_content"
@@ -113,8 +113,8 @@
             android:id="@+id/iv_pic1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxHeight="50dp"
-            android:maxWidth="48dp"
+        android:maxHeight="70dp"
+                android:maxWidth="70dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_image_load_normal" />
 
@@ -122,8 +122,8 @@
             android:id="@+id/iv_pic2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxHeight="50dp"
-            android:maxWidth="48dp"
+           android:maxHeight="70dp"
+                android:maxWidth="70dp"
             android:scaleType="fitCenter"
             android:paddingLeft="4dp"
             android:src="@drawable/ic_image_load_normal" />
@@ -132,8 +132,8 @@
             android:id="@+id/iv_pic3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxHeight="50dp"
-            android:maxWidth="48dp"
+          android:maxHeight="70dp"
+                android:maxWidth="70dp"
             android:scaleType="fitCenter"      android:paddingLeft="4dp"
             android:src="@drawable/ic_image_load_normal" />
     </com.custom.view.FlowLayout>

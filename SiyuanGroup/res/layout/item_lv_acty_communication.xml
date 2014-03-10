@@ -61,7 +61,7 @@
             style="@style/TextView.black"
             android:text="我是标题，我是用来测试的，"
             android:textColor="@color/blue_lv_third"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/item_lv_acty_comminication_body"
@@ -69,7 +69,7 @@
             android:layout_marginTop="4dp"
             android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
             android:textColor="@color/black"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
         <com.custom.view.FlowLayout
             android:id="@+id/flowlayout_content"
@@ -82,10 +82,8 @@
                 android:id="@+id/iv_pic1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:maxHeight="50dp"
-                android:maxWidth="48dp"
-                android:minHeight="20dp"
-                android:minWidth="20dp"
+                android:maxHeight="70dp"
+                android:maxWidth="70dp"
                 android:scaleType="fitCenter"
             />
         </com.custom.view.FlowLayout>
