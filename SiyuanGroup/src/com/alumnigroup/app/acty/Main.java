@@ -28,6 +28,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -56,7 +57,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		initLayout();
 		checkVerison();
 		openReceiver();
-		test();
+//		test();
 
 	}
 
@@ -89,10 +90,10 @@ public class Main extends BaseActivity implements OnClickListener {
 		if (MessageCache.getUnreadCount(getContext()) == 0) {
 			tv_unreadCount.setVisibility(View.INVISIBLE);
 		} else {
-			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())
-					+ "");
+			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext()) + "");
 			tv_unreadCount.setVisibility(View.VISIBLE);
 		}
+		
 	}
 
 	private void checkVerison() {
@@ -131,10 +132,11 @@ public class Main extends BaseActivity implements OnClickListener {
 		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
 		iv_backgroud =(ImageView)_getView(R.id.iv_main_bg);
 		if (AppInfo.getBackgroudPath(getContext()) != null) {
-			ImageLoader.getInstance().displayImage("file://"+AppInfo.getBackgroudPath(getContext()), iv_backgroud);
+			iv_backgroud.setImageBitmap(BitmapFactory.decodeFile(AppInfo.getBackgroudPath(getContext())));
 		}
 		initWebView();
 	}
+	
 
 	// 初始化广告栏
 	@SuppressLint("SetJavaScriptEnabled")
@@ -235,7 +237,7 @@ public class Main extends BaseActivity implements OnClickListener {
 			} else if (intent.getAction().equals(
 					Constants.Action_Backgroud_switch)) {
 				if (AppInfo.getBackgroudPath(getContext()) != null) {
-					ImageLoader.getInstance().displayImage("file://"+AppInfo.getBackgroudPath(getContext()), iv_backgroud);
+					iv_backgroud.setImageBitmap(BitmapFactory.decodeFile(AppInfo.getBackgroudPath(getContext())));
 				}
 			}
 		}

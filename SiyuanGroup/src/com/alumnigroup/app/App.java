@@ -42,7 +42,6 @@ public class App extends Application {
 				.memoryCache(new LruMemoryCache(2 * 1024 * 1024))
 				.discCacheFileCount(100).memoryCacheSize(10 * 1024 * 1024)
 				.defaultDisplayImageOptions(defaultOptions).build();
-
 		ImageLoader.getInstance().init(config);
 		
 	}

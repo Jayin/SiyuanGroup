@@ -4,13 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.apache.http.client.ClientProtocolException;
-
 import android.content.Context;
-import android.preference.PreferenceActivity.Header;
-
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.DataPool;
+import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.JsonUtils;
 
 /**
@@ -53,6 +50,7 @@ public class AppInfo {
 		DataPool dp = new DataPool(DataPool.SP_Name_User, context);
 		return (User) dp.get(DataPool.SP_Key_User);
 	}
+	
     /**
      * create by vector
      * @param json
@@ -75,8 +73,9 @@ public class AppInfo {
 		}
 		return false;
 	}
+	
     /**
-     * create by Jayin Ton 
+     * create by Jayin Ton
      * @param context
      * @param user
      * @return
@@ -89,14 +88,12 @@ public class AppInfo {
 
 	/**
 	 * 获得自定义的主页背景图片
-	 * 
 	 * @param context
 	 * @return
 	 */
 	public static String getBackgroudPath(Context context) {
 		// 路径
-		String path = context.getFilesDir() + File.separator
-				+ "main_backgroud.jpg";
+		String path = FilePath.getImageFilePath()+"main_backgroud.jpg";
 		File file = new File(path);
 		if (file.exists()) {
 			return path;

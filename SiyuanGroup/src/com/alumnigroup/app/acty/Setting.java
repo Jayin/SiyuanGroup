@@ -1,5 +1,6 @@
 package com.alumnigroup.app.acty;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
@@ -15,6 +16,8 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.Constants;
+import com.alumnigroup.utils.FilePath;
+import com.alumnigroup.utils.FileUtils;
 import com.alumnigroup.utils.ImageUtils;
 
 /**
@@ -114,27 +117,14 @@ public class Setting extends BaseActivity {
 			}
 			if (photo != null) {
 			try {
-					ImageUtils.saveImage(getContext(),"main_backgroud.jpg", photo, 75);
+				    FileUtils.deleteFile(FilePath.getImageFilePath()+"main_backgroud.jpg");
+					ImageUtils.saveImageToSD(FilePath.getImageFilePath()+"main_backgroud.jpg", photo, 75);
 					sendBroadcast(new Intent(Constants.Action_Backgroud_switch));
-					debug("IOException--ok");
+					debug("pic save--ok");
 				} catch (IOException e) {
 					e.printStackTrace();
-					debug("IOException--start");
+					debug("IOException--pic save faild");
 				}
-
-//				saveFile = new File(getContext().getFilesDir() + File.separator
-//						+ "img" + File.separator + "main_backgroud.jpg");
-//				FileOutputStream stream;
-//				try {
-//					debug("saving");
-//					stream = new FileOutputStream(saveFile);
-//					photo.compress(Bitmap.CompressFormat.JPEG, 75, stream);
-//					sendBroadcast(new Intent(Constants.Action_Backgroud_switch));
-//				} catch (FileNotFoundException e) {
-//					e.printStackTrace();
-//					debug("FileNotFoundException");
-//				}
-
 			}
 		}
 	}
