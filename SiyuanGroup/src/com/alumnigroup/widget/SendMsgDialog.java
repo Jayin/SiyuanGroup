@@ -48,9 +48,8 @@ public class SendMsgDialog extends Dialog {
 							return;
 						}
 						MessageAPI api = new MessageAPI();
-						L.i("receiverid--"+receiverid);
-						L.i("body--"+et.getText().toString());
-						api.send(receiverid, "title", et.getText().toString(),
+                        String body  = et.getText().toString();
+						api.send(receiverid, "title", body,
 								new JsonResponseHandler() {
 
 									@Override
