@@ -98,11 +98,28 @@ public class SpaceOther extends BaseActivity {
 
 	private void initTop() {
 		ivBackground = (ImageView) _getView(R.id.acty_space_other_top_iv_background);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + user.getCover(), ivBackground);
+		
 		ivPortrait = (ImageView) _getView(R.id.acty_space_other_top_iv_portrait);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + user.getAvatar(), ivPortrait);
+		
+		
+		if (user.getCover() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + user.getCover(), ivBackground);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal,
+					ivBackground);
+		}
+
+		if (user.getCover() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + user.getAvatar(), ivPortrait);
+		} else {
+			ImageLoader.getInstance()
+					.displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,
+							ivPortrait);
+		}
 
 		tvTopName = (TextView) _getView(R.id.acty_space_other_top_tv_name);
 		tvTopName.setText(user.getProfile().getName());

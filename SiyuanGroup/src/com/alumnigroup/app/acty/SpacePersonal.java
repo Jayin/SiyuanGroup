@@ -54,7 +54,7 @@ public class SpacePersonal extends BaseActivity {
 	 * 顶部
 	 */
 	private TextView tvLeave2Visitor;
-	private ImageView ivBackgroup;
+	private ImageView ivBackground;
 	private Bitmap backgroupBitmap;
 
 	private ImageView ivPortrait;
@@ -94,7 +94,7 @@ public class SpacePersonal extends BaseActivity {
 	protected void onStart() {
 		super.onStart();
 	}
-	
+
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -105,10 +105,24 @@ public class SpacePersonal extends BaseActivity {
 		myself = (User) AppInfo.getUser(SpacePersonal.this);
 
 		tvLeave2Visitor.setText(myself.getProfile().getSummary());
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + myself.getCover(), ivBackgroup);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
+		if (myself.getCover() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + myself.getCover(), ivBackground);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal,
+					ivBackground);
+		}
+
+		if (myself.getCover() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
+		} else {
+			ImageLoader.getInstance()
+					.displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,
+							ivPortrait);
+		}
 		tvUsername.setText(myself.getProfile().getName());
 
 		addData();
@@ -134,8 +148,8 @@ public class SpacePersonal extends BaseActivity {
 		 */
 		tvLeave2Visitor = (TextView) _getView(R.id.acty_space_personal_top_et_leave2visitor);
 
-		ivBackgroup = (ImageView) _getView(R.id.acty_space_personal_top_iv_backgroup);
-		ivBackgroup.setOnClickListener(this);
+		ivBackground = (ImageView) _getView(R.id.acty_space_personal_top_iv_backgroup);
+		ivBackground.setOnClickListener(this);
 
 		ivPortrait = (ImageView) _getView(R.id.acty_space_personal_top_iv_portrait);
 
@@ -311,7 +325,7 @@ public class SpacePersonal extends BaseActivity {
 	 */
 	private void initPersonalData() {
 		llPersonalData.removeAllViews();
-//		addPersonalData("真实姓名", myself.getProfile().getName());
+		// addPersonalData("真实姓名", myself.getProfile().getName());
 		String gender = null;
 		if ("m".equalsIgnoreCase(myself.getProfile().getGender())) {
 			gender = "男";
@@ -371,7 +385,7 @@ public class SpacePersonal extends BaseActivity {
 					backgroupBitmap = (Bitmap) extras.get("data");
 				}
 			} catch (Exception e) {
-			   e.printStackTrace();
+				e.printStackTrace();
 			}
 
 			api.updateCover(BitmapUtils.getBitmapInputStream(backgroupBitmap),
@@ -391,8 +405,8 @@ public class SpacePersonal extends BaseActivity {
 								updatePdUser();
 								// ImageLoader.getInstance().displayImage(
 								// RestClient.BASE_URL + myself.getCover(),
-								// ivBackgroup);
-								ivBackgroup.setImageBitmap(backgroupBitmap);
+								// ivBackground);
+								ivBackground.setImageBitmap(backgroupBitmap);
 								toast("更新成功");
 							} else {
 								toast("更新失败");
