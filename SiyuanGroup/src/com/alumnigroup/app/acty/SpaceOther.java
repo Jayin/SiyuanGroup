@@ -25,11 +25,13 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
+import com.alumnigroup.widget.SendMsgDialog;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 他人空间
+ * 
  * @author vector;Jayin Ton sice 2014.3.7
  * 
  */
@@ -38,6 +40,8 @@ public class SpaceOther extends BaseActivity {
 	private View btnAddfriend;
 
 	private User user;
+
+	private SendMsgDialog dialog;
 
 	/**
 	 * header
@@ -98,10 +102,9 @@ public class SpaceOther extends BaseActivity {
 
 	private void initTop() {
 		ivBackground = (ImageView) _getView(R.id.acty_space_other_top_iv_background);
-		
+
 		ivPortrait = (ImageView) _getView(R.id.acty_space_other_top_iv_portrait);
-		
-		
+
 		if (user.getCover() != null) {
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + user.getCover(), ivBackground);
@@ -135,6 +138,8 @@ public class SpaceOther extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		dialog = new SendMsgDialog(getContext());
+		dialog.setReceiverId(user.getId());
 
 		/**
 		 * header
@@ -146,9 +151,9 @@ public class SpaceOther extends BaseActivity {
 
 		btnFollow = _getView(R.id.acty_space_other_top_btn_add_friend);
 		tvBtnFollowContent = (TextView) _getView(R.id.acty_space_other_top_btn_add_friend_content);
-		if(user.getIsfollowed()==1){
+		if (user.getIsfollowed() == 1) {
 			tvBtnFollowContent.setText("取消关注");
-		}else{
+		} else {
 			tvBtnFollowContent.setText("关 注");
 		}
 		btnFollow.setOnClickListener(this);
@@ -183,6 +188,8 @@ public class SpaceOther extends BaseActivity {
 
 		btnAddfriend = _getView(R.id.acty_space_other_top_btn_add_friend);
 		btnAddfriend.setOnClickListener(this);
+
+		_getView(R.id.acty_head_btn_more).setOnClickListener(this);
 	}
 
 	/**
@@ -229,7 +236,7 @@ public class SpaceOther extends BaseActivity {
 	 */
 	private void initPersonalData() {
 
-//		addPersonalData("真实姓名", user.getProfile().getName());
+		// addPersonalData("真实姓名", user.getProfile().getName());
 		addPersonalData("性别", user.getProfile().getGender());
 		addPersonalData("年龄", user.getProfile().getAge() + "");
 		addPersonalData("大学", user.getProfile().getUniversity());
@@ -283,13 +290,16 @@ public class SpaceOther extends BaseActivity {
 									portrait);
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
-							name.setText(dynamic.getUser().getProfile().getName());
+							name.setText(dynamic.getUser().getProfile()
+									.getName());
 							TextView content = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_content);
 							content.setText(dynamic.getMessage());
 							TextView time = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_datetime);
-							time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(), CalendarUtils.TYPE_timeline));
+							time.setText(CalendarUtils.getTimeFromat(
+									dynamic.getCreatetime(),
+									CalendarUtils.TYPE_timeline));
 							/**
 							 */
 							llNewDynamic.addView(convertView);
@@ -421,7 +431,9 @@ public class SpaceOther extends BaseActivity {
 		case R.id.acty_head_btn_back:
 			finish();
 			break;
-
+		case R.id.acty_head_btn_more:
+			dialog.show();
+			break;
 		default:
 			break;
 		}
