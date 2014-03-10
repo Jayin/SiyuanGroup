@@ -103,7 +103,10 @@ public class MessageDetail extends BaseActivity {
 							status.add(Sending);
 							position = status.size() - 1;
 							MMessage mm = new MMessage();
-							mm.setSender(AppInfo.getUser(getContext()));
+							// stop here
+//							mm.setSender(AppInfo.getUser(getContext()));
+							mm.setSenderavatar(AppInfo.getUser(getContext()).getAvatar());
+							mm.setSendername(AppInfo.getUser(getContext()).getProfile().getName());
 							mm.setBody(et_body.getText().toString());
 							data.add(mm);
 							adapter.notifyDataSetChanged();
@@ -194,9 +197,9 @@ public class MessageDetail extends BaseActivity {
 			switch (getItemViewType(position)) {
 			case LEFT:
 				h.tv_content.setText(m.getBody());
-				if (m.getSender().getAvatar() != null) {
+				if (m.getSenderavatar()!= null) {
 					ImageLoader.getInstance().displayImage(
-							RestClient.BASE_URL + m.getSender().getAvatar(),
+							RestClient.BASE_URL + m.getSenderavatar(),
 							h.iv_avatar);
 				} else {
 					ImageLoader.getInstance().displayImage(
@@ -216,9 +219,9 @@ public class MessageDetail extends BaseActivity {
 				break;
 			case RIGHT:
 				h.tv_content.setText(m.getBody());
-				if (m.getSender().getAvatar() != null) {
+				if (m.getSenderavatar() != null) {
 					ImageLoader.getInstance().displayImage(
-							RestClient.BASE_URL + m.getSender().getAvatar(),
+							RestClient.BASE_URL + m.getSenderavatar(),
 							h.iv_avatar);
 				} else {
 					ImageLoader.getInstance().displayImage(
@@ -252,7 +255,7 @@ public class MessageDetail extends BaseActivity {
 		 * */
 		@Override
 		public int getItemViewType(int position) {
-			return data.get(position).getSender().getId() != AppInfo.getUser(
+			return data.get(position).getSenderid() != AppInfo.getUser(
 					getContext()).getId() ? LEFT : RIGHT;
 		}
 

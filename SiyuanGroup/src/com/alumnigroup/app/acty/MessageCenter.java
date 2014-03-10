@@ -27,9 +27,11 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 /**
  * 消息中心
- * @author Jayin Ton 
+ * 
+ * @author Jayin Ton
  */
 public class MessageCenter extends BaseActivity {
 	private XListView lv_message;
@@ -56,7 +58,7 @@ public class MessageCenter extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-				api.getReceiedMessageListByPage(1, new JsonResponseHandler() {
+				api.getMessageList(1, new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -90,31 +92,31 @@ public class MessageCenter extends BaseActivity {
 					lv_message.startRefresh();
 					return;
 				}
-				api.getReceiedMessageListByPage(page + 1,
-						new JsonResponseHandler() {
+				
+				api.getMessageList(page + 1, new JsonResponseHandler() {
 
-							@Override
-							public void onOK(Header[] headers, JSONObject obj) {
-								ArrayList<MMessage> newData = MMessage
-										.create_by_jsonarray(obj.toString());
-								if (newData == null) {
-									toast("网络异常 解析错误");
-								} else if (newData.size() == 0) {
-									toast("没有消息");
-								} else {
-									page++;
-									data_message.addAll(newData);
-									adapter.notifyDataSetChanged();
-								}
-								lv_message.stopLoadMore();
-							}
+					@Override
+					public void onOK(Header[] headers, JSONObject obj) {
+						ArrayList<MMessage> newData = MMessage
+								.create_by_jsonarray(obj.toString());
+						if (newData == null) {
+							toast("网络异常 解析错误");
+						} else if (newData.size() == 0) {
+							toast("没有消息");
+						} else {
+							page++;
+							data_message.addAll(newData);
+							adapter.notifyDataSetChanged();
+						}
+						lv_message.stopLoadMore();
+					}
 
-							@Override
-							public void onFaild(int errorType, int errorCode) {
-								toast(ErrorCode.errorList.get(errorCode));
-								lv_message.stopLoadMore();
-							}
-						});
+					@Override
+					public void onFaild(int errorType, int errorCode) {
+						toast(ErrorCode.errorList.get(errorCode));
+						lv_message.stopLoadMore();
+					}
+				});
 			}
 		});
 
@@ -191,17 +193,20 @@ public class MessageCenter extends BaseActivity {
 			} else {
 				h = (ViewHolder) convertView.getTag();
 			}
-			User u = data_message.get(position).getSender();
-			if (u.getAvatar() != null) {
-				ImageLoader.getInstance().displayImage(
-						RestClient.BASE_URL + u.getAvatar(), h.iv_avatar);
+			MMessage mm = data_message.get(position);
+
+			if (mm.getSenderavatar() != null) {
+				ImageLoader.getInstance()
+						.displayImage(
+								RestClient.BASE_URL + mm.getSenderavatar(),
+								h.iv_avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
 						"drawalbe://" + R.drawable.ic_image_load_normal,
 						h.iv_avatar);
 			}
 			h.tv_content.setText(data_message.get(position).getBody());
-			h.tv_username.setText(u.getProfile().getName());
+			h.tv_username.setText(mm.getSendername());
 			h.tv_time.setText(CalendarUtils.getTimeFromat(
 					data_message.get(position).getSendtime(),
 					CalendarUtils.TYPE_timeline));

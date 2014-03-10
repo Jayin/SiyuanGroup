@@ -17,11 +17,12 @@ import com.google.gson.Gson;
  */
 @SuppressWarnings("serial")
 public class MMessage implements Serializable {
-    /**
-     * 根据一个消息里表，统计未读消息数
-     * @param messages
-     * @return
-     */
+	/**
+	 * 根据一个消息里表，统计未读消息数
+	 * 
+	 * @param messages
+	 * @return
+	 */
 	public static int getUnreadCount(ArrayList<MMessage> messages) {
 		int count = 0;
 		for (MMessage m : messages) {
@@ -64,28 +65,24 @@ public class MMessage implements Serializable {
 
 	/** 消息id */
 	private int id;
+	/** 发送人id */
+	private int senderid;
+	/** 接受者 id */
+	private User receiverid;
 	/** 消息标题 */
 	private String title;
+	/** 内容 */
+	private String body;
 	/** 是否已读 */
 	private int isread;
-	/** 是否已回复 */
-	private int isreplied;
 	/** 发送时间 */
 	private long sendtime;
-	/** 发送者 */
-	private User sender;
-	/** 接受者 */
-	private User receiver;
-	/** 内容*/
-	private String body;
-
-	public String getBody() {
-		return body;
-	}
-
-	public void setBody(String body) {
-		this.body = body;
-	}
+	/** 未读数 */
+	private int unreadcount;
+	/** 发送者 姓名 */
+	private String sendername;
+	/** 发送者头像 */
+	private String senderavatar;
 
 	public int getId() {
 		return id;
@@ -93,6 +90,22 @@ public class MMessage implements Serializable {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public int getSenderid() {
+		return senderid;
+	}
+
+	public void setSenderid(int senderid) {
+		this.senderid = senderid;
+	}
+
+	public User getReceiverid() {
+		return receiverid;
+	}
+
+	public void setReceiverid(User receiverid) {
+		this.receiverid = receiverid;
 	}
 
 	public String getTitle() {
@@ -103,20 +116,20 @@ public class MMessage implements Serializable {
 		this.title = title;
 	}
 
+	public String getBody() {
+		return body;
+	}
+
+	public void setBody(String body) {
+		this.body = body;
+	}
+
 	public int getIsread() {
 		return isread;
 	}
 
 	public void setIsread(int isread) {
 		this.isread = isread;
-	}
-
-	public int getIsreplied() {
-		return isreplied;
-	}
-
-	public void setIsreplied(int isreplied) {
-		this.isreplied = isreplied;
 	}
 
 	public long getSendtime() {
@@ -127,28 +140,37 @@ public class MMessage implements Serializable {
 		this.sendtime = sendtime;
 	}
 
-	public User getSender() {
-		return sender;
+	public int getUnreadcount() {
+		return unreadcount;
 	}
 
-	public void setSender(User sender) {
-		this.sender = sender;
+	public void setUnreadcount(int unreadcount) {
+		this.unreadcount = unreadcount;
 	}
 
-	public User getReceiver() {
-		return receiver;
+	public String getSendername() {
+		return sendername;
 	}
 
-	public void setReceiver(User receiver) {
-		this.receiver = receiver;
+	public void setSendername(String sendername) {
+		this.sendername = sendername;
+	}
+
+	public String getSenderavatar() {
+		return senderavatar;
+	}
+
+	public void setSenderavatar(String senderavatar) {
+		this.senderavatar = senderavatar;
 	}
 
 	@Override
 	public String toString() {
-		return "MMessage [id=" + id + ", title=" + title + ", isread=" + isread
-				+ ", isreplied=" + isreplied + ", sendtime=" + sendtime
-				+ ", sender=" + sender + ", receiver=" + receiver + ", body="
-				+ body + "]";
+		return "MMessage [id=" + id + ", senderid=" + senderid
+				+ ", receiverid=" + receiverid + ", title=" + title + ", body="
+				+ body + ", isread=" + isread + ", sendtime=" + sendtime
+				+ ", unreadcount=" + unreadcount + ", sendername=" + sendername
+				+ ", senderavatar=" + senderavatar + "]";
 	}
 
 }

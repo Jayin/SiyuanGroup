@@ -14,13 +14,18 @@ public class MessageAPI {
 	public MessageAPI() {
 
 	}
-    /**
-     * 发消息
-     * @param receiver 收件人id
-     * @param title 标题
-     * @param body 内容
-     * @param responseHandler
-     */
+
+	/**
+	 * 发消息
+	 * 
+	 * @param receiver
+	 *            收件人id
+	 * @param title
+	 *            标题
+	 * @param body
+	 *            内容
+	 * @param responseHandler
+	 */
 	public void send(int receiverid, String title, String body,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
@@ -32,78 +37,42 @@ public class MessageAPI {
 			params.add("body", body);
 		RestClient.post("/api/messages/send", params, responseHandler);
 	}
-	/**
-	 * 回复
-	 * @param sourceid  要回复的消息id
-	 * @param title  标题
-	 * @param body 内容
-	 * @param responseHandler
-	 */
-	public void reply(int sourceid ,String title,String body,AsyncHttpResponseHandler responseHandler){
-		RequestParams params = new RequestParams();
-		if (sourceid > 0)
-			params.add("sourceid", sourceid + "");
-		if (title != null)
-			params.add("title", title);
-		if (body != null)
-			params.add("body", body);
-		RestClient.post("/api/messages/reply", params, responseHandler);
-	}
+
 	/**
 	 * 获取未读消息数量<br>
 	 * 需登录
+	 * 
 	 * @param responseHandler
 	 */
-	public void getUnreadCount(AsyncHttpResponseHandler responseHandler){
+	public void getUnreadCount(AsyncHttpResponseHandler responseHandler) {
 		RestClient.get("/api/messages/unreadcount", null, responseHandler);
 	}
-	/**
-	 * 标记为已读
-	 * @param id 消息id
-	 * @param responseHandler
-	 */
-	public void markRead(int id  ,AsyncHttpResponseHandler responseHandler){
+    /**
+     * 消息列表
+     * @param page
+     * @param responseHandler
+     */
+	public void getMessageList(int page,
+			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
-		if (id  > 0)
-			params.add("id", id  + "");
-		RestClient.post("/api/messages/markread", params, responseHandler);
+		if(page>0)
+			params.add("page", page+"");
+		RestClient.get("/api/messages/list", params, responseHandler);
 	}
 	/**
-	 * 根据请求返回书获取收消息列表
-	 * @param limit 请求返回数
-	 * @param responseHandler
-	 */
-	public void getReceiedMessageListByLimit(int limit,AsyncHttpResponseHandler responseHandler){
-		RequestParams params =new RequestParams();
-		params.add("limit", limit+"");
-		RestClient.get("/api/messages/receivelist", params, responseHandler);
-	}
-	/**
-	 * 根据页码获取消息列表
+	 * 获得聊天记录
 	 * @param page 页码
+	 * @param friendid 对方id
 	 * @param responseHandler
 	 */
-	public void getReceiedMessageListByPage(int page,AsyncHttpResponseHandler responseHandler){
-		RequestParams params =new RequestParams();
-		params.add("page", page+"");
-		RestClient.get("/api/messages/receivelist", params, responseHandler);
+	public void getChatRecord(int page,int friendid,
+			AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		if(page>0)
+			params.add("page", page+"");
+		if(friendid>0)
+			params.add("friendid", friendid+"");
+		RestClient.get("/api/messages/record", params, responseHandler);
 	}
-	 /**
-	  *  发消息列表
-	  * @param page 页码
-	  * @param responseHandler
-	  */
-	public void getSendMessageList(int page,AsyncHttpResponseHandler responseHandler){
-		RequestParams params =new RequestParams();
-		params.add("page", page+"");
-		RestClient.get("/api/messages/sendlist", params, responseHandler);
-	}
-	
+
 }
-
-
-
-
-
-
-
