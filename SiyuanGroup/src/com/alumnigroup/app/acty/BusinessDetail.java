@@ -28,6 +28,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cocomment;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -51,6 +52,7 @@ public class BusinessDetail extends BaseActivity {
 	private List<Cocomment> data;
 	private CocommentAdapter adatper;
 	private BroadcastReceiver mReceiver;
+	private ImageView iv_pic1, iv_pic2, iv_pic3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +62,7 @@ public class BusinessDetail extends BaseActivity {
 		initLayout();
 		openReceiver();
 	}
+
 	// 评论成功后添加评论条目
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
@@ -109,6 +112,39 @@ public class BusinessDetail extends BaseActivity {
 		tv_deadline = (TextView) _getView(R.id.tv_deadline);
 		tv_description = (TextView) _getView(R.id.tv_description);
 		tv_notify = (TextView) _getView(R.id.tv_notify);
+
+		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
+		iv_pic2 = (ImageView) _getView(R.id.iv_pic2);
+		iv_pic3 = (ImageView) _getView(R.id.iv_pic3);
+
+		for (int i = 0; i < c.getPictures().size(); i++) {
+			switch (i) {
+			case 0:
+				iv_pic1.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + c.getPictures().get(i).getPath(),
+						iv_pic1);
+				iv_pic1.setOnClickListener(this);
+
+				break;
+			case 1:
+				iv_pic2.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + c.getPictures().get(i).getPath(),
+						iv_pic2);
+				iv_pic2.setOnClickListener(this);
+				break;
+			case 2:
+				iv_pic3.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + c.getPictures().get(i).getPath(),
+						iv_pic3);
+				iv_pic3.setOnClickListener(this);
+				break;
+			default:
+				break;
+			}
+		}
 
 		tv_username.setText(c.getUser().getProfile().getName());
 		tv_projectname.setText(c.getName());
@@ -184,6 +220,7 @@ public class BusinessDetail extends BaseActivity {
 
 	@Override
 	public void onClick(View v) {
+		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
@@ -197,13 +234,13 @@ public class BusinessDetail extends BaseActivity {
 		case R.id.btn_space:
 			// toast("to space");
 			User u = c.getUser();
-			Intent intent = new Intent();
-			if(user.getId() != u.getId()){
+			intent = new Intent();
+			if (user.getId() != u.getId()) {
 				intent.setClass(getContext(), SpaceOther.class);
-			}else{
+			} else {
 				intent.setClass(getContext(), SpacePersonal.class);
 			}
-			intent.putExtra("user",c.getUser());
+			intent.putExtra("user", c.getUser());
 			openActivity(intent);
 			break;
 		case R.id.btn_comment:
@@ -211,6 +248,25 @@ public class BusinessDetail extends BaseActivity {
 			break;
 		case R.id.btn_favourite:
 			favourite();
+			break;
+
+		case R.id.iv_pic1:
+			intent = new Intent(getContext(), ImageDisplay.class);
+			intent.putExtra("url", RestClient.BASE_URL
+					+ c.getPictures().get(0).getPath());
+			openActivity(intent);
+			break;
+		case R.id.iv_pic2:
+			intent = new Intent(getContext(), ImageDisplay.class);
+			intent.putExtra("url", RestClient.BASE_URL
+					+ c.getPictures().get(1).getPath());
+			openActivity(intent);
+			break;
+		case R.id.iv_pic3:
+			intent = new Intent(getContext(), ImageDisplay.class);
+			intent.putExtra("url", RestClient.BASE_URL
+					+ c.getPictures().get(2).getPath());
+			openActivity(intent);
 			break;
 		default:
 			break;
@@ -313,7 +369,7 @@ public class BusinessDetail extends BaseActivity {
 				ImageLoader.getInstance().displayImage(
 						RestClient.BASE_URL
 								+ data.get(position).getUser().getAvatar(),
-								h.avatar);
+						h.avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
 						"drawable://" + R.drawable.ic_image_load_normal,
