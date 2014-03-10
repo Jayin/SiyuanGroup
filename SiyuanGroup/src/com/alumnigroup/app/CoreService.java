@@ -105,10 +105,7 @@ public class CoreService extends Service {
 				}
 				final int mCount = count;
 				// send broadcast after getting all messages
-				int unreadCount = MessageCache
-						.getUnreadCount(getApplicationContext());
-				MessageCache.setUnreadCount(getApplicationContext(),
-						unreadCount + count);
+				MessageCache.setUnreadCount(getApplicationContext(),count);
 				Intent intent = new Intent(Constants.Action_Receive_UnreadCount);
 				intent.putExtra("count", mCount);
 				sendBroadcast(intent);

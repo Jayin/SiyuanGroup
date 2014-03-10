@@ -201,12 +201,12 @@ public class BusinessPublish extends BaseActivity {
 				}
 			}
 		}
-		if (pics[0] != null)
-			debug("pics[0]!=null");
-		if (pics[1] != null)
-			debug("pics[1]!=null");
-		if (pics[2] != null)
-			debug("pics[2]!=null");
+//		if (pics[0] != null)
+//			debug("pics[0]!=null-->" + pics[0].getAbsolutePath());
+//		if (pics[1] != null)
+//			debug("pics[1]!=null-->" + pics[1].getAbsolutePath());
+//		if (pics[2] != null)
+//			debug("pics[2]!=null-->" + pics[2].getAbsolutePath());
 		api.create(name, description, company, regdeadline, statusid,
 				isprivate, pics[0], pics[1], pics[2],
 				new JsonResponseHandler() {
