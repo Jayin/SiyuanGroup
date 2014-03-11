@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/item_listview_bg_whitetogrey"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" >
+
+        <ImageView
+            android:id="@+id/iv_avatar"
+            style="@style/ImageView.avatar"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:src="@drawable/ic_image_load_loading" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/iv_avatar"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/tv_username"
+                style="@style/TextView.black"
+                android:layout_marginTop="8dp"
+                android:text="黄廉温" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_posttime"
+            style="@style/TextView.black"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="6dp"
+            android:text="2013-10-12 09:20"
+            android:textColor="@color/grey_lv_two"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_listView_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="6dp" >
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/TextView.black"
+            android:text="我是标题，我是用来测试的，"
+            android:textColor="@color/blue_lv_third"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_body"
+            style="@style/TextView.black"
+            android:layout_marginTop="4dp"
+            android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
+            android:textColor="@color/black"
+            android:textSize="16sp" android:layout_marginBottom="4dp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
+</LinearLayout>

@@ -26,7 +26,7 @@ public abstract class JsonResponseHandler extends AsyncHttpResponseHandler {
 	@Override
 	public void onFailure(int statusCode, Header[] headers, byte[] data,
 			Throwable err) {
-		L.e(new String(data));
+		if(data!=null)L.e(new String(data));
 		// IOException
 		if (statusCode == 0) {
 			onFaild(Error_IOException,statusCode);

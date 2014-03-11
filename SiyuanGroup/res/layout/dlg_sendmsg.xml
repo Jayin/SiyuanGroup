@@ -6,6 +6,7 @@
     android:orientation="vertical" >
 
     <TextView
+        android:id="@+id/tv_title"
         style="@style/TextView.black"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="4dp"

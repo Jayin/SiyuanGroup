@@ -85,7 +85,7 @@ public class Setting extends BaseActivity {
 			break;
 
 		case R.id.acty_setting_btn_tickling:
-			intent.setClass(Setting.this, Tickling.class);
+			intent.setClass(Setting.this, Feedback.class);
 			startActivity(intent);
 			break;
 		case R.id.acty_setting_btn_changeBackgroud:

@@ -89,7 +89,7 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".acty.Tickling"
+            android:name=".acty.Feedback"
             android:screenOrientation="portrait" >
         </activity>
         <activity
