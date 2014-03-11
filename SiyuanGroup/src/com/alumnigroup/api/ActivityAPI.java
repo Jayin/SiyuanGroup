@@ -1,5 +1,8 @@
 package com.alumnigroup.api;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.L;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -231,7 +234,8 @@ public class ActivityAPI {
 	 */
 	public void creatAcivity(int groupid, int maxnum, long starttime,
 			long duration, long regdeadline, int statusid, long money,
-			String name, String content, String site,
+			String name, String content, String site, File picture1,
+			File picture2, File picture3,
 			AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();
 		params.add("groupid", groupid + "");
@@ -246,12 +250,16 @@ public class ActivityAPI {
 		params.add("site", site);
 		params.add("regdeadline", CalendarUtils.getTimeFromat(regdeadline,
 				CalendarUtils.TYPE_THIRD));
-		L.i("regdeadline__>"
-				+ CalendarUtils.getTimeFromat(regdeadline,
-						CalendarUtils.TYPE_THIRD));
-		L.i("starttime>"
-				+ CalendarUtils.getTimeFromat(starttime,
-						CalendarUtils.TYPE_THIRD));
+		try {
+			if (picture1 != null)
+				params.put("picture1", picture1);
+			if (picture2 != null)
+				params.put("picture2", picture2);
+			if (picture3 != null)
+				params.put("picture3", picture3);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		RestClient.post("/api/activities/create", params, responseHandler);
 	}
 

@@ -74,6 +74,7 @@ public class BusinessPublish extends BaseActivity {
 		btn_isprivate = _getView(R.id.isprivate);
 
 		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
+		_getView(R.id.btn_add_pic).setOnClickListener(this);
 
 		et_name = (EditText) _getView(R.id.et_name);
 		et_description = (EditText) _getView(R.id.et_description);
@@ -81,8 +82,7 @@ public class BusinessPublish extends BaseActivity {
 
 		tv_deadline = (TextView) _getView(R.id.tv_deadline);
 		tv_isPrivate = (TextView) _getView(R.id.tv_isprivate);
-
-		_getView(R.id.btn_add_pic).setOnClickListener(this);
+	
 		btn_back.setOnClickListener(this);
 		btn_create.setOnClickListener(this);
 		btn_deadline.setOnClickListener(this);

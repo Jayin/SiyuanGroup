@@ -1,11 +1,20 @@
 package com.alumnigroup.app.acty;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.HashMap;
+
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.api.ActivityAPI;
@@ -15,10 +24,14 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.EditTextUtils;
+import com.alumnigroup.utils.FilePath;
+import com.alumnigroup.utils.ImageUtils;
 import com.alumnigroup.widget.TimePickDialog;
 import com.alumnigroup.widget.TimePickDialog.OnSiglePickFinishedListener;
+import com.custom.view.FlowLayout;
 
 /**
  * 发起活动页面
@@ -27,7 +40,8 @@ import com.alumnigroup.widget.TimePickDialog.OnSiglePickFinishedListener;
  * 
  */
 public class ActivitiesPublish extends BaseActivity {
-	private View btn_back, btn_create, btn_invite, btn_starttime, btn_deadline;
+	private int RequestCode_Pick_image = 1;
+	private View btn_back, btn_create, btn_starttime, btn_deadline;
 	private EditText et_name, et_description, et_maxNum, et_money, et_duration,
 			et_site;
 	private TextView tv_startTime, tv_deadline;
@@ -38,6 +52,8 @@ public class ActivitiesPublish extends BaseActivity {
 	private int sy_pickwhat = 1; // 1 pick: tv_startTime ; 2 tv_deadline
 	private long starttime = 0, regdeadline = 0;
 	private MActivity acty;
+	private FlowLayout flowLayout;
+	private HashMap<View, Uri> bitmaps;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,13 +81,14 @@ public class ActivitiesPublish extends BaseActivity {
 			closeActivity();
 			toast("无参数");
 		}
+		
+		bitmaps = new HashMap<View, Uri>();
 	}
 
 	@Override
 	protected void initLayout() {
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_create = _getView(R.id.acty_head_btn_create);
-		btn_invite = _getView(R.id.btn_invite);
 		btn_starttime = _getView(R.id.btn_starttime);
 		btn_deadline = _getView(R.id.btn_deadline);
 
@@ -102,7 +119,6 @@ public class ActivitiesPublish extends BaseActivity {
 		});
 		btn_back.setOnClickListener(this);
 		btn_create.setOnClickListener(this);
-		btn_invite.setOnClickListener(this);
 		btn_starttime.setOnClickListener(this);
 		btn_deadline.setOnClickListener(this);
 
@@ -120,7 +136,9 @@ public class ActivitiesPublish extends BaseActivity {
 					acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
 			et_site.setText(acty.getSite());
 		}
-
+		
+		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
+		_getView(R.id.btn_add_pic).setOnClickListener(this);
 	}
 
 	@Override
@@ -156,10 +174,6 @@ public class ActivitiesPublish extends BaseActivity {
 
 			}
 			break;
-		case R.id.btn_invite:
-			// to 好友列表
-			toast("to friend list");
-			break;
 		case R.id.btn_starttime:
 			// select time
 			sy_pickwhat = 1;
@@ -169,6 +183,18 @@ public class ActivitiesPublish extends BaseActivity {
 			// select time
 			sy_pickwhat = 2;
 			dialog.show();
+			break;
+			
+		case R.id.btn_add_pic:
+			if (flowLayout.getChildCount() >= 4) {
+				toast("目前最多能上传发3张图片");
+				return;
+			}
+			// to pick a pic & add...
+			Intent intent = new Intent(Intent.ACTION_PICK);
+			intent.setType("image/*");
+			// openActivity(intent);
+			startActivityForResult(intent, RequestCode_Pick_image);
 			break;
 		default:
 			break;
@@ -196,21 +222,27 @@ public class ActivitiesPublish extends BaseActivity {
 
 	private void create(int groupid, int maxnum, int duration, int statusid,
 			long money, String name, String content, String site) {
-		debug(" groupid-->" + groupid);
-		debug("maxnum -->" + maxnum);
-		debug("duration -->" + duration);
-		debug("statusid -->" + statusid);
-		debug("money-->" + money);
-
-		debug(" name-->" + name);
-		debug(" content-->" + starttime);
-		debug(" site-->" + site);
-		debug(" regdeadline-->" + regdeadline);
-		debug(" starttime-->" + starttime);
-
+		
+		final File[] pics = new File[3];
+		if (bitmaps.size() > 0) {
+			int count = 0;
+			for (View v : bitmaps.keySet()) {
+				try {
+					String fileName = FilePath.getImageFilePath()
+							+ "activity_pic" + count + ".jpg";
+					ImageUtils.saveImageToSD(fileName, ImageUtils
+							.createImageThumbnail(BitmapUtils.getPicFromUri(
+									bitmaps.get(v), getContext()), 800), 80);
+					pics[count] = new File(fileName);
+					count++;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
 		api.creatAcivity(groupid, maxnum, starttime, duration,
 
-		regdeadline, statusid, money, name, content, site,
+		regdeadline, statusid, money, name, content, site,pics[0], pics[1], pics[2],
 				new JsonResponseHandler() {
 
 					@Override
@@ -251,6 +283,34 @@ public class ActivitiesPublish extends BaseActivity {
 		}
 		return true;
 
+	}
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == RequestCode_Pick_image && resultCode == RESULT_OK) {
+			Uri photoUri = data.getData();
+			final View container = getLayoutInflater().inflate(
+					R.layout.item_flowlayout_image, null);
+			ImageView iv = (ImageView) container.findViewById(R.id.iv_image);
+			iv.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					flowLayout.removeView(container);
+					bitmaps.remove(container);
+				}
+			});
+			try {
+				Bitmap bitmap = BitmapUtils.getPicFromUri(photoUri,
+						getContext());
+				iv.setImageBitmap(ImageUtils.zoomBitmap(bitmap, 100, 100));
+				bitmap = null;
+				bitmaps.put(container, photoUri);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			flowLayout.addView(container);
+		}
 	}
 
 }

@@ -10,16 +10,14 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-         android:layout_margin="8dp"
-        >
+        android:layout_margin="8dp"
+        android:scrollbars="none" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:orientation="vertical"
-           
-             >
+            android:orientation="vertical" >
 
             <TextView
                 style="@style/TextView.base"
@@ -69,9 +67,9 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="right"
+                    android:hint="点击编辑"
                     android:inputType="number"
-                    android:text="" 
-                    android:hint="点击编辑"/>
+                    android:text="" />
             </LinearLayout>
 
             <LinearLayout
@@ -91,8 +89,9 @@
                     style="@style/EditText.base"
                     android:layout_weight="1"
                     android:background="@null"
-                    android:gravity="right"   android:inputType="number"
-                    android:hint="RMB"/>
+                    android:gravity="right"
+                    android:hint="RMB"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -133,10 +132,10 @@
                     android:id="@+id/et_duration"
                     style="@style/EditText.base"
                     android:layout_weight="1"
-                    android:inputType="number"
                     android:background="@null"
                     android:gravity="right"
-                    android:hint="单位:天" />
+                    android:hint="单位:天"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -181,30 +180,34 @@
                     android:layout_weight="1"
                     android:background="@null"
                     android:gravity="right"
-                    android:text=""  android:hint="点击编辑"/>
+                    android:hint="点击编辑"
+                    android:text="" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/btn_invite"
+            <TextView
+                android:id="@+id/tv_pic"
+                style="@style/TextView.base"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="12dp"
+                android:singleLine="true"
+                android:text="图片"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <com.custom.view.FlowLayout
+                android:id="@+id/flowlayout_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
-                android:layout_marginBottom="8dp"
-                android:background="@drawable/btn_preference_sigle"
-                android:orientation="horizontal" android:visibility="invisible">
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginTop="6dp" >
 
-                <TextView
-                    style="@style/TextView.black"
-                    android:layout_weight="1"
-                    android:padding="6dp"
-                    android:text="邀请好友" />
-
-                <ImageView
+                <ImageButton
+                    android:id="@+id/btn_add_pic"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/ic_item_toright_blue" />
-            </LinearLayout>
+                    android:background="@drawable/btn_add" />
+            </com.custom.view.FlowLayout>
         </LinearLayout>
     </ScrollView>
 
