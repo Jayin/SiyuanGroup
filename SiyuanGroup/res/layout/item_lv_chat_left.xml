@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="200dp"
-            android:text="好饿好饿啊好饿啊好饿啊好饿啊好饿啊好饿啊啊"
+            android:text="segment"
             android:textColor="@color/black"
             android:textSize="16sp" />
     </RelativeLayout>
@@ -50,5 +50,11 @@
             android:background="@drawable/ic_img_resend_normal"
             android:visibility="invisible" />
     </RelativeLayout>
+    
+      <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1" >
+    </LinearLayout>
 
 </LinearLayout>

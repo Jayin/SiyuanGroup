@@ -24,10 +24,12 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
+
 /**
  * 消息详情
+ * 
  * @author Jayin Ton
- *
+ * 
  */
 public class MessageDetail extends BaseActivity {
 	private MMessage message;
@@ -104,9 +106,13 @@ public class MessageDetail extends BaseActivity {
 							position = status.size() - 1;
 							MMessage mm = new MMessage();
 							// stop here
-//							mm.setSender(AppInfo.getUser(getContext()));
-							mm.setSenderavatar(AppInfo.getUser(getContext()).getAvatar());
-							mm.setSendername(AppInfo.getUser(getContext()).getProfile().getName());
+							// mm.setSender(AppInfo.getUser(getContext()));
+							mm.setSenderid(AppInfo.getUser(getContext())
+									.getId());
+							mm.setSenderavatar(AppInfo.getUser(getContext())
+									.getAvatar());
+							mm.setSendername(AppInfo.getUser(getContext())
+									.getProfile().getName());
 							mm.setBody(et_body.getText().toString());
 							data.add(mm);
 							adapter.notifyDataSetChanged();
@@ -118,6 +124,7 @@ public class MessageDetail extends BaseActivity {
 							status.set(position, Finished);
 							adapter.notifyDataSetInvalidated();
 							lv.setSelection(data.size() - 1);
+							et_body.setText("");
 						}
 
 						@Override
@@ -125,6 +132,7 @@ public class MessageDetail extends BaseActivity {
 							status.set(position, Finished);
 							adapter.notifyDataSetInvalidated();
 							lv.setSelection(data.size() - 1);
+							et_body.setText("");
 						}
 					});
 
@@ -197,7 +205,7 @@ public class MessageDetail extends BaseActivity {
 			switch (getItemViewType(position)) {
 			case LEFT:
 				h.tv_content.setText(m.getBody());
-				if (m.getSenderavatar()!= null) {
+				if (m.getSenderavatar() != null) {
 					ImageLoader.getInstance().displayImage(
 							RestClient.BASE_URL + m.getSenderavatar(),
 							h.iv_avatar);

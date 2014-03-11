@@ -68,7 +68,7 @@ public class MMessage implements Serializable {
 	/** 发送人id */
 	private int senderid;
 	/** 接受者 id */
-	private User receiverid;
+	private int receiverid;
 	/** 消息标题 */
 	private String title;
 	/** 内容 */
@@ -100,11 +100,11 @@ public class MMessage implements Serializable {
 		this.senderid = senderid;
 	}
 
-	public User getReceiverid() {
+	public int getReceiverid() {
 		return receiverid;
 	}
 
-	public void setReceiverid(User receiverid) {
+	public void setReceiverid(int receiverid) {
 		this.receiverid = receiverid;
 	}
 
@@ -172,5 +172,4 @@ public class MMessage implements Serializable {
 				+ ", unreadcount=" + unreadcount + ", sendername=" + sendername
 				+ ", senderavatar=" + senderavatar + "]";
 	}
-
 }
