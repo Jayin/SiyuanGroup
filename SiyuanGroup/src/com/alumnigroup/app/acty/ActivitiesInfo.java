@@ -359,10 +359,6 @@ public class ActivitiesInfo extends BaseActivity {
 		btn_userlist.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
 		initViewPager();
-		
-		
-		
-
 	}
 
 	@Override
