@@ -83,8 +83,28 @@ public class MActivity implements Serializable {
 	private User user;
 	/** 活动人数*/
 	private int numUsership;
+	/** 图片数*/
+	private int numPictures;
 	/** 活动截止申请日期*/
 	private long regdeadline;
+    /** 图片*/
+    private ArrayList<MPicture> pictures;
+
+	public int getNumPictures() {
+		return numPictures;
+	}
+
+	public void setNumPictures(int numPictures) {
+		this.numPictures = numPictures;
+	}
+
+	public ArrayList<MPicture> getPictures() {
+		return pictures;
+	}
+
+	public void setPictures(ArrayList<MPicture> pictures) {
+		this.pictures = pictures;
+	}
 
 	public String getAvatar() {
 		return avatar;

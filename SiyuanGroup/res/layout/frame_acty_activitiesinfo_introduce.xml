@@ -230,7 +230,48 @@
                 android:textSize="14sp" />
         </LinearLayout>
 
-        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/ic_preference_first_normal"
+            android:orientation="horizontal" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:padding="6dp"
+                android:text="图片"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <com.custom.view.FlowLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_marginRight="4dp"
+            android:background="@drawable/ic_preference_last_normal"
+            android:orientation="horizontal" >
+
+            <!-- to -->
+
+            <ImageView
+                android:id="@+id/iv_pic1"
+               style="@style/ImageView.pic"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_pic2"
+               style="@style/ImageView.pic"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/iv_pic3"
+                style="@style/ImageView.pic"
+                android:visibility="gone" />
+        </com.custom.view.FlowLayout>
     </LinearLayout>
 
 </ScrollView>

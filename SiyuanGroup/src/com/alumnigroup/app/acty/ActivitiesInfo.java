@@ -66,6 +66,7 @@ public class ActivitiesInfo extends BaseActivity {
 	private List<Issue> data_share;
 	private IssueAdapter adapter_share;
 	private int page_share = 0,page_member = 0;
+	private ImageView iv_pic1, iv_pic2, iv_pic3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -309,6 +310,39 @@ public class ActivitiesInfo extends BaseActivity {
 		
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
 		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
+		
+		iv_pic1 = (ImageView) info.findViewById(R.id.iv_pic1);
+		iv_pic2 = (ImageView) info.findViewById(R.id.iv_pic2);
+		iv_pic3 = (ImageView) info.findViewById(R.id.iv_pic3);
+
+		for (int i = 0; i < acty.getPictures().size(); i++) {
+			switch (i) {
+			case 0:
+				iv_pic1.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + acty.getPictures().get(i).getPath(),
+						iv_pic1);
+				iv_pic1.setOnClickListener(this);
+
+				break;
+			case 1:
+				iv_pic2.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + acty.getPictures().get(i).getPath(),
+						iv_pic2);
+				iv_pic2.setOnClickListener(this);
+				break;
+			case 2:
+				iv_pic3.setVisibility(View.VISIBLE);
+				ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL + acty.getPictures().get(i).getPath(),
+						iv_pic3);
+				iv_pic3.setOnClickListener(this);
+				break;
+			default:
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -325,6 +359,9 @@ public class ActivitiesInfo extends BaseActivity {
 		btn_userlist.setOnClickListener(this);
 		btn_share.setOnClickListener(this);
 		initViewPager();
+		
+		
+		
 
 	}
 
@@ -382,6 +419,24 @@ public class ActivitiesInfo extends BaseActivity {
 			mPopupWindow.dismiss();
 			intent = new Intent(this, ActivitiesSharePublish.class);
 			intent.putExtra("activity",acty);
+			openActivity(intent);
+			break;
+		case R.id.iv_pic1:
+			intent = new Intent(getContext(), ImageDisplay.class);
+			intent.putExtra("url", RestClient.BASE_URL
+					+ acty.getPictures().get(0).getPath());
+			openActivity(intent);
+			break;
+		case R.id.iv_pic2:
+			intent = new Intent(getContext(), ImageDisplay.class);
+			intent.putExtra("url", RestClient.BASE_URL
+					+ acty.getPictures().get(1).getPath());
+			openActivity(intent);
+			break;
+		case R.id.iv_pic3:
+			intent = new Intent(getContext(), ImageDisplay.class);
+			intent.putExtra("url", RestClient.BASE_URL
+					+ acty.getPictures().get(2).getPath());
 			openActivity(intent);
 			break;
 		default:

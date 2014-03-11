@@ -249,7 +249,6 @@ public class BusinessDetail extends BaseActivity {
 		case R.id.btn_favourite:
 			favourite();
 			break;
-
 		case R.id.iv_pic1:
 			intent = new Intent(getContext(), ImageDisplay.class);
 			intent.putExtra("url", RestClient.BASE_URL
