@@ -1,6 +1,7 @@
 package com.alumnigroup.app.acty;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -19,6 +20,7 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MMessage;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.XListView;
@@ -33,15 +35,18 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class MessageDetail extends BaseActivity {
 	private MMessage message;
-	private ArrayList<MMessage> data;
+	// private ArrayList<MMessage> data;
 	private XListView lv;
 	private ChatAdapter adapter;
 	private EditText et_body;
 	private MessageAPI api;
-	private ArrayList<Integer> status;
+	// private ArrayList<Integer> status;
 	private final int Finished = 0;
 	private final int Sending = 1;
 	private final int Faild = 2;
+	private int page = 0;
+	private LinkedList<MMessage> msgs;
+	private LinkedList<Integer> status;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,12 +60,35 @@ public class MessageDetail extends BaseActivity {
 	private void initCotroller() {
 		lv.setAdapter(adapter);
 		lv.setPullLoadEnable(false);
-		lv.setPullRefreshEnable(false);
+		lv.setPullRefreshEnable(true);
 		lv.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
+				api.getChatRecord(page + 1, message.getSenderid(),
+						new JsonResponseHandler() {
 
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								int position = 0;
+								ArrayList<MMessage> messages = MMessage
+										.create_by_jsonarray(obj.toString());
+								for (MMessage m : messages) {
+									msgs.push(m);
+									status.push(Finished);
+								}
+								page++;
+								adapter.notifyDataSetChanged();
+								lv.setSelection(position);
+								lv.stopRefresh();
+							}
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv.stopRefresh();
+							}
+						});
 			}
 
 			@Override
@@ -68,17 +96,20 @@ public class MessageDetail extends BaseActivity {
 
 			}
 		});
+		lv.startRefresh();
 	}
 
 	@Override
 	protected void initData() {
 		message = getSerializableExtra("message");
 		api = new MessageAPI();
-		data = new ArrayList<MMessage>();
+		// data = new ArrayList<MMessage>();
 		adapter = new ChatAdapter();
-		data.add(message);
-		status = new ArrayList<Integer>();
-		status.add(Finished);
+		// data.add(message);
+		// status = new ArrayList<Integer>();
+		// status.add(Finished);
+		status = new LinkedList<Integer>();
+		msgs = new LinkedList<MMessage>();
 	}
 
 	@Override
@@ -96,45 +127,52 @@ public class MessageDetail extends BaseActivity {
 			closeActivity();
 			break;
 		case R.id.btn_send:
-			api.send(message.getId(), "", et_body.getText().toString(),
-					new JsonResponseHandler() {
-						int position = 0;
+			if (et_body.getText().toString().equals("")) {
+				toast("不能为空");
+				return;
+			}
+			api.send(message.getSenderid(), "title", et_body.getText()
+					.toString(), new JsonResponseHandler() {
+				int position = 0;
 
-						@Override
-						public void onStart() {
-							status.add(Sending);
-							position = status.size() - 1;
-							MMessage mm = new MMessage();
-							// stop here
-							// mm.setSender(AppInfo.getUser(getContext()));
-							mm.setSenderid(AppInfo.getUser(getContext())
-									.getId());
-							mm.setSenderavatar(AppInfo.getUser(getContext())
-									.getAvatar());
-							mm.setSendername(AppInfo.getUser(getContext())
-									.getProfile().getName());
-							mm.setBody(et_body.getText().toString());
-							data.add(mm);
-							adapter.notifyDataSetChanged();
-							lv.setSelection(data.size() - 1);
-						}
+				@Override
+				public void onStart() {
+					position = status.size();
+					MMessage mm = new MMessage();
+					// stop here
+					// mm.setSender(AppInfo.getUser(getContext()));
+					mm.setSenderid(AppInfo.getUser(getContext()).getId());
+					mm.setSenderavatar(AppInfo.getUser(getContext())
+							.getAvatar());
+					mm.setSendername(AppInfo.getUser(getContext()).getProfile()
+							.getName());
+					mm.setBody(et_body.getText().toString());
+					// data.add(mm);
+					msgs.add(mm);
+					status.add(Sending);
+					adapter.notifyDataSetChanged();
+					lv.setSelection(msgs.size() - 1);
+					debug("onstart---pos-"+position);
+				}
 
-						@Override
-						public void onOK(Header[] headers, JSONObject obj) {
-							status.set(position, Finished);
-							adapter.notifyDataSetInvalidated();
-							lv.setSelection(data.size() - 1);
-							et_body.setText("");
-						}
+				@Override
+				public void onOK(Header[] headers, JSONObject obj) {
+					status.set(position, Finished);
+					adapter.notifyDataSetInvalidated();
+					lv.setSelection(msgs.size() - 1);
+					et_body.setText("");
+					debug("on ok---pos-"+position);
+				}
 
-						@Override
-						public void onFaild(int errorType, int errorCode) {
-							status.set(position, Finished);
-							adapter.notifyDataSetInvalidated();
-							lv.setSelection(data.size() - 1);
-							et_body.setText("");
-						}
-					});
+				@Override
+				public void onFaild(int errorType, int errorCode) {
+					status.set(position, Finished);
+					adapter.notifyDataSetInvalidated();
+					lv.setSelection(msgs.size() - 1);
+					et_body.setText("");
+					debug("onFaild---pos-"+position);
+				}
+			});
 
 			break;
 		default:
@@ -151,12 +189,12 @@ public class MessageDetail extends BaseActivity {
 
 		@Override
 		public int getCount() {
-			return data.size();
+			return msgs.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return data.get(position);
+			return msgs.get(position);
 		}
 
 		@Override
@@ -167,7 +205,7 @@ public class MessageDetail extends BaseActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			ViewHolder h = null;
-			MMessage m = data.get(position);
+			MMessage m = msgs.get(position);
 			if (convertView == null) {
 				h = new ViewHolder();
 				switch (getItemViewType(position)) {
@@ -237,6 +275,8 @@ public class MessageDetail extends BaseActivity {
 									+ R.drawable.ic_image_load_normal,
 							h.iv_avatar);
 				}
+				
+				debug( m.getSenderavatar());
 				if (status.get(position) == Finished) {
 					h.iv_faild.setVisibility(View.INVISIBLE);
 					h.progress.setVisibility(View.INVISIBLE);
@@ -263,7 +303,7 @@ public class MessageDetail extends BaseActivity {
 		 * */
 		@Override
 		public int getItemViewType(int position) {
-			return data.get(position).getSenderid() != AppInfo.getUser(
+			return msgs.get(position).getSenderid() != AppInfo.getUser(
 					getContext()).getId() ? LEFT : RIGHT;
 		}
 

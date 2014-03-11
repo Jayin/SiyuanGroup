@@ -73,6 +73,11 @@ public class MessageCenter extends BaseActivity {
 							data_message.clear();
 							data_message.addAll(newData);
 							adapter.notifyDataSetChanged();
+							if(data_message.size()<10){
+								lv_message.setPullLoadEnable(false);
+							}else{
+								lv_message.setPullLoadEnable(true);
+							}
 						}
 						lv_message.stopRefresh();
 					}
