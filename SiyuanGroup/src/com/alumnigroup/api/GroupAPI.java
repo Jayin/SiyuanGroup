@@ -149,7 +149,7 @@ public class GroupAPI {
 	 *            圈子id
 	 * @param responseHandler
 	 *            处理器
-	 * @deprecated
+	 *  
 	 */
 	public void view(int id, AsyncHttpResponseHandler responseHandler) {
 		RequestParams params = new RequestParams();

@@ -17,6 +17,14 @@ import com.google.gson.Gson;
  */
 @SuppressWarnings("serial")
 public class Dynamic implements Serializable {
+	/** 类别：话题 */
+	public static final int Item_type_issue = 2;
+	/** 类别：活动 */
+	public static final int Item_type_activity = 3;
+	/** 类别：商务合作 */
+	public static final int Item_type_business = 4;
+	/** 类别：圈子 */
+	public static final int Item_type_group = 5;
 
 	/**
 	 * 解析单个动态
@@ -55,28 +63,6 @@ public class Dynamic implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 			list = null;
-		}
-		return list;
-	}
-
-	/**
-	 * 解析一个动态列表的列表
-	 * 
-	 * @param jsonarray
-	 *            动态列表json字符串
-	 * @return List<Dynamic> return null if parse faild
-	 */
-	public static List<Dynamic> create_by_jsonarray(JSONObject jsonoObj) {
-		List<Dynamic> list = new ArrayList<Dynamic>();
-		JSONArray array = null;
-		try {
-			array = jsonoObj.getJSONArray("events");
-
-			for (int i = 0; i < array.length(); i++) {
-				list.add(create_by_json(array.getJSONObject(i).toString()));
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
 		}
 		return list;
 	}

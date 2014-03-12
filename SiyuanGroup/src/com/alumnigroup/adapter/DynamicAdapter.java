@@ -2,6 +2,10 @@ package com.alumnigroup.adapter;
 
 import java.util.List;
 
+import org.apache.http.Header;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -11,19 +15,34 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alumnigroup.api.ActivityAPI;
+import com.alumnigroup.api.BusinessAPI;
+import com.alumnigroup.api.GroupAPI;
+import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.acty.ActivitiesInfo;
+import com.alumnigroup.app.acty.BusinessDetail;
+import com.alumnigroup.app.acty.CommunicationDetail;
+import com.alumnigroup.app.acty.GroupInfo;
 import com.alumnigroup.app.acty.SpaceOther;
 import com.alumnigroup.app.acty.SpacePersonal;
+import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.Dynamic;
+import com.alumnigroup.entity.ErrorCode;
+import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.MActivity;
+import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 动态页面 
+ * 动态页面
  * 
  * @author vector;restructured by Jayin Ton
  * 
@@ -83,7 +102,7 @@ public class DynamicAdapter extends BaseAdapter {
 		} else {
 			h = (ViewHolder) convertView.getTag();
 		}
-		Dynamic dynamic = dynamics.get(position);
+		final Dynamic dynamic = dynamics.get(position);
 
 		h.portrait.setOnClickListener(new PortraitOnClick(position));
 
@@ -101,6 +120,130 @@ public class DynamicAdapter extends BaseAdapter {
 		h.content.setText(dynamic.getMessage());
 		h.time.setText(CalendarUtils.getTimeFromat(dynamic.getCreatetime(),
 				CalendarUtils.TYPE_timeline));
+		convertView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				switch (dynamic.getItemtype()) {
+				case Dynamic.Item_type_activity:
+					ActivityAPI aapi = new ActivityAPI();
+                    aapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+						
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							try {
+								MActivity acty  = MActivity.create_by_json(obj.getJSONObject("activity").toString());
+								Intent activityIntent = new Intent(context,
+										ActivitiesInfo.class);
+								activityIntent.putExtra("activity", acty);
+								context.startActivity(activityIntent);
+							} catch (JSONException e) {
+								e.printStackTrace();
+								Toast.makeText(context, "网络异常，解析错误",
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+						
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							Toast.makeText(context,
+									ErrorCode.errorList.get(errorCode),
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+					break;
+				case Dynamic.Item_type_business:
+					BusinessAPI bapi = new BusinessAPI();
+					bapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+
+							try {
+								Cooperation c = Cooperation.create_by_json(obj
+										.getJSONObject("cooperation")
+										.toString());
+								Intent cooperationIntent = new Intent(context,
+										BusinessDetail.class);
+								cooperationIntent.putExtra("cooperation", c);
+								context.startActivity(cooperationIntent);
+							} catch (JSONException e) {
+								e.printStackTrace();
+								Toast.makeText(context, "网络异常，解析错误",
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							Toast.makeText(context,
+									ErrorCode.errorList.get(errorCode),
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+					break;
+				case Dynamic.Item_type_issue:
+					IssuesAPI iapi = new IssuesAPI();
+					iapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							try {
+								Issue issue = Issue.create_by_json(obj
+										.getJSONObject("issue").toString());
+								Intent issueIntent = new Intent(context,
+										CommunicationDetail.class);
+								issueIntent.putExtra("issue", issue);
+								context.startActivity(issueIntent);
+							} catch (JSONException e) {
+								e.printStackTrace();
+								Toast.makeText(context, "网络异常，解析错误",
+										Toast.LENGTH_SHORT).show();
+							}
+						}
+
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							Toast.makeText(context,
+									ErrorCode.errorList.get(errorCode),
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+					break;
+				case Dynamic.Item_type_group:
+					GroupAPI gapi = new GroupAPI();
+					gapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+						
+						@Override
+						public void onOK(Header[] headers, JSONObject obj) {
+							try {
+								MGroup group = MGroup.create_by_json(obj.getJSONObject("group").toString());
+								Intent groupIntent = new Intent(context,
+										GroupInfo.class);
+								groupIntent.putExtra("group", group);
+								context.startActivity(groupIntent);
+							} catch (JSONException e) {
+								e.printStackTrace();
+								Toast.makeText(context, "网络异常，解析错误",
+										Toast.LENGTH_SHORT).show();
+							}
+							
+						}
+						
+						@Override
+						public void onFaild(int errorType, int errorCode) {
+							Toast.makeText(context,
+									ErrorCode.errorList.get(errorCode),
+									Toast.LENGTH_SHORT).show();
+						}
+					});
+					break;
+				default:
+					break;
+				}
+
+			}
+		});
 		return convertView;
 	}
 
