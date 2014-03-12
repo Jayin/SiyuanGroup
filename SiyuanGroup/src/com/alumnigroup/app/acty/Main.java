@@ -1,7 +1,5 @@
 package com.alumnigroup.app.acty;
 
-import javax.crypto.spec.IvParameterSpec;
-
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -27,9 +25,6 @@ import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
-import com.alumnigroup.utils.DataPool;
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 主界面
@@ -42,7 +37,6 @@ public class Main extends BaseActivity implements OnClickListener {
 	private WebView webview;
 	private LinearLayout content;
 	private int width = 0, height = 0;
-	private DataPool dp;
 	private BroadcastReceiver mRecevier;
 	private TextView tv_unreadCount;
 	private boolean isError = false;
@@ -52,20 +46,19 @@ public class Main extends BaseActivity implements OnClickListener {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_main);
-		dp = new DataPool(DataPool.SP_Name_User, this);
 		initData();
 		initLayout();
 		checkVerison();
+		startPolling();
 		openReceiver();
-//		test();
-
 	}
 
-	private void test() {
-		Intent service = new Intent(Constants.Action_To_Get_Unread);
-		service.setClass(getContext(), CoreService.class);
-		startService(service);
+	private void startPolling() {
+		 Intent service =new Intent(getContext(), CoreService.class);
+		 service.setAction(Constants.Action_Start_Receive_UnreadCount);
+		 startService(service);
 	}
+
 
 	// 接收到
 	private void openReceiver() {
@@ -90,10 +83,11 @@ public class Main extends BaseActivity implements OnClickListener {
 		if (MessageCache.getUnreadCount(getContext()) == 0) {
 			tv_unreadCount.setVisibility(View.INVISIBLE);
 		} else {
-			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext()) + "");
+			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())
+					+ "");
 			tv_unreadCount.setVisibility(View.VISIBLE);
 		}
-		
+
 	}
 
 	private void checkVerison() {
@@ -114,7 +108,7 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		_getView(R.id.frame_main_one_myspace).setOnClickListener(this);
 
-		_getView(R.id.frame_main_one_setting).setOnClickListener(this); 
+		_getView(R.id.frame_main_one_setting).setOnClickListener(this);
 
 		_getView(R.id.frame_main_one_message).setOnClickListener(this);
 
@@ -130,13 +124,13 @@ public class Main extends BaseActivity implements OnClickListener {
 
 		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
 		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
-		iv_backgroud =(ImageView)_getView(R.id.iv_main_bg);
+		iv_backgroud = (ImageView) _getView(R.id.iv_main_bg);
 		if (AppInfo.getBackgroudPath(getContext()) != null) {
-			iv_backgroud.setImageBitmap(BitmapFactory.decodeFile(AppInfo.getBackgroudPath(getContext())));
+			iv_backgroud.setImageBitmap(BitmapFactory.decodeFile(AppInfo
+					.getBackgroudPath(getContext())));
 		}
 		initWebView();
 	}
-	
 
 	// 初始化广告栏
 	@SuppressLint("SetJavaScriptEnabled")
@@ -225,19 +219,23 @@ public class Main extends BaseActivity implements OnClickListener {
 			break;
 		}
 	}
+
 	class MainRecevier extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got
-																					// unread
-																					// count
-				tv_unreadCount.setText(MessageCache
-						.getUnreadCount(getContext()) + "");
-				tv_unreadCount.setVisibility(View.VISIBLE);
+			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got unread
+																					 
+				if (MessageCache.getUnreadCount(getContext()) > 0) {
+					tv_unreadCount.setText(MessageCache
+							.getUnreadCount(getContext()) + "");
+					tv_unreadCount.setVisibility(View.VISIBLE);
+				}
 			} else if (intent.getAction().equals(
 					Constants.Action_Backgroud_switch)) {
 				if (AppInfo.getBackgroudPath(getContext()) != null) {
-					iv_backgroud.setImageBitmap(BitmapFactory.decodeFile(AppInfo.getBackgroudPath(getContext())));
+					iv_backgroud
+							.setImageBitmap(BitmapFactory.decodeFile(AppInfo
+									.getBackgroudPath(getContext())));
 				}
 			}
 		}

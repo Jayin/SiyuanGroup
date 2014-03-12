@@ -4,6 +4,8 @@ import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -30,6 +32,9 @@ import com.alumnigroup.utils.L;
  */
 public class CoreService extends Service {
 	private BroadcastReceiver mReceiver = null;
+	public static final int Default_PollingTime = 60*1000;
+	public boolean hasStartPolling = false;
+
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -39,6 +44,7 @@ public class CoreService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+	    startPolling();
 		mReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
 				L.i("CoreService-->onReceive-->" + intent.getAction());
@@ -52,6 +58,26 @@ public class CoreService extends Service {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_To_Get_Unread);// 去获取未读消息数目
 		registerReceiver(mReceiver, filter);
+		
+	}
+   //开始轮询
+	private void startPolling() {
+		hasStartPolling = true;
+		AlarmManager am =(AlarmManager) this.getSystemService(ALARM_SERVICE);
+		Intent intent = new Intent(this,CoreService.class);
+		intent.setAction(Constants.Action_To_Get_Unread);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Default_PollingTime, pendingIntent);
+	}
+	//停止轮询
+	private void stopPolling(){
+		hasStartPolling = false;
+		AlarmManager am =(AlarmManager) this.getSystemService(ALARM_SERVICE);
+		Intent intent = new Intent(this,CoreService.class);
+		intent.setAction(Constants.Action_To_Get_Unread);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
+//		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Default_PollingTime, pendingIntent);
+		am.cancel(pendingIntent);
 	}
 
 	@Override
@@ -82,6 +108,20 @@ public class CoreService extends Service {
 					@Override
 					public void run() {
 						getUnread(); // 获取未读消息数目
+					}
+				};
+			}else if(Constants.Action_Stop_Receive_UnreadCount.equals(action)){
+				runnable = new Runnable() {
+					@Override
+					public void run() {
+						stopPolling(); // 停止取消息数目
+					}
+				};
+			}else if(Constants.Action_Start_Receive_UnreadCount.equals(action)){
+				runnable = new Runnable() {
+					@Override
+					public void run() {
+						if(!hasStartPolling)startPolling(); // 开始取消息数目
 					}
 				};
 			}

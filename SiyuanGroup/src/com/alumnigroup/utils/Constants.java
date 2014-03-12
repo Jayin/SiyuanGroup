@@ -14,7 +14,10 @@ public class Constants {
 	public static final String Action_To_Get_Unread = "To_Get_Unread";
  	/** 得到未读消息数目 */
  	public static final String Action_Receive_UnreadCount = "Receive_UnreadCount";
-	
+ 	/** 停止轮询得到未读消息数目 */
+ 	public static final String Action_Stop_Receive_UnreadCount = "Stop_Receive_UnreadCount";
+ 	/** 开始得到未读消息数目 */
+ 	public static final String Action_Start_Receive_UnreadCount = "Start_Receive_UnreadCount";
 	
 	// 广播Action 
 	/** 话题(包含圈子分享 )发布成功*/

@@ -1,18 +1,17 @@
 package com.alumnigroup.app.acty;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
 import com.alumnigroup.app.App;
 import com.alumnigroup.app.BaseActivity;
+import com.alumnigroup.app.CoreService;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.Constants;
@@ -78,6 +77,9 @@ public class Setting extends BaseActivity {
 
 		case R.id.acty_setting_btn_quit:
 			toast("正在退出");
+			Intent service =new Intent(getContext(), CoreService.class);
+			 service.setAction(Constants.Action_Stop_Receive_UnreadCount);
+			 startService(service);
 			((App) getApplication()).cleanUpInfo();
 			toast("已经退出当前用户");
 			openActivity(Login.class);
