@@ -23,9 +23,9 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * 动态页面，ListView 的适配器
+ * 动态页面 
  * 
- * @author vector
+ * @author vector;restructured by Jayin Ton
  * 
  */
 public class DynamicAdapter extends BaseAdapter {

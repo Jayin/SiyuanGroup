@@ -42,8 +42,8 @@ public class Dynamic implements Serializable {
 	 *            动态列表json字符串
 	 * @return List<Dynamic> return null if parse faild
 	 */
-	public static List<Dynamic> create_by_jsonarray(String jsonarray) {
-		List<Dynamic> list = new ArrayList<Dynamic>();
+	public static ArrayList<Dynamic> create_by_jsonarray(String jsonarray) {
+		ArrayList<Dynamic> list = new ArrayList<Dynamic>();
 		JSONObject obj = null;
 		JSONArray array = null;
 		try {

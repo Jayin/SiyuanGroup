@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import android.content.Context;
 
 import com.alumnigroup.entity.Cooperation;
+import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
-import com.alumnigroup.entity.MMessage;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.DataPool;
 
@@ -43,6 +43,9 @@ public class AppCache {
 	public static final String Key_Group_all = "Group_all";
 	public static final String Key_Group_my = "Group_my";
 	public static final String Key_Group_favourite = "Group_favourite";
+	// 动态2种
+	public static final String Key_Dynamic_all = "Dynamic_all";
+	public static final String Key_Dynamic_friend= "Dynamic_friend";
 
 	private static DataPool getDataPool(Context context) {
 		return new DataPool(Cache_Name, context);
@@ -246,5 +249,26 @@ public class AppCache {
 	public static void setGroupMy(Context context, ArrayList<MGroup> value) {
 		save(context, Key_Group_my, value);
 	}
+	
+	/** 获得动态all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Dynamic> getDynamicAll(Context context) {
+		return (ArrayList<Dynamic>) get(context, Key_Dynamic_all);
+	}
 
+	/** 保存动态all列表 */
+	public static void setDynamicAll(Context context, ArrayList<Dynamic> value) {
+		save(context, Key_Dynamic_all, value);
+	}
+	
+	/** 获得动态Friend列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<Dynamic> getDynamicFriend(Context context) {
+		return (ArrayList<Dynamic>) get(context, Key_Dynamic_friend);
+	}
+
+	/** 保存动态Friend列表 */
+	public static void setDynamicFriend(Context context, ArrayList<Dynamic> value) {
+		save(context, Key_Dynamic_friend, value);
+	}
 }

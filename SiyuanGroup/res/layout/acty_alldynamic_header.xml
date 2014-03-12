@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="全站动态" />
+            android:text="动态" />
     </RelativeLayout>
     
 

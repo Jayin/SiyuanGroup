@@ -7,85 +7,45 @@ import org.apache.http.Header;
 import org.json.JSONObject;
 
 import android.os.Bundle;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
+import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.DynamicAdapter;
+import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.api.DynamicAPI;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 
 /**
  * 全部动态界面
  * 
- * @author vector
+ * @author vector;restructured by Jayin Ton
  * 
  */
 public class Alldynamic extends BaseActivity implements OnClickListener {
 
-	/**
-	 * 返回按钮，全部动态按钮，好友动态按钮
-	 */
-	private View btnBack, btnAllDynamic, btnFriendDynamic;
-	/**
-	 * 头上的标题
-	 */
-	private TextView tvHeadTitle;
-	/**
-	 * 全部动态和好友动态页面
-	 */
-	private View allDynamic, friendDynamic;
+	private View btn_AllDynamic, btn_friendDynamic;
 
 	/**
 	 * 显示内容全部动态和好友动态ViewPeger
 	 */
-	private ViewPager vpDynamicContent;
+	private ViewPager viewpager;
 
-	/**
-	 * 要显示的页卡
-	 */
-	private ArrayList<View> alDynamicView;
-
-	/**
-	 * 页卡的PullAndLoadListView
-	 */
-	private XListView lv_AllDynamic, lvFriendDynamic;
-	/**
-	 * 页卡的数据 -- listview
-	 */
-	private ArrayList<Dynamic> alAllDynamicContent, alFriendDynamicContent;
-
-	/**
-	 * 页卡的数据适配器
-	 */
-	private DynamicAdapter aptAllDynamic, aptFriendDynamic;
-
-	/**
-	 * 页卡的适配器
-	 */
-	private DynamicViewPagerAdapter viewAdapter;
-
-	private DynamicAPI api = new DynamicAPI();
-	private int page_all = 1;
-	private int page_myfriend = 1;
-	private DataPool dp;
-	
-	/**
-	 * 我的好友开始时候刷新了
-	 */
-	private boolean isRe = false;
+	private XListView lv_AllDynamic, lv_friendDynamic;
+	private ArrayList<Dynamic> data_alldynamic, data_frienddynamic;
+	private DynamicAdapter adapter_all, adapter_friend;
+	private DynamicAPI api;
+	private int page_all = 0;
+	private int page_myfriend = 0;
+	private List<View> btns;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,223 +53,72 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		setContentView(R.layout.acty_alldynamic);
 		initData();
 		initLayout();
+		initController();
 	}
 
 	@Override
 	protected void initData() {
-		dp = new DataPool(this);
+		api = new DynamicAPI();
+		if (AppCache.getDynamicAll(getContext()) != null) {
+			data_alldynamic = AppCache.getDynamicAll(getContext());
+		} else {
+			data_alldynamic = new ArrayList<Dynamic>();
+		}
+		if (AppCache.getDynamicFriend(getContext()) != null) {
+			data_frienddynamic = AppCache.getDynamicFriend(getContext());
+		} else {
+			data_frienddynamic = new ArrayList<Dynamic>();
+		}
+		adapter_all = new DynamicAdapter(data_alldynamic, this);
+		adapter_friend = new DynamicAdapter(data_frienddynamic, this);
 
-		alAllDynamicContent = new ArrayList<Dynamic>();
-		loadAllData(alAllDynamicContent);
-		alFriendDynamicContent = new ArrayList<Dynamic>();
-		loadMyFriendData(alFriendDynamicContent);
-
-	}
-
-	/**
-	 * 保存缓存数据进sharepreferenses 中,最多保存20 条记录
-	 */
-	private void saveAllData2SP(List<Dynamic> dynamics) {
-		if (dynamics == null || dynamics.size() == 0) {
-			return;
-		}
-		for (int i = 1; i <= 20 && dynamics.size() >= i
-				&& dynamics.get(i - 1) != null; i++) {
-			dp.remove(DataPool.SP_KEY_ALL_DUNAMIC + i);
-			dp.put(DataPool.SP_KEY_ALL_DUNAMIC + i, dynamics.get(i - 1));
-		}
-	}
-
-	/**
-	 * 加载缓存数据进users 中,最多20 条记录
-	 */
-	private void loadAllData(List<Dynamic> dynamics) {
-		if (dynamics == null) {
-			return;
-		}
-		for (int i = 1; i <= 20; i++) {
-			Dynamic dynamic = (Dynamic) dp.get(DataPool.SP_KEY_ALL_DUNAMIC + i);
-			if (dynamic != null) {
-				dynamics.add(dynamic);
-			}
-		}
-	}
-
-	/**
-	 * 保存缓存数据进sharepreferenses 中,最多保存20 条记录
-	 */
-	private void saveMyFriendData2SP(List<Dynamic> dynamics) {
-		if (dynamics == null || dynamics.size() == 0) {
-			return;
-		}
-		for (int i = 1; i <= 20 && dynamics.size() >= i
-				&& dynamics.get(i - 1) != null; i++) {
-			dp.remove(DataPool.SP_KEY_FRIEND_DUNAMIC + i);
-			dp.put(DataPool.SP_KEY_FRIEND_DUNAMIC + i, dynamics.get(i - 1));
-		}
-	}
-
-	/**
-	 * 加载缓存数据,最多20 条记录
-	 */
-	private void loadMyFriendData(List<Dynamic> dynamics) {
-		if (dynamics == null) {
-			return;
-		}
-		for (int i = 1; i <= 20; i++) {
-			Dynamic dynamic = (Dynamic) dp.get(DataPool.SP_KEY_FRIEND_DUNAMIC
-					+ i);
-			if (dynamic != null) {
-				dynamics.add(dynamic);
-			}
-		}
 	}
 
 	@Override
 	protected void initLayout() {
-		/**
-		 * 主要就是初始化数据，四大步骤
-		 */
-		initHead();
-		initDynamicName();
+		btn_AllDynamic = _getView(R.id.acty_alldynamic_footer_alldynamic);
+		btn_friendDynamic = _getView(R.id.acty_alldynamic_footer_friend_dynamic);
+
+		btns = new ArrayList<View>();
+		btns.add(btn_AllDynamic);
+		btns.add(btn_friendDynamic);
+
+		btn_AllDynamic.setOnClickListener(this);
+		btn_friendDynamic.setOnClickListener(this);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		initViewPager();
-		initDynamicDate();
-		initController();
-	}
-
-	private void initDynamicDate() {
-		aptAllDynamic = new DynamicAdapter(alAllDynamicContent, this);
-		aptFriendDynamic = new DynamicAdapter(alFriendDynamicContent, this);
-
-		lv_AllDynamic.setAdapter(aptAllDynamic);
-		lvFriendDynamic.setAdapter(aptFriendDynamic);
-	}
-
-	/**
-	 * 初始化头部控件
-	 */
-	private void initHead() {
-		btnBack = _getView(R.id.acty_head_btn_back);
-		btnBack.setOnClickListener(this);
-		tvHeadTitle = (TextView) _getView(R.id.acty_head_tv_title);
-	}
-
-	/**
-	 * 初始化头标, 头标也有点击事件
-	 */
-	private void initDynamicName() {
-		btnAllDynamic = _getView(R.id.acty_alldynamic_footer_alldynamic);
-		btnFriendDynamic = _getView(R.id.acty_alldynamic_footer_friend_dynamic);
-
-		btnAllDynamic.setOnClickListener(this);
-		btnFriendDynamic.setOnClickListener(this);
 	}
 
 	/**
 	 * 初始化ViewPager
 	 */
 	private void initViewPager() {
-
-		vpDynamicContent = (ViewPager) _getView(R.id.acty_alldynamic_vp_content);
-		alDynamicView = new ArrayList<View>();
-		/**
-		 * alldynamic and listview
-		 */
-		LayoutInflater inflater = getLayoutInflater();
-		allDynamic = inflater.inflate(R.layout.item_lv_acty_alldynamic_content,
-				null);
+		View allDynamic, friendDynamic;
+		viewpager = (ViewPager) _getView(R.id.acty_alldynamic_vp_content);
+		allDynamic = getLayoutInflater().inflate(
+				R.layout.item_lv_acty_alldynamic_content, null);
+		friendDynamic = getLayoutInflater().inflate(
+				R.layout.item_lv_acty_frienddynamic_content, null);
 		lv_AllDynamic = (XListView) allDynamic
 				.findViewById(R.id.item_lv_alldynamic_content);
-
-		/**
-		 * frienddynamic and listview
-		 */
-		friendDynamic = inflater.inflate(
-				R.layout.item_lv_acty_frienddynamic_content, null);
-		lvFriendDynamic = (XListView) friendDynamic
+		lv_friendDynamic = (XListView) friendDynamic
 				.findViewById(R.id.item_lv_frienddynamic_content);
 
-		alDynamicView.add(allDynamic);
-		alDynamicView.add(friendDynamic);
-		viewAdapter = new DynamicViewPagerAdapter(alDynamicView);
-		vpDynamicContent.setAdapter(viewAdapter);
-		vpDynamicContent.setCurrentItem(0);
-		// 需要监听页卡改变事件
-		vpDynamicContent
-				.setOnPageChangeListener(new DynamicOnPageChangeListener());
-	}
+		List<View> views = new ArrayList<View>();
+		views.add(allDynamic);
+		views.add(friendDynamic);
 
-	/**
-	 * 监听页卡的改变
-	 * 
-	 * @author vector
-	 * 
-	 */
-	class DynamicOnPageChangeListener implements OnPageChangeListener {
+		List<XListView> listviews = new ArrayList<XListView>();
+		listviews.add(lv_AllDynamic);
+		listviews.add(lv_friendDynamic);
 
-		public void onPageScrollStateChanged(int arg0) {
+		List<DynamicAdapter> adapters = new ArrayList<DynamicAdapter>();
+		adapters.add(adapter_all);
+		adapters.add(adapter_friend);
 
-		}
-
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-
-		}
-
-		/**
-		 * 滑动变为另外一个View 的时候，改变footer
-		 */
-		public void onPageSelected(int position) {
-			changeFooter(position);
-		}
-
-	}
-
-	private void changeFooter(int position) {
-		if (position == 0) {
-			btnAllDynamic.setBackgroundResource(R.color.blue_nav_bg_press);
-			btnFriendDynamic.setBackgroundResource(R.color.blue_nav_bg_nomal);
-			tvHeadTitle.setText("全站动态");
-		}
-		if (position == 1) {
-			btnAllDynamic.setBackgroundResource(R.color.blue_nav_bg_nomal);
-			btnFriendDynamic.setBackgroundResource(R.color.blue_nav_bg_press);
-			tvHeadTitle.setText("好友动态");
-		}
-	}
-
-	/**
-	 * ViewPager 的适配器
-	 * 
-	 * @author vector
-	 * 
-	 */
-	class DynamicViewPagerAdapter extends PagerAdapter {
-		private List<View> mListViews;
-
-		public DynamicViewPagerAdapter(List<View> mListViews) {
-			this.mListViews = mListViews;// 构造方法，参数是我们的页卡，这样比较方便。
-		}
-
-		@Override
-		public void destroyItem(ViewGroup container, int position, Object object) {
-			container.removeView(mListViews.get(position));// 删除页卡
-		}
-
-		@Override
-		public Object instantiateItem(ViewGroup container, int position) { // 这个方法用来实例化页卡
-			container.addView(mListViews.get(position), 0);// 添加页卡
-			return mListViews.get(position);
-		}
-
-		@Override
-		public int getCount() {
-			return mListViews.size();// 返回页卡的数量
-		}
-
-		@Override
-		public boolean isViewFromObject(View arg0, Object arg1) {
-			return arg0 == arg1;// 官方提示这样写
-		}
+		viewpager.setAdapter(new BaseViewPagerAdapter(views));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
+				listviews, adapters));
 	}
 
 	@Override
@@ -317,21 +126,22 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		int id = v.getId();
 		switch (id) {
 		case R.id.acty_alldynamic_footer_alldynamic:
-			vpDynamicContent.setCurrentItem(0);
-			changeFooter(0);
+			if (viewpager.getCurrentItem() == 0) {
+				lv_AllDynamic.startRefresh();
+			} else {
+				viewpager.setCurrentItem(0, true);
+			}
 			break;
 
 		case R.id.acty_alldynamic_footer_friend_dynamic:
-			if(!isRe){
-				lvFriendDynamic.startRefresh();
-				isRe = !isRe;
+			if (viewpager.getCurrentItem() == 1) {
+				lv_friendDynamic.startRefresh();
+			} else {
+				viewpager.setCurrentItem(1, true);
 			}
-			vpDynamicContent.setCurrentItem(1);
-			changeFooter(1);
 			break;
-
 		case R.id.acty_head_btn_back:
-			finish();
+			closeActivity();
 			break;
 
 		default:
@@ -343,8 +153,11 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 为下拉刷新、加载更多绑定控制器
 	 */
 	private void initController() {
+		lv_AllDynamic.setAdapter(adapter_all);
+		lv_friendDynamic.setAdapter(adapter_friend);
+
 		lv_AllDynamic.setPullLoadEnable(true);
-		lvFriendDynamic.setPullLoadEnable(true);
+		lv_friendDynamic.setPullLoadEnable(true);
 
 		lv_AllDynamic.setXListViewListener(new IXListViewListener() {
 
@@ -355,22 +168,20 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						List<Dynamic> newData_alldynamic = Dynamic
+						ArrayList<Dynamic> newData = Dynamic
 								.create_by_jsonarray(obj.toString());
-						if (newData_alldynamic == null) {
+						if (newData == null) {
 							toast("网络异常，解析错误");
-						} else if (newData_alldynamic.size() == 0) {
+						} else if (newData.size() == 0) {
 							toast("还没有任何动态");
 							lv_AllDynamic.setPullLoadEnable(false);
 						} else {
-
 							page_all = 1;
-							alAllDynamicContent.clear();
-							alAllDynamicContent.addAll(newData_alldynamic);
-							saveAllData2SP(newData_alldynamic);
-							aptAllDynamic.notifyDataSetChanged();
-
+							data_alldynamic.clear();
+							data_alldynamic.addAll(newData);
+							adapter_all.notifyDataSetChanged();
 							lv_AllDynamic.setPullLoadEnable(true);
+							AppCache.setDynamicAll(getContext(), newData);
 						}
 						lv_AllDynamic.stopRefresh();
 					}
@@ -405,8 +216,8 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 							lv_AllDynamic.setPullLoadEnable(false);
 						} else {
 							page_all++;
-							alAllDynamicContent.addAll(newData_alldynamic);
-							aptAllDynamic.notifyDataSetChanged();
+							data_alldynamic.addAll(newData_alldynamic);
+							adapter_all.notifyDataSetChanged();
 						}
 						lv_AllDynamic.stopLoadMore();
 					}
@@ -421,7 +232,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			}
 		});
 
-		lvFriendDynamic.setXListViewListener(new IXListViewListener() {
+		lv_friendDynamic.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
@@ -430,30 +241,29 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						List<Dynamic> newData_alldynamic = Dynamic
+						ArrayList<Dynamic> newData = Dynamic
 								.create_by_jsonarray(obj.toString());
-						if (newData_alldynamic == null) {
+						if (newData == null) {
 							toast("网络异常，解析错误");
-						} else if (newData_alldynamic.size() == 0) {
+						} else if (newData.size() == 0) {
 							toast("还没有任何动态");
-							lvFriendDynamic.setPullLoadEnable(false);
+							lv_friendDynamic.setPullLoadEnable(false);
 						} else {
 
 							page_myfriend = 1;
-							alFriendDynamicContent.clear();
-							alFriendDynamicContent.addAll(newData_alldynamic);
-							saveMyFriendData2SP(newData_alldynamic);
-							aptFriendDynamic.notifyDataSetChanged();
-
-							lvFriendDynamic.setPullLoadEnable(true);
+							data_frienddynamic.clear();
+							data_frienddynamic.addAll(newData);
+							adapter_friend.notifyDataSetChanged();
+							lv_friendDynamic.setPullLoadEnable(true);
+							AppCache.setDynamicFriend(getContext(), newData);
 						}
-						lvFriendDynamic.stopRefresh();
+						lv_friendDynamic.stopRefresh();
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast(ErrorCode.errorList.get(errorCode));
-						lvFriendDynamic.stopRefresh();
+						lv_friendDynamic.stopRefresh();
 					}
 				});
 
@@ -463,8 +273,8 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 			public void onLoadMore() {
 
 				if (page_myfriend == 0) {
-					lvFriendDynamic.stopLoadMore();
-					lvFriendDynamic.startRefresh();
+					lv_friendDynamic.stopLoadMore();
+					lv_friendDynamic.startRefresh();
 					return;
 				}
 				api.getMyFollowing(page_myfriend + 1,
@@ -472,33 +282,31 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
-								List<Dynamic> newData_alldynamic = Dynamic
+								List<Dynamic> newData = Dynamic
 										.create_by_jsonarray(obj.toString());
-								if (newData_alldynamic == null) {
+								if (newData == null) {
 									toast("网络异常，解析错误");
-								} else if (newData_alldynamic.size() == 0) {
+								} else if (newData.size() == 0) {
 									toast("没有更多");
-									lvFriendDynamic.setPullLoadEnable(false);
+									lv_friendDynamic.setPullLoadEnable(false);
 								} else {
 
 									page_myfriend++;
-									alFriendDynamicContent
-											.addAll(newData_alldynamic);
-									aptFriendDynamic.notifyDataSetChanged();
+									data_frienddynamic.addAll(newData);
+									adapter_friend.notifyDataSetChanged();
 								}
-								lvFriendDynamic.stopLoadMore();
+								lv_friendDynamic.stopLoadMore();
 							}
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
 								toast(ErrorCode.errorList.get(errorCode));
-								lvFriendDynamic.stopLoadMore();
+								lv_friendDynamic.stopLoadMore();
 							}
 						});
 
 			}
 		});
-		
 		lv_AllDynamic.startRefresh();
 	}
 
