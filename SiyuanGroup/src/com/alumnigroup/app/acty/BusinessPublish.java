@@ -146,7 +146,7 @@ public class BusinessPublish extends BaseActivity {
 			}
 			break;
 		case R.id.btn_add_pic:
-			if (flowLayout.getChildCount() >= 4) {
+			if (flowLayout.getChildCount() >= 3) {
 				toast("目前最多能上传发3张图片");
 				return;
 			}

@@ -29,7 +29,7 @@ public class Follower implements Serializable {
 			return null;
 		List<User> res = new ArrayList<User>();
 		for (Follower f : list) {
-			res.add(f.getFollowee());
+			res.add(f.getUser());
 		}
 		return res;
 	}
@@ -63,7 +63,7 @@ public class Follower implements Serializable {
     /** 备注*/
 	private String remark;
 	/** 用户信息*/
-	private User followee;
+	private User user;
 
 	public String getRemark() {
 		return remark;
@@ -73,18 +73,16 @@ public class Follower implements Serializable {
 		this.remark = remark;
 	}
 
-	public User getFollowee() {
-		return followee;
+	public User getUser() {
+		return user;
 	}
 
-	public void setFollowee(User followee) {
-		this.followee = followee;
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	@Override
 	public String toString() {
-		return "Following [remark=" + remark + ", followee=" + followee + "]";
+		return "Follower [remark=" + remark + ", user=" + user + "]";
 	}
-	
-	
 }

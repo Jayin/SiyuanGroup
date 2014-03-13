@@ -82,21 +82,25 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						List<User> newData_allmember = User
+						List<User> newData = User
 								.create_by_jsonarray(obj.toString());
-						if (newData_allmember == null) {
+						if (newData == null) {
 							toast("网络异常，解析错误");
-						} else if (newData_allmember.size() == 0) {
+						} else if (newData.size() == 0) {
 							toast("还没有任何会员");
 							lv_allmember.setPullLoadEnable(false);
 						} else {
 							page_allmember = 1;
 							data_allmember.clear();
-							data_allmember.addAll(newData_allmember);
+							data_allmember.addAll(newData);
 							adapter_allmember.notifyDataSetChanged();
-							lv_allmember.setPullLoadEnable(true);
 							AppCache.setAllmemberAll(getContext(),
 									data_allmember);
+							if(newData.size()<10){
+								lv_allmember.setPullLoadEnable(false);
+							}else{
+								lv_allmember.setPullLoadEnable(true);
+							}
 						}
 						lv_allmember.stopRefresh();
 					}
@@ -168,9 +172,13 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 									data_following.clear();
 									data_following.addAll(newData);
 									adapter_following.notifyDataSetChanged();
-									lv_following.setPullLoadEnable(true);
 									AppCache.setAllmemberFollowing(
 											getContext(), data_following);
+									if(newData.size()<10){
+										lv_following.setPullLoadEnable(false);
+									}else{
+										lv_following.setPullLoadEnable(true);
+									}
 								}
 								lv_following.stopRefresh();
 							}
@@ -181,7 +189,6 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 								lv_following.stopRefresh();
 							}
 						});
-
 			}
 
 			@Override
@@ -246,9 +253,13 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 									data_followers.clear();
 									data_followers.addAll(newData);
 									adapter_followers.notifyDataSetChanged();
-									lv_followers.setPullLoadEnable(true);
 									AppCache.setAllmemberFollowers(
 											getContext(), data_followers);
+									if(newData.size()<10){
+										lv_followers.setPullLoadEnable(false);
+									}else{
+										lv_followers.setPullLoadEnable(true);
+									}
 								}
 								// //好友应该加载一次就ok？
 								lv_followers.stopRefresh();
