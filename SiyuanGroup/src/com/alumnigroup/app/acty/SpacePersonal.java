@@ -203,11 +203,6 @@ public class SpacePersonal extends BaseActivity {
 				addKeyWord(tag, color++ % 2);
 			}
 		}
-		// 相册暂时remove
-		// lyAlbum.removeAllViews();
-		// for (int i = 0; i < 5; i++) {
-		// addAlbum(i);
-		// }
 		addNewDynamic();
 	}
 
@@ -342,7 +337,6 @@ public class SpacePersonal extends BaseActivity {
 	 */
 	private void initPersonalData() {
 		llPersonalData.removeAllViews();
-		// addPersonalData("真实姓名", myself.getProfile().getName());
 		String gender = null;
 		if ("m".equalsIgnoreCase(myself.getProfile().getGender())) {
 			gender = "男";
@@ -361,8 +355,6 @@ public class SpacePersonal extends BaseActivity {
 	 * 增加
 	 */
 	private void addPersonalData(String name, String value) {
-		/**
-		 */
 		LayoutInflater inflater = null;
 		inflater = LayoutInflater.from(this);
 		View convertView = null;
@@ -376,8 +368,6 @@ public class SpacePersonal extends BaseActivity {
 				.findViewById(R.id.item_lv_space_other_personaldata_value);
 		tvValue.setText(value);
 
-		/**
-		 */
 		llPersonalData.addView(convertView);
 	}
 

@@ -67,7 +67,6 @@ public class SpaceOther extends BaseActivity {
 	 * keyword 布局：一个AutoLinefeedLayout .自动换行布局
 	 */
 	private FlowLayout flowlayout_keyword;
-//	private OutoLinefeedLayout lyKeyword;
 
 	/**
 	 * 相册
@@ -169,7 +168,6 @@ public class SpaceOther extends BaseActivity {
 		 * 关键字
 		 */
 		flowlayout_keyword = (FlowLayout) _getView(R.id.flowlayout_keyword);
-//		lyKeyword.setMargin(10);
 
 		/**
 		 * 相册
@@ -261,10 +259,6 @@ public class SpaceOther extends BaseActivity {
 			public void onFailure(int statusCode, Header[] headers,
 					byte[] data, Throwable err) {
 				toast("网络异常 错误码:" + statusCode);
-				if (data != null)
-					L.i(new String(data));
-				if (err != null)
-					L.i(err.toString());
 			}
 
 			@Override
@@ -285,17 +279,22 @@ public class SpaceOther extends BaseActivity {
 
 							ImageView portrait = (ImageView) convertView
 									.findViewById(R.id.item_lv_alldynamic_iv_portrait);
-if(dynamic.getUser().getAvatar()!=null){
-	ImageLoader.getInstance().displayImage(
-			RestClient.BASE_URL
-					+ dynamic.getUser().getAvatar(),
-			portrait);
-}else{
-	ImageLoader.getInstance().displayImage(
-			"drawable://"+R.drawable.ic_image_load_normal,
-			portrait);
-}
-							
+							if (dynamic.getUser().getAvatar() != null) {
+								ImageLoader.getInstance()
+										.displayImage(
+												RestClient.BASE_URL
+														+ dynamic.getUser()
+																.getAvatar(),
+												portrait);
+							} else {
+								ImageLoader
+										.getInstance()
+										.displayImage(
+												"drawable://"
+														+ R.drawable.ic_image_load_normal,
+												portrait);
+							}
+
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
 							name.setText(dynamic.getUser().getProfile()
@@ -308,8 +307,6 @@ if(dynamic.getUser().getAvatar()!=null){
 							time.setText(CalendarUtils.getTimeFromat(
 									dynamic.getCreatetime(),
 									CalendarUtils.TYPE_timeline));
-							/**
-							 */
 							llNewDynamic.addView(convertView);
 						}
 					}

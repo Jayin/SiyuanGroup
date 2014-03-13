@@ -37,7 +37,6 @@ import com.loopj.android.http.RequestParams;
 public class EditKeyword extends BaseActivity {
 
 	// /** 控件 */
-	// private OutoLinefeedLayout lyContent;
 	private FlowLayout flowlayout;
 	private EditText etAdd;
 	private View btnAdd, btnRelease, parent;
@@ -81,33 +80,6 @@ public class EditKeyword extends BaseActivity {
 		// flowlayout.setMargin(10);
 
 		etAdd = (EditText) _getView(R.id.acty_edit_keywork_et_add);
-//		etAdd.addTextChangedListener(new TextWatcher() {
-//
-//			@Override
-//			public void onTextChanged(CharSequence s, int start, int before,
-//					int count) {
-//				// 拿到最后一个字符串
-//				if (before == 0 && count == 1) {
-//					if (s.toString().charAt(start) == ',') {
-//						etAdd.setText(s.toString().substring(0, start - 1));
-//						add();
-//					}
-//				}
-//				// 如果是粘贴的话
-//				if (before == 0 && count != 1) {
-//					// 先不理咯
-//				}
-//			}
-//
-//			@Override
-//			public void beforeTextChanged(CharSequence s, int start, int count,
-//					int after) {
-//			}
-//
-//			@Override
-//			public void afterTextChanged(Editable s) {
-//			}
-//		});
 		btnAdd = _getView(R.id.acty_edit_keywork_btn_add);
 		btnAdd.setOnClickListener(this);
 
