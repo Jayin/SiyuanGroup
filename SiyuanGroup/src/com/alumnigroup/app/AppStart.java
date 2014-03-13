@@ -3,7 +3,6 @@ package com.alumnigroup.app;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-
 import com.alumnigroup.app.acty.Login;
 import com.alumnigroup.app.acty.Main;
 import com.alumnigroup.utils.DataPool;
@@ -20,26 +19,25 @@ public class AppStart extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_start);
+
 		new Handler().postDelayed(new Runnable() {
 
 			@Override
 			public void run() {
 				init();
-				Intent intent = new Intent(AppStart.this, Login.class);
 				if (checkLoginInfo()) {
 					openActivity(Main.class);
 				} else {
 					openActivity(Login.class);
 				}
-
 				closeActivity();
 			}
-
-		}, 1000);
+		}, 1500);
 	}
 
 	// 初始化工作
 	protected void init() {
+		// start up the core service
 		Intent intent = new Intent(getContext(), CoreService.class);
 		sendBroadcast(intent);
 	}

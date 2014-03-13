@@ -1,13 +1,9 @@
 package com.alumnigroup.app.acty;
 
-import java.util.List;
-
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.R.integer;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -20,15 +16,10 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.utils.StringUtils;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.widget.MyProgressDialog;
-import com.google.gson.Gson;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
 /**
  * 登录注册页面
@@ -38,14 +29,13 @@ import com.loopj.android.http.RequestParams;
  */
 public class Login extends BaseActivity {
 	private ViewFlipper flipper;
-	private EditText et_log_username, et_login_password;
+	private EditText et_login_username, et_login_password;
 	private EditText et_reg_username, et_reg_password, et_reg_confirm,
 			et_reg_name, et_reg_email, et_reg_university, et_reg_major,
 			et_reg_summary, et_reg_grade;
 	private View btn_login, btn_regitst, btn_ok, btn_cancle;
 	private UserAPI api;
 	private MyProgressDialog dialog;
-	private DataPool dp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -60,51 +50,33 @@ public class Login extends BaseActivity {
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.acty_login_btn_login:
-			if (StringUtils.isEmpty(EditTextUtils.getText(et_log_username))
+			if (StringUtils.isEmpty(EditTextUtils.getText(et_login_username))
 					|| StringUtils.isEmpty(EditTextUtils
 							.getText(et_login_password))) {
 				toast("输入不能为空 ");
 				return;
 			}
 
-			api.login(EditTextUtils.getText(et_log_username),
+			api.login(EditTextUtils.getText(et_login_username),
 					EditTextUtils.getText(et_login_password),
-					new AsyncHttpResponseHandler() {
+					new JsonResponseHandler() {
+
 						@Override
 						public void onStart() {
 							dialog.show();
 						}
 
 						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								byte[] data, Throwable arg3) {
+						public void onOK(Header[] headers, JSONObject obj) {
 							dialog.dismiss();
-							toast("网络异常  错误码:" + statusCode);
-							if (data != null)
-								L.i(new String(data));
+							saveLoginInfo(obj.toString());
 						}
 
 						@Override
-						public void onSuccess(int statusCode, Header[] headers,
-								byte[] data) {
+						public void onFaild(int errorType, int errorCode) {
 							dialog.dismiss();
-							// 登录成功。。。save login info here..
-
-							String json = new String(data);
-							debug("onSuccess-->" + json);
-							// toast(json);
-							// succeed(json);
-							if (JsonUtils.isOK(json)) {
-								saveLoginInfo(json);
-								//保存用户账号密码
-								AppInfo.setUserID(getContext(), et_log_username.getText().toString());
-								AppInfo.setUserPSW(getContext(), et_login_password.getText().toString());
-							} else {
-								toast("Error:" + JsonUtils.getErrorString(json));
-							}
-
+							toast(ErrorCode.errorList.get(errorCode));
 						}
-
 					});
 			break;
 		case R.id.acty_login_btn_regist:
@@ -164,7 +136,7 @@ public class Login extends BaseActivity {
 
 						@Override
 						public void onFaild(int errorType, int errorCode) {
-							toast("网络异常 " + ErrorCode.errorList.get(errorCode));
+							toast("注册失败" + ErrorCode.errorList.get(errorCode));
 							dialog.dismiss();
 						}
 					});
@@ -181,13 +153,12 @@ public class Login extends BaseActivity {
 	@Override
 	protected void initData() {
 		api = new UserAPI();
-		dp = new DataPool(DataPool.SP_Name_User, this);
 	}
 
 	@Override
 	protected void initLayout() {
 		initFlipper();
-		et_log_username = (EditText) _getView(R.id.acty_login_et_username);
+		et_login_username = (EditText) _getView(R.id.acty_login_et_username);
 		et_login_password = (EditText) _getView(R.id.acty_login_et_password);
 		et_reg_username = (EditText) _getView(R.id.acty_register_et_username);
 		et_reg_password = (EditText) _getView(R.id.acty_register_et_password);
@@ -211,42 +182,38 @@ public class Login extends BaseActivity {
 		btn_cancle.setOnClickListener(this);
 
 		dialog = new MyProgressDialog(getContext());
-		
-
 	}
 
 	private void saveLoginInfo(String json) {
-		int userid = JsonUtils.getInt(json, "id");
-		// 正确解析
-		if (userid > 0) {
-			api.find(new RequestParams("id", userid),
-					new JsonResponseHandler() {
+		int id = JsonUtils.getInt(json, "id");
+		UserAPI api = new UserAPI();
+		api.view(id, new JsonResponseHandler() {
 
-						@Override
-						public void onOK(Header[] headers, JSONObject obj) {
-							List<User> userList = User.create_by_jsonarray(obj
-									.toString());
-							if (userList == null || userList.size() == 0) {
-								toast("登录失败 没有改用户信息");
-							} else {
-								if (dp.put(DataPool.SP_Key_User,
-										userList.get(0))) {
-									Intent intent = new Intent(Login.this,
-											Main.class);
-									openActivity(intent);
-									closeActivity();
-								}
-							}
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				try {
+					User user = User.create_by_json(obj.getJSONObject("user")
+							.toString());
+					AppInfo.setUser(getContext(), user);
+					// 保存用户账号密码
+					AppInfo.setUsername(getContext(), et_login_username
+							.getText().toString());
+					AppInfo.setUserPSW(getContext(), et_login_password
+							.getText().toString());
 
-						}
+					openActivity(Main.class);
+					closeActivity();
+				} catch (JSONException e) {
+					e.printStackTrace();
+					toast("网络异常 解析错误");
+				}
+			}
 
-						@Override
-						public void onFaild(int errorType, int errorCode) {
-							toast("网络异常 错误码:" + errorCode);
-						}
-					});
-		}
-
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast(ErrorCode.errorList.get(errorCode));
+			}
+		});
 	}
 
 	private void initFlipper() {

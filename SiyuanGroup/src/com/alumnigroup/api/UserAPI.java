@@ -255,4 +255,23 @@ public class UserAPI {
 		RestClient.post("/api/users/avatar/update", params,
 				asyncHttpResponseHandler);
 	}
+	/**
+	 * 查看我的信息
+	 * @param asyncHttpResponseHandler
+	 */
+	public void getMyInfo(AsyncHttpResponseHandler asyncHttpResponseHandler){
+		RestClient.get("/api/users/i", null,
+				asyncHttpResponseHandler);
+	}
+	/**
+	 * 查看用户的的信息
+	 * @param id 用户id
+	 * @param asyncHttpResponseHandler
+	 */
+	public void view(int id,AsyncHttpResponseHandler asyncHttpResponseHandler){
+		RequestParams params = new RequestParams();
+		params.add("id", id+"");	
+		RestClient.get("/api/users/view", params,
+				asyncHttpResponseHandler);
+	}
 }

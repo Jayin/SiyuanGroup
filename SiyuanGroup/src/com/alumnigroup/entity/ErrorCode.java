@@ -39,7 +39,7 @@ public class ErrorCode {
 
 		errorList.put(21300, "注册失败");//注册失败Register fail
 		errorList.put(21301, "用户验证失败,请重新登录");//用户验证失败,请重新登录Auth fail
-		errorList.put(21302, "登录失败");//登录失败Login fail
+		errorList.put(21302, "登录失败,密码错误");//登录失败Login fail
 		errorList.put(30000, "文件读取错误");//文件读取错误File reading error
 		errorList.put(30001, "文件写入错误");//文件写入错误File writing error
 		errorList.put(30002, "文件删除错误");//文件删除错误File deleting error

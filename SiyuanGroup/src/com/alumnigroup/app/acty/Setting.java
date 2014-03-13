@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 
 import com.alumnigroup.app.App;
@@ -27,6 +29,9 @@ import com.alumnigroup.utils.ImageUtils;
  */
 public class Setting extends BaseActivity {
 	public static final int Request_Pick_Image = 1;
+	private static final int status_start = 0;
+	private static final int status_faild = 1;
+	private static final int status_finish = 2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,14 +81,7 @@ public class Setting extends BaseActivity {
 			break;
 
 		case R.id.acty_setting_btn_quit:
-			toast("正在退出");
-			Intent service =new Intent(getContext(), CoreService.class);
-			 service.setAction(Constants.Action_Stop_Receive_UnreadCount);
-			 startService(service);
-			((App) getApplication()).cleanUpInfo();
-			toast("已经退出当前用户");
-			openActivity(Login.class);
-			finish();
+			quitApp();
 			break;
 
 		case R.id.acty_setting_btn_tickling:
@@ -101,12 +99,48 @@ public class Setting extends BaseActivity {
 		}
 	}
 
+	private void quitApp() {
+
+		final Handler h = new Handler() {
+			@Override
+			public void handleMessage(Message msg) {
+				switch (msg.what) {
+				case status_start:
+					toast("正在退出。。。");
+					break;
+				case status_faild:
+					break;
+				case status_finish:
+					Intent service = new Intent(getContext(), CoreService.class);
+					service.setAction(Constants.Action_Stop_Receive_UnreadCount);
+					startService(service);
+					toast("已退出");
+					openActivity(Login.class);
+					finish();
+					break;
+				default:
+					break;
+				}
+			}
+		};
+
+		new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				h.sendEmptyMessage(status_start);
+				((App) getApplication()).cleanUpInfo();
+				h.sendEmptyMessage(status_finish);
+			}
+		}).start();
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK && requestCode == Request_Pick_Image) {
 			Bitmap photo = null;
 			Uri photoUri = data.getData();
-				
+
 			if (photoUri != null) {
 				try {
 					photo = BitmapUtils.getPicFromUri(photoUri, getContext());
@@ -115,17 +149,17 @@ public class Setting extends BaseActivity {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				 
 			}
 			if (photo != null) {
-			try {
-				    FileUtils.deleteFile(FilePath.getImageFilePath()+"main_backgroud.jpg");
-					ImageUtils.saveImageToSD(FilePath.getImageFilePath()+"main_backgroud.jpg", photo, 75);
+				try {
+					FileUtils.deleteFile(FilePath.getImageFilePath()
+							+ "main_backgroud.jpg");
+					ImageUtils.saveImageToSD(FilePath.getImageFilePath()
+							+ "main_backgroud.jpg", photo, 75);
 					sendBroadcast(new Intent(Constants.Action_Backgroud_switch));
-					debug("pic save--ok");
+					toast("背景切换完成");
 				} catch (IOException e) {
 					e.printStackTrace();
-					debug("IOException--pic save faild");
 				}
 			}
 		}

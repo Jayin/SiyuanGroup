@@ -4,6 +4,7 @@ import android.app.Application;
 
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.utils.DataPool;
+import com.alumnigroup.utils.FileUtils;
 import com.loopj.android.http.PersistentCookieStore;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
@@ -47,16 +48,21 @@ public class App extends Application {
 	}
 
 	/**
-	 * 退出账号时清楚数据
+	 * 退出账号时清除数据,有点耗时，推荐该操作放在线程
+	 * files/下数据未清除
 	 */
 	public void cleanUpInfo() {
 		// 清楚所有缓存
 		DataPool dp = new DataPool(DataPool.SP_Name_User, this);
 		dp.removeAll();
-
+        
+		dp = new DataPool(AppCache.Cache_Name, this);
+		dp.removeAll();
+		
+		FileUtils.deleteFilesInFolder(getFilesDir().getAbsolutePath());
 		PersistentCookieStore cs = new PersistentCookieStore(this);
 		cs.clear();
 		ImageLoader.getInstance().clearDiscCache();
-
+		ImageLoader.getInstance().clearMemoryCache();
 	}
 }

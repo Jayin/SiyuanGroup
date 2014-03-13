@@ -220,10 +220,10 @@ public class CoreService extends Service {
 	}
 
 	private void login() {
-		String userid = AppInfo.getUserID(getApplicationContext());
+		String username = AppInfo.getUsername(getApplicationContext());
 		String psw = AppInfo.getUserPSW(getApplicationContext());
 		UserAPI api = new UserAPI();
-		api.login(userid, psw, new JsonResponseHandler() {
+		api.login(username, psw, new JsonResponseHandler() {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {

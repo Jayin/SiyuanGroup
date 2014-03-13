@@ -62,16 +62,6 @@ public class User implements Serializable {
 	public User() {
 
 	}
-	/** 是否关注 1：关注 0：还没有关注 **/
-	private int isfollowed;
-
-	public int getIsfollowed() {
-		return isfollowed;
-	}
-
-	public void setIsfollowed(int isfollowed) {
-		this.isfollowed = isfollowed;
-	}
 	/** 用户id **/
 	private int id;
 	/** 用户名(登录) */
@@ -98,6 +88,16 @@ public class User implements Serializable {
 	private Profile profile;
 	/** 空间背景图片*/
 	private String cover;
+	/** 是否关注: 1已关注 ;0未关注 **/
+	private int isfollowed;
+	
+	public int getIsfollowed() {
+		return isfollowed;
+	}
+
+	public void setIsfollowed(int isfollowed) {
+		this.isfollowed = isfollowed;
+	}
 
 	public String getCover() {
 		return cover;
