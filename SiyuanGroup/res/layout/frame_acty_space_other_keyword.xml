@@ -17,21 +17,11 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true"
             android:layout_marginTop="20dp"
             android:text="关键字"
             android:textColor="#0a6ca2"
             android:textSize="18dp" />
-
-        <TextView
-            android:id="@+id/acty_space_other_keyword_tv_explain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/acty_space_other_keyword_tv_label"
-            android:layout_marginBottom="5dp"
-            android:layout_toRightOf="@+id/acty_space_other_keyword_tv_label"
-            android:text="用于全站会员搜索的内容"
-            android:textColor="@color/grey_lv_third"
-            android:textSize="14dp" />
     </RelativeLayout>
 
     <TextView

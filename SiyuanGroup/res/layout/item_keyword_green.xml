@@ -9,5 +9,5 @@
     android:paddingRight="8dp"
     android:paddingTop="15dp"
     android:textColor="#45b97c"
-    android:text="sdfsdfsd"
+    android:text="keyword"
     android:textSize="18dp" />

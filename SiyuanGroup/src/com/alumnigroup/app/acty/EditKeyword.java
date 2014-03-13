@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -21,33 +22,34 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.OutoLinefeedLayout;
+import com.custom.view.FlowLayout;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
 /**
  * 修改关键字
  * 
- * @author vector
+ * @author vector;restructure by Jayin Ton
  * 
  */
 public class EditKeyword extends BaseActivity {
 
-	/** 控件 */
-	private OutoLinefeedLayout lyContent, lyHot;
+	// /** 控件 */
+	// private OutoLinefeedLayout lyContent;
+	private FlowLayout flowlayout;
 	private EditText etAdd;
 	private View btnAdd, btnRelease, parent;
 
-	/**  关键字 */
+	/** 关键字 */
 	private int backgroupcolor = 0;
 
 	/** 增加的关键字 */
 	private ArrayList<Keyword> alMyKeyword;
-
-	/**  热门关键字 */
-	private ArrayList<Keyword> alHotKeyword;
 
 	private UserAPI api;
 	private User myself;
@@ -78,40 +80,37 @@ public class EditKeyword extends BaseActivity {
 
 		parent = _getView(R.id.acty_edit_keywork_ly_edit);
 
-		lyContent = (OutoLinefeedLayout) _getView(R.id.acty_edit_keywork_ly_content);
-		lyContent.setMargin(10);
-
-		lyHot = (OutoLinefeedLayout) _getView(R.id.acty_edit_keywork_ly_hot);
-		lyHot.setMargin(10);
+		flowlayout = (FlowLayout) _getView(R.id.flowlayout_keyword);
+		// flowlayout.setMargin(10);
 
 		etAdd = (EditText) _getView(R.id.acty_edit_keywork_et_add);
-		etAdd.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
-				// 拿到最后一个字符串
-				if (before == 0 && count == 1) {
-					if (s.toString().charAt(start) == ',') {
-						etAdd.setText(s.toString().substring(0, start - 1));
-						add();
-					}
-				}
-				// 如果是粘贴的话
-				if (before == 0 && count != 1) {
-					// 先不理咯
-				}
-			}
-
-			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
-			}
-
-			@Override
-			public void afterTextChanged(Editable s) {
-			}
-		});
+//		etAdd.addTextChangedListener(new TextWatcher() {
+//
+//			@Override
+//			public void onTextChanged(CharSequence s, int start, int before,
+//					int count) {
+//				// 拿到最后一个字符串
+//				if (before == 0 && count == 1) {
+//					if (s.toString().charAt(start) == ',') {
+//						etAdd.setText(s.toString().substring(0, start - 1));
+//						add();
+//					}
+//				}
+//				// 如果是粘贴的话
+//				if (before == 0 && count != 1) {
+//					// 先不理咯
+//				}
+//			}
+//
+//			@Override
+//			public void beforeTextChanged(CharSequence s, int start, int count,
+//					int after) {
+//			}
+//
+//			@Override
+//			public void afterTextChanged(Editable s) {
+//			}
+//		});
 		btnAdd = _getView(R.id.acty_edit_keywork_btn_add);
 		btnAdd.setOnClickListener(this);
 
@@ -139,9 +138,9 @@ public class EditKeyword extends BaseActivity {
 	 * 
 	 */
 	private void updateKeyWord() {
-		lyContent.removeAllViews();
+		flowlayout.removeAllViews();
 		for (Keyword keyword : alMyKeyword) {
-			lyContent.addView(keyword.getView());
+			flowlayout.addView(keyword.getView());
 		}
 	}
 
@@ -238,31 +237,27 @@ public class EditKeyword extends BaseActivity {
 	}
 
 	private void sendKeyWord() {
-		String tags = "";
+		StringBuilder tags = new StringBuilder();
 		for (Keyword keyword : alMyKeyword) {
-			tags += keyword.getContent() + ",";
+			// tags += keyword.getContent() + ",";
+			tags.append(keyword.getContent()).append(",");
 		}
-		api.updateTag(tags, new AsyncHttpResponseHandler() {
+		if (tags.length() > 0)
+			tags.deleteCharAt(tags.length() - 1);
+		api.updateTag(tags.toString(), new JsonResponseHandler() {
+
 			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					byte[] data, Throwable err) {
-				toast("更新失败");
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("更新完成");
+				updateSPUser();
+			}
+
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("更新失败 " + ErrorCode.errorList.get(errorCode));
 				dialog.cancel();
 			}
-
-			@Override
-			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-				String json = new String(data);// jsonarray
-				if (JsonUtils.isOK(json)) {
-					toast("更新完成");
-					updateSPUser();
-				} else {
-					toast("更新失败" + json);
-					dialog.cancel();
-				}
-			}
 		});
-
 	}
 
 	/**

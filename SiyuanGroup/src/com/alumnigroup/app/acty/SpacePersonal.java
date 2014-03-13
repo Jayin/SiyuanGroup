@@ -102,7 +102,7 @@ public class SpacePersonal extends BaseActivity {
 	}
 
 	protected void initData() {
-		myself = (User) AppInfo.getUser(SpacePersonal.this);
+		myself = AppInfo.getUser(this);
 
 		tvLeave2Visitor.setText(myself.getProfile().getSummary());
 		if (myself.getCover() != null) {
@@ -196,10 +196,11 @@ public class SpacePersonal extends BaseActivity {
 				addKeyWord(tag, color++ % 2);
 			}
 		}
-		lyAlbum.removeAllViews();
-		for (int i = 0; i < 5; i++) {
-			addAlbum(i);
-		}
+		//相册暂时remove
+//		lyAlbum.removeAllViews();
+//		for (int i = 0; i < 5; i++) {
+//			addAlbum(i);
+//		}
 		addNewDynamic();
 	}
 
@@ -238,11 +239,17 @@ public class SpacePersonal extends BaseActivity {
 
 							ImageView portrait = (ImageView) convertView
 									.findViewById(R.id.item_lv_alldynamic_iv_portrait);
-
-							ImageLoader.getInstance().displayImage(
-									RestClient.BASE_URL
-											+ dynamic.getUser().getAvatar(),
-									portrait);
+          if(dynamic.getUser().getAvatar()!=null){
+        	  ImageLoader.getInstance().displayImage(
+						RestClient.BASE_URL
+								+ dynamic.getUser().getAvatar(),
+						portrait);
+          }else{
+        	  ImageLoader.getInstance().displayImage(
+					"drawable://"+R.drawable.ic_image_load_normal,
+						portrait);
+          }
+							
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
 							name.setText(dynamic.getUser().getProfile()

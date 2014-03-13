@@ -17,7 +17,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="20dp" 
             android:text="最新动态"
             android:textColor="#0a6ca2"
             android:textSize="18dp" />
@@ -27,12 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/acty_space_personal_new_dunamic_tv_label"
             android:layout_marginRight="15dp"
             android:background="@drawable/btn_simple_selected"
             android:clickable="true"
-            android:gravity="center"
-            android:orientation="horizontal" >
+            android:gravity="center"  android:layout_centerVertical="true"
+            android:orientation="horizontal" android:visibility="gone">
 
             <TextView
                 android:layout_width="wrap_content"

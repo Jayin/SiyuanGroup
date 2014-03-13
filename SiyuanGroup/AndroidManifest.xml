@@ -50,7 +50,8 @@
         <activity
             android:name=".acty.Main"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+        >
         </activity>
         <activity
             android:name=".acty.Alldynamic"
