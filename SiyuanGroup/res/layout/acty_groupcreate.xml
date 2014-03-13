@@ -10,7 +10,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="8dp" >
+        android:padding="8dp"
+        android:scrollbars="none" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,7 +27,6 @@
                 android:textStyle="bold" />
 
             <EditText
-                
                 android:id="@+id/et_name"
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp" />
@@ -52,7 +52,8 @@
                 android:layout_marginTop="12dp"
                 android:background="@drawable/btn_preference_sigle"
                 android:clickable="true"
-                android:orientation="horizontal" android:visibility="invisible" >
+                android:orientation="horizontal"
+                android:visibility="invisible" >
 
                 <TextView
                     style="@style/TextView.black"
