@@ -35,7 +35,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="4dp"
-                android:text="黄廉温"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/item_lv_allmemeber_name"
                 android:layout_marginTop="6dp"
-                android:text="江门五邑大学信息工程学院"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 
@@ -55,7 +55,7 @@
                 android:layout_above="@+id/item_lv_allmemeber_major"
                 android:layout_marginLeft="17dp"
                 android:layout_toRightOf="@+id/item_lv_allmemeber_name"
-                android:text="11届"
+                android:text="null"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

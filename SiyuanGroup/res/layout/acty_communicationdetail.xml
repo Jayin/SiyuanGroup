@@ -111,7 +111,8 @@
                         android:maxHeight="50dp"
                         android:maxWidth="48dp"
                         android:scaleType="fitCenter"
-                        android:src="@drawable/ic_image_load_normal" />
+                        android:src="@drawable/ic_image_load_normal"
+                        android:visibility="gone" />
                 </com.custom.view.FlowLayout>
             </LinearLayout>
 

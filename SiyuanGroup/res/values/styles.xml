@@ -46,7 +46,7 @@
     </style>
 
     <style name="ImageView.avatar" parent="ImageView">
-        <item name="android:scaleType">fitXY</item>
+        <item name="android:scaleType">centerCrop</item>
         <item name="android:src">@drawable/ic_image_load_loading</item>
     </style>
 

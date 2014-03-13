@@ -140,9 +140,11 @@ public class CommunicationDetail extends BaseActivity {
 					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
 		}
 		// 图片
-		final MPicture pic = issue.getPictures() != null ? issue.getPictures().get(0)
+		final MPicture pic = issue.getPictures().size() >0   ? issue.getPictures().get(0)
 				: null;
+		iv_pic1.setVisibility(View.GONE);
 		if (pic != null) {
+			iv_pic1.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + pic.getPath(), iv_pic1);
 			iv_pic1.setOnClickListener(new OnClickListener() {

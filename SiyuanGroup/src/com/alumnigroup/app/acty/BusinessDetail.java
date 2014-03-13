@@ -297,7 +297,7 @@ public class BusinessDetail extends BaseActivity {
 				toast("结束项目失败 " + ErrorCode.errorList.get(errorCode));
 			}
 		});
-
+        closeActivity();
 	}
 
 	// 收藏的remark默认为期类型名

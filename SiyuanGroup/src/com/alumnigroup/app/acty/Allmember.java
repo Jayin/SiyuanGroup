@@ -231,12 +231,13 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 							@Override
 							public void onOK(Header[] headers, JSONObject obj) {
+								debug(obj.toString());
 								List<User> newData = Follower
 										.getUsesList(Follower
 												.create_by_jsonarray(obj
 														.toString()));
 								if (newData == null) {
-									toast("网络异常 解析错误");
+									toast("网络异常 解析错误");debug("网络异常 解析错误");
 								} else if (newData.size() == 0) {
 									toast("还没有粉丝");
 									lv_followers.setPullLoadEnable(false);

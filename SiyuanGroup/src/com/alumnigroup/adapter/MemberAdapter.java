@@ -65,6 +65,7 @@ public class MemberAdapter extends BaseAdapter {
 		} else {
 			h = (ViewHolder) convertView.getTag();
 		}
+		 
 		User u = data.get(position);
 		if (u.getAvatar() != null) {
 			ImageLoader.getInstance().displayImage(

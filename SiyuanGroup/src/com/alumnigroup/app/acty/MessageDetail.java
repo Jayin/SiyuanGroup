@@ -243,9 +243,9 @@ public class MessageDetail extends BaseActivity {
 			switch (getItemViewType(position)) {
 			case LEFT:
 				h.tv_content.setText(m.getBody());
-				if (m.getSenderavatar() != null) {
+				if (message.getSenderavatar() != null) {
 					ImageLoader.getInstance().displayImage(
-							RestClient.BASE_URL + m.getSenderavatar(),
+							RestClient.BASE_URL + message.getSenderavatar(),
 							h.iv_avatar);
 				} else {
 					ImageLoader.getInstance().displayImage(
@@ -265,9 +265,9 @@ public class MessageDetail extends BaseActivity {
 				break;
 			case RIGHT:
 				h.tv_content.setText(m.getBody());
-				if (m.getSenderavatar() != null) {
+				if (AppInfo.getUser(getContext()).getAvatar() != null) {
 					ImageLoader.getInstance().displayImage(
-							RestClient.BASE_URL + m.getSenderavatar(),
+							RestClient.BASE_URL + AppInfo.getUser(getContext()).getAvatar(),
 							h.iv_avatar);
 				} else {
 					ImageLoader.getInstance().displayImage(

@@ -22,6 +22,7 @@ import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.FilePath;
@@ -155,9 +156,9 @@ public class EditPersonalData extends BaseActivity {
 								getImage.setType("image/*");
 								getImage.putExtra("output", uri);
 								getImage.putExtra("crop", "true");
-								getImage.putExtra("aspectX", 2);
+								getImage.putExtra("aspectX", 1);
 								getImage.putExtra("aspectY", 1);
-								getImage.putExtra("outputX", 200);
+								getImage.putExtra("outputX", 100);
 								getImage.putExtra("outputY", 100);
 								startActivityForResult(getImage, 0);
 							}
@@ -196,7 +197,7 @@ public class EditPersonalData extends BaseActivity {
 					@Override
 					public void onFailure(int statusCode, Header[] headers,
 							byte[] data, Throwable err) {
-						toast("更新失败");
+						toast("更新失败"+ErrorCode.errorList.get(statusCode));
 					}
 
 					@Override

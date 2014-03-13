@@ -43,8 +43,8 @@ public class CalendarUtils {
 			case 0:
 				tmp = cur.get(Calendar.HOUR_OF_DAY)
 						- pre.get(Calendar.HOUR_OF_DAY);
-				if (tmp <= 1) {
-					tmp = cur.get(Calendar.MINUTE) - pre.get(Calendar.MINUTE);
+				if (tmp < 1) {
+					tmp = Math.abs(cur.get(Calendar.MINUTE) - pre.get(Calendar.MINUTE));
 					sb.append(tmp).append("分钟").append("前");
 				} else {
 					sb.append("今日 ")

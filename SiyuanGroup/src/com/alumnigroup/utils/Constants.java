@@ -32,5 +32,7 @@ public class Constants {
 	public static final String Action_ActivityShare_Edit  = "ActivityShare_Edit";
 	/** 主页面图片更换*/
 	public static final String Action_Backgroud_switch ="Backgroud_switch";
+	/** 用户退出*/
+	public static final String Action_User_Login_Out ="User_Login_Out";
 
 }

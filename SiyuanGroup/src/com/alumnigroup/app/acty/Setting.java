@@ -106,7 +106,7 @@ public class Setting extends BaseActivity {
 			public void handleMessage(Message msg) {
 				switch (msg.what) {
 				case status_start:
-					toast("正在退出。。。");
+					toast("正在退出...");
 					break;
 				case status_faild:
 					break;
@@ -130,6 +130,7 @@ public class Setting extends BaseActivity {
 			public void run() {
 				h.sendEmptyMessage(status_start);
 				((App) getApplication()).cleanUpInfo();
+				sendBroadcast(new Intent(Constants.Action_User_Login_Out));//发广播
 				h.sendEmptyMessage(status_finish);
 			}
 		}).start();

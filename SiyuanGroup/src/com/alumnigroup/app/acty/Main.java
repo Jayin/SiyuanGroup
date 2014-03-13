@@ -66,6 +66,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_Receive_UnreadCount);// 有未读消息
 		filter.addAction(Constants.Action_Backgroud_switch);// 背景图切换
+		filter.addAction(Constants.Action_User_Login_Out);//用户登出
 		registerReceiver(mRecevier, filter);
 	}
 
@@ -237,6 +238,8 @@ public class Main extends BaseActivity implements OnClickListener {
 							.setImageBitmap(BitmapFactory.decodeFile(AppInfo
 									.getBackgroudPath(getContext())));
 				}
+			}else if(intent.getAction().equals(Constants.Action_User_Login_Out)){
+				closeActivity();
 			}
 		}
 	}

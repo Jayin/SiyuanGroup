@@ -59,7 +59,6 @@ public class Follower implements Serializable {
 		}
 		return list;
 	}
-
 	
     /** 备注*/
 	private String remark;
