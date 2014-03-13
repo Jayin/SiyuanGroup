@@ -35,12 +35,14 @@ import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.ImageUtils;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.OutoLinefeedLayout;
+import com.custom.view.FlowLayout;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
- * @author vector
+ * 个人空间页面
+ * @author vector , Jayin Ton
  * 
  */
 public class SpacePersonal extends BaseActivity {
@@ -68,7 +70,8 @@ public class SpacePersonal extends BaseActivity {
 	/**
 	 * 关键字
 	 */
-	private OutoLinefeedLayout lyKeyword;
+	// private OutoLinefeedLayout lyKeyword;
+	private FlowLayout flowlayout_keyword;
 	private View btnEditKeywork;
 	/**
 	 * 相册
@@ -152,6 +155,7 @@ public class SpacePersonal extends BaseActivity {
 		ivBackground.setOnClickListener(this);
 
 		ivPortrait = (ImageView) _getView(R.id.acty_space_personal_top_iv_portrait);
+		ivPortrait.setOnClickListener(this);
 
 		tvUsername = (TextView) _getView(R.id.acty_space_personal_top_tv_name);
 
@@ -165,8 +169,11 @@ public class SpacePersonal extends BaseActivity {
 		/**
 		 * 关键字
 		 */
-		lyKeyword = (OutoLinefeedLayout) _getView(R.id.acty_space_personal_keyword_OutoLinefeed);
-		lyKeyword.setMargin(10);
+		flowlayout_keyword = (FlowLayout) _getView(R.id.flowlayout_keyword);
+
+		// lyKeyword = (OutoLinefeedLayout)
+		// _getView(R.id.acty_space_personal_keyword_OutoLinefeed);
+		// lyKeyword.setMargin(10);
 
 		btnEditKeywork = _getView(R.id.acty_space_personal_keyword_btn_edit);
 		btnEditKeywork.setOnClickListener(this);
@@ -187,7 +194,7 @@ public class SpacePersonal extends BaseActivity {
 	private void addData() {
 		initPersonalData();
 
-		lyKeyword.removeAllViews();
+		flowlayout_keyword.removeAllViews();
 		if (myself.getProfile().getTag() != null
 				&& !myself.getProfile().getTag().equals("")) {
 			String tags[] = myself.getProfile().getTag().split(",");
@@ -196,11 +203,11 @@ public class SpacePersonal extends BaseActivity {
 				addKeyWord(tag, color++ % 2);
 			}
 		}
-		//相册暂时remove
-//		lyAlbum.removeAllViews();
-//		for (int i = 0; i < 5; i++) {
-//			addAlbum(i);
-//		}
+		// 相册暂时remove
+		// lyAlbum.removeAllViews();
+		// for (int i = 0; i < 5; i++) {
+		// addAlbum(i);
+		// }
 		addNewDynamic();
 	}
 
@@ -239,17 +246,22 @@ public class SpacePersonal extends BaseActivity {
 
 							ImageView portrait = (ImageView) convertView
 									.findViewById(R.id.item_lv_alldynamic_iv_portrait);
-          if(dynamic.getUser().getAvatar()!=null){
-        	  ImageLoader.getInstance().displayImage(
-						RestClient.BASE_URL
-								+ dynamic.getUser().getAvatar(),
-						portrait);
-          }else{
-        	  ImageLoader.getInstance().displayImage(
-					"drawable://"+R.drawable.ic_image_load_normal,
-						portrait);
-          }
-							
+							if (dynamic.getUser().getAvatar() != null) {
+								ImageLoader.getInstance()
+										.displayImage(
+												RestClient.BASE_URL
+														+ dynamic.getUser()
+																.getAvatar(),
+												portrait);
+							} else {
+								ImageLoader
+										.getInstance()
+										.displayImage(
+												"drawable://"
+														+ R.drawable.ic_image_load_normal,
+												portrait);
+							}
+
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
 							name.setText(dynamic.getUser().getProfile()
@@ -307,15 +319,13 @@ public class SpacePersonal extends BaseActivity {
 		/**
 		 * 装上TextView
 		 */
-		LayoutInflater inflater = null;
-		inflater = LayoutInflater.from(this);
+		LayoutInflater inflater = LayoutInflater.from(this);
 		View convertView = null;
 
 		if (background == 0) {
 			convertView = inflater.inflate(R.layout.item_keyword_yellow, null);
 		} else {
 			convertView = inflater.inflate(R.layout.item_keyword_green, null);
-
 		}
 		TextView tvKeyWord = (TextView) convertView
 				.findViewById(R.id.item_keyword_tv_value);
@@ -324,7 +334,7 @@ public class SpacePersonal extends BaseActivity {
 		/**
 		 * 加入新的关键字
 		 */
-		lyKeyword.addView(convertView);
+		flowlayout_keyword.addView(convertView);
 	}
 
 	/**
@@ -513,6 +523,8 @@ public class SpacePersonal extends BaseActivity {
 						}
 					}).create();
 			dlg.show();
+			break;
+		case R.id.acty_space_personal_top_iv_portrait: //not to response
 			break;
 
 		default:

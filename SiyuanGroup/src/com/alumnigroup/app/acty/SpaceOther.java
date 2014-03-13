@@ -26,6 +26,7 @@ import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 import com.alumnigroup.widget.SendMsgDialog;
+import com.custom.view.FlowLayout;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -65,7 +66,8 @@ public class SpaceOther extends BaseActivity {
 	/**
 	 * keyword 布局：一个AutoLinefeedLayout .自动换行布局
 	 */
-	private OutoLinefeedLayout lyKeyword;
+	private FlowLayout flowlayout_keyword;
+//	private OutoLinefeedLayout lyKeyword;
 
 	/**
 	 * 相册
@@ -166,8 +168,8 @@ public class SpaceOther extends BaseActivity {
 		/**
 		 * 关键字
 		 */
-		lyKeyword = (OutoLinefeedLayout) _getView(R.id.acty_space_other_keyword_OutoLinefeed);
-		lyKeyword.setMargin(10);
+		flowlayout_keyword = (FlowLayout) _getView(R.id.flowlayout_keyword);
+//		lyKeyword.setMargin(10);
 
 		/**
 		 * 相册
@@ -283,11 +285,17 @@ public class SpaceOther extends BaseActivity {
 
 							ImageView portrait = (ImageView) convertView
 									.findViewById(R.id.item_lv_alldynamic_iv_portrait);
-
-							ImageLoader.getInstance().displayImage(
-									RestClient.BASE_URL
-											+ dynamic.getUser().getAvatar(),
-									portrait);
+if(dynamic.getUser().getAvatar()!=null){
+	ImageLoader.getInstance().displayImage(
+			RestClient.BASE_URL
+					+ dynamic.getUser().getAvatar(),
+			portrait);
+}else{
+	ImageLoader.getInstance().displayImage(
+			"drawable://"+R.drawable.ic_image_load_normal,
+			portrait);
+}
+							
 							TextView name = (TextView) convertView
 									.findViewById(R.id.item_lv_alldynamic_tv_name);
 							name.setText(dynamic.getUser().getProfile()
@@ -405,7 +413,7 @@ public class SpaceOther extends BaseActivity {
 		/**
 		 * 加入新的关键字
 		 */
-		lyKeyword.addView(convertView);
+		flowlayout_keyword.addView(convertView);
 	}
 
 	@Override

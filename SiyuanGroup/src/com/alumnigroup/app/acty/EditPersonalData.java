@@ -79,8 +79,15 @@ public class EditPersonalData extends BaseActivity {
 		btnOK.setOnClickListener(this);
 
 		ivPortrait = (ImageView) _getView(R.id.acty_edit_personaldata_iv_portrait);
-		ImageLoader.getInstance().displayImage(
-				RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
+		if(myself.getAvatar()!=null){
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
+		}else{
+			ImageLoader.getInstance().displayImage(
+					"drawable://"+R.drawable.ic_image_load_normal,
+					ivPortrait);
+		}
+	
 		ivPortrait.setOnClickListener(this);
 
 		rbtnBoy = (RadioButton) _getView(R.id.acty_edit_personaldata_rg_sex_boy);

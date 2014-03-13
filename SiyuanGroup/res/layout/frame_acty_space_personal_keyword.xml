@@ -28,11 +28,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="15dp"
             android:background="@drawable/btn_simple_selected"
             android:clickable="true"
             android:gravity="center"
-            android:layout_marginBottom="4dp"
-            android:layout_marginRight="15dp" android:layout_centerVertical="true"
             android:orientation="horizontal" >
 
             <TextView
@@ -50,14 +51,11 @@
         android:layout_height="1px"
         android:background="#0a6ca2" />
 
-    <com.alumnigroup.widget.OutoLinefeedLayout
-        android:id="@+id/acty_space_personal_keyword_OutoLinefeed"
+    <com.custom.view.FlowLayout
+        android:id="@+id/flowlayout_keyword"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="wrap_content"
         android:background="@color/white" >
-
-        <!-- 用来装关键字的 ,动态加进来 -->
-
-    </com.alumnigroup.widget.OutoLinefeedLayout>
+    </com.custom.view.FlowLayout>
 
 </LinearLayout>

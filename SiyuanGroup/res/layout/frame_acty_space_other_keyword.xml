@@ -16,8 +16,8 @@
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="20dp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:text="关键字"
             android:textColor="#0a6ca2"
@@ -30,14 +30,11 @@
         android:layout_height="1px"
         android:background="#0a6ca2" />
 
-    <com.alumnigroup.widget.OutoLinefeedLayout
-        android:id="@+id/acty_space_other_keyword_OutoLinefeed"
+    <com.custom.view.FlowLayout
+        android:id="@+id/flowlayout_keyword"
         android:layout_width="match_parent"
-        android:layout_height="10dp"
+        android:layout_height="wrap_content"
         android:background="@color/white" >
-
-        <!-- 用来装关键字的 ,动态加进来 -->
-
-    </com.alumnigroup.widget.OutoLinefeedLayout>
+    </com.custom.view.FlowLayout>
 
 </LinearLayout>
