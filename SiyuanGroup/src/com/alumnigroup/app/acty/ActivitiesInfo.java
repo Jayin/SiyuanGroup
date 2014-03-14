@@ -94,6 +94,14 @@ public class ActivitiesInfo extends BaseActivity {
 		filter.addAction(Constants.Action_ActivityInfo_Edit);
 		registerReceiver(mReceiver, filter);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mReceiver!=null){
+			unregisterReceiver(mReceiver);
+		}
+	}
 
 	private void initPopupWindow() {
 		View view = getLayoutInflater().inflate(

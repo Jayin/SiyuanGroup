@@ -72,6 +72,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		initController();
 		openReceiver();
 	}
+	
 
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
@@ -117,6 +118,14 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_ActivityInfo_Edit);
 		registerReceiver(mReceiver, filter);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		if(mReceiver!=null){
+			unregisterReceiver(mReceiver);
+		}
 	}
 
 	private void initController() {
