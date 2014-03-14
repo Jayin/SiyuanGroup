@@ -12,6 +12,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo.State;
 import android.os.IBinder;
 
 import com.alumnigroup.api.MessageAPI;
@@ -32,9 +34,8 @@ import com.alumnigroup.utils.L;
  */
 public class CoreService extends Service {
 	private BroadcastReceiver mReceiver = null;
-	public static final int Default_PollingTime = 60*1000;
+	public static final int Default_PollingTime = 60 * 1000;
 	public boolean hasStartPolling = false;
-
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -44,39 +45,58 @@ public class CoreService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-	    startPolling();
+		initReceiver();
+		startPolling();
+	}
+    //初始化广播
+	private void initReceiver() {
 		mReceiver = new BroadcastReceiver() {
 			public void onReceive(Context context, Intent intent) {
-				L.i("CoreService-->onReceive-->" + intent.getAction());
+				L.i("CoreService::onReceive-->" + intent.getAction());
 				if (intent != null && context != null) {
 					intent.setClass(context, CoreService.class);
+					
+					//wrap the intent
+					//网络状态发生改变
+					if(intent.getAction()!=null && intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION)){
+						   if(AndroidUtils.isNetworkConnected(getApplicationContext())){ 
+ 							   //登录
+							   intent.setAction(Constants.Action_To_Login_In);
+						   }
+					} 
+					//start to work
 					startService(intent);
 				}
-
 			};
 		};
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_To_Get_Unread);// 去获取未读消息数目
+		filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION); 	//网络状态发生改变
 		registerReceiver(mReceiver, filter);
-		
 	}
-   //开始轮询
+
+	// 开始轮询
 	private void startPolling() {
 		hasStartPolling = true;
-		AlarmManager am =(AlarmManager) this.getSystemService(ALARM_SERVICE);
-		Intent intent = new Intent(this,CoreService.class);
+		AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+		Intent intent = new Intent(this, CoreService.class);
 		intent.setAction(Constants.Action_To_Get_Unread);
-		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
-		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Default_PollingTime, pendingIntent);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+				0);
+		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+				Default_PollingTime, pendingIntent);
 	}
-	//停止轮询
-	private void stopPolling(){
+
+	// 停止轮询
+	private void stopPolling() {
 		hasStartPolling = false;
-		AlarmManager am =(AlarmManager) this.getSystemService(ALARM_SERVICE);
-		Intent intent = new Intent(this,CoreService.class);
+		AlarmManager am = (AlarmManager) this.getSystemService(ALARM_SERVICE);
+		Intent intent = new Intent(this, CoreService.class);
 		intent.setAction(Constants.Action_To_Get_Unread);
-		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent, 0);
-//		am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), Default_PollingTime, pendingIntent);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, intent,
+				0);
+		// am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(),
+		// Default_PollingTime, pendingIntent);
 		am.cancel(pendingIntent);
 	}
 
@@ -110,18 +130,28 @@ public class CoreService extends Service {
 						getUnread(); // 获取未读消息数目
 					}
 				};
-			}else if(Constants.Action_Stop_Receive_UnreadCount.equals(action)){
+			} else if (Constants.Action_Stop_Receive_UnreadCount.equals(action)) {
 				runnable = new Runnable() {
 					@Override
 					public void run() {
 						stopPolling(); // 停止取消息数目
 					}
 				};
-			}else if(Constants.Action_Start_Receive_UnreadCount.equals(action)){
+			} else if (Constants.Action_Start_Receive_UnreadCount
+					.equals(action)) {
 				runnable = new Runnable() {
 					@Override
 					public void run() {
-						if(!hasStartPolling)startPolling(); // 开始取消息数目
+						if (!hasStartPolling)
+							startPolling(); // 开始取消息数目
+					}
+				};
+			}else if(Constants.Action_To_Login_In.equals(action)){
+				runnable = new Runnable() {
+					
+					@Override
+					public void run() {
+					    login();   //登录
 					}
 				};
 			}
@@ -145,32 +175,10 @@ public class CoreService extends Service {
 				}
 				final int mCount = count;
 				// send broadcast after getting all messages
-				MessageCache.setUnreadCount(getApplicationContext(),count);
+				MessageCache.setUnreadCount(getApplicationContext(), count);
 				Intent intent = new Intent(Constants.Action_Receive_UnreadCount);
 				intent.putExtra("count", mCount);
 				sendBroadcast(intent);
-				L.i("getUnread-->" + count);
-				// if (count > 0) {
-				// api.getReceiedMessageList(count, new JsonResponseHandler() {
-				//
-				// @Override
-				// public void onOK(Header[] headers, JSONObject obj) {
-				// ArrayList<MMessage> new_messages = MMessage
-				// .create_by_jsonarray(obj.toString());
-				// ArrayList<MMessage> cache_messages=
-				// MessageCache.getReceiveMessages(getApplicationContext());
-				// cache_messages.addAll(new_messages);
-				// MessageCache.setReceiveMessages(getApplicationContext(),
-				// cache_messages);
-				//
-				// }
-				//
-				// @Override
-				// public void onFaild(int errorType, int errorCode) {
-				// L.e("获取消息错误," + ErrorCode.errorList.get(errorCode));
-				// }
-				// });
-				// }
 			}
 
 			@Override
@@ -227,11 +235,13 @@ public class CoreService extends Service {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-                  L.i("login successfully");
+				sendBroadcast(new Intent(Constants.Action_Login_In_Successful));
+				L.i("login successfully");
 			}
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
+				sendBroadcast(new Intent(Constants.Action_Login_In_Faild));
 				L.e(ErrorCode.errorList.get(errorCode));
 			}
 		});

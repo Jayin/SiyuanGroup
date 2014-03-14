@@ -18,6 +18,12 @@ public class Constants {
  	public static final String Action_Stop_Receive_UnreadCount = "Stop_Receive_UnreadCount";
  	/** 开始得到未读消息数目 */
  	public static final String Action_Start_Receive_UnreadCount = "Start_Receive_UnreadCount";
+	/** 去登录 */
+    public static final String Action_To_Login_In = "To_Login_in";
+	/** 用户登录成功 */
+    public static final String Action_Login_In_Successful = "Login_In_Successful";
+	/** 用户登录失败  */
+    public static final String Action_Login_In_Faild ="Login_In_Faild";
 	
 	// 广播Action 
 	/** 话题(包含圈子分享 )发布成功*/

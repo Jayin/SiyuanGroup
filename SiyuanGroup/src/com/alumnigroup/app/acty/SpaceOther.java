@@ -23,7 +23,6 @@ import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 import com.alumnigroup.widget.SendMsgDialog;
 import com.custom.view.FlowLayout;
@@ -237,7 +236,7 @@ public class SpaceOther extends BaseActivity {
 	private void initPersonalData() {
 
 		// addPersonalData("真实姓名", user.getProfile().getName());
-		addPersonalData("性别", user.getProfile().getGender());
+		addPersonalData("性别", user.getProfile().getGender().equals("m")?"男":"女");
 		addPersonalData("年龄", user.getProfile().getAge() + "");
 		addPersonalData("大学", user.getProfile().getUniversity());
 		addPersonalData("毕业届数", user.getProfile().getGrade() + "");

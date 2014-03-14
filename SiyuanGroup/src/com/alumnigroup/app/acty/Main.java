@@ -225,7 +225,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got unread
-																					 
+				tv_unreadCount.setVisibility(View.INVISIBLE);															 
 				if (MessageCache.getUnreadCount(getContext()) > 0) {
 					tv_unreadCount.setText(MessageCache
 							.getUnreadCount(getContext()) + "");
