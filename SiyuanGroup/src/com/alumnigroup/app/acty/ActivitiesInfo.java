@@ -85,8 +85,7 @@ public class ActivitiesInfo extends BaseActivity {
 			
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				 MActivity a = (MActivity)intent.getSerializableExtra("activity");
-				 acty = a;
+				 acty  = (MActivity)intent.getSerializableExtra("activity");
 				 fillInData();
 			}
 		};

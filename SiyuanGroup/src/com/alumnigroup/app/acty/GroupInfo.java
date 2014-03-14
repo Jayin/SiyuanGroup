@@ -87,18 +87,8 @@ public class GroupInfo extends BaseActivity {
 				
 				@Override
 				public void onReceive(Context context, Intent intent) {
-					 MGroup g =(MGroup)intent.getSerializableExtra("group");
-					 if (g.getAvatar() != null) {
-							ImageLoader.getInstance().displayImage(
-									RestClient.BASE_URL + g.getAvatar(), iv_avatar);
-						} else {
-							ImageLoader.getInstance().displayImage(
-									"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
-						}
-						tv_owner.setText(g.getOwner().getProfile().getName());
-						tv_numMember.setText(g.getNumMembers() + "");
-						tv_description.setText(g.getDescription());
-						tv_groupName.setText(g.getName());
+					 group =(MGroup)intent.getSerializableExtra("group");
+					 fillInData();
 				}
 			};
 	    IntentFilter filter = new IntentFilter();
@@ -376,17 +366,7 @@ public class GroupInfo extends BaseActivity {
 		// btn_deleteGroup.setVisibility(View.GONE);
 		// btn_edit.setVisibility(View.INVISIBLE);
 		// }
-		if (group.getAvatar() != null) {
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + group.getAvatar(), iv_avatar);
-		} else {
-			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
-		}
-		tv_owner.setText(group.getOwner().getProfile().getName());
-		tv_numMember.setText(group.getNumMembers() + "");
-		tv_description.setText(group.getDescription());
-		tv_groupName.setText(group.getName());
+		fillInData();
 
 		List<View> views = new ArrayList<View>();
 		views.add(info);
@@ -404,6 +384,19 @@ public class GroupInfo extends BaseActivity {
 		
 	}
 
+	private void fillInData() {
+		if (group.getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + group.getAvatar(), iv_avatar);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+		}
+		tv_owner.setText(group.getOwner().getProfile().getName());
+		tv_numMember.setText(group.getNumMembers() + "");
+		tv_description.setText(group.getDescription());
+		tv_groupName.setText(group.getName());
+	}
 	@Override
 	public void onClick(View v) {
 		Intent intent;
