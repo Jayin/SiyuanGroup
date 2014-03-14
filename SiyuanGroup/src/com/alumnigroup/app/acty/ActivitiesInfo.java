@@ -6,19 +6,21 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
-import android.widget.AdapterView.OnItemClickListener;
 
-import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.MemberAdapter;
@@ -36,8 +38,7 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.entity.Userships;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.widget.PullAndLoadListView.OnLoadMoreListener;
-import com.alumnigroup.widget.PullToRefreshListView.OnRefreshListener;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -67,7 +68,7 @@ public class ActivitiesInfo extends BaseActivity {
 	private IssueAdapter adapter_share;
 	private int page_share = 0,page_member = 0;
 	private ImageView iv_pic1, iv_pic2, iv_pic3;
-
+	private BroadcastReceiver mReceiver = null;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -76,6 +77,22 @@ public class ActivitiesInfo extends BaseActivity {
 		initPopupWindow();
 		initLayout();
 		initController();
+		openReceiver();
+	}
+
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver() {
+			
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				 MActivity a = (MActivity)intent.getSerializableExtra("activity");
+				 acty = a;
+				 fillInData();
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_ActivityInfo_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	private void initPopupWindow() {
@@ -275,23 +292,7 @@ public class ActivitiesInfo extends BaseActivity {
 		
 		iv_avatar = (ImageView) info.findViewById(R.id.iv_avatar);
 		
-		if(acty.getAvatar()!=null){
-			ImageLoader.getInstance().displayImage(RestClient.BASE_URL +acty.getAvatar(), iv_avatar);
-		}else{
-			ImageLoader.getInstance().displayImage(
-					"drawable://"+R.drawable.ic_image_load_normal, iv_avatar);
-		}
-		
-		tv_name.setText(acty.getName());
-		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(
-				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
-		tv_starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
-				CalendarUtils.TYPE_TWO));
-		tv_site.setText(acty.getSite());
-		tv_description.setText(acty.getContent());
-		tv_applyNum.setText(acty.getNumUsership() + "/" + acty.getMaxnum());
-		tv_duration.setText(acty.getDuration() + "天");
-		tv_money.setText(acty.getMoney() + "RMB");
+		fillInData();
 
 		btns.add(btn_info);
 		btns.add(btn_userlist);
@@ -343,6 +344,26 @@ public class ActivitiesInfo extends BaseActivity {
 				break;
 			}
 		}
+	}
+	//填充数据
+	private void fillInData(){
+		if(acty.getAvatar()!=null){
+			ImageLoader.getInstance().displayImage(RestClient.BASE_URL +acty.getAvatar(), iv_avatar);
+		}else{
+			ImageLoader.getInstance().displayImage(
+					"drawable://"+R.drawable.ic_image_load_normal, iv_avatar);
+		}
+		
+		tv_name.setText(acty.getName());
+		tv_applyDeadline.setText(CalendarUtils.getTimeFromat(
+				acty.getRegdeadline(), CalendarUtils.TYPE_TWO));
+		tv_starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
+				CalendarUtils.TYPE_TWO));
+		tv_site.setText(acty.getSite());
+		tv_description.setText(acty.getContent());
+		tv_applyNum.setText(acty.getNumUsership() + "/" + acty.getMaxnum());
+		tv_duration.setText(acty.getDuration() + "天");
+		tv_money.setText(acty.getMoney() + "RMB");
 	}
 
 	@Override

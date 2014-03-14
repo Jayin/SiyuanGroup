@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -31,6 +34,7 @@ import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
@@ -54,6 +58,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	private StarAPI starAPI;
 	private User user;
 
+	private ArrayList<MActivity> data_clicked = null;
+	private int item_click = -1;
+	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
+	private BroadcastReceiver mReceiver = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,6 +70,53 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+		openReceiver();
+	}
+
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				MActivity a = (MActivity) intent
+						.getSerializableExtra("activity");
+				data_clicked.set(item_click,a);
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_actyname))
+						.setText(a.getName());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_site))
+						.setText(a.getSite());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_starttime))
+						.setText("时间:"
+								+ CalendarUtils.getTimeFromat(a.getStarttime(),
+										CalendarUtils.TYPE_TWO));
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_ownername))
+						.setText(a.getUser().getProfile().getName());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_applyCount))
+						.setText(a.getNumUsership() + "人报名");
+				((ImageView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_iv_status))
+						.setImageResource(a.getStatus().getId() == 1 ? R.drawable.ic_image_status_on
+								: R.drawable.ic_image_status_off);
+				ImageView iv_avatar = (ImageView) viewClicked
+						.findViewById(R.id.item_lv_acty_activities_iv_avater);
+				if (a.getAvatar() != null) {
+					ImageLoader.getInstance().displayImage(
+							RestClient.BASE_URL + a.getAvatar(), iv_avatar);
+				} else {
+					ImageLoader.getInstance().displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,
+							iv_avatar);
+				}
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_ActivityInfo_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	private void initController() {
@@ -520,21 +576,23 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			long id) {
 		if (position - 1 == -1)
 			return;
+		viewClicked = view;
+		item_click = position - 1;
+		Intent intent = new Intent(this, ActivitiesInfo.class);
 		if (parent == lv_all) {
-			Intent intent = new Intent(this, ActivitiesInfo.class);
 			intent.putExtra("activity", data_all.get(position - 1));
-			openActivity(intent);
+			data_clicked = data_all;
 		}
 		if (parent == lv_myjoin) {
-			Intent intent = new Intent(this, ActivitiesInfo.class);
 			intent.putExtra("activity", data_myjoin.get(position - 1));
-			openActivity(intent);
+			data_clicked = data_myjoin;
 		}
 		if (parent == lv_favourit) {
-			Intent intent = new Intent(this, ActivitiesInfo.class);
 			intent.putExtra("activity", data_favourite.get(position - 1));
-			openActivity(intent);
+			data_clicked = data_favourite;
+
 		}
+		openActivity(intent);
 	}
 
 }

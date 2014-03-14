@@ -41,6 +41,9 @@ public class Constants {
 	
 	/** 活动分享修改*/
 	public static final String Action_ActivityShare_Edit  = "ActivityShare_Edit";
+	/** 活动信息修改*/
+	public static final String Action_ActivityInfo_Edit = "ActivityInfo_Edit ";
+	
 	/** 主页面图片更换*/
 	public static final String Action_Backgroud_switch ="Backgroud_switch";
 	/** 用户退出*/

@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SynData;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
@@ -201,7 +202,7 @@ public class ActivitiesPublish extends BaseActivity {
 		}
 	}
 
-	private void update(int actyid, int maxnum, int duration, int statusid,
+	private void update(final int actyid, int maxnum, int duration, int statusid,
 			long money, String name, String content, String site) {
 		api.update(actyid, maxnum, starttime,duration, regdeadline, statusid, money,
 				name, content, site, new JsonResponseHandler() {
@@ -210,6 +211,7 @@ public class ActivitiesPublish extends BaseActivity {
 					public void onOK(Header[] headers, JSONObject obj) {
 						toast("已更新");
 						closeActivity();
+						SynData.SyncActivityInfo(getContext(), actyid, null);
 					}
 
 					@Override

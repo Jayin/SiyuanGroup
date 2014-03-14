@@ -15,7 +15,7 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.utils.DataPool;
 
 /**
- * 数据缓存<br>
+ * 数据缓存/单个数据缓存修改<br>
  * 活动 商务合作 话题交流 圈子
  * 
  * @author Jayin Ton
@@ -46,7 +46,7 @@ public class AppCache {
 	public static final String Key_Group_favourite = "Group_favourite";
 	// 动态2种
 	public static final String Key_Dynamic_all = "Dynamic_all";
-	public static final String Key_Dynamic_friend= "Dynamic_friend";
+	public static final String Key_Dynamic_friend = "Dynamic_friend";
 
 	private static DataPool getDataPool(Context context) {
 		return new DataPool(Cache_Name, context);
@@ -64,38 +64,91 @@ public class AppCache {
 	public static void remove(Context context, String key) {
 		getDataPool(context).remove(key);
 	}
-	
+
 	/**
 	 * 改变全站会员的一个用户数据
 	 */
-	public static void changeAllmemberAll(Context context,User change){
+	public static void changeAllmemberAll(Context context, User change) {
 		ArrayList<User> all = getAllmemberAll(context);
-		for(int i=0;i<all.size();i++){
-			if(all.get(i).getId()==change.getId()){
-				all.set(i, change);
+		if(all!=null){
+			for (int i = 0; i < all.size(); i++) {
+				if (all.get(i).getId() == change.getId()) {
+					all.set(i, change);
+					break;
+				}
 			}
+			setAllmemberAll(context, all);
 		}
-		setAllmemberAll(context, all);
 	}
+
 	/**
 	 * 修改一个圈子的资料
+	 * 
 	 * @param context
 	 * @param change
 	 */
-	public static void changeGroupItem(Context context,MGroup change){
+	public static void changeGroupItem(Context context, MGroup change) {
 		ArrayList<MGroup> group_all = getGroupAll(context);
 		ArrayList<MGroup> group_my = getGroupMy(context);
-		for(int i=0;i<group_all.size();i++){
-			MGroup g = group_all.get(i);
-			if(g.getId() == change.getId()){
-				group_all.set(i, change);
+		if(group_all !=null){
+			for (int i = 0; i < group_all.size(); i++) {
+				MGroup g = group_all.get(i);
+				if (g.getId() == change.getId()) {
+					group_all.set(i, change);
+					break;
+				}
 			}
+			setGroupAll(context, group_all);
 		}
-		for(int i=0;i<group_my.size();i++){
-			MGroup g = group_my.get(i);
-			if(g.getId() == change.getId()){
-				group_my.set(i, change);
+		if(group_my != null){
+			for (int i = 0; i < group_my.size(); i++) {
+				MGroup g = group_my.get(i);
+				if (g.getId() == change.getId()) {
+					group_my.set(i, change);
+					break;
+				}
 			}
+			setGroupMy(context, group_my);
+		}
+	}
+    /**
+     * 修改一个活动的资料
+     * @param context
+     * @param change
+     */
+	public static void changeActivityInfo(Context context, MActivity change) {
+		ArrayList<MActivity> acty_all = getActivityAll(context);
+		ArrayList<MActivity> acty_my = getActivityMy(context);
+		ArrayList<MActivity> acty_fav = getActivityFavourite(context);
+		if(acty_all != null){
+			for (int i = 0; i < acty_all.size(); i++) {
+				MActivity g = acty_all.get(i);
+				if (g.getId() == change.getId()) {
+					acty_all.set(i, change);
+				}
+			}
+			setActivityAll(context, acty_all);
+		}
+		
+		if(acty_my != null){
+			for (int i = 0; i < acty_my.size(); i++) {
+				MActivity g = acty_my.get(i);
+				if (g.getId() == change.getId()) {
+					acty_my.set(i, change);
+					break;
+				}
+			}
+			setActivityMy(context, acty_my);
+		}
+		if(acty_fav!=null){
+			for (int i = 0; i < acty_fav.size(); i++) {
+				MActivity g = acty_fav.get(i);
+				if (g.getId() == change.getId()) {
+					acty_fav.set(i, change);
+					break;
+				}
+			}
+			setActivityFavourite(context, acty_fav);
 		}
 	}
 
@@ -110,25 +163,26 @@ public class AppCache {
 		save(context, Key_Allmember_all, value);
 	}
 
-	/**获得全站会员follow关注列表 */
+	/** 获得全站会员follow关注列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<User> getAllmemberFollowing(Context context) {
 		return (ArrayList<User>) get(context, Key_Allmember_following);
 	}
 
-	/** 删除关注的一个**/
-	public static void removeAllmemberFollowing(Context context,User remove){
+	/** 删除关注的一个 **/
+	public static void removeAllmemberFollowing(Context context, User remove) {
 		ArrayList<User> followers = getAllmemberFollowers(context);
-		for(int i=0;i<followers.size();i++){
-			if(followers.get(i).getId()==remove.getId()){
+		for (int i = 0; i < followers.size(); i++) {
+			if (followers.get(i).getId() == remove.getId()) {
 				followers.remove(i);
 			}
 		}
 		setAllmemberFollowing(context, followers);
 	}
-	
-	/** 保存全站会员follow关注列表*/
-	public static void setAllmemberFollowing(Context context,ArrayList<User> value){
+
+	/** 保存全站会员follow关注列表 */
+	public static void setAllmemberFollowing(Context context,
+			ArrayList<User> value) {
 		save(context, Key_Allmember_following, value);
 	}
 
@@ -272,7 +326,7 @@ public class AppCache {
 	public static void setGroupMy(Context context, ArrayList<MGroup> value) {
 		save(context, Key_Group_my, value);
 	}
-	
+
 	/** 获得动态all列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Dynamic> getDynamicAll(Context context) {
@@ -283,7 +337,7 @@ public class AppCache {
 	public static void setDynamicAll(Context context, ArrayList<Dynamic> value) {
 		save(context, Key_Dynamic_all, value);
 	}
-	
+
 	/** 获得动态Friend列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<Dynamic> getDynamicFriend(Context context) {
@@ -291,7 +345,8 @@ public class AppCache {
 	}
 
 	/** 保存动态Friend列表 */
-	public static void setDynamicFriend(Context context, ArrayList<Dynamic> value) {
+	public static void setDynamicFriend(Context context,
+			ArrayList<Dynamic> value) {
 		save(context, Key_Dynamic_friend, value);
 	}
 }
