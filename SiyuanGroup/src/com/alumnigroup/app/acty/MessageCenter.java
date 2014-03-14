@@ -17,13 +17,16 @@ import android.widget.TextView;
 
 import com.alumnigroup.api.MessageAPI;
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
+import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MMessage;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -132,6 +135,12 @@ public class MessageCenter extends BaseActivity {
 					int position, long id) {
 				if (position - 1 == -1)
 					return;
+				//刷新已读书
+				int unreadCount =  MessageCache.getUnreadCount(getContext())-data_message.get(position-1).getUnreadcount();
+				MessageCache.setUnreadCount(getContext(),unreadCount <0?0:unreadCount);
+				sendBroadcast(new Intent(Constants.Action_Receive_UnreadCount));
+				view.findViewById(R.id.tv_unreadcount).setVisibility(View.GONE);
+				data_message.get(position-1).setUnreadcount(0);
 				Intent intent = new Intent(getContext(), MessageDetail.class);
 				intent.putExtra("message", data_message.get(position - 1));
 				openActivity(intent);
@@ -194,6 +203,7 @@ public class MessageCenter extends BaseActivity {
 				h.tv_content = (TextView) convertView
 						.findViewById(R.id.tv_content);
 				h.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
+				h.tv_unreadCount = (TextView)convertView.findViewById(R.id.tv_unreadcount);
 				convertView.setTag(h);
 			} else {
 				h = (ViewHolder) convertView.getTag();
@@ -210,17 +220,22 @@ public class MessageCenter extends BaseActivity {
 						"drawalbe://" + R.drawable.ic_image_load_normal,
 						h.iv_avatar);
 			}
-			h.tv_content.setText(data_message.get(position).getBody());
+			h.tv_content.setText(mm.getBody());
 			h.tv_username.setText(mm.getSendername());
 			h.tv_time.setText(CalendarUtils.getTimeFromat(
 					data_message.get(position).getSendtime(),
 					CalendarUtils.TYPE_timeline));
+			h.tv_unreadCount.setVisibility(View.GONE);
+			if(mm.getUnreadcount()>0){
+				h.tv_unreadCount.setText(mm.getUnreadcount()+"");
+				h.tv_unreadCount.setVisibility(View.VISIBLE);
+			}
 			return convertView;
 		}
 
 		class ViewHolder {
 			ImageView iv_avatar;
-			TextView tv_time, tv_username, tv_content;
+			TextView tv_time, tv_username, tv_content,tv_unreadCount;
 		}
 
 	}
