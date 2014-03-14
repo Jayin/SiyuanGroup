@@ -45,7 +45,9 @@
         <item name="android:layout_height">48dp</item>
     </style>
 
-    <style name="ImageView.avatar" parent="ImageView">
+    <style name="ImageView.avatar">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
         <item name="android:scaleType">centerCrop</item>
         <item name="android:src">@drawable/ic_image_load_loading</item>
     </style>

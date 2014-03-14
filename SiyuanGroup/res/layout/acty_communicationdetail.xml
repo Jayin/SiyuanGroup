@@ -35,8 +35,7 @@
 
                     <ImageView
                         android:id="@+id/acty_communicationdetail_iv_avater"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
+                        style="@style/ImageView.avatar"
                         android:src="@drawable/ic_image_load_loading" />
 
                     <LinearLayout
