@@ -21,6 +21,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.widget.LoadingDialog;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 

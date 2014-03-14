@@ -20,20 +20,21 @@ import com.alumnigroup.app.R;
  * @author Jayin Ton
  * 
  */
-public class MyProgressDialog extends Dialog {
+public class LoadingDialog extends Dialog {
 	private TextView tv_updateinfo;
 	private ImageView iv;
 	private Context context;
 
-	public MyProgressDialog(Context context) {
+	public LoadingDialog(Context context) {
 		super(context, R.style.Dialog_Theme_BaseDialog);
 		this.context = context;
+		init();
 	}
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		init();
+	private void init() {
+		// this.setCancelable(false);
+		this.setCanceledOnTouchOutside(false);
+		this.setCancelable(true);
 		setContentView(R.layout.dlg_progress);
 		iv = (ImageView) findViewById(R.id.dlg_progress_iv_progress);
 		tv_updateinfo = (TextView) findViewById(R.id.dlg_progress_tv_updateinfo);
@@ -43,11 +44,6 @@ public class MyProgressDialog extends Dialog {
 				R.anim.load_animation);
 		// 使用ImageView显示动画
 		iv.startAnimation(round);
-	}
-
-	private void init() {
-		// this.setCancelable(false);
-		this.setCanceledOnTouchOutside(false);
 	}
 
 	public void setText(CharSequence text) {

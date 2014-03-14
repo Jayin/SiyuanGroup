@@ -12,10 +12,8 @@
 
         <ImageView
             android:id="@+id/item_lv_alldynamic_iv_portrait"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
+            style="@style/ImageView.avatar"
             android:layout_centerInParent="true"
-            android:scaleType="fitXY"
             android:src="@drawable/aa_po" />
     </RelativeLayout>
 

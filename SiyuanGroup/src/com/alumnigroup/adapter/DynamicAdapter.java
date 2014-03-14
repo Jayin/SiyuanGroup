@@ -39,6 +39,7 @@ import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.widget.LoadingDialog;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -48,7 +49,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class DynamicAdapter extends BaseAdapter {
-
+	private LoadingDialog dialog;
 	/**
 	 * 要适配的数据
 	 */
@@ -64,6 +65,8 @@ public class DynamicAdapter extends BaseAdapter {
 		this.dynamics = dynamics;
 		this.context = context;
 		inflater = LayoutInflater.from(this.context);
+		dialog = new LoadingDialog(context);
+		dialog.setCancelable(false);
 	}
 
 	public int getCount() {
@@ -125,14 +128,33 @@ public class DynamicAdapter extends BaseAdapter {
 			@Override
 			public void onClick(View v) {
 				switch (dynamic.getItemtype()) {
+				case Dynamic.Itme_type_user:
+					User user = dynamic.getUser();
+					Intent intent = new Intent(context, SpacePersonal.class);
+					if (user.getId() == AppInfo.getUser(context).getId()) {
+						intent = new Intent(context, SpacePersonal.class);
+					}else{
+						intent = new Intent(context, SpaceOther.class);
+					}
+					intent.putExtra("user", user);
+					context.startActivity(intent);
+					break;
 				case Dynamic.Item_type_activity:
 					ActivityAPI aapi = new ActivityAPI();
-                    aapi.view(dynamic.getItemid(), new JsonResponseHandler() {
-						
+					aapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+						public void onStart() {
+							dialog.show();
+						};
+
+						public void onFinish() {
+							dialog.dismiss();
+						};
+
 						@Override
 						public void onOK(Header[] headers, JSONObject obj) {
 							try {
-								MActivity acty  = MActivity.create_by_json(obj.getJSONObject("activity").toString());
+								MActivity acty = MActivity.create_by_json(obj
+										.getJSONObject("activity").toString());
 								Intent activityIntent = new Intent(context,
 										ActivitiesInfo.class);
 								activityIntent.putExtra("activity", acty);
@@ -143,18 +165,27 @@ public class DynamicAdapter extends BaseAdapter {
 										Toast.LENGTH_SHORT).show();
 							}
 						}
-						
+
 						@Override
 						public void onFaild(int errorType, int errorCode) {
 							Toast.makeText(context,
 									ErrorCode.errorList.get(errorCode),
 									Toast.LENGTH_SHORT).show();
 						}
+
 					});
+
 					break;
 				case Dynamic.Item_type_business:
 					BusinessAPI bapi = new BusinessAPI();
 					bapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+						public void onStart() {
+							dialog.show();
+						};
+
+						public void onFinish() {
+							dialog.dismiss();
+						};
 
 						@Override
 						public void onOK(Header[] headers, JSONObject obj) {
@@ -185,6 +216,13 @@ public class DynamicAdapter extends BaseAdapter {
 				case Dynamic.Item_type_issue:
 					IssuesAPI iapi = new IssuesAPI();
 					iapi.view(dynamic.getItemid(), new JsonResponseHandler() {
+						public void onStart() {
+							dialog.show();
+						};
+
+						public void onFinish() {
+							dialog.dismiss();
+						};
 
 						@Override
 						public void onOK(Header[] headers, JSONObject obj) {
@@ -213,11 +251,19 @@ public class DynamicAdapter extends BaseAdapter {
 				case Dynamic.Item_type_group:
 					GroupAPI gapi = new GroupAPI();
 					gapi.view(dynamic.getItemid(), new JsonResponseHandler() {
-						
+						public void onStart() {
+							dialog.show();
+						};
+
+						public void onFinish() {
+							dialog.dismiss();
+						};
+
 						@Override
 						public void onOK(Header[] headers, JSONObject obj) {
 							try {
-								MGroup group = MGroup.create_by_json(obj.getJSONObject("group").toString());
+								MGroup group = MGroup.create_by_json(obj
+										.getJSONObject("group").toString());
 								Intent groupIntent = new Intent(context,
 										GroupInfo.class);
 								groupIntent.putExtra("group", group);
@@ -227,9 +273,9 @@ public class DynamicAdapter extends BaseAdapter {
 								Toast.makeText(context, "网络异常，解析错误",
 										Toast.LENGTH_SHORT).show();
 							}
-							
+
 						}
-						
+
 						@Override
 						public void onFaild(int errorType, int errorCode) {
 							Toast.makeText(context,

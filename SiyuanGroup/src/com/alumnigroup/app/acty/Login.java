@@ -19,7 +19,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.StringUtils;
 import com.alumnigroup.utils.EditTextUtils;
-import com.alumnigroup.widget.MyProgressDialog;
+import com.alumnigroup.widget.LoadingDialog;
 
 /**
  * 登录注册页面
@@ -35,7 +35,7 @@ public class Login extends BaseActivity {
 			et_reg_summary, et_reg_grade;
 	private View btn_login, btn_regitst, btn_ok, btn_cancle;
 	private UserAPI api;
-	private MyProgressDialog dialog;
+	private LoadingDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -181,7 +181,7 @@ public class Login extends BaseActivity {
 		btn_ok.setOnClickListener(this);
 		btn_cancle.setOnClickListener(this);
 
-		dialog = new MyProgressDialog(getContext());
+		dialog = new LoadingDialog(getContext());
 	}
 
 	private void saveLoginInfo(String json) {

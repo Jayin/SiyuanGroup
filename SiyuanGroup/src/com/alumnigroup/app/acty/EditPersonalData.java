@@ -244,7 +244,7 @@ public class EditPersonalData extends BaseActivity {
 				
 				@Override
 				public void onFaild(int errorType, int errorCode) {
-					toast("更新失败"+ErrorCode.errorList.get(errorCode));
+					toast("更新失败 "+ErrorCode.errorList.get(errorCode));
 				}
 			});
 

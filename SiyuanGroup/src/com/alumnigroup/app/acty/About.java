@@ -14,7 +14,7 @@ import com.alumnigroup.app.CoreService;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
-import com.alumnigroup.widget.MyProgressDialog;
+import com.alumnigroup.widget.LoadingDialog;
 /**
  * 关于页面
  * @author crete by Vector
@@ -22,7 +22,7 @@ import com.alumnigroup.widget.MyProgressDialog;
  *
  */
 public class About extends BaseActivity {
-	private MyProgressDialog dialog;
+	private LoadingDialog dialog;
 	private BroadcastReceiver mReceiver;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,7 @@ public class About extends BaseActivity {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		dialog = new MyProgressDialog(getContext());
+		dialog = new LoadingDialog(getContext());
 	}
 	
 	@Override

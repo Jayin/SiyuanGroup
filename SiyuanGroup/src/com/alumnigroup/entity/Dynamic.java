@@ -17,6 +17,8 @@ import com.google.gson.Gson;
  */
 @SuppressWarnings("serial")
 public class Dynamic implements Serializable {
+	/** 类别：用户*/
+	public static final int Itme_type_user = 1;
 	/** 类别：话题 */
 	public static final int Item_type_issue = 2;
 	/** 类别：活动 */
