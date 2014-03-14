@@ -339,7 +339,7 @@ public class SpacePersonal extends BaseActivity {
 		llPersonalData.removeAllViews();
 		String gender = null;
 		addPersonalData("性别", myself.getProfile().getGender().equals("m")?"男":"女");
-		addPersonalData("年龄", myself.getProfile().getAge() + "");
+		addPersonalData("年龄", myself.getProfile().getAge()==0?"保密": myself.getProfile().getAge()+"");
 		addPersonalData("大学", myself.getProfile().getUniversity());
 		addPersonalData("毕业届数", myself.getProfile().getGrade() + "");
 		addPersonalData("专业", myself.getProfile().getMajor());

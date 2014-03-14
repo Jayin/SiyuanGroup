@@ -152,7 +152,7 @@
                         android:layout_marginLeft="40dp"
                         android:layout_weight="1"
                         android:background="@color/white"
-                        android:text="21"
+                        android:hint="0为保密"
                         android:textColor="@color/blue_lv_third" />
                 </LinearLayout>
 

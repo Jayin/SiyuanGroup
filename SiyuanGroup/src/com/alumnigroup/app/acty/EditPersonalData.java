@@ -1,10 +1,10 @@
 package com.alumnigroup.app.acty;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.apache.http.Header;
-import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -24,18 +24,16 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.ImageUtils;
-import com.alumnigroup.utils.JsonUtils;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 修改个人资料
  * 
- * @author vector
+ * @author vector;Jayin Ton
  * 
  */
 public class EditPersonalData extends BaseActivity {
@@ -158,8 +156,8 @@ public class EditPersonalData extends BaseActivity {
 								getImage.putExtra("crop", "true");
 								getImage.putExtra("aspectX", 1);
 								getImage.putExtra("aspectY", 1);
-								getImage.putExtra("outputX", 100);
-								getImage.putExtra("outputY", 100);
+								getImage.putExtra("outputX", 200);
+								getImage.putExtra("outputY", 200);
 								startActivityForResult(getImage, 0);
 							}
 						}
@@ -191,33 +189,25 @@ public class EditPersonalData extends BaseActivity {
 		String major = etMajor.getText().toString();
 		String summary = etSummary.getText().toString();
 
-		api.updateProfile(myself.getId(), name, gender, age, grade, university,
-				major, summary, new AsyncHttpResponseHandler() {
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("更新失败"+ErrorCode.errorList.get(statusCode));
-					}
-
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);// jsonarray
-						System.out.println(json);
-						if (JsonUtils.isOK(json)) {
-							toast("更新完成");
-							updateSPUser();
-						} else {
-							toast("更新失败");
-						}
-					}
-
-					@Override
-					public void onFinish() {
-						dialog.cancel();
-					}
-				});
+		
+		api.updateProfile(myself.getId(), name, gender, age, grade, university, major, summary, new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("更新完成");
+				updateSPUser();
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("更新失败"+ErrorCode.errorList.get(errorCode));
+			}
+			
+			@Override
+			public void onFinish() {
+				dialog.cancel();
+			}
+		});
 		dialog.show();
 	}
 
@@ -242,32 +232,22 @@ public class EditPersonalData extends BaseActivity {
 			} catch (Exception e) {
 
 			}
+			
+			api.updatePortrait(BitmapUtils.getBitmapInputStream(portraitBitmap), new JsonResponseHandler() {
+				
+				@Override
+				public void onOK(Header[] headers, JSONObject obj) {
+					updateSPUser();
+					ivPortrait.setImageBitmap(portraitBitmap);
+					toast("更新成功");
+				}
+				
+				@Override
+				public void onFaild(int errorType, int errorCode) {
+					toast("更新失败"+ErrorCode.errorList.get(errorCode));
+				}
+			});
 
-			api.updatePortrait(
-					BitmapUtils.getBitmapInputStream(portraitBitmap),
-					new AsyncHttpResponseHandler() {
-
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								byte[] data, Throwable err) {
-							toast("网络异常 错误码:" + statusCode);
-						}
-
-						@Override
-						public void onSuccess(int statusCode, Header[] headers,
-								byte[] data) {
-							String json = new String(data);
-							if (JsonUtils.isOK(json)) {
-								updateSPUser();
-								ivPortrait.setImageBitmap(portraitBitmap);
-								toast("更新成功");
-							} else {
-								toast("更新失败");
-							}
-
-						}
-
-					});
 		}
 	}
 
@@ -275,28 +255,29 @@ public class EditPersonalData extends BaseActivity {
 	 * 更新user 数据
 	 */
 	private void updateSPUser() {
-		api.find(new RequestParams("id", myself.getId()),
-				new AsyncHttpResponseHandler() {
-					@Override
-					public void onFinish() {
-						dialog.cancel();
-						finish();
-					}
-
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-							try {
-								AppInfo.setUser(json, EditPersonalData.this);
-							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				});
+		api.getMyInfo(new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				User user;
+				try {
+					user = User.create_by_json(obj.getJSONObject("user").toString());
+					AppInfo.setUser(getContext(),user);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				 
+			}
+			@Override
+			public void onFinish() {
+				dialog.cancel();
+				closeActivity();
+			}
+		});
 	}
 
 }

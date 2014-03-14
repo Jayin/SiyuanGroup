@@ -119,7 +119,7 @@ public class Login extends BaseActivity {
 			String university = EditTextUtils.getText(et_reg_university);
 			String major = EditTextUtils.getText(et_reg_major);
 			String summary = EditTextUtils.getText(et_reg_summary);
-			api.regist(username, password, name, email, "m", 30, grade,
+			api.regist(username, password, name, email, "m", 0, grade,
 					university, major, summary, new JsonResponseHandler() {
 						@Override
 						public void onStart() {

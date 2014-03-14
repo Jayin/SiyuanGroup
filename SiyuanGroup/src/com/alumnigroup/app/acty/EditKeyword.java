@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
@@ -233,29 +234,30 @@ public class EditKeyword extends BaseActivity {
 	 * 更新user 数据
 	 */
 	private void updateSPUser() {
-		api.find(new RequestParams("id", myself.getId()),
-				new AsyncHttpResponseHandler() {
-					@Override
-					public void onFinish() {
-						dialog.cancel();
-						finish();
-					}
-
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-							try {
-								AppInfo.setUser(json, EditKeyword.this);
-							} catch (ClientProtocolException e) {
-								e.printStackTrace();
-							} catch (IOException e) {
-								e.printStackTrace();
-							}
-						}
-					}
-				});
-
+		api.getMyInfo(new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				User user;
+				try {
+					user = User.create_by_json(obj.getJSONObject("user").toString());
+					AppInfo.setUser(getContext(),user);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				 
+			}
+			
+			@Override
+			public void onFinish() {
+				dialog.cancel();
+				closeActivity();
+			}
+		});
 	}
 
 	/**

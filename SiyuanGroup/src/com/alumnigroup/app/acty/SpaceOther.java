@@ -237,7 +237,7 @@ public class SpaceOther extends BaseActivity {
 
 		// addPersonalData("真实姓名", user.getProfile().getName());
 		addPersonalData("性别", user.getProfile().getGender().equals("m")?"男":"女");
-		addPersonalData("年龄", user.getProfile().getAge() + "");
+		addPersonalData("年龄", user.getProfile().getAge()==0?"保密":user.getProfile().getAge()+"");
 		addPersonalData("大学", user.getProfile().getUniversity());
 		addPersonalData("毕业届数", user.getProfile().getGrade() + "");
 		addPersonalData("专业", user.getProfile().getMajor());
