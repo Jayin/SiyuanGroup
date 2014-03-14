@@ -3,6 +3,7 @@ package com.alumnigroup.app.acty;
 import java.util.List;
 
 import org.apache.http.Header;
+import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -20,9 +21,12 @@ import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Dynamic;
+import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
+import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.JsonUtils;
+import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
 import com.alumnigroup.widget.SendMsgDialog;
 import com.custom.view.FlowLayout;
@@ -37,7 +41,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class SpaceOther extends BaseActivity {
 
-	private View btnAddfriend;
+//	private View btnAddfriend;
 
 	private User user;
 
@@ -151,6 +155,7 @@ public class SpaceOther extends BaseActivity {
 
 		btnFollow = _getView(R.id.acty_space_other_top_btn_add_friend);
 		tvBtnFollowContent = (TextView) _getView(R.id.acty_space_other_top_btn_add_friend_content);
+		L.i("is followed-->:"+user.getIsfollowed());
 		if (user.getIsfollowed() == 1) {
 			tvBtnFollowContent.setText("取消关注");
 		} else {
@@ -184,9 +189,6 @@ public class SpaceOther extends BaseActivity {
 		 * 新动态
 		 */
 		llNewDynamic = (LinearLayout) _getView(R.id.acty_space_other_new_dynamica_ll_content);
-
-		btnAddfriend = _getView(R.id.acty_space_other_top_btn_add_friend);
-		btnAddfriend.setOnClickListener(this);
 
 		_getView(R.id.acty_head_btn_more).setOnClickListener(this);
 	}
@@ -447,65 +449,106 @@ public class SpaceOther extends BaseActivity {
 	private void follow() {
 		tvBtnFollowContent.setText("关注中···");
 		FollowshipAPI api = new FollowshipAPI();
-		api.follow(user.getId(), user.getUsername(),
-				new AsyncHttpResponseHandler() {
-
-					@Override
-					public void onFinish() {
-						super.onFinish();
-						btnFollow.setClickable(true);
-					}
-
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							byte[] data, Throwable err) {
-						toast("关注失败");
-						tvBtnFollowContent.setText("关 注");
-					}
-
-					public void onSuccess(int statusCode, Header[] headers,
-							byte[] data) {
-						String json = new String(data);
-						if (JsonUtils.isOK(json)) {
-							tvBtnFollowContent.setText("取消关注");
-							user.setIsfollowed(1);
-							AppCache.changeAllmemberAll(SpaceOther.this, user);
-						} else {
-							toast("关注失败");
-							tvBtnFollowContent.setText("关 注");
-						}
-					}
-				});
+		
+		api.follow(user.getId(), user.getUsername(), new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				tvBtnFollowContent.setText("取消关注");
+				AppCache.changeAllmemberAll(getContext(), user);
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				toast("关注失败 "+ErrorCode.errorList.get(errorCode));
+				tvBtnFollowContent.setText("关 注");
+			}
+			
+			@Override
+			public void onFinish() {
+				btnFollow.setClickable(true);
+			}
+		});
+		
+//		api.follow(user.getId(), user.getUsername(),
+//				new AsyncHttpResponseHandler() {
+//
+//					@Override
+//					public void onFinish() {
+//						super.onFinish();
+//						btnFollow.setClickable(true);
+//					}
+//
+//					@Override
+//					public void onFailure(int statusCode, Header[] headers,
+//							byte[] data, Throwable err) {
+//						toast("关注失败");
+//						tvBtnFollowContent.setText("关 注");
+//					}
+//
+//					public void onSuccess(int statusCode, Header[] headers,
+//							byte[] data) {
+//						String json = new String(data);
+//						if (JsonUtils.isOK(json)) {
+//							tvBtnFollowContent.setText("取消关注");
+//							AppCache.changeAllmemberAll(SpaceOther.this, user);
+//						} else {
+//							toast("关注失败");
+//							tvBtnFollowContent.setText("关 注");
+//						}
+//					}
+//				});
 	}
 
 	private void unFollow() {
 		tvBtnFollowContent.setText("取消中···");
 		FollowshipAPI api = new FollowshipAPI();
-		api.unfollow(user.getId(), new AsyncHttpResponseHandler() {
-
+		
+		api.unfollow(user.getId(), new JsonResponseHandler() {
+			
 			@Override
-			public void onFinish() {
-				super.onFinish();
-				btnFollow.setClickable(true);
+			public void onOK(Header[] headers, JSONObject obj) {
+				tvBtnFollowContent.setText("关 注");
+				AppCache.removeAllmemberFollowing(SpaceOther.this, user);
 			}
-
+			
 			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					byte[] data, Throwable err) {
+			public void onFaild(int errorType, int errorCode) {
 				toast("取消失败");
 				tvBtnFollowContent.setText("取消关注");
 			}
-
-			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-				String json = new String(data);
-				if (JsonUtils.isOK(json)) {
-					tvBtnFollowContent.setText("关 注");
-					AppCache.removeAllmemberFollowing(SpaceOther.this, user);
-				} else {
-					toast("取消失败");
-					tvBtnFollowContent.setText("取消关注");
-				}
+			
+			@Override
+			public void onFinish() {
+				btnFollow.setClickable(true);
 			}
 		});
+		
+//		api.unfollow(user.getId(), new AsyncHttpResponseHandler() {
+//
+//			@Override
+//			public void onFinish() {
+//				super.onFinish();
+//				btnFollow.setClickable(true);
+//			}
+//
+//			@Override
+//			public void onFailure(int statusCode, Header[] headers,
+//					byte[] data, Throwable err) {
+//				toast("取消失败");
+//				tvBtnFollowContent.setText("取消关注");
+//			}
+//
+//			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
+//				String json = new String(data);
+//				if (JsonUtils.isOK(json)) {
+//					tvBtnFollowContent.setText("关 注");
+//					AppCache.removeAllmemberFollowing(SpaceOther.this, user);
+//				} else {
+//					toast("取消失败");
+//					tvBtnFollowContent.setText("取消关注");
+//				}
+//			}
+//		});
 	}
 }
