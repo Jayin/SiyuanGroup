@@ -101,7 +101,9 @@ public class GroupInfo extends BaseActivity {
 						tv_groupName.setText(g.getName());
 				}
 			};
-		registerReceiver(mReceiver, new IntentFilter(Constants.Action_GroupInfo_Edit));
+	    IntentFilter filter = new IntentFilter();
+	    filter.addAction(Constants.Action_GroupInfo_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	@Override

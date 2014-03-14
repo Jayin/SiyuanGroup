@@ -1,6 +1,7 @@
 package com.alumnigroup.app;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import android.content.Context;
@@ -63,18 +64,7 @@ public class AppCache {
 	public static void remove(Context context, String key) {
 		getDataPool(context).remove(key);
 	}
-
-	/** 获得全站会员all列表 */
-	@SuppressWarnings("unchecked")
-	public static ArrayList<User> getAllmemberAll(Context context) {
-		return (ArrayList<User>) get(context, Key_Allmember_all);
-	}
-
-	/** 保存全站会员all列表 */
-	public static void setAllmemberAll(Context context, ArrayList<User> value) {
-		save(context, Key_Allmember_all, value);
-	}
-
+	
 	/**
 	 * 改变全站会员的一个用户数据
 	 */
@@ -87,6 +77,39 @@ public class AppCache {
 		}
 		setAllmemberAll(context, all);
 	}
+	/**
+	 * 修改一个圈子的资料
+	 * @param context
+	 * @param change
+	 */
+	public static void changeGroupItem(Context context,MGroup change){
+		ArrayList<MGroup> group_all = getGroupAll(context);
+		ArrayList<MGroup> group_my = getGroupMy(context);
+		for(int i=0;i<group_all.size();i++){
+			MGroup g = group_all.get(i);
+			if(g.getId() == change.getId()){
+				group_all.set(i, change);
+			}
+		}
+		for(int i=0;i<group_my.size();i++){
+			MGroup g = group_my.get(i);
+			if(g.getId() == change.getId()){
+				group_my.set(i, change);
+			}
+		}
+	}
+
+	/** 获得全站会员all列表 */
+	@SuppressWarnings("unchecked")
+	public static ArrayList<User> getAllmemberAll(Context context) {
+		return (ArrayList<User>) get(context, Key_Allmember_all);
+	}
+
+	/** 保存全站会员all列表 */
+	public static void setAllmemberAll(Context context, ArrayList<User> value) {
+		save(context, Key_Allmember_all, value);
+	}
+
 	/**获得全站会员follow关注列表 */
 	@SuppressWarnings("unchecked")
 	public static ArrayList<User> getAllmemberFollowing(Context context) {

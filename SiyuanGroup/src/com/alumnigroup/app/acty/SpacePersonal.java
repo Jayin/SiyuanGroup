@@ -117,7 +117,7 @@ public class SpacePersonal extends BaseActivity {
 					ivBackground);
 		}
 
-		if (myself.getCover() != null) {
+		if (myself.getAvatar() != null) {
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + myself.getAvatar(), ivPortrait);
 		} else {

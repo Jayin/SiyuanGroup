@@ -17,6 +17,8 @@ import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SynData;
+import com.alumnigroup.app.SynData.SynDataListener;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
@@ -123,7 +125,7 @@ public class GroupManage extends BaseActivity {
 			uploadFile();
 		}
 	}
-
+  
 	private void uploadFile() {
 		final File f = new File(FilePath.getImageFilePath() + "cache_face.jpg");
 		FileInputStream fin;
@@ -140,6 +142,7 @@ public class GroupManage extends BaseActivity {
 				@Override
 				public void onOK(Header[] headers, JSONObject obj) {
 					toast("头像上传成功");
+					SynData.SyncGroupInfo(getContext(), group.getId(), null);
 				}
 
 				@Override

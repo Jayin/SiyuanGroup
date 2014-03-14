@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -29,6 +32,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -49,6 +53,11 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	private int page_all = 0, page_myjoin = 0;
 	private GroupAPI api;
 	private PopupWindow mPopupWindow;
+	
+    private ArrayList<MGroup> data_clicked = null;
+	private int item_click =-1;
+	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
+	private BroadcastReceiver mReceiver = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +66,44 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+		openReceiver();
+	}
+
+	// 修改圈子分享 刷新UI,包括数据修改
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				MGroup g = (MGroup) intent.getSerializableExtra("group");
+				data_clicked.set(item_click, g);
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_group_tv_ame))
+						.setText(g.getName());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_group_tv_ownername))
+						.setText(g.getOwner().getProfile().getName());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_group_tv_memberCount))
+						.setText(g.getNumMembers()+"");
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_group_tv_description))
+						.setText(g.getDescription());
+				ImageView iv_avatar = (ImageView) viewClicked
+						.findViewById(R.id.item_lv_acty_circlelist_iv_avater);
+				if (g.getAvatar() != null) {
+					ImageLoader.getInstance().displayImage(
+							RestClient.BASE_URL + g.getAvatar(), iv_avatar);
+				} else {
+					ImageLoader.getInstance().displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,
+							iv_avatar);
+				}
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_GroupInfo_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	private void initController() {
@@ -84,9 +131,9 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
-							if(data_all.size()<10){
+							if (data_all.size() < 10) {
 								lv_all.setPullLoadEnable(false);
-							}else{
+							} else {
 								lv_all.setPullLoadEnable(true);
 							}
 							AppCache.setGroupAll(getContext(), data_all);
@@ -161,9 +208,9 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							data_myjoin.clear();
 							data_myjoin.addAll(newData_my);
 							adapter_myjoin.notifyDataSetChanged();
-							if(data_myjoin.size()<10){
+							if (data_myjoin.size() < 10) {
 								lv_myjoin.setPullLoadEnable(false);
-							}else{
+							} else {
 								lv_myjoin.setPullLoadEnable(true);
 							}
 							AppCache.setGroupMy(getContext(), data_myjoin);
@@ -239,22 +286,33 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		List<View> views = new ArrayList<View>();
 		views.add(all);
 		views.add(myjoin);
-		
+
 		List<XListView> listviews = new ArrayList<XListView>();
-		listviews.add(lv_all);listviews.add(lv_myjoin); 
-		
-		List<GroupAdapter>  adapters = new ArrayList<GroupAdapter>();
-		adapters.add(adapter_all);adapters.add(adapter_myjoin); 
-		
+		listviews.add(lv_all);
+		listviews.add(lv_myjoin);
+
+		List<GroupAdapter> adapters = new ArrayList<GroupAdapter>();
+		adapters.add(adapter_all);
+		adapters.add(adapter_myjoin);
+
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,listviews,adapters));
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
+				listviews, adapters));
 	}
 
 	@Override
 	protected void initData() {
 		api = new GroupAPI();
-		data_all = new ArrayList<MGroup>();
-		data_myjoin = new ArrayList<MGroup>();
+		if(AppCache.getGroupAll(getContext())!=null){
+			data_all =AppCache.getGroupAll(getContext());
+		}else{
+			data_all = new ArrayList<MGroup>();
+		}
+		if(AppCache.getGroupMy(getContext())!=null){
+			data_myjoin = AppCache.getGroupMy(getContext());
+		}else{
+			data_myjoin = new ArrayList<MGroup>();
+		}
 	}
 
 	@Override
@@ -303,16 +361,16 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			mPopupWindow.showAsDropDown(btn_more);
 			break;
 		case R.id.acty_group_footer_all:
-			if(viewpager.getCurrentItem()==0){
+			if (viewpager.getCurrentItem() == 0) {
 				lv_all.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(0, true);
 			}
 			break;
 		case R.id.acty_group_footer_myjoin:
-			if(viewpager.getCurrentItem()==1){
+			if (viewpager.getCurrentItem() == 1) {
 				lv_myjoin.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(1, true);
 			}
 			break;
@@ -333,11 +391,15 @@ public class Group extends BaseActivity implements OnItemClickListener {
 			long id) {
 		if (position - 1 == -1)
 			return;
+		viewClicked = view;
+		item_click = position-1;
 		Intent intent = new Intent(this, GroupInfo.class);
 		if (parent == lv_all) {
 			intent.putExtra("group", data_all.get(position - 1));
+			data_clicked = data_all;
 		} else {
 			intent.putExtra("group", data_myjoin.get(position - 1));
+			data_clicked = data_myjoin;
 		}
 		openActivity(intent);
 	}
