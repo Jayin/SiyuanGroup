@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -34,7 +37,7 @@ import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
-import com.alumnigroup.utils.L;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -57,6 +60,11 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	private XListView lv_myjoin, lv_all, lv_favourit;
 	private StarAPI starAPI;
 
+	private ArrayList<Cooperation> data_clicked = null;
+	private int item_click = -1;
+	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
+	private BroadcastReceiver mReceiver = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,6 +72,60 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+		openReceiver();
+	}
+
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Cooperation c = (Cooperation) intent
+						.getSerializableExtra("cooperation");
+				data_clicked.set(item_click, c);
+				((TextView) viewClicked.findViewById(R.id.tv_projectname))
+						.setText(c.getName());
+				((TextView) viewClicked.findViewById(R.id.tv_deadline))
+						.setText(CalendarUtils.getTimeFromat(
+								c.getRegdeadline(), CalendarUtils.TYPE_TWO));
+				((TextView) viewClicked.findViewById(R.id.tv_major)).setText(c
+						.getUser().getProfile().getMajor());
+				((TextView) viewClicked.findViewById(R.id.tv_username))
+						.setText(c.getUser().getProfile().getName());
+				((TextView) viewClicked.findViewById(R.id.tv_description))
+						.setText(c.getDescription());
+				((TextView) viewClicked.findViewById(R.id.tv_numComment))
+						.setText(c.getNumComments() + "");
+
+				ImageView iv_avatar = (ImageView) viewClicked
+						.findViewById(R.id.iv_avater);
+				ImageView iv_status = (ImageView) viewClicked
+						.findViewById(R.id.iv_status);
+				if (c.getUser().getAvatar() != null) {
+					ImageLoader.getInstance().displayImage(
+							RestClient.BASE_URL + c.getUser().getAvatar(),
+							iv_avatar);
+				} else {
+					ImageLoader.getInstance().displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,
+							iv_avatar);
+				}
+
+				if (c.getStatusid() != 2) {
+					ImageLoader.getInstance().displayImage(
+							"drawable://" + R.drawable.ic_image_status_on,
+							iv_status);
+				} else {
+					ImageLoader.getInstance().displayImage(
+							"drawable://" + R.drawable.ic_image_status_off,
+							iv_status);
+				}
+
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Bussiness_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	private void initController() {
@@ -451,21 +513,22 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			long id) {
 		if (position - 1 == -1)
 			return;
+		viewClicked = view;
+		item_click = position - 1;
+		Intent intent = new Intent(this, BusinessDetail.class);
 		if (parent == lv_all) {
-			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_all.get(position - 1));
-			openActivity(intent);
+			data_clicked = data_all;
 		}
 		if (parent == lv_myjoin) {
-			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_myjoin.get(position - 1));
-			openActivity(intent);
+			data_clicked = data_myjoin;
 		}
 		if (parent == lv_favourit) {
-			Intent intent = new Intent(this, BusinessDetail.class);
 			intent.putExtra("cooperation", data_favourite.get(position - 1));
-			openActivity(intent);
+			data_clicked = data_favourite;
 		}
+		openActivity(intent);
 	}
 
 	class BusinessAdapter extends BaseAdapter {
@@ -506,8 +569,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						.findViewById(R.id.tv_username);
 				h.description = (TextView) convertView
 						.findViewById(R.id.tv_description);
-				h.numFavour = (TextView) convertView
-						.findViewById(R.id.tv_numFavour);
 				h.commentNum = (TextView) convertView
 						.findViewById(R.id.tv_numComment);
 				h.avatar = (ImageView) convertView.findViewById(R.id.iv_avater);
@@ -526,7 +587,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			h.major.setText(c.getUser().getProfile().getMajor());
 			h.name_user.setText(c.getUser().getProfile().getName());
 			h.description.setText(c.getDescription());
-			h.numFavour.setText(14 + ""); // should change
 			h.commentNum.setText(c.getNumComments() + "");
 			if (c.getUser().getAvatar() != null) {
 				ImageLoader.getInstance()
@@ -563,7 +623,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						h.pic1.setVisibility(View.VISIBLE);
 						ImageLoader.getInstance().displayImage(
 								RestClient.BASE_URL + pic.getPath(), h.pic1);
-						
+
 						h.pic1.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View v) {
@@ -599,7 +659,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 								RestClient.BASE_URL
 										+ c.getPictures().get(i).getPath(),
 								h.pic3);
-						
+
 						h.pic3.setOnClickListener(new OnClickListener() {
 							@Override
 							public void onClick(View v) {
@@ -621,7 +681,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 		class ViewHolder {
 			TextView name_project, deadline, major, name_user, description,
-					numFavour, commentNum;
+					commentNum;
 			ImageView avatar, status, pic1, pic2, pic3;
 		}
 

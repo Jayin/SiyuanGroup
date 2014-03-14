@@ -6,7 +6,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.alumnigroup.api.ActivityAPI;
+import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.GroupAPI;
+import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -76,6 +78,36 @@ public class SynData {
 					intent.putExtra("activity", acty);
 					context.sendBroadcast(intent);
 					if(listener!=null)listener.onSuccess(acty);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					if(listener!=null)listener.onFaild();
+				}
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				if(listener!=null)listener.onFaild();
+			}
+		});
+	}
+	/**
+	 * 更新一条商务合作信息
+	 * @param context
+	 * @param cooperationId
+	 * @param listener
+	 */
+	public static void SyncBussinessInfo(final Context context,int cooperationId,final  SynDataListener listener){
+		  BusinessAPI api = new BusinessAPI();
+		  api.view(cooperationId, new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				try {
+					Cooperation c = Cooperation.create_by_json(obj.getJSONObject("cooperation").toString());
+					AppCache.changeBussinessInfo(context, c);
+					Intent intent = new Intent(Constants.Action_Bussiness_Edit);
+					intent.putExtra("cooperation", c);
+					context.sendBroadcast(intent);
 				} catch (JSONException e) {
 					e.printStackTrace();
 					if(listener!=null)listener.onFaild();

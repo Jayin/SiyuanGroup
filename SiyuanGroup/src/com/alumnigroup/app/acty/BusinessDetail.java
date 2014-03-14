@@ -63,12 +63,12 @@ public class BusinessDetail extends BaseActivity {
 		openReceiver();
 	}
 
-	// 评论成功后添加评论条目
+	
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				if (intent.getAction().equals(
+				if (intent.getAction().equals( // 评论成功后添加评论条目
 						Constants.Action_Bussiness_Comment_Ok)) {
 					if (data.isEmpty())
 						tv_notify.setVisibility(View.GONE);
@@ -78,12 +78,17 @@ public class BusinessDetail extends BaseActivity {
 					data.add(cocomment);
 					CommonUtils.reverse(data);
 					commentView.setAdapter(new CocommentAdapter(data));
+				}else if(intent.getAction().equals(Constants.Action_Bussiness_Edit)){//修改资料
+				   c =(Cooperation) intent.getSerializableExtra("cooperation");
+				   fillInData();
 				}
 
 			}
 		};
-		registerReceiver(mReceiver, new IntentFilter(
-				Constants.Action_Bussiness_Comment_Ok));
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Bussiness_Comment_Ok);
+		filter.addAction(Constants.Action_Bussiness_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	@Override
@@ -112,6 +117,7 @@ public class BusinessDetail extends BaseActivity {
 		tv_deadline = (TextView) _getView(R.id.tv_deadline);
 		tv_description = (TextView) _getView(R.id.tv_description);
 		tv_notify = (TextView) _getView(R.id.tv_notify);
+		iv_avatar = (ImageView) _getView(R.id.iv_avatar);
 
 		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
 		iv_pic2 = (ImageView) _getView(R.id.iv_pic2);
@@ -146,11 +152,7 @@ public class BusinessDetail extends BaseActivity {
 			}
 		}
 
-		tv_username.setText(c.getUser().getProfile().getName());
-		tv_projectname.setText(c.getName());
-		tv_deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
-				CalendarUtils.TYPE_TWO));
-		tv_description.setText(c.getDescription());
+		fillInData();
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_edit = _getView(R.id.btn_edit);
@@ -166,14 +168,6 @@ public class BusinessDetail extends BaseActivity {
 		btn_comment.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
 
-		iv_avatar = (ImageView) _getView(R.id.iv_avatar);
-		if (c.getUser().getAvatar() != null) {
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + c.getUser().getAvatar(), iv_avatar);
-		} else {
-			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
-		}
 		commentView = (CommentView) _getView(R.id.commentlist);
 
 		// api get comment list
@@ -217,6 +211,22 @@ public class BusinessDetail extends BaseActivity {
 			common.setVisibility(View.GONE);
 		}
 	}
+
+	private void fillInData() {
+		tv_username.setText(c.getUser().getProfile().getName());
+		tv_projectname.setText(c.getName());
+		tv_deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
+				CalendarUtils.TYPE_TWO));
+		tv_description.setText(c.getDescription());
+		if (c.getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + c.getUser().getAvatar(), iv_avatar);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+		}
+	}
+
 
 	@Override
 	public void onClick(View v) {

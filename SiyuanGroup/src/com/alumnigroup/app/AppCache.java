@@ -1,11 +1,8 @@
 package com.alumnigroup.app;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-
 import android.content.Context;
-
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.Issue;
@@ -149,6 +146,46 @@ public class AppCache {
 				}
 			}
 			setActivityFavourite(context, acty_fav);
+		}
+	}
+	/**
+	 * 修改一个商务合作的资料
+	 * @param context
+	 * @param change
+	 */
+	public static void changeBussinessInfo(Context context,Cooperation change){
+		ArrayList<Cooperation> b_all = getBusinessAll(context);
+		ArrayList<Cooperation> b_my = getBusinessMy(context);
+		ArrayList<Cooperation> b_fav = getBusinessFavourite(context);
+		
+		if(b_all != null){
+			for (int i = 0; i < b_all.size(); i++) {
+				Cooperation g = b_all.get(i);
+				if (g.getId() == change.getId()) {
+					b_all.set(i, change);
+				}
+			}
+			setBusinessAll(context, b_all);
+		}
+		
+		if(b_my != null){
+			for (int i = 0; i < b_my.size(); i++) {
+				Cooperation g = b_my.get(i);
+				if (g.getId() == change.getId()) {
+					b_my.set(i, change);
+				}
+			}
+			setBusinessMy(context, b_my);
+		}
+		
+		if(b_fav != null){
+			for (int i = 0; i < b_fav.size(); i++) {
+				Cooperation g = b_fav.get(i);
+				if (g.getId() == change.getId()) {
+					b_fav.set(i, change);
+				}
+			}
+			setBusinessFavourite(context, b_fav);
 		}
 	}
 

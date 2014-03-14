@@ -23,6 +23,7 @@ import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SynData;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -147,7 +148,7 @@ public class BusinessPublish extends BaseActivity {
 			break;
 		case R.id.btn_add_pic:
 			if (flowLayout.getChildCount() >= 3) {
-				toast("目前最多能上传发3张图片");
+				toast("目前最多能上传发2张图片");
 				return;
 			}
 			// to pick a pic & add...
@@ -170,6 +171,7 @@ public class BusinessPublish extends BaseActivity {
 					public void onOK(Header[] headers, JSONObject obj) {
 						toast("已更新");
 						closeActivity();
+						SynData.SyncBussinessInfo(getContext(), c.getId(), null);
 					}
 
 					@Override

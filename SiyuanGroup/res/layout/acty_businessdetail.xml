@@ -41,7 +41,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_weight="1"
-                        android:orientation="vertical" >
+                        android:orientation="vertical" android:layout_gravity="center_vertical">
 
                         <TextView
                             android:id="@+id/tv_username"
@@ -50,14 +50,6 @@
                             android:text="marchen"
                             android:textColor="@color/blue_lv_third"
                             android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_time"
-                            style="@style/TextView.base"
-                            android:layout_marginTop="4dp"
-                            android:text="2013-11-30 21:00:00"
-                            android:textColor="@color/grey_lv_third"
-                            android:textSize="12sp" />
                     </LinearLayout>
 
                     <ImageView

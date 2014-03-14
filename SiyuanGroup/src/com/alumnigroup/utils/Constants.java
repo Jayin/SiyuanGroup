@@ -31,6 +31,8 @@ public class Constants {
 	
 	/** 商务合作评论成功*/	
 	public static final String Action_Bussiness_Comment_Ok = "Bussiness_Comment_Ok"; 
+	/** 商务合作修改*/
+	public static final String Action_Bussiness_Edit = "Bussiness_Edit";
 	
 	/** 获得版本信息*/
 	public static final String Action_Receive_VersionInfo = "Receive_VersionInfo"; 

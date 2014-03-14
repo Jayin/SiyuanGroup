@@ -14,6 +14,7 @@ import com.google.gson.Gson;
  * @author Jayin Ton
  * 
  */
+@SuppressWarnings("serial")
 public class Cooperation implements Serializable {
 
 	public static Cooperation create_by_json(String json) {
