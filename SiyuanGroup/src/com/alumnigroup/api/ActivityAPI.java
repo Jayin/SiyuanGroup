@@ -400,5 +400,18 @@ public class ActivityAPI {
 			params.add("id", id + "");
 		RestClient.get("/api/activities/view", params, responseHandler);
 	}
-
+    /**
+     * 获取活动申请列表
+     * @param page
+     * @param id
+     * @param responseHandler
+     */
+	public void getApplyList(int page, int id,
+			AsyncHttpResponseHandler responseHandler){
+		RequestParams params = new RequestParams();
+		params.add("page", page + "");
+		params.add("id", id + "");
+		params.add("isaccepted", "0");
+		RestClient.get("/api/activities/userslist", params, responseHandler);
+	}
 }

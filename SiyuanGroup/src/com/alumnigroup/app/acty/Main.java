@@ -25,6 +25,7 @@ import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 主界面

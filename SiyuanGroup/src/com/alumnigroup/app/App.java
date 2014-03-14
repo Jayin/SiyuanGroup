@@ -28,6 +28,7 @@ public class App extends Application {
 	}
     
 	private void initImageLoader() {
+		//在baseActivity onDestroy中清理clearMemoryCache();
 		DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
 		//在内存和sd卡中缓存,如果经常OOM 移除.cacheInMemory(true) or 每个Activity.onDestory()的时候调用用ImageLoader.getInstance().clearMemoryCache()
 				.cacheOnDisc(true).cacheInMemory(true).imageScaleType(ImageScaleType.EXACTLY_STRETCHED)

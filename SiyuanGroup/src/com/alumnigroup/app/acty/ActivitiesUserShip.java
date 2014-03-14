@@ -66,7 +66,7 @@ public class ActivitiesUserShip extends BaseActivity {
 
 			@Override
 			public void onRefresh() {
-				api.getUserList(1, acty.getId(), new JsonResponseHandler() {
+				api.getApplyList(1, acty.getId(), new JsonResponseHandler() {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
@@ -105,7 +105,7 @@ public class ActivitiesUserShip extends BaseActivity {
 					lv.startRefresh();
 					return;
 				}
-				api.getUserList(page + 1, acty.getId(),
+				api.getApplyList(page + 1, acty.getId(),
 						new JsonResponseHandler() {
 
 							@Override

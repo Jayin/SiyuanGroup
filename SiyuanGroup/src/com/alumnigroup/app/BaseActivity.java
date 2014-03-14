@@ -2,6 +2,8 @@ package com.alumnigroup.app;
 
 import java.io.Serializable;
 
+import com.nostra13.universalimageloader.core.ImageLoader;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -140,6 +142,7 @@ public abstract class BaseActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		ImageLoader.getInstance().clearMemoryCache();//清理缓存
 	}
 
 	@Override
