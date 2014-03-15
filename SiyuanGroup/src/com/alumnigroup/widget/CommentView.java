@@ -19,6 +19,7 @@ public class CommentView extends LinearLayout {
 	private void init(){
 		this.setOrientation(LinearLayout.VERTICAL);
 		if(mBaseAdapter==null)throw new IllegalArgumentException("you have to set a adapter for this widget!");
+		this.removeAllViews();
 		for(int i=0;i<mBaseAdapter.getCount();i++){
 			View convertView = null;
 			this.addView(mBaseAdapter.getView(i, convertView, this), i);
