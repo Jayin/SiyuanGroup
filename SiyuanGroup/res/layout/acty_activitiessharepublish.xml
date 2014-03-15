@@ -45,12 +45,14 @@
                 android:minLines="6" />
 
             <TextView
+                android:id="@+id/tv_pic"
                 style="@style/TextView.base"
                 android:layout_marginTop="6dp"
                 android:singleLine="true"
                 android:text="图片"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
+
             <com.custom.view.FlowLayout
                 android:id="@+id/flowlayout_container"
                 android:layout_width="match_parent"

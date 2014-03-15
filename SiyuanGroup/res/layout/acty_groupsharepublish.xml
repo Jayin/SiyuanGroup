@@ -43,8 +43,9 @@
                 style="@style/EditText.base"
                 android:layout_marginTop="6dp"
                 android:minLines="6" />
-            
-             <TextView
+
+            <TextView
+                android:id="@+id/tv_pic"
                 style="@style/TextView.base"
                 android:layout_marginTop="6dp"
                 android:singleLine="true"

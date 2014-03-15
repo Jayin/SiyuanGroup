@@ -24,7 +24,6 @@ import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.BitmapUtils;
-import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.FileUtils;
@@ -47,6 +46,7 @@ public class GroupSharePublish extends BaseActivity {
 	private FlowLayout flowLayout;
 	private boolean withPic = false;
 	private LoadingDialog loadingdialog;
+	private View tv_pic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +80,11 @@ public class GroupSharePublish extends BaseActivity {
 		}
 
 		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
+		tv_pic = _getView(R.id.tv_pic);
+		if(issue!=null){
+			flowLayout.setVisibility(View.INVISIBLE);
+			tv_pic.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override

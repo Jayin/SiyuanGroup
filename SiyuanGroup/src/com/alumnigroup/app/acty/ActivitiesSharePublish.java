@@ -46,6 +46,7 @@ public class ActivitiesSharePublish extends BaseActivity {
 	private FlowLayout flowLayout;
 	private boolean withPic = false;
 	private LoadingDialog loadingdialog;
+	private View tv_pic;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +80,11 @@ public class ActivitiesSharePublish extends BaseActivity {
 		}
 
 		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
-
+		tv_pic = _getView(R.id.tv_pic);
+		if(mIssue!=null){
+			flowLayout.setVisibility(View.INVISIBLE);
+			tv_pic.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override

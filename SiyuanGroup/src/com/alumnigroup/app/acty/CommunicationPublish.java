@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.app.BaseActivity;
@@ -42,6 +43,7 @@ public class CommunicationPublish extends BaseActivity {
 	private IssuesAPI api;
 	private Issue issue;
 	private FlowLayout flowLayout;
+	private View tv_pic;
 	private boolean withPic = false;
 
 	private LoadingDialog dialog;
@@ -74,6 +76,11 @@ public class CommunicationPublish extends BaseActivity {
 			et_content.setText(issue.getBody());
 		}
 		flowLayout = (FlowLayout) _getView(R.id.flowlayout_container);
+		tv_pic = _getView(R.id.tv_pic);
+		if(issue!=null){
+			flowLayout.setVisibility(View.INVISIBLE);
+			tv_pic.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	@Override
