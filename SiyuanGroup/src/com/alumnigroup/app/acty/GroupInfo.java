@@ -14,6 +14,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -34,8 +35,10 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MMemberships;
+import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.L;
@@ -51,8 +54,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class GroupInfo extends BaseActivity {
 	private MGroup group;
-	private View btn_back, btn_edit, btn_info, btn_member, btn_share, btn_join,
-			btn_invite, btn_exitGroup, btn_more;
+	private View btn_back, btn_info, btn_member, btn_share, btn_more;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
@@ -69,6 +71,9 @@ public class GroupInfo extends BaseActivity {
 	private GroupShareAPI shareAPI;
 	private BroadcastReceiver mReceiver = null;
 
+	private int item_click = -1;
+	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -79,28 +84,100 @@ public class GroupInfo extends BaseActivity {
 		initController();
 		openReceiver();
 	}
-   //修改圈子分享 刷新UI
+
+	// 修改圈子分享 刷新UI
 	private void openReceiver() {
-		 mReceiver = new BroadcastReceiver() {
-				
-				@Override
-				public void onReceive(Context context, Intent intent) {
-					 group =(MGroup)intent.getSerializableExtra("group");
-					 fillInData();
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if (intent.getAction().equals(Constants.Action_GroupInfo_Edit)) {
+					group = (MGroup) intent.getSerializableExtra("group");
+					fillInData();
+				} else if (intent.getAction().equals(
+						Constants.Action_Issue_Edit)) { // 更新话题修改
+					Issue issue = (Issue) intent.getSerializableExtra("issue");
+					data_share.set(item_click, issue);
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_name))
+							.setText(issue.getUser().getProfile().getName());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_major))
+							.setText(issue.getUser().getProfile().getMajor());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_posttime))
+							.setText(CalendarUtils.getTimeFromat(
+									issue.getPosttime(),
+									CalendarUtils.TYPE_timeline));
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_title))
+							.setText(issue.getTitle());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_body))
+							.setText(issue.getBody());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_numComment))
+							.setText(issue.getNumComments() + "");
+					ImageView iv_avatar = (ImageView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_avatar);
+					ImageView iv_pic1 = (ImageView) viewClicked
+							.findViewById(R.id.iv_pic1);
+
+					if (issue.getUser().getAvatar() != null) {
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL
+										+ issue.getUser().getAvatar(),
+								iv_avatar);
+					} else {
+						ImageLoader
+								.getInstance()
+								.displayImage(
+										"drawable://"
+												+ R.drawable.ic_image_load_normal,
+										iv_avatar);
+					}
+					// 暂时1张图片
+					iv_pic1.setVisibility(View.GONE);
+					if (issue.getPictures() != null
+							&& issue.getPictures().size() > 0) {
+						iv_pic1.setVisibility(View.VISIBLE);
+						// for (MPicture pic : issue.getPictures()) {
+						final MPicture pic = issue.getPictures().get(0);
+						iv_pic1.setVisibility(View.VISIBLE);
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL + pic.getPath(), iv_pic1);
+						// }
+
+						iv_pic1.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								Intent intent = new Intent(getContext(),
+										ImageDisplay.class);
+								intent.putExtra("url", RestClient.BASE_URL
+										+ pic.getPath());
+								getContext().startActivity(intent);
+							}
+						});
+					}
 				}
-			};
-	    IntentFilter filter = new IntentFilter();
-	    filter.addAction(Constants.Action_GroupInfo_Edit);
+
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_GroupInfo_Edit);
+		filter.addAction(Constants.Action_Issue_Edit);
 		registerReceiver(mReceiver, filter);
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if(mReceiver!=null){
+		if (mReceiver != null) {
 			unregisterReceiver(mReceiver);
 		}
 	}
+
 	private void initPopupWindow() {
 		View view = getLayoutInflater().inflate(R.layout.popup_acty_groupinfo,
 				null);
@@ -126,46 +203,47 @@ public class GroupInfo extends BaseActivity {
 		lv_share.setAdapter(adapter_share);
 
 		lv_member.setPullRefreshEnable(true);
-		lv_member.setPullLoadEnable(false);//一次性加载
+		lv_member.setPullLoadEnable(false);// 一次性加载
 		lv_share.setPullRefreshEnable(true);
 		lv_share.setPullLoadEnable(true);
-		
+
 		lv_member.setXListViewListener(new IXListViewListener() {
 
 			@Override
 			public void onRefresh() {
-				api.getMembersAccepted(1, group.getId(), new JsonResponseHandler() {
+				api.getMembersAccepted(1, group.getId(),
+						new JsonResponseHandler() {
 
-					@Override
-					public void onOK(Header[] headers, JSONObject obj) {
-						List<MMemberships> memberships = MMemberships
-								.create_by_jsonarray(obj.toString());
-						List<User> newData = new ArrayList<User>();
-						if (memberships == null) {
-							toast("网络异常  解析错误");
-						} else {
-							for (MMemberships mm : memberships) {
-								newData.add(mm.getUser());
+							@Override
+							public void onOK(Header[] headers, JSONObject obj) {
+								List<MMemberships> memberships = MMemberships
+										.create_by_jsonarray(obj.toString());
+								List<User> newData = new ArrayList<User>();
+								if (memberships == null) {
+									toast("网络异常  解析错误");
+								} else {
+									for (MMemberships mm : memberships) {
+										newData.add(mm.getUser());
+									}
+									if (newData.size() == 0) {
+										toast("还没有会员");
+									} else {
+										page_member = 1;
+										data_user.clear();
+										data_user.addAll(newData);
+										adapter_member.notifyDataSetChanged();
+									}
+								}
+								lv_member.stopRefresh();
 							}
-							if (newData.size() == 0) {
-								toast("还没有会员");
-							} else {
-								page_member = 1;
-								data_user.clear();
-								data_user.addAll(newData);
-								adapter_member.notifyDataSetChanged();
+
+							@Override
+							public void onFaild(int errorType, int errorCode) {
+								toast(ErrorCode.errorList.get(errorCode));
+								lv_member.stopRefresh();
+
 							}
-						}
-						lv_member.stopRefresh();
-					}
-
-					@Override
-					public void onFaild(int errorType, int errorCode) {
-						toast(ErrorCode.errorList.get(errorCode));
-						lv_member.stopRefresh();
-
-					}
-				});
+						});
 
 			}
 
@@ -242,7 +320,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast( ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_share.stopRefresh();
 							}
 						});
@@ -277,7 +355,7 @@ public class GroupInfo extends BaseActivity {
 
 							@Override
 							public void onFaild(int errorType, int errorCode) {
-								toast( ErrorCode.errorList.get(errorCode));
+								toast(ErrorCode.errorList.get(errorCode));
 								lv_share.stopLoadMore();
 
 							}
@@ -285,16 +363,20 @@ public class GroupInfo extends BaseActivity {
 
 			}
 		});
-		
+
 		lv_share.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-                       Intent intent = new Intent(getContext(), GroupShareDetail.class);
-                       intent.putExtra("issue", data_share.get(position-1));
-                       intent.putExtra("group", group);
-                       openActivity(intent);
+				if (position - 1 == -1)
+					return;
+				viewClicked = view;
+				item_click = position - 1;
+				Intent intent = new Intent(getContext(), GroupShareDetail.class);
+				intent.putExtra("issue", data_share.get(position - 1));
+				intent.putExtra("group", group);
+				openActivity(intent);
 			}
 		});
 	}
@@ -370,16 +452,21 @@ public class GroupInfo extends BaseActivity {
 		views.add(info);
 		views.add(member);
 		views.add(share);
-		
+
 		List<XListView> listviews = new ArrayList<XListView>();
-		listviews.add(null);  listviews.add(lv_member);listviews.add(lv_share); 
-		
-		List<BaseAdapter>  adapters = new ArrayList<BaseAdapter>();
-		adapters.add(null);  adapters.add(adapter_member);adapters.add(adapter_share); 
-		
+		listviews.add(null);
+		listviews.add(lv_member);
+		listviews.add(lv_share);
+
+		List<BaseAdapter> adapters = new ArrayList<BaseAdapter>();
+		adapters.add(null);
+		adapters.add(adapter_member);
+		adapters.add(adapter_share);
+
 		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns, listviews, adapters));
-		
+		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
+				listviews, adapters));
+
 	}
 
 	private void fillInData() {
@@ -395,6 +482,7 @@ public class GroupInfo extends BaseActivity {
 		tv_description.setText(group.getDescription());
 		tv_groupName.setText(group.getName());
 	}
+
 	@Override
 	public void onClick(View v) {
 		Intent intent;
@@ -409,16 +497,16 @@ public class GroupInfo extends BaseActivity {
 			viewpager.setCurrentItem(0);
 			break;
 		case R.id.acty_groupinfo_footer_groupMenber:
-			if(viewpager.getCurrentItem()==1){
+			if (viewpager.getCurrentItem() == 1) {
 				lv_member.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(1);
 			}
 			break;
 		case R.id.acty_groupinfo_footer_groupShare:
-			if(viewpager.getCurrentItem()==2){
+			if (viewpager.getCurrentItem() == 2) {
 				lv_share.startRefresh();
-			}else{
+			} else {
 				viewpager.setCurrentItem(2);
 			}
 			break;
@@ -476,9 +564,9 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				if(errorCode ==20506){
+				if (errorCode == 20506) {
 					toast("已加入");
-				}else{
+				} else {
 					toast("申请失败 " + ErrorCode.errorList.get(errorCode));
 				}
 			}
@@ -496,7 +584,7 @@ public class GroupInfo extends BaseActivity {
 			@Override
 			public void onFaild(int errorType, int errorCode) {
 				// toast("退出失败 错误码:" + errorCode);
-				toast("退出失败"+ErrorCode.errorList.get(errorCode));
+				toast("退出失败" + ErrorCode.errorList.get(errorCode));
 			}
 		});
 

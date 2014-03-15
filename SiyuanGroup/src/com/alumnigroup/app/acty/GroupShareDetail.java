@@ -12,6 +12,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,6 +27,7 @@ import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
+import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
@@ -39,7 +41,7 @@ public class GroupShareDetail extends BaseActivity {
 	btn_comment_owner,  btn_space,
 			btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
-	private ImageView iv_avater;
+	private ImageView iv_avater, iv_pic1;
 	private Issue issue;
 	// private PullAndLoadListView lv_comment;
 	private CommentView lv_comment;
@@ -53,7 +55,7 @@ public class GroupShareDetail extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_groupsharedetail);
+		setContentView(R.layout.acty_communicationdetail);
 		initData();
 		initLayout();
 		openReceiver();
@@ -71,11 +73,17 @@ public class GroupShareDetail extends BaseActivity {
 				CommonUtils.reverse(data_commet);
 //				adapter_commet.notifyDataSetChanged();
 				lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
-				
+			}else if (intent.getAction().equals(
+					Constants.Action_Issue_Edit)) {
+				issue = (Issue) intent.getSerializableExtra("issue");
+				fillInData();
 			}
 			
 		}};
-		registerReceiver(mReceiver, new IntentFilter(Constants.Action_Issue_Comment_Ok));
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Issue_Comment_Ok);
+		filter.addAction(Constants.Action_Issue_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 	
 	@Override
@@ -105,31 +113,35 @@ public class GroupShareDetail extends BaseActivity {
 		tv_title = (TextView) _getView(R.id.item_lv_acty_comminication_title);
 		tv_body = (TextView) _getView(R.id.item_lv_acty_comminication_body);
 		iv_avater = (ImageView) _getView(R.id.acty_communicationdetail_iv_avater);
-
+		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
+		
 		owner = _getView(R.id.owner);
 		vistor = _getView(R.id.visitor);
-		if (issue.getUser().getId() == user.getId()) {
-			owner.setVisibility(View.VISIBLE);
-			vistor.setVisibility(View.GONE);
-		} else {
-			owner.setVisibility(View.GONE);
-			vistor.setVisibility(View.VISIBLE);
-		}
-
-		// 头像
-		if (issue.getUser().getAvatar() != null) {
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + issue.getUser().getAvatar(),
-					iv_avater);
-		} else {
-			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
-		}
-		tv_username.setText(issue.getUser().getProfile().getName());
-		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
-				CalendarUtils.TYPE_timeline));
-		tv_title.setText(issue.getTitle());
-		tv_body.setText(issue.getBody());
+		
+		fillInData();
+		
+//		if (issue.getUser().getId() == user.getId()) {
+//			owner.setVisibility(View.VISIBLE);
+//			vistor.setVisibility(View.GONE);
+//		} else {
+//			owner.setVisibility(View.GONE);
+//			vistor.setVisibility(View.VISIBLE);
+//		}
+//
+//		// 头像
+//		if (issue.getUser().getAvatar() != null) {
+//			ImageLoader.getInstance().displayImage(
+//					RestClient.BASE_URL + issue.getUser().getAvatar(),
+//					iv_avater);
+//		} else {
+//			ImageLoader.getInstance().displayImage(
+//					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
+//		}
+//		tv_username.setText(issue.getUser().getProfile().getName());
+//		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
+//				CalendarUtils.TYPE_timeline));
+//		tv_title.setText(issue.getTitle());
+//		tv_body.setText(issue.getBody());
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);
@@ -184,6 +196,50 @@ public class GroupShareDetail extends BaseActivity {
 				tv_notify.setVisibility(View.GONE);
 			}
 		});
+	}
+
+	private void fillInData() {
+		if (issue.getUser().getId() == user.getId()) {
+			owner.setVisibility(View.VISIBLE);
+			vistor.setVisibility(View.GONE);
+		} else {
+			owner.setVisibility(View.GONE);
+			vistor.setVisibility(View.VISIBLE);
+		}
+
+		// 头像
+		if (issue.getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + issue.getUser().getAvatar(),
+					iv_avater);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
+		}
+		// 图片
+		final MPicture pic = issue.getPictures() != null && issue.getPictures().size() > 0 ? issue
+				.getPictures().get(0) : null;
+		iv_pic1.setVisibility(View.GONE);
+		if (pic != null) {
+			iv_pic1.setVisibility(View.VISIBLE);
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + pic.getPath(), iv_pic1);
+			iv_pic1.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(getContext(), ImageDisplay.class);
+					intent.putExtra("url", RestClient.BASE_URL + pic.getPath());
+					openActivity(intent);
+				}
+			});
+		}
+		tv_username.setText(issue.getUser().getProfile().getName());
+		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
+				CalendarUtils.TYPE_timeline));
+		tv_title.setText(issue.getTitle());
+		tv_body.setText(issue.getBody());
+		
 	}
 
 	@Override

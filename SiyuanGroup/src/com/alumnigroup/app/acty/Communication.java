@@ -88,9 +88,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 				data_clicked.set(item_click, issue);
 				 ((TextView) viewClicked
 						.findViewById(R.id.item_lv_acty_comminication_name)).setText(issue.getUser().getProfile().getName());
-			 ((TextView) viewClicked
+			     ((TextView) viewClicked
 						.findViewById(R.id.item_lv_acty_comminication_major)).setText(issue.getUser().getProfile().getMajor());
-				((TextView) viewClicked
+				 ((TextView) viewClicked
 						.findViewById(R.id.item_lv_acty_comminication_posttime)).setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
 								CalendarUtils.TYPE_timeline));
 				 ((TextView) viewClicked

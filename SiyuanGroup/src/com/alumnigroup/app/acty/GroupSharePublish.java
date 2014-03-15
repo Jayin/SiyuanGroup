@@ -18,11 +18,13 @@ import android.widget.ImageView;
 import com.alumnigroup.api.GroupShareAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.BitmapUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.FileUtils;
@@ -129,6 +131,7 @@ public class GroupSharePublish extends BaseActivity {
 							public void onOK(Header[] headers, JSONObject obj) {
 								toast("更新成功");
 								closeActivity();
+								SyncData.SyncIssueInfo(getContext(), issue.getId(), null);
 							}
 
 							@Override
