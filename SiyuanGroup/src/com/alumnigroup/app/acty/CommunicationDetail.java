@@ -42,8 +42,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class CommunicationDetail extends BaseActivity {
-	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space,
-			btn_delete, btn_edit;
+	private View btn_back, btn_favourite, btn_comment_visitor,
+			btn_comment_owner, btn_space, btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
 	private ImageView iv_avater, iv_pic1;
 	private Issue issue;
@@ -82,8 +82,9 @@ public class CommunicationDetail extends BaseActivity {
 					// adapter_commet.notifyDataSetChanged();
 					lv_comment.setAdapter(new CommentAdapter(getContext(),
 							data_commet));
-				}else if(intent.getAction().equals(Constants.Action_Issue_Edit)){
-					issue = (Issue)intent.getSerializableExtra("issue");
+				} else if (intent.getAction().equals(
+						Constants.Action_Issue_Edit)) {
+					issue = (Issue) intent.getSerializableExtra("issue");
 					fillInData();
 				}
 			}
@@ -125,22 +126,21 @@ public class CommunicationDetail extends BaseActivity {
 
 		owner = _getView(R.id.owner);
 		vistor = _getView(R.id.visitor);
-		
+
 		fillInData();
-		
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);
-		btn_share = _getView(R.id.acty_communicationdetail_footer_share);
-		btn_comment = _getView(R.id.acty_communicationdetail_footer_comment);
+		btn_comment_visitor = _getView(R.id.acty_communicationdetail_footer_comment_visitor);
+		btn_comment_owner = _getView(R.id.acty_communicationdetail_footer_comment_owner);
 		btn_favourite = _getView(R.id.acty_communicationdetail_footer_favourite);
 		btn_delete = _getView(R.id.btn_delete);
 		btn_edit = _getView(R.id.btn_edit);
 
 		btn_back.setOnClickListener(this);
 		btn_space.setOnClickListener(this);
-		btn_share.setOnClickListener(this);
-		btn_comment.setOnClickListener(this);
+		btn_comment_visitor.setOnClickListener(this);
+		btn_comment_owner.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
 		btn_delete.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
@@ -203,20 +203,20 @@ public class CommunicationDetail extends BaseActivity {
 					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
 		}
 		// 图片
-		final MPicture pic = issue.getPictures().size() >0   ? issue.getPictures().get(0)
-				: null;
+		final MPicture pic = issue.getPictures().size() > 0 ? issue
+				.getPictures().get(0) : null;
 		iv_pic1.setVisibility(View.GONE);
 		if (pic != null) {
 			iv_pic1.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + pic.getPath(), iv_pic1);
 			iv_pic1.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					 Intent intent = new Intent(getContext(), ImageDisplay.class);
-					 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
-				     openActivity(intent);
+					Intent intent = new Intent(getContext(), ImageDisplay.class);
+					intent.putExtra("url", RestClient.BASE_URL + pic.getPath());
+					openActivity(intent);
 				}
 			});
 		}
@@ -229,13 +229,13 @@ public class CommunicationDetail extends BaseActivity {
 
 	@Override
 	public void onClick(View v) {
+		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
 			break;
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
-			Intent intent = null;
 			if (issue.getUser().getId() == AppInfo.getUser(getContext())
 					.getId()) {
 				intent = new Intent(this, SpacePersonal.class);
@@ -245,15 +245,17 @@ public class CommunicationDetail extends BaseActivity {
 			intent.putExtra("user", issue.getUser());
 			openActivity(intent);
 			break;
-		case R.id.acty_communicationdetail_footer_share:
-			// 分享到圈子
-			// toast("share");
+		case R.id.acty_communicationdetail_footer_comment_visitor:
+			// 别人评论
+			intent = new Intent(this, CommunicationComment.class);
+			intent.putExtra("issue", issue);
+			openActivity(intent);
 			break;
-		case R.id.acty_communicationdetail_footer_comment:
-			// 评论
-			Intent comIntent = new Intent(this, CommunicationComment.class);
-			comIntent.putExtra("issue", issue);
-			openActivity(comIntent);
+		case R.id.acty_communicationdetail_footer_comment_owner:
+			//作者者自己评论
+			intent = new Intent(this, CommunicationComment.class);
+			intent.putExtra("issue", issue);
+			openActivity(intent);
 			break;
 		case R.id.acty_communicationdetail_footer_favourite:
 			// 收藏

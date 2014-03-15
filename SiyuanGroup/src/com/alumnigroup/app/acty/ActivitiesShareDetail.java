@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,8 +42,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  */
 public class ActivitiesShareDetail extends BaseActivity {
 
-	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space,
-			btn_delete, btn_edit;
+	private View btn_back, btn_favourite, btn_comment_visitor,
+			btn_comment_owner, btn_space, btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
 	private ImageView iv_avater;
 	private Issue issue;
@@ -81,7 +80,7 @@ public class ActivitiesShareDetail extends BaseActivity {
 					CommonUtils.reverse(data_commet);
 					data_commet.add(comment);
 					CommonUtils.reverse(data_commet);
-					issue.setNumComments(data_commet.size());//增加评论数
+					issue.setNumComments(data_commet.size());// 增加评论数
 					// adapter_commet.notifyDataSetChanged();
 					lv_comment.setAdapter(new CommentAdapter(getContext(),
 							data_commet));
@@ -89,8 +88,7 @@ public class ActivitiesShareDetail extends BaseActivity {
 				}
 				if (intent.getAction().equals(
 						Constants.Action_ActivityShare_Edit)) {
-					Issue mIssue = (Issue) intent
-							.getSerializableExtra("issue");
+					Issue mIssue = (Issue) intent.getSerializableExtra("issue");
 					tv_username
 							.setText(mIssue.getUser().getProfile().getName());
 					tv_time.setText(CalendarUtils.getTimeFromat(
@@ -162,16 +160,16 @@ public class ActivitiesShareDetail extends BaseActivity {
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);
-		btn_share = _getView(R.id.acty_communicationdetail_footer_share);
-		btn_comment = _getView(R.id.acty_communicationdetail_footer_comment);
+		btn_comment_visitor = _getView(R.id.acty_communicationdetail_footer_comment_visitor);
+		btn_comment_owner = _getView(R.id.acty_communicationdetail_footer_comment_owner);
 		btn_favourite = _getView(R.id.acty_communicationdetail_footer_favourite);
 		btn_delete = _getView(R.id.btn_delete);
 		btn_edit = _getView(R.id.btn_edit);
 
 		btn_back.setOnClickListener(this);
 		btn_space.setOnClickListener(this);
-		btn_share.setOnClickListener(this);
-		btn_comment.setOnClickListener(this);
+		btn_comment_visitor.setOnClickListener(this);
+		btn_comment_owner.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
 		btn_delete.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
@@ -219,13 +217,13 @@ public class ActivitiesShareDetail extends BaseActivity {
 
 	@Override
 	public void onClick(View v) {
+		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
 			break;
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
-			Intent intent = null;
 			if (issue.getUser().getId() == AppInfo.getUser(getContext())
 					.getId()) {
 				intent = new Intent(this, SpacePersonal.class);
@@ -235,15 +233,17 @@ public class ActivitiesShareDetail extends BaseActivity {
 			intent.putExtra("user", issue.getUser());
 			openActivity(intent);
 			break;
-		case R.id.acty_communicationdetail_footer_share:
-			// 分享到圈子
-			// toast("share");
+		case R.id.acty_communicationdetail_footer_comment_visitor:
+			// 别人评论
+			intent = new Intent(this, CommunicationComment.class);
+			intent.putExtra("issue", issue);
+			openActivity(intent);
 			break;
-		case R.id.acty_communicationdetail_footer_comment:
-			// 评论
-			Intent comIntent = new Intent(this, CommunicationComment.class);
-			comIntent.putExtra("issue", issue);
-			openActivity(comIntent);
+		case R.id.acty_communicationdetail_footer_comment_owner:
+			// 作者者自己评论
+			intent = new Intent(this, CommunicationComment.class);
+			intent.putExtra("issue", issue);
+			openActivity(intent);
 			break;
 		case R.id.acty_communicationdetail_footer_favourite:
 			// 收藏

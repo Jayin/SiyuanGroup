@@ -31,13 +31,12 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.CommonUtils;
 import com.alumnigroup.utils.Constants;
-import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.widget.CommentView;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class GroupShareDetail extends BaseActivity {
-	private View btn_back, btn_share, btn_favourite, btn_comment, btn_space,
+	private View btn_back, btn_favourite, btn_comment_visitor,
+	btn_comment_owner,  btn_space,
 			btn_delete, btn_edit;
 	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
 	private ImageView iv_avater;
@@ -134,16 +133,16 @@ public class GroupShareDetail extends BaseActivity {
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);
-		btn_share = _getView(R.id.acty_communicationdetail_footer_share);
-		btn_comment = _getView(R.id.acty_communicationdetail_footer_comment);
+		btn_comment_visitor = _getView(R.id.acty_communicationdetail_footer_comment_visitor);
+		btn_comment_owner = _getView(R.id.acty_communicationdetail_footer_comment_owner);
 		btn_favourite = _getView(R.id.acty_communicationdetail_footer_favourite);
 		btn_delete = _getView(R.id.btn_delete);
 		btn_edit = _getView(R.id.btn_edit);
 
 		btn_back.setOnClickListener(this);
 		btn_space.setOnClickListener(this);
-		btn_share.setOnClickListener(this);
-		btn_comment.setOnClickListener(this);
+		btn_comment_visitor.setOnClickListener(this);
+		btn_comment_owner.setOnClickListener(this);
 		btn_favourite.setOnClickListener(this);
 		btn_delete.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
@@ -189,13 +188,13 @@ public class GroupShareDetail extends BaseActivity {
 
 	@Override
 	public void onClick(View v) {
+		Intent intent = null;
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
 			break;
 		case R.id.acty_communicationdetail_btn_space:
 			// 去个人空间
-			Intent intent = null;
 			if(issue.getUser().getId()==AppInfo.getUser(getContext()).getId()){
 				intent=new Intent(this, SpacePersonal.class);
 			}else{
@@ -204,15 +203,17 @@ public class GroupShareDetail extends BaseActivity {
 			intent.putExtra("user", issue.getUser());
 			openActivity(intent);
 			break;
-		case R.id.acty_communicationdetail_footer_share:
-			// 分享到圈子
-			// toast("share");
+		case R.id.acty_communicationdetail_footer_comment_visitor:
+			// 别人评论
+			intent = new Intent(this, CommunicationComment.class);
+			intent.putExtra("issue", issue);
+			openActivity(intent);
 			break;
-		case R.id.acty_communicationdetail_footer_comment:
-			// 评论
-			Intent comIntent = new Intent(this, CommunicationComment.class);
-			comIntent.putExtra("issue", issue);
-			openActivity(comIntent);
+		case R.id.acty_communicationdetail_footer_comment_owner:
+			// 作者者自己评论
+			intent = new Intent(this, CommunicationComment.class);
+			intent.putExtra("issue", issue);
+			openActivity(intent);
 			break;
 		case R.id.acty_communicationdetail_footer_favourite:
 			// 收藏

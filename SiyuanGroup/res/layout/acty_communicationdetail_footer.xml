@@ -6,29 +6,11 @@
     <LinearLayout
         android:id="@+id/visitor"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"  >
-
-        <!-- 分享暂时不做 -->
-
-        <RelativeLayout
-            android:id="@+id/acty_communicationdetail_footer_share"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0"
-            android:background="@drawable/item_listview_bg_whitetogrey" >
-
-            <TextView
-                style="@style/TextView.base"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="分享"
-                android:textColor="@color/grey_lv_two"
-                android:textSize="14sp" />
-        </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:visibility="gone" >
 
         <RelativeLayout
-            android:id="@+id/acty_communicationdetail_footer_comment"
+            android:id="@+id/acty_communicationdetail_footer_comment_visitor"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -66,6 +48,23 @@
         android:id="@+id/owner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/acty_communicationdetail_footer_comment_owner"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/item_listview_bg_whitetogrey" >
+
+            <TextView
+                style="@style/TextView.base"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="评论"
+                android:textColor="@color/grey_lv_two"
+                android:textSize="14sp" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/btn_edit"
