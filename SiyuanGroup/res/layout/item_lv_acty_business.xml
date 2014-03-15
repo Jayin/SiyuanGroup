@@ -40,7 +40,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/tv_deadline"
+                    android:id="@+id/tv_createtime"
                     style="@style/TextView.base"
                     android:layout_marginRight="4dp"
                     android:text="2013-11-30 21:00:00"

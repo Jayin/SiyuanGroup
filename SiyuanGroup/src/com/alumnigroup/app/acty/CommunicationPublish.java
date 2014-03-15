@@ -26,8 +26,15 @@ import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.FileUtils;
 import com.alumnigroup.utils.ImageUtils;
+import com.alumnigroup.widget.LoadingDialog;
 import com.custom.view.FlowLayout;
 
+/**
+ * 话题发布
+ * 
+ * @author Jayin Ton
+ * 
+ */
 public class CommunicationPublish extends BaseActivity {
 	private int RequestCode_Pick_image = 1;
 	private EditText et_title, et_content;
@@ -35,6 +42,8 @@ public class CommunicationPublish extends BaseActivity {
 	private Issue issue;
 	private FlowLayout flowLayout;
 	private boolean withPic = false;
+
+	private LoadingDialog dialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +61,8 @@ public class CommunicationPublish extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		dialog = new LoadingDialog(getContext());
+		dialog.setCancelable(false);
 		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		_getView(R.id.acty_head_btn_post).setOnClickListener(this);
 		_getView(R.id.btn_add_pic).setOnClickListener(this);
@@ -94,6 +105,17 @@ public class CommunicationPublish extends BaseActivity {
 								toast("发布失败 "
 										+ ErrorCode.errorList.get(errorCode));
 							}
+
+							@Override
+							public void onStart() {
+								dialog.setText("发布中...");
+								dialog.show();
+							}
+
+							@Override
+							public void onFinish() {
+								dialog.dismiss();
+							}
 						});
 			} else { // 更新
 				api.updateIssue(issue.getId(), title, body,
@@ -110,16 +132,19 @@ public class CommunicationPublish extends BaseActivity {
 								toast("更新失败 "
 										+ ErrorCode.errorList.get(errorCode));
 							}
+							@Override
+							public void onStart() {
+								dialog.setText("更新中...");
+								dialog.show();
+							}
+
+							@Override
+							public void onFinish() {
+								dialog.dismiss();
+							}
 						});
 			}
 			break;
-		// case R.id.mention:
-		// // toast("mention");
-		// Intent intent = new Intent(this, FollowingList.class);
-		// intent.putExtra("userid", 1);
-		// openActivity(intent);
-		// break;
-
 		case R.id.btn_add_pic:
 			if (flowLayout.getChildCount() >= 2) {
 				toast("目前仅支持发一张图片");

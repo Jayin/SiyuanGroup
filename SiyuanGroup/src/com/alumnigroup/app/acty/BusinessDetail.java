@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.Header;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.BroadcastReceiver;
@@ -13,12 +12,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.alumnigroup.adapter.CommentAdapter;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -28,13 +27,11 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.entity.Cocomment;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
-import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.CommonUtils;
 import com.alumnigroup.utils.Constants;
-import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.widget.CommentView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -44,7 +41,7 @@ public class BusinessDetail extends BaseActivity {
 			btn_favourite;
 	private View owner, common;
 	private TextView tv_username, tv_projectname, tv_deadline, tv_description,
-			tv_notify;
+			tv_notify,tv_createtime;
 	private ImageView iv_avatar;
 	private User user;
 	private CommentView commentView;
@@ -118,6 +115,7 @@ public class BusinessDetail extends BaseActivity {
 		tv_description = (TextView) _getView(R.id.tv_description);
 		tv_notify = (TextView) _getView(R.id.tv_notify);
 		iv_avatar = (ImageView) _getView(R.id.iv_avatar);
+		tv_createtime =  (TextView) _getView(R.id.tv_createtime);
 
 		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
 		iv_pic2 = (ImageView) _getView(R.id.iv_pic2);
@@ -151,16 +149,13 @@ public class BusinessDetail extends BaseActivity {
 				break;
 			}
 		}
-
-		fillInData();
-
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_edit = _getView(R.id.btn_edit);
 		btn_end = _getView(R.id.btn_end);
 		btn_space = _getView(R.id.btn_space);
 		btn_comment = _getView(R.id.btn_comment);
 		btn_favourite = _getView(R.id.btn_favourite);
-
+		
 		btn_back.setOnClickListener(this);
 		btn_edit.setOnClickListener(this);
 		btn_end.setOnClickListener(this);
@@ -169,7 +164,8 @@ public class BusinessDetail extends BaseActivity {
 		btn_favourite.setOnClickListener(this);
 
 		commentView = (CommentView) _getView(R.id.commentlist);
-
+		fillInData();
+		
 		// api get comment list
 		api.getCommentList(c.getId(), new JsonResponseHandler() {
 
@@ -213,7 +209,13 @@ public class BusinessDetail extends BaseActivity {
 	}
 
 	private void fillInData() {
+		if(c.getStatus().getId() ==2){ //合作已经结束了
+			((TextView)btn_end.findViewById(R.id.tv_end)).setText("已结束");
+			btn_end.setClickable(false);
+		}
 		tv_username.setText(c.getUser().getProfile().getName());
+		tv_createtime.setText(CalendarUtils.getTimeFromat(c.getCreatetime(),
+					CalendarUtils.TYPE_TWO));
 		tv_projectname.setText(c.getName());
 		tv_deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
 				CalendarUtils.TYPE_TWO));
@@ -323,7 +325,11 @@ public class BusinessDetail extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 " + ErrorCode.errorList.get(errorCode));
+						if(20506 == errorCode){ //已收藏
+							toast("已收藏");
+						}else{
+							toast("收藏失败 " + ErrorCode.errorList.get(errorCode));
+						}
 					}
 				});
 	}
@@ -370,20 +376,36 @@ public class BusinessDetail extends BaseActivity {
 			} else {
 				h = (ViewHolder) convertView.getTag();
 			}
-			h.name.setText(data.get(position).getUser().getProfile().getName());
-			h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
+			final Cocomment comment = data.get(position);
+			h.name.setText(comment.getUser().getProfile().getName());
+			h.positime.setText(CalendarUtils.getTimeFromat(comment
 					.getPosttime(), CalendarUtils.TYPE_timeline));
-			h.body.setText(data.get(position).getBody());
-			if (data.get(position).getUser().getAvatar() != null) {
+			h.body.setText(comment.getBody());
+			if (comment.getUser().getAvatar() != null) {
 				ImageLoader.getInstance().displayImage(
 						RestClient.BASE_URL
-								+ data.get(position).getUser().getAvatar(),
+								+ comment.getUser().getAvatar(),
 						h.avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
 						"drawable://" + R.drawable.ic_image_load_normal,
 						h.avatar);
 			}
+			
+			h.avatar.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					 Intent intent = null;
+					 if(comment.getUser().getId() == AppInfo.getUser(getContext()).getId()){
+						  intent = new Intent(getContext(),SpacePersonal.class);
+					 }else{
+						  intent = new Intent(getContext(),SpaceOther.class);
+					 }
+					 intent.putExtra("user", comment.getUser());
+					 openActivity(intent);
+				}
+			});
 
 			return convertView;
 		}

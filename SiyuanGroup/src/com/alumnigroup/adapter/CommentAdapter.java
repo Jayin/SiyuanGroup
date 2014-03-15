@@ -2,19 +2,24 @@ package com.alumnigroup.adapter;
 
 import java.util.List;
 
-import com.alumnigroup.api.RestClient;
-import com.alumnigroup.app.R;
-import com.alumnigroup.entity.Comment;
-import com.alumnigroup.utils.CalendarUtils;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
+import com.alumnigroup.app.R;
+import com.alumnigroup.app.acty.SpaceOther;
+import com.alumnigroup.app.acty.SpacePersonal;
+import com.alumnigroup.entity.Comment;
+import com.alumnigroup.utils.CalendarUtils;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 public class CommentAdapter extends BaseAdapter {
 
@@ -60,20 +65,36 @@ public class CommentAdapter extends BaseAdapter {
 		} else {
 			h = (ViewHolder) convertView.getTag();
 		}
-		h.name.setText(data.get(position).getUser().getProfile().getName());
-		h.positime.setText(CalendarUtils.getTimeFromat(data.get(position)
+		final Comment  c = data.get(position);
+		h.name.setText(c.getUser().getProfile().getName());
+		h.positime.setText(CalendarUtils.getTimeFromat(c
 				.getPosttime(), CalendarUtils.TYPE_timeline));
-		h.body.setText(data.get(position).getBody());
-		if(data.get(position).getUser().getAvatar()!=null){
+		h.body.setText(c.getBody());
+		if(c.getUser().getAvatar()!=null){
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL
-							+ data.get(position).getUser().getAvatar(),
+							+ c.getUser().getAvatar(),
 					h.avater);
 		}else{
 			ImageLoader.getInstance().displayImage(
 					"drawable://"+R.drawable.ic_image_load_normal,
 					h.avater);
 		}
+		
+		h.avater.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				 Intent intent = null;
+				 if(c.getUser().getId() == AppInfo.getUser(context).getId()){
+					  intent = new Intent(context,SpacePersonal.class);
+				 }else{
+					  intent = new Intent(context,SpaceOther.class);
+				 }
+				 intent.putExtra("user", c.getUser());
+				 context.startActivity(intent);
+			}
+		});
 		
 		return convertView;
 	}

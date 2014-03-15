@@ -57,8 +57,6 @@ public class Cooperation implements Serializable {
 	private String description;
 	/** 公司 */
 	private String company;
-	/** 截止日期 */
-	private long deadline;
 	/** 头像 */
 	private String avatar;
 	/** 项目状态id */
@@ -73,6 +71,8 @@ public class Cooperation implements Serializable {
 	private int numComments;
 	/** 图片数*/
 	private int numPictures;
+	/** 创建时间 */
+	private long createtime;
 	/** 项目(消息)截止日期*/ 
     private long regdeadline ;
     /** 图片*/
@@ -151,14 +151,6 @@ public class Cooperation implements Serializable {
 		this.company = company;
 	}
 
-	public long getDeadline() {
-		return deadline;
-	}
-
-	public void setDeadline(long deadline) {
-		this.deadline = deadline;
-	}
-
 	public String getAvatar() {
 		return avatar;
 	}
@@ -199,18 +191,22 @@ public class Cooperation implements Serializable {
 		this.status = status;
 	}
 
+	public long getCreatetime() {
+		return createtime;
+	}
+
+	public void setCreatetime(long createtime) {
+		this.createtime = createtime;
+	}
+
 	@Override
 	public String toString() {
 		return "Cooperation [id=" + id + ", name=" + name + ", ownerid="
 				+ ownerid + ", description=" + description + ", company="
-				+ company + ", deadline=" + deadline + ", avatar=" + avatar
-				+ ", statusid=" + statusid + ", isprivate=" + isprivate
-				+ ", user=" + user + ", status=" + status + ", numComments="
-				+ numComments + "]";
+				+ company + ", avatar=" + avatar + ", statusid=" + statusid
+				+ ", isprivate=" + isprivate + ", user=" + user + ", status="
+				+ status + ", numComments=" + numComments + ", numPictures="
+				+ numPictures + ", createtime=" + createtime + ", regdeadline="
+				+ regdeadline + ", pictures=" + pictures + "]";
 	}
-
-	 
-
- 
-
 }

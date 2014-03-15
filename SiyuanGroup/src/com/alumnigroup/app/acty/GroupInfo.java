@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.alumnigroup.adapter.BaseOnPageChangeListener;
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.MemberAdapter;
@@ -31,7 +30,6 @@ import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.acty.Group.GroupAdapter;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
@@ -230,7 +228,7 @@ public class GroupInfo extends BaseActivity {
 								if (newData_share == null) {
 									toast("网络异常 解析错误");
 								} else if (newData_share.size() == 0) {
-									toast("还没有分享");
+									toast("还没有讨论");
 									lv_share.setPullLoadEnable(false);
 								} else {
 									page_share = 1;
@@ -478,7 +476,11 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("申请失败 " + ErrorCode.errorList.get(errorCode));
+				if(errorCode ==20506){
+					toast("已加入");
+				}else{
+					toast("申请失败 " + ErrorCode.errorList.get(errorCode));
+				}
 			}
 		});
 	}
