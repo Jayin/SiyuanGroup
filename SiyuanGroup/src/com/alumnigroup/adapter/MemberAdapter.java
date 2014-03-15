@@ -3,17 +3,21 @@ package com.alumnigroup.adapter;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.api.RestClient;
+import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.acty.SpaceOther;
+import com.alumnigroup.app.acty.SpacePersonal;
 import com.alumnigroup.entity.User;
-import com.alumnigroup.utils.L;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -66,7 +70,7 @@ public class MemberAdapter extends BaseAdapter {
 			h = (ViewHolder) convertView.getTag();
 		}
 		 
-		User u = data.get(position);
+		final User u = data.get(position);
 		if (u.getAvatar() != null) {
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + u.getAvatar(), h.avatar);
@@ -83,6 +87,21 @@ public class MemberAdapter extends BaseAdapter {
 		} else {
 			h.online.setVisibility(View.INVISIBLE);
 		}
+	    
+		h.avatar.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				 Intent intent = null;
+				 if(u.getId() == AppInfo.getUser(context).getId()){
+					  intent = new Intent(context,SpacePersonal.class);
+				 }else{
+					  intent = new Intent(context,SpaceOther.class);
+				 }
+				 intent.putExtra("user", u);
+				 context.startActivity(intent);				
+			}
+		});
 		return convertView;
 	}
 

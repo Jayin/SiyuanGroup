@@ -85,9 +85,9 @@ public class Business extends BaseActivity implements OnItemClickListener {
 				data_clicked.set(item_click, c);
 				((TextView) viewClicked.findViewById(R.id.tv_projectname))
 						.setText(c.getName());
-				((TextView) viewClicked.findViewById(R.id.tv_deadline))
+				((TextView) viewClicked.findViewById(R.id.tv_createtime))
 						.setText(CalendarUtils.getTimeFromat(
-								c.getRegdeadline(), CalendarUtils.TYPE_TWO));
+								c.getCreatetime(), CalendarUtils.TYPE_TWO));
 				((TextView) viewClicked.findViewById(R.id.tv_major)).setText(c
 						.getUser().getProfile().getMajor());
 				((TextView) viewClicked.findViewById(R.id.tv_username))
@@ -562,8 +562,8 @@ public class Business extends BaseActivity implements OnItemClickListener {
 						R.layout.item_lv_acty_business, null);
 				h.name_project = (TextView) convertView
 						.findViewById(R.id.tv_projectname);
-				h.deadline = (TextView) convertView
-						.findViewById(R.id.tv_deadline);
+				h.createtime = (TextView) convertView
+						.findViewById(R.id.tv_createtime);
 				h.major = (TextView) convertView.findViewById(R.id.tv_major);
 				h.name_user = (TextView) convertView
 						.findViewById(R.id.tv_username);
@@ -582,7 +582,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			}
 			Cooperation c = data.get(position);
 			h.name_project.setText(c.getName());
-			h.deadline.setText(CalendarUtils.getTimeFromat(c.getRegdeadline(),
+			h.createtime.setText(CalendarUtils.getTimeFromat(c.getCreatetime(),
 					CalendarUtils.TYPE_TWO));
 			h.major.setText(c.getUser().getProfile().getMajor());
 			h.name_user.setText(c.getUser().getProfile().getName());
@@ -680,7 +680,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		}
 
 		class ViewHolder {
-			TextView name_project, deadline, major, name_user, description,
+			TextView name_project, createtime, major, name_user, description,
 					commentNum;
 			ImageView avatar, status, pic1, pic2, pic3;
 		}

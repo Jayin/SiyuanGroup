@@ -18,6 +18,7 @@ import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
+import com.alumnigroup.widget.LoadingDialog;
 
 /**
  * 创建圈子页面
@@ -31,6 +32,7 @@ public class GroupCreate extends BaseActivity {
 	private GroupAPI api;
 	private MGroup group = null;
 	private TextView tv_title; // 创建圈子/编辑
+	private LoadingDialog loadingdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,9 @@ public class GroupCreate extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		loadingdialog  =new LoadingDialog(getContext());
+		loadingdialog.setCancelable(false);
+		
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_create = _getView(R.id.acty_head_btn_create);
 		btn_invite = _getView(R.id.invite);
@@ -111,6 +116,18 @@ public class GroupCreate extends BaseActivity {
 			public void onFaild(int errorType, int errorCode) {
 				toast("创建失败 " + ErrorCode.errorList.get(errorCode));
 			}
+			
+			@Override
+			public void onStart() {
+				loadingdialog.setText("创建中...");
+				loadingdialog.show();
+			}
+			
+			@Override
+			public void onFinish() {
+				loadingdialog.dismiss();
+			}
+
 		});
 
 	}
@@ -132,6 +149,18 @@ public class GroupCreate extends BaseActivity {
 					public void onFaild(int errorType, int errorCode) {
 						toast("修改失败 " + ErrorCode.errorList.get(errorCode));
 					}
+					
+					@Override
+					public void onStart() {
+						loadingdialog.setText("更新中...");
+						loadingdialog.show();
+					}
+					
+					@Override
+					public void onFinish() {
+						loadingdialog.dismiss();
+					}
+
 				});
 	}
 }

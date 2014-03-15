@@ -2,9 +2,7 @@ package com.alumnigroup.app.acty;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 import org.apache.http.Header;
 import org.json.JSONObject;
@@ -31,9 +29,9 @@ import com.alumnigroup.utils.BitmapUtils;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.FilePath;
-import com.alumnigroup.utils.FileUtils;
 import com.alumnigroup.utils.ImageUtils;
 import com.alumnigroup.utils.StringUtils;
+import com.alumnigroup.widget.LoadingDialog;
 import com.alumnigroup.widget.TimePickDialog;
 import com.alumnigroup.widget.TimePickDialog.OnSiglePickFinishedListener;
 import com.custom.view.FlowLayout;
@@ -49,6 +47,7 @@ public class BusinessPublish extends BaseActivity {
 	private Cooperation c;
 	private FlowLayout flowLayout;
 	private HashMap<View, Uri> bitmaps;
+	private LoadingDialog loadingdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +68,9 @@ public class BusinessPublish extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		loadingdialog  =new LoadingDialog(getContext());
+		loadingdialog.setCancelable(false);
+		
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_create = _getView(R.id.acty_head_btn_create);
 		btn_deadline = _getView(R.id.btn_deadline);
@@ -178,14 +180,24 @@ public class BusinessPublish extends BaseActivity {
 					public void onFaild(int errorType, int errorCode) {
 						toast("更新失败 " + ErrorCode.errorList.get(errorCode));
 					}
+					
+					
+					@Override
+					public void onStart() {
+						loadingdialog.setText("更新中...");
+						loadingdialog.show();
+					}
+					
+					@Override
+					public void onFinish() {
+						loadingdialog.dismiss();
+					}
 				});
 	}
 
 	private void create(String name, String description, String company,
 			int statusid, int isprivate) {
 
-		// File pic1 = withPic ? new File(FilePath.getImageFilePath()
-		// + "cooperation_pic1.jpg") : null;
 		final File[] pics = new File[3];
 		if (bitmaps.size() > 0) {
 			int count = 0;
@@ -203,12 +215,6 @@ public class BusinessPublish extends BaseActivity {
 				}
 			}
 		}
-//		if (pics[0] != null)
-//			debug("pics[0]!=null-->" + pics[0].getAbsolutePath());
-//		if (pics[1] != null)
-//			debug("pics[1]!=null-->" + pics[1].getAbsolutePath());
-//		if (pics[2] != null)
-//			debug("pics[2]!=null-->" + pics[2].getAbsolutePath());
 		api.create(name, description, company, regdeadline, statusid,
 				isprivate, pics[0], pics[1], pics[2],
 				new JsonResponseHandler() {
@@ -222,6 +228,17 @@ public class BusinessPublish extends BaseActivity {
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast("发布失败 " + ErrorCode.errorList.get(errorCode));
+					}
+					
+					@Override
+					public void onStart() {
+						loadingdialog.setText("发布中...");
+						loadingdialog.show();
+					}
+					
+					@Override
+					public void onFinish() {
+						loadingdialog.dismiss();
 					}
 				});
 
