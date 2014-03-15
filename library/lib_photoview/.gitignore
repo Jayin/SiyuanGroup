@@ -14,3 +14,7 @@
 *.ini
 
 bin/
+.settings/
+
+ 
+

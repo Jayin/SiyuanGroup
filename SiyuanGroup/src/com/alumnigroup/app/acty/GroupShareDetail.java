@@ -71,7 +71,6 @@ public class GroupShareDetail extends BaseActivity {
 				CommonUtils.reverse(data_commet);
 				data_commet.add(comment);
 				CommonUtils.reverse(data_commet);
-//				adapter_commet.notifyDataSetChanged();
 				lv_comment.setAdapter(new CommentAdapter(getContext(),data_commet));
 			}else if (intent.getAction().equals(
 					Constants.Action_Issue_Edit)) {
@@ -120,29 +119,6 @@ public class GroupShareDetail extends BaseActivity {
 		
 		fillInData();
 		
-//		if (issue.getUser().getId() == user.getId()) {
-//			owner.setVisibility(View.VISIBLE);
-//			vistor.setVisibility(View.GONE);
-//		} else {
-//			owner.setVisibility(View.GONE);
-//			vistor.setVisibility(View.VISIBLE);
-//		}
-//
-//		// 头像
-//		if (issue.getUser().getAvatar() != null) {
-//			ImageLoader.getInstance().displayImage(
-//					RestClient.BASE_URL + issue.getUser().getAvatar(),
-//					iv_avater);
-//		} else {
-//			ImageLoader.getInstance().displayImage(
-//					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
-//		}
-//		tv_username.setText(issue.getUser().getProfile().getName());
-//		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
-//				CalendarUtils.TYPE_timeline));
-//		tv_title.setText(issue.getTitle());
-//		tv_body.setText(issue.getBody());
-
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);
 		btn_comment_visitor = _getView(R.id.acty_communicationdetail_footer_comment_visitor);

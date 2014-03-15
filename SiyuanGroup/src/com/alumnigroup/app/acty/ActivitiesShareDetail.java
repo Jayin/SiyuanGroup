@@ -90,13 +90,6 @@ public class ActivitiesShareDetail extends BaseActivity {
 				}
 				if (intent.getAction().equals(
 						Constants.Action_ActivityShare_Edit)) {
-//					Issue mIssue = (Issue) intent.getSerializableExtra("issue");
-//					tv_username
-//							.setText(mIssue.getUser().getProfile().getName());
-//					tv_time.setText(CalendarUtils.getTimeFromat(
-//							mIssue.getPosttime(), CalendarUtils.TYPE_timeline));
-//					tv_title.setText(mIssue.getTitle());
-//					tv_body.setText(mIssue.getBody());
 					issue = (Issue) intent.getSerializableExtra("issue");
 					fillInData();
 				}
@@ -142,28 +135,6 @@ public class ActivitiesShareDetail extends BaseActivity {
 		vistor = _getView(R.id.visitor);
 		
 		fillInData();
-//		if (issue.getUser().getId() == user.getId()) {
-//			owner.setVisibility(View.VISIBLE);
-//			vistor.setVisibility(View.GONE);
-//		} else {
-//			owner.setVisibility(View.GONE);
-//			vistor.setVisibility(View.VISIBLE);
-//		}
-//
-//		// 头像
-//		if (issue.getUser().getAvatar() != null) {
-//			ImageLoader.getInstance().displayImage(
-//					RestClient.BASE_URL + issue.getUser().getAvatar(),
-//					iv_avater);
-//		} else {
-//			ImageLoader.getInstance().displayImage(
-//					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
-//		}
-//		tv_username.setText(issue.getUser().getProfile().getName());
-//		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
-//				CalendarUtils.TYPE_timeline));
-//		tv_title.setText(issue.getTitle());
-//		tv_body.setText(issue.getBody());
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);

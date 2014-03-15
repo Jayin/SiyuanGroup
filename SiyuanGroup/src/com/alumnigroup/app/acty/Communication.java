@@ -33,7 +33,6 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
-import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
