@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.SynData;
-import com.alumnigroup.app.SynData.SynDataListener;
+import com.alumnigroup.app.SyncData;
+import com.alumnigroup.app.SyncData.SynDataListener;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -142,7 +142,7 @@ public class GroupCreate extends BaseActivity {
 						toast("修改成功");
 						closeActivity();
 						//同步数据
-						SynData.SyncGroupInfo(getContext(), group.getId(), null);
+						SyncData.SyncGroupInfo(getContext(), group.getId(), null);
 					}
 
 					@Override

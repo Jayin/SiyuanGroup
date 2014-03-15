@@ -82,13 +82,16 @@ public class CommunicationDetail extends BaseActivity {
 					// adapter_commet.notifyDataSetChanged();
 					lv_comment.setAdapter(new CommentAdapter(getContext(),
 							data_commet));
-
+				}else if(intent.getAction().equals(Constants.Action_Issue_Edit)){
+					issue = (Issue)intent.getSerializableExtra("issue");
+					fillInData();
 				}
-
 			}
 		};
-		registerReceiver(mReceiver, new IntentFilter(
-				Constants.Action_Issue_Comment_Ok));
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Issue_Comment_Ok);
+		filter.addAction(Constants.Action_Issue_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	@Override
@@ -122,46 +125,9 @@ public class CommunicationDetail extends BaseActivity {
 
 		owner = _getView(R.id.owner);
 		vistor = _getView(R.id.visitor);
-		if (issue.getUser().getId() == user.getId()) {
-			owner.setVisibility(View.VISIBLE);
-			vistor.setVisibility(View.GONE);
-		} else {
-			owner.setVisibility(View.GONE);
-			vistor.setVisibility(View.VISIBLE);
-		}
-
-		// 头像
-		if (issue.getUser().getAvatar() != null) {
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + issue.getUser().getAvatar(),
-					iv_avater);
-		} else {
-			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
-		}
-		// 图片
-		final MPicture pic = issue.getPictures().size() >0   ? issue.getPictures().get(0)
-				: null;
-		iv_pic1.setVisibility(View.GONE);
-		if (pic != null) {
-			iv_pic1.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + pic.getPath(), iv_pic1);
-			iv_pic1.setOnClickListener(new OnClickListener() {
-				
-				@Override
-				public void onClick(View v) {
-					 Intent intent = new Intent(getContext(), ImageDisplay.class);
-					 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
-				     openActivity(intent);
-				}
-			});
-		}
-		tv_username.setText(issue.getUser().getProfile().getName());
-		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
-				CalendarUtils.TYPE_timeline));
-		tv_title.setText(issue.getTitle());
-		tv_body.setText(issue.getBody());
+		
+		fillInData();
+		
 
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_space = _getView(R.id.acty_communicationdetail_btn_space);
@@ -216,6 +182,49 @@ public class CommunicationDetail extends BaseActivity {
 				tv_notify.setVisibility(View.GONE);
 			}
 		});
+	}
+
+	private void fillInData() {
+		if (issue.getUser().getId() == user.getId()) {
+			owner.setVisibility(View.VISIBLE);
+			vistor.setVisibility(View.GONE);
+		} else {
+			owner.setVisibility(View.GONE);
+			vistor.setVisibility(View.VISIBLE);
+		}
+
+		// 头像
+		if (issue.getUser().getAvatar() != null) {
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + issue.getUser().getAvatar(),
+					iv_avater);
+		} else {
+			ImageLoader.getInstance().displayImage(
+					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
+		}
+		// 图片
+		final MPicture pic = issue.getPictures().size() >0   ? issue.getPictures().get(0)
+				: null;
+		iv_pic1.setVisibility(View.GONE);
+		if (pic != null) {
+			iv_pic1.setVisibility(View.VISIBLE);
+			ImageLoader.getInstance().displayImage(
+					RestClient.BASE_URL + pic.getPath(), iv_pic1);
+			iv_pic1.setOnClickListener(new OnClickListener() {
+				
+				@Override
+				public void onClick(View v) {
+					 Intent intent = new Intent(getContext(), ImageDisplay.class);
+					 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
+				     openActivity(intent);
+				}
+			});
+		}
+		tv_username.setText(issue.getUser().getProfile().getName());
+		tv_time.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
+				CalendarUtils.TYPE_timeline));
+		tv_title.setText(issue.getTitle());
+		tv_body.setText(issue.getBody());
 	}
 
 	@Override

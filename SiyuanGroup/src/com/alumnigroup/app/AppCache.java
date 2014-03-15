@@ -188,6 +188,46 @@ public class AppCache {
 			setBusinessFavourite(context, b_fav);
 		}
 	}
+	/**
+	 * 修改一条话题的信息
+	 * @param context
+	 * @param change
+	 */
+	public static void changeIssueInfo(Context context,Issue change){
+		ArrayList<Issue> issue_all = getCommunicationAll(context);
+		ArrayList<Issue> issue_my = getCommunicationMy(context);
+		ArrayList<Issue> issue_fav = getCommunicationFavourite(context);
+		
+		if(issue_all != null){
+			for (int i = 0; i < issue_all.size(); i++) {
+				Issue g = issue_all.get(i);
+				if (g.getId() == change.getId()) {
+					issue_all.set(i, change);
+				}
+			}
+			setCommunicationAll(context, issue_all);
+		}
+		
+		if(issue_my != null){
+			for (int i = 0; i < issue_my.size(); i++) {
+				Issue g = issue_my.get(i);
+				if (g.getId() == change.getId()) {
+					issue_my.set(i, change);
+				}
+			}
+			setCommunicationMy(context, issue_my);
+		}
+		
+		if(issue_fav != null){
+			for (int i = 0; i < issue_fav.size(); i++) {
+				Issue g = issue_fav.get(i);
+				if (g.getId() == change.getId()) {
+					issue_fav.set(i, change);
+				}
+			}
+			setCommunicationFavourite(context, issue_fav);
+		}
+	}
 
 	/** 获得全站会员all列表 */
 	@SuppressWarnings("unchecked")

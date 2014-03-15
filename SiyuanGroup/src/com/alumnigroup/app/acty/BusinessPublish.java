@@ -21,7 +21,7 @@ import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.SynData;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
@@ -173,7 +173,7 @@ public class BusinessPublish extends BaseActivity {
 					public void onOK(Header[] headers, JSONObject obj) {
 						toast("已更新");
 						closeActivity();
-						SynData.SyncBussinessInfo(getContext(), c.getId(), null);
+						SyncData.SyncBussinessInfo(getContext(), c.getId(), null);
 					}
 
 					@Override

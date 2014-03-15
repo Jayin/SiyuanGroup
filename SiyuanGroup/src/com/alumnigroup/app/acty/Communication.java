@@ -6,8 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -31,11 +33,13 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
+import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
@@ -59,6 +63,11 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private StarAPI starAPI;
 	private User user;
 
+	private ArrayList<Issue> data_clicked = null;
+	private int item_click = -1;
+	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
+	private BroadcastReceiver mReceiver = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -66,7 +75,69 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+		openReceiver();
+	}
 
+	// 修改话题分享 刷新UI
+	private void openReceiver() {
+		mReceiver = new BroadcastReceiver() {
+
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				Issue issue =  (Issue) intent.getSerializableExtra("issue");
+				data_clicked.set(item_click, issue);
+				 ((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_name)).setText(issue.getUser().getProfile().getName());
+			 ((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_major)).setText(issue.getUser().getProfile().getMajor());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_posttime)).setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
+								CalendarUtils.TYPE_timeline));
+				 ((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_title)).setText(issue.getTitle());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_body)).setText(issue.getBody());
+				((TextView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_numComment)).setText(issue.getNumComments() + "");
+				ImageView iv_avatar = (ImageView) viewClicked
+						.findViewById(R.id.item_lv_acty_comminication_avatar);
+				ImageView iv_pic1 = (ImageView) viewClicked.findViewById(R.id.iv_pic1);
+				
+				if (issue.getUser().getAvatar() != null) {
+					ImageLoader.getInstance()
+							.displayImage(
+									RestClient.BASE_URL + issue.getUser().getAvatar(),
+									iv_avatar);
+				} else {
+					ImageLoader.getInstance().displayImage(
+							"drawable://" + R.drawable.ic_image_load_normal,iv_avatar);
+				}
+				// 暂时1张图片
+				iv_pic1.setVisibility(View.GONE);
+				if (issue.getPictures() != null && issue.getPictures().size() > 0) {
+					iv_pic1.setVisibility(View.VISIBLE);
+					// for (MPicture pic : issue.getPictures()) {
+					final MPicture pic = issue.getPictures().get(0);
+					iv_pic1.setVisibility(View.VISIBLE);
+					ImageLoader.getInstance().displayImage(
+							RestClient.BASE_URL + pic.getPath(),iv_pic1);
+					// }
+
+					iv_pic1.setOnClickListener(new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							Intent intent = new Intent(getContext(), ImageDisplay.class);
+							intent.putExtra("url", RestClient.BASE_URL + pic.getPath());
+							getContext().startActivity(intent);
+						}
+					});
+				}
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_Issue_Edit);
+		registerReceiver(mReceiver, filter);
 	}
 
 	private void initController() {
@@ -96,9 +167,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							data_all.clear();
 							data_all.addAll(newData_all);
 							adapter_all.notifyDataSetChanged();
-							if(data_all.size()<10){
+							if (data_all.size() < 10) {
 								lv_all.setPullLoadEnable(false);
-							}else{
+							} else {
 								lv_all.setPullLoadEnable(true);
 							}
 							AppCache.setCommunicationAll(getContext(), data_all);
@@ -171,9 +242,9 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 							data_my.clear();
 							data_my.addAll(newData_my);
 							adapter_my.notifyDataSetChanged();
-							if(data_my.size()<10){
+							if (data_my.size() < 10) {
 								lv_my.setPullLoadEnable(false);
-							}else{
+							} else {
 								lv_my.setPullLoadEnable(true);
 							}
 							AppCache.setCommunicationMy(getContext(), data_my);
@@ -251,9 +322,10 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 										data_favourite.addAll(newData_faviour);
 										adapter_favourite
 												.notifyDataSetChanged();
-										if(data_favourite.size()<10){
-											lv_favourit.setPullLoadEnable(false);
-										}else{
+										if (data_favourite.size() < 10) {
+											lv_favourit
+													.setPullLoadEnable(false);
+										} else {
 											lv_favourit.setPullLoadEnable(true);
 										}
 										AppCache.setCommunicationFavourite(
@@ -453,15 +525,20 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			long id) {
 		if (position - 1 == -1)
 			return;
+		viewClicked = view;
+		item_click = position-1;
 		Intent intent = new Intent(this, CommunicationDetail.class);
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));
+			data_clicked = data_all;
 		}
 		if (parent == lv_my) {
 			intent.putExtra("issue", data_my.get(position - 1));
+			data_clicked = data_my;
 		}
 		if (parent == lv_favourit) {
 			intent.putExtra("issue", data_favourite.get(position - 1));
+			data_clicked = data_favourite;
 		}
 		openActivity(intent);
 	}
@@ -511,8 +588,6 @@ class IssueAdapter extends BaseAdapter {
 					.findViewById(R.id.item_lv_acty_comminication_body);
 			h.numComment = (TextView) convertView
 					.findViewById(R.id.item_lv_acty_comminication_numComment);
-			h.favourite = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_favourite);
 			h.avatar = (ImageView) convertView
 					.findViewById(R.id.item_lv_acty_comminication_avatar);
 			h.pic1 = (ImageView) convertView.findViewById(R.id.iv_pic1);
@@ -528,7 +603,6 @@ class IssueAdapter extends BaseAdapter {
 		h.title.setText(issue.getTitle());
 		h.body.setText(issue.getBody());
 		h.numComment.setText(issue.getNumComments() + "");
-		// h.favourite.setText(data.get(position).getFavourite()+"");
 		if (issue.getUser().getAvatar() != null) {
 			ImageLoader.getInstance()
 					.displayImage(
@@ -540,33 +614,33 @@ class IssueAdapter extends BaseAdapter {
 		}
 		// 暂时1张图片
 		h.pic1.setVisibility(View.GONE);
-		  L.i(issue.getNumPictures()+"");
+		L.i(issue.getNumPictures() + "");
 		if (issue.getPictures() != null && issue.getPictures().size() > 0) {
 			h.pic1.setVisibility(View.VISIBLE);
 			// for (MPicture pic : issue.getPictures()) {
 			final MPicture pic = issue.getPictures().get(0);
-		    L.i(pic.toString());
+			L.i(pic.toString());
 			h.pic1.setVisibility(View.VISIBLE);
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + pic.getPath(), h.pic1);
 			// }
-			
+
 			h.pic1.setOnClickListener(new OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
-					 Intent intent = new Intent(context, ImageDisplay.class);
-					 intent.putExtra("url",  RestClient.BASE_URL + pic.getPath());
-				     context.startActivity(intent);
+					Intent intent = new Intent(context, ImageDisplay.class);
+					intent.putExtra("url", RestClient.BASE_URL + pic.getPath());
+					context.startActivity(intent);
 				}
 			});
 		}
-		
+
 		return convertView;
 	}
 
 	class ViewHolder {
-		TextView name, major, posttime, title, body, numComment, favourite;
+		TextView name, major, posttime, title, body, numComment;
 		ImageView avatar, pic1, pic2, pic3;
 	}
 

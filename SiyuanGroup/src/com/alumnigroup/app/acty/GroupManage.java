@@ -17,8 +17,8 @@ import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
-import com.alumnigroup.app.SynData;
-import com.alumnigroup.app.SynData.SynDataListener;
+import com.alumnigroup.app.SyncData;
+import com.alumnigroup.app.SyncData.SynDataListener;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.User;
@@ -142,7 +142,7 @@ public class GroupManage extends BaseActivity {
 				@Override
 				public void onOK(Header[] headers, JSONObject obj) {
 					toast("头像上传成功");
-					SynData.SyncGroupInfo(getContext(), group.getId(), null);
+					SyncData.SyncGroupInfo(getContext(), group.getId(), null);
 				}
 
 				@Override
