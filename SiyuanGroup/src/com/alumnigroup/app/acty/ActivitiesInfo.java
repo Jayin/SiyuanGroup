@@ -496,7 +496,11 @@ public class ActivitiesInfo extends BaseActivity {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("报名失败 " + ErrorCode.errorList.get(errorCode));
+				if(errorCode == 20506){
+					toast("已报名,请等待审核");
+				}else{
+					toast("报名失败 " + ErrorCode.errorList.get(errorCode));
+				}
 			}
 		});
 
@@ -518,7 +522,12 @@ public class ActivitiesInfo extends BaseActivity {
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
-						toast("收藏失败 "+ErrorCode.errorList.get(errorCode));
+						if(errorCode==20506){
+							toast("已收藏");
+						}else{
+							toast("收藏失败 "+ErrorCode.errorList.get(errorCode));
+						}
+						
 
 					}
 				});

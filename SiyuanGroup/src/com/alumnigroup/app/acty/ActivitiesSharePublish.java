@@ -28,6 +28,7 @@ import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.FileUtils;
 import com.alumnigroup.utils.ImageUtils;
+import com.alumnigroup.widget.LoadingDialog;
 import com.custom.view.FlowLayout;
 
 /**
@@ -44,6 +45,7 @@ public class ActivitiesSharePublish extends BaseActivity {
 	private MActivity activity;
 	private FlowLayout flowLayout;
 	private boolean withPic = false;
+	private LoadingDialog loadingdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,9 @@ public class ActivitiesSharePublish extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		loadingdialog  =new LoadingDialog(getContext());
+		loadingdialog.setCancelable(false);
+		
 		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		_getView(R.id.acty_head_btn_post).setOnClickListener(this);
 		_getView(R.id.btn_add_pic).setOnClickListener(this);
@@ -126,6 +131,17 @@ public class ActivitiesSharePublish extends BaseActivity {
 			public void onFaild(int errorType, int errorCode) {
 				toast("发布失败 " + ErrorCode.errorList.get(errorCode));
 			}
+			
+			@Override
+			public void onStart() {
+				loadingdialog.setText("发布中...");
+				loadingdialog.show();
+			}
+			
+			@Override
+			public void onFinish() {
+				loadingdialog.dismiss();
+			}
 		});
 
 	}
@@ -155,6 +171,17 @@ public class ActivitiesSharePublish extends BaseActivity {
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						toast("更新失败 " + ErrorCode.errorList.get(errorCode));
+					}
+					
+					@Override
+					public void onStart() {
+						loadingdialog.setText("更新中...");
+						loadingdialog.show();
+					}
+					
+					@Override
+					public void onFinish() {
+						loadingdialog.dismiss();
 					}
 				});
 	}

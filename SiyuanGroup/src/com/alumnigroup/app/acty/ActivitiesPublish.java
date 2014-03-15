@@ -30,6 +30,7 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.FilePath;
 import com.alumnigroup.utils.ImageUtils;
+import com.alumnigroup.widget.LoadingDialog;
 import com.alumnigroup.widget.TimePickDialog;
 import com.alumnigroup.widget.TimePickDialog.OnSiglePickFinishedListener;
 import com.custom.view.FlowLayout;
@@ -55,6 +56,7 @@ public class ActivitiesPublish extends BaseActivity {
 	private MActivity acty;
 	private FlowLayout flowLayout;
 	private HashMap<View, Uri> bitmaps;
+	private LoadingDialog loadingdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +90,9 @@ public class ActivitiesPublish extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		loadingdialog  =new LoadingDialog(getContext());
+		loadingdialog.setCancelable(false);
+		
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_create = _getView(R.id.acty_head_btn_create);
 		btn_starttime = _getView(R.id.btn_starttime);
@@ -218,6 +223,17 @@ public class ActivitiesPublish extends BaseActivity {
 					public void onFaild(int errorType, int errorCode) {
 						toast("更新失败 " + ErrorCode.errorList.get(errorCode));
 					}
+					
+					@Override
+					public void onStart() {
+						loadingdialog.setText("更新中...");
+						loadingdialog.show();
+					}
+					
+					@Override
+					public void onFinish() {
+						loadingdialog.dismiss();
+					}
 				});
 
 	}
@@ -257,6 +273,17 @@ public class ActivitiesPublish extends BaseActivity {
 					public void onFaild(int errorType, int errorCode) {
 						//toast("网络异常 错误码:" + errorCode);
 						toast("活动发起失败 "+ErrorCode.errorList.get(errorCode));
+					}
+					
+					@Override
+					public void onStart() {
+						loadingdialog.setText("创建中...");
+						loadingdialog.show();
+					}
+					
+					@Override
+					public void onFinish() {
+						loadingdialog.dismiss();
 					}
 				});
 
