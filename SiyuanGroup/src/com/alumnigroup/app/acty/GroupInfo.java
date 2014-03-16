@@ -99,72 +99,10 @@ public class GroupInfo extends BaseActivity {
 				} else if (intent.getAction().equals(
 						Constants.Action_Issue_Edit)) { // 更新话题修改
 					Issue issue = (Issue) intent.getSerializableExtra("issue");
-					data_share.set(item_click, issue);
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_name))
-							.setText(issue.getUser().getProfile().getName());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_major))
-							.setText(issue.getUser().getProfile().getMajor());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_posttime))
-							.setText(CalendarUtils.getTimeFromat(
-									issue.getPosttime(),
-									CalendarUtils.TYPE_timeline));
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_title))
-							.setText(issue.getTitle());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_body))
-							.setText(issue.getBody());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_numComment))
-							.setText(issue.getNumComments() + "");
-					ImageView iv_avatar = (ImageView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_avatar);
-					ImageView iv_pic1 = (ImageView) viewClicked
-							.findViewById(R.id.iv_pic1);
-
-					if (issue.getUser().getAvatar() != null) {
-						ImageLoader.getInstance().displayImage(
-								RestClient.BASE_URL
-										+ issue.getUser().getAvatar(),
-								iv_avatar);
-					} else {
-						ImageLoader
-								.getInstance()
-								.displayImage(
-										"drawable://"
-												+ R.drawable.ic_image_load_normal,
-										iv_avatar);
-					}
-					// 暂时1张图片
-					iv_pic1.setVisibility(View.GONE);
-					if (issue.getPictures() != null
-							&& issue.getPictures().size() > 0) {
-						iv_pic1.setVisibility(View.VISIBLE);
-						// for (MPicture pic : issue.getPictures()) {
-						final MPicture pic = issue.getPictures().get(0);
-						iv_pic1.setVisibility(View.VISIBLE);
-						ImageLoader.getInstance().displayImage(
-								RestClient.BASE_URL + pic.getPath(), iv_pic1);
-						// }
-
-						iv_pic1.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								Intent intent = new Intent(getContext(),
-										ImageDisplay.class);
-								intent.putExtra("url", RestClient.BASE_URL
-										+ pic.getPath());
-								getContext().startActivity(intent);
-							}
-						});
-					}
+					SyncData.updateEditIssue(data_share, adapter_share, issue);
 				}else if(intent.getAction().equals(Constants.Action_Issue_delete)){
 					Issue deleteItem = (Issue)intent.getSerializableExtra("issue");
-					SyncData.updateDelete(data_share, adapter_share, deleteItem);
+					SyncData.updateDeleteIssue(data_share, adapter_share, deleteItem);
 				}
 
 			}

@@ -194,7 +194,7 @@ public class SyncData {
 	 * @param adapter
 	 * @param deleteItem
 	 */
-	public static  void updateDelete(List<Issue> data,IssueAdapter adapter,Issue deleteItem){
+	public static void updateDeleteIssue(List<Issue> data,IssueAdapter adapter,Issue deleteItem){
 		for(int i=0;i<data.size();i++){
 			if(deleteItem.getId()==data.get(i).getId()){
 			     data.remove(i);
@@ -202,6 +202,21 @@ public class SyncData {
 			}
 		}
 		adapter.notifyDataSetChanged();
+	}
+	/**
+	 * 更新issue修改
+	 * @param data
+	 * @param adapter
+	 * @param editItem
+	 */
+	public static void updateEditIssue(List<Issue> data,IssueAdapter adapter,Issue editItem){
+		for(int i=0;i<data.size();i++){
+			if(editItem.getId()==data.get(i).getId()){
+			     data.set(i, editItem);
+			     break;
+			}
+		}
+		adapter.notifyDataSetInvalidated();
 	}
 
 	/**

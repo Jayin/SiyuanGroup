@@ -59,11 +59,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private IssuesAPI api;
 	private StarAPI starAPI;
 	private User user;
-
-	private ArrayList<Issue> data_clicked = null;
-	private int item_click = -1;
-	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
- 
 	private BroadcastReceiver mReceiver = null;
 
 	@Override
@@ -84,74 +79,14 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			public void onReceive(Context context, Intent intent) {
 				if (intent.getAction().equals(Constants.Action_Issue_Edit)) {
 					Issue issue = (Issue) intent.getSerializableExtra("issue");
-					data_clicked.set(item_click, issue);
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_name))
-							.setText(issue.getUser().getProfile().getName());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_major))
-							.setText(issue.getUser().getProfile().getMajor());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_posttime))
-							.setText(CalendarUtils.getTimeFromat(
-									issue.getPosttime(),
-									CalendarUtils.TYPE_timeline));
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_title))
-							.setText(issue.getTitle());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_body))
-							.setText(issue.getBody());
-					((TextView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_numComment))
-							.setText(issue.getNumComments() + "");
-					ImageView iv_avatar = (ImageView) viewClicked
-							.findViewById(R.id.item_lv_acty_comminication_avatar);
-					ImageView iv_pic1 = (ImageView) viewClicked
-							.findViewById(R.id.iv_pic1);
-
-					if (issue.getUser().getAvatar() != null) {
-						ImageLoader.getInstance().displayImage(
-								RestClient.BASE_URL
-										+ issue.getUser().getAvatar(),
-								iv_avatar);
-					} else {
-						ImageLoader
-								.getInstance()
-								.displayImage(
-										"drawable://"
-												+ R.drawable.ic_image_load_normal,
-										iv_avatar);
-					}
-					// 暂时1张图片
-					iv_pic1.setVisibility(View.GONE);
-					if (issue.getPictures() != null
-							&& issue.getPictures().size() > 0) {
-						iv_pic1.setVisibility(View.VISIBLE);
-						// for (MPicture pic : issue.getPictures()) {
-						final MPicture pic = issue.getPictures().get(0);
-						iv_pic1.setVisibility(View.VISIBLE);
-						ImageLoader.getInstance().displayImage(
-								RestClient.BASE_URL + pic.getPath(), iv_pic1);
-						// }
-
-						iv_pic1.setOnClickListener(new OnClickListener() {
-
-							@Override
-							public void onClick(View v) {
-								Intent intent = new Intent(getContext(),
-										ImageDisplay.class);
-								intent.putExtra("url", RestClient.BASE_URL
-										+ pic.getPath());
-								getContext().startActivity(intent);
-							}
-						});
-					}
+					SyncData.updateEditIssue(data_all, adapter_all, issue);
+					SyncData.updateEditIssue(data_favourite, adapter_favourite, issue);
+					SyncData.updateEditIssue(data_my, adapter_my, issue);
 				}else if(intent.getAction().equals(Constants.Action_Issue_delete)){
 					Issue deleteItem = (Issue)intent.getSerializableExtra("issue");
-					SyncData.updateDelete(data_all, adapter_all, deleteItem);
-					SyncData.updateDelete(data_my, adapter_my, deleteItem);
-					SyncData.updateDelete(data_favourite, adapter_favourite, deleteItem);
+					SyncData.updateDeleteIssue(data_all, adapter_all, deleteItem);
+					SyncData.updateDeleteIssue(data_my, adapter_my, deleteItem);
+					SyncData.updateDeleteIssue(data_favourite, adapter_favourite, deleteItem);
 				}
 			}
 		};
@@ -546,20 +481,15 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 			long id) {
 		if (position - 1 == -1)
 			return;
-		viewClicked = view;
-		item_click = position - 1;
 		Intent intent = new Intent(this, CommunicationDetail.class);
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));
-			data_clicked = data_all;
 		}
 		if (parent == lv_my) {
 			intent.putExtra("issue", data_my.get(position - 1));
-			data_clicked = data_my;
 		}
 		if (parent == lv_favourit) {
 			intent.putExtra("issue", data_favourite.get(position - 1));
-			data_clicked = data_favourite;
 		}
 		openActivity(intent);
 	}
