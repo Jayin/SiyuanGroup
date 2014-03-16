@@ -3,6 +3,7 @@ package com.alumnigroup.app;
 import java.io.Serializable;
 import java.util.ArrayList;
 import android.content.Context;
+
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.Dynamic;
 import com.alumnigroup.entity.Issue;
@@ -223,6 +224,50 @@ public class AppCache {
 				Issue g = issue_fav.get(i);
 				if (g.getId() == change.getId()) {
 					issue_fav.set(i, change);
+				}
+			}
+			setCommunicationFavourite(context, issue_fav);
+		}
+	}
+	/**
+	 * 删除一话题
+	 * @param context
+	 * @param issueId
+	 * @param listener
+	 */
+	public static void deleteIssue(Context context,Issue deleteItem){
+		ArrayList<Issue> issue_all = getCommunicationAll(context);
+		ArrayList<Issue> issue_my = getCommunicationMy(context);
+		ArrayList<Issue> issue_fav = getCommunicationFavourite(context);
+		
+		if(issue_all != null){
+			for (int i = 0; i < issue_all.size(); i++) {
+				Issue g = issue_all.get(i);
+				if (g.getId() == deleteItem.getId()) {
+					issue_all.remove(i);
+					break;
+				}
+			}
+			setCommunicationAll(context, issue_all);
+		}
+		
+		if(issue_my != null){
+			for (int i = 0; i < issue_my.size(); i++) {
+				Issue g = issue_my.get(i);
+				if (g.getId() == deleteItem.getId()) {
+					issue_my.remove(i);
+					break;
+				}
+			}
+			setCommunicationMy(context, issue_my);
+		}
+		
+		if(issue_fav != null){
+			for (int i = 0; i < issue_fav.size(); i++) {
+				Issue g = issue_fav.get(i);
+				if (g.getId() == deleteItem.getId()) {
+					issue_fav.remove(i);
+					break;
 				}
 			}
 			setCommunicationFavourite(context, issue_fav);

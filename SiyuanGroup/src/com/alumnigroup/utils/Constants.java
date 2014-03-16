@@ -30,6 +30,8 @@ public class Constants {
 	public static final String Action_Issue_Comment_Ok = "Issue_Comment_Ok";
 	/** 话题修改*/
 	public static final String Action_Issue_Edit = "Action_Issue_Edit";
+	/** 话题删除*/
+	public static final String Action_Issue_delete ="Action_Issue_delete";
 	
 	/** 商务合作评论成功*/	
 	public static final String Action_Bussiness_Comment_Ok = "Bussiness_Comment_Ok"; 

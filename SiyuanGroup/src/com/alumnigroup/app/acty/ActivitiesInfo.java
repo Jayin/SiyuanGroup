@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.ActivityShareAPI;
@@ -32,6 +33,7 @@ import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
@@ -161,6 +163,9 @@ public class ActivitiesInfo extends BaseActivity {
 							}
 						});
 					}
+				}else if(intent.getAction().equals(Constants.Action_Issue_delete)){
+					Issue deleteItem = (Issue)intent.getSerializableExtra("issue");
+					SyncData.updateDelete(data_share, adapter_share, deleteItem);
 				}
 
 			}
@@ -168,6 +173,7 @@ public class ActivitiesInfo extends BaseActivity {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_ActivityInfo_Edit);
 		filter.addAction(Constants.Action_ActivityShare_Edit);
+		filter.addAction(Constants.Action_Issue_delete);
 		registerReceiver(mReceiver, filter);
 	}
 
@@ -271,7 +277,11 @@ public class ActivitiesInfo extends BaseActivity {
 									data_share.clear();
 									data_share.addAll(newData_share);
 									adapter_share.notifyDataSetChanged();
-									lv_share.setPullLoadEnable(true);
+									if(newData_share.size()<10){
+										lv_share.setPullLoadEnable(false);
+									}else{
+										lv_share.setPullLoadEnable(true);
+									}
 								}
 								lv_share.stopRefresh();
 							}
@@ -308,6 +318,11 @@ public class ActivitiesInfo extends BaseActivity {
 									page_share++;
 									data_share.addAll(newData_share);
 									adapter_share.notifyDataSetChanged();
+									if(newData_share.size()<10){
+										lv_share.setPullLoadEnable(false);
+									}else{
+										lv_share.setPullLoadEnable(true);
+									}
 								}
 								lv_share.stopLoadMore();
 							}
