@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.ActivityShareAPI;

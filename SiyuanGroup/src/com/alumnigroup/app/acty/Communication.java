@@ -12,18 +12,16 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -31,6 +29,7 @@ import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MPicture;
@@ -39,7 +38,6 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -65,6 +63,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	private ArrayList<Issue> data_clicked = null;
 	private int item_click = -1;
 	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
+ 
 	private BroadcastReceiver mReceiver = null;
 
 	@Override
@@ -83,62 +82,85 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Issue issue =  (Issue) intent.getSerializableExtra("issue");
-				data_clicked.set(item_click, issue);
-				 ((TextView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_name)).setText(issue.getUser().getProfile().getName());
-			     ((TextView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_major)).setText(issue.getUser().getProfile().getMajor());
-				 ((TextView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_posttime)).setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
-								CalendarUtils.TYPE_timeline));
-				 ((TextView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_title)).setText(issue.getTitle());
-				((TextView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_body)).setText(issue.getBody());
-				((TextView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_numComment)).setText(issue.getNumComments() + "");
-				ImageView iv_avatar = (ImageView) viewClicked
-						.findViewById(R.id.item_lv_acty_comminication_avatar);
-				ImageView iv_pic1 = (ImageView) viewClicked.findViewById(R.id.iv_pic1);
-				
-				if (issue.getUser().getAvatar() != null) {
-					ImageLoader.getInstance()
-							.displayImage(
-									RestClient.BASE_URL + issue.getUser().getAvatar(),
-									iv_avatar);
-				} else {
-					ImageLoader.getInstance().displayImage(
-							"drawable://" + R.drawable.ic_image_load_normal,iv_avatar);
-				}
-				// 暂时1张图片
-				iv_pic1.setVisibility(View.GONE);
-				if (issue.getPictures() != null && issue.getPictures().size() > 0) {
-					iv_pic1.setVisibility(View.VISIBLE);
-					// for (MPicture pic : issue.getPictures()) {
-					final MPicture pic = issue.getPictures().get(0);
-					iv_pic1.setVisibility(View.VISIBLE);
-					ImageLoader.getInstance().displayImage(
-							RestClient.BASE_URL + pic.getPath(),iv_pic1);
-					// }
+				if (intent.getAction().equals(Constants.Action_Issue_Edit)) {
+					Issue issue = (Issue) intent.getSerializableExtra("issue");
+					data_clicked.set(item_click, issue);
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_name))
+							.setText(issue.getUser().getProfile().getName());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_major))
+							.setText(issue.getUser().getProfile().getMajor());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_posttime))
+							.setText(CalendarUtils.getTimeFromat(
+									issue.getPosttime(),
+									CalendarUtils.TYPE_timeline));
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_title))
+							.setText(issue.getTitle());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_body))
+							.setText(issue.getBody());
+					((TextView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_numComment))
+							.setText(issue.getNumComments() + "");
+					ImageView iv_avatar = (ImageView) viewClicked
+							.findViewById(R.id.item_lv_acty_comminication_avatar);
+					ImageView iv_pic1 = (ImageView) viewClicked
+							.findViewById(R.id.iv_pic1);
 
-					iv_pic1.setOnClickListener(new OnClickListener() {
+					if (issue.getUser().getAvatar() != null) {
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL
+										+ issue.getUser().getAvatar(),
+								iv_avatar);
+					} else {
+						ImageLoader
+								.getInstance()
+								.displayImage(
+										"drawable://"
+												+ R.drawable.ic_image_load_normal,
+										iv_avatar);
+					}
+					// 暂时1张图片
+					iv_pic1.setVisibility(View.GONE);
+					if (issue.getPictures() != null
+							&& issue.getPictures().size() > 0) {
+						iv_pic1.setVisibility(View.VISIBLE);
+						// for (MPicture pic : issue.getPictures()) {
+						final MPicture pic = issue.getPictures().get(0);
+						iv_pic1.setVisibility(View.VISIBLE);
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL + pic.getPath(), iv_pic1);
+						// }
 
-						@Override
-						public void onClick(View v) {
-							Intent intent = new Intent(getContext(), ImageDisplay.class);
-							intent.putExtra("url", RestClient.BASE_URL + pic.getPath());
-							getContext().startActivity(intent);
-						}
-					});
+						iv_pic1.setOnClickListener(new OnClickListener() {
+
+							@Override
+							public void onClick(View v) {
+								Intent intent = new Intent(getContext(),
+										ImageDisplay.class);
+								intent.putExtra("url", RestClient.BASE_URL
+										+ pic.getPath());
+								getContext().startActivity(intent);
+							}
+						});
+					}
+				}else if(intent.getAction().equals(Constants.Action_Issue_delete)){
+					Issue deleteItem = (Issue)intent.getSerializableExtra("issue");
+					SyncData.updateDelete(data_all, adapter_all, deleteItem);
+					SyncData.updateDelete(data_my, adapter_my, deleteItem);
+					SyncData.updateDelete(data_favourite, adapter_favourite, deleteItem);
 				}
 			}
 		};
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_Issue_Edit);
+		filter.addAction(Constants.Action_Issue_delete);
 		registerReceiver(mReceiver, filter);
 	}
-
+	
 	private void initController() {
 		lv_all.setPullRefreshEnable(true);
 		lv_all.setPullLoadEnable(true);
@@ -525,7 +547,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		if (position - 1 == -1)
 			return;
 		viewClicked = view;
-		item_click = position-1;
+		item_click = position - 1;
 		Intent intent = new Intent(this, CommunicationDetail.class);
 		if (parent == lv_all) {
 			intent.putExtra("issue", data_all.get(position - 1));
@@ -544,103 +566,4 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 }
 
-class IssueAdapter extends BaseAdapter {
-	private List<Issue> data;
-	private Context context;
-
-	public IssueAdapter(Context context, List<Issue> data) {
-		this.data = data;
-		this.context = context;
-	}
-
-	@Override
-	public int getCount() {
-		return data.size();
-	}
-
-	@Override
-	public Object getItem(int position) {
-		return data.get(position);
-	}
-
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
-
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder h = null;
-		if (convertView == null) {
-			h = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(
-					R.layout.item_lv_acty_communication, null);
-			h.name = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_name);
-			h.major = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_major);
-			h.posttime = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_posttime);
-			h.title = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_title);
-			h.body = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_body);
-			h.numComment = (TextView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_numComment);
-			h.avatar = (ImageView) convertView
-					.findViewById(R.id.item_lv_acty_comminication_avatar);
-			h.pic1 = (ImageView) convertView.findViewById(R.id.iv_pic1);
-			convertView.setTag(h);
-		} else {
-			h = (ViewHolder) convertView.getTag();
-		}
-		Issue issue = data.get(position);
-		h.name.setText(issue.getUser().getProfile().getName());
-		h.major.setText(issue.getUser().getProfile().getMajor());
-		h.posttime.setText(CalendarUtils.getTimeFromat(issue.getPosttime(),
-				CalendarUtils.TYPE_timeline));
-		h.title.setText(issue.getTitle());
-		h.body.setText(issue.getBody());
-		h.numComment.setText(issue.getNumComments() + "");
-		if (issue.getUser().getAvatar() != null) {
-			ImageLoader.getInstance()
-					.displayImage(
-							RestClient.BASE_URL + issue.getUser().getAvatar(),
-							h.avatar);
-		} else {
-			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
-		}
-		// 暂时1张图片
-		h.pic1.setVisibility(View.GONE);
-		L.i(issue.getNumPictures() + "");
-		if (issue.getPictures() != null && issue.getPictures().size() > 0) {
-			h.pic1.setVisibility(View.VISIBLE);
-			// for (MPicture pic : issue.getPictures()) {
-			final MPicture pic = issue.getPictures().get(0);
-			L.i(pic.toString());
-			h.pic1.setVisibility(View.VISIBLE);
-			ImageLoader.getInstance().displayImage(
-					RestClient.BASE_URL + pic.getPath(), h.pic1);
-			// }
-
-			h.pic1.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(context, ImageDisplay.class);
-					intent.putExtra("url", RestClient.BASE_URL + pic.getPath());
-					context.startActivity(intent);
-				}
-			});
-		}
-
-		return convertView;
-	}
-
-	class ViewHolder {
-		TextView name, major, posttime, title, body, numComment;
-		ImageView avatar, pic1, pic2, pic3;
-	}
-
-}
+ 

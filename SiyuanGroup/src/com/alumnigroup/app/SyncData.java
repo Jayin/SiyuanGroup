@@ -1,9 +1,15 @@
 package com.alumnigroup.app;
 
+import java.util.List;
+
 import org.apache.http.Header;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Context;
+import android.content.Intent;
+
+import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.GroupAPI;
@@ -14,11 +20,6 @@ import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
-import com.google.gson.internal.JsonReaderInternalAccess;
-import com.google.gson.stream.JsonReader;
-
-import android.content.Context;
-import android.content.Intent;
 
 /**
  * 数据同步，通常修改后去同步
@@ -174,6 +175,33 @@ public class SyncData {
 					listener.onFaild();
 			}
 		});
+	}
+	/**
+	 * 删除一条issue
+	 * @param context
+	 * @param deleteItem
+	 * @param listener
+	 */
+	public static void deleteIssue(Context context,Issue deleteItem){
+		AppCache.deleteIssue(context, deleteItem);
+		Intent intent = new Intent(Constants.Action_Issue_delete);
+		intent.putExtra("issue", deleteItem);
+		context.sendBroadcast(intent);
+	}
+	/**
+	 * 更新issue删除
+	 * @param data
+	 * @param adapter
+	 * @param deleteItem
+	 */
+	public static  void updateDelete(List<Issue> data,IssueAdapter adapter,Issue deleteItem){
+		for(int i=0;i<data.size();i++){
+			if(deleteItem.getId()==data.get(i).getId()){
+			     data.remove(i);
+			     break;
+			}
+		}
+		adapter.notifyDataSetChanged();
 	}
 
 	/**

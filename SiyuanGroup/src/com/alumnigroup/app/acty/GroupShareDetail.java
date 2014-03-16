@@ -23,6 +23,7 @@ import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
@@ -270,6 +271,10 @@ public class GroupShareDetail extends BaseActivity {
 			public void onOK(Header[] headers, JSONObject obj) {
 				toast("删除成功");
 				closeActivity();
+				//这部分没有缓存，直接通知删除好了
+				Intent intent = new Intent(Constants.Action_Issue_delete);
+				intent.putExtra("issue", issue);
+				getContext().sendBroadcast(intent);
 			}
 
 			@Override

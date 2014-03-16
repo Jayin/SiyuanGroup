@@ -23,6 +23,7 @@ import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.Comment;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
@@ -86,7 +87,7 @@ public class CommunicationDetail extends BaseActivity {
 						Constants.Action_Issue_Edit)) {
 					issue = (Issue) intent.getSerializableExtra("issue");
 					fillInData();
-				}
+				} 
 			}
 		};
 		IntentFilter filter = new IntentFilter();
@@ -280,6 +281,7 @@ public class CommunicationDetail extends BaseActivity {
 			public void onOK(Header[] headers, JSONObject obj) {
 				toast("删除成功");
 				closeActivity();
+				SyncData.deleteIssue(getContext(), issue);
 			}
 
 			@Override
