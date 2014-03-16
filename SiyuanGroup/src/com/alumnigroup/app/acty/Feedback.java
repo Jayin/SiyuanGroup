@@ -21,6 +21,8 @@ import com.alumnigroup.entity.MFeedback;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.widget.FeedbackDialog;
+import com.alumnigroup.widget.FeedbackDialog.FeedbackLinstener;
+import com.alumnigroup.widget.LoadingDialog;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -140,7 +142,13 @@ public class Feedback extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		dialog = new FeedbackDialog(getContext());
+		dialog = new FeedbackDialog(getContext(),new FeedbackLinstener() {
+			
+			@Override
+			public void onFinish() {
+				lv.startRefresh();
+			}
+		});
 		lv = (XListView) _getView(R.id.lv_feedback);
 		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		_getView(R.id.btn_feedback).setOnClickListener(this);
