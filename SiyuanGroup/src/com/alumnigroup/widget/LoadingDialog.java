@@ -2,7 +2,6 @@ package com.alumnigroup.widget;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.os.Bundle;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -24,7 +23,7 @@ public class LoadingDialog extends Dialog {
 	private TextView tv_updateinfo;
 	private ImageView iv;
 	private Context context;
-
+    private Animation round ;
 	public LoadingDialog(Context context) {
 		super(context, R.style.Dialog_Theme_BaseDialog);
 		this.context = context;
@@ -40,13 +39,18 @@ public class LoadingDialog extends Dialog {
 		tv_updateinfo = (TextView) findViewById(R.id.dlg_progress_tv_updateinfo);
 
 		// 加载动画
-		Animation round = AnimationUtils.loadAnimation(context,
+		round = AnimationUtils.loadAnimation(context,
 				R.anim.load_animation);
-		// 使用ImageView显示动画
-		iv.startAnimation(round);
 	}
 
 	public void setText(CharSequence text) {
 		this.tv_updateinfo.setText(text);
+	}
+	
+	@Override
+	public void show() {
+		super.show();
+		// 使用ImageView显示动画
+		iv.startAnimation(round);
 	}
 }

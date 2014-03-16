@@ -195,6 +195,7 @@ public class CoreService extends Service {
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				try {
+					System.out.println(obj.toString());
 					int versioncode = Integer.parseInt(obj
 							.getString("versioncode"));
 					int currentVersion = AndroidUtils
@@ -222,7 +223,10 @@ public class CoreService extends Service {
 
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-
+				L.e("check version faild");
+				Intent intent = new Intent(
+						Constants.Action_Receive_VersionInfo);
+				sendBroadcast(intent);
 			}
 		});
 	}
