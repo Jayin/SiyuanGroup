@@ -143,7 +143,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:gravity="center"
-                        android:text="收藏"
+                        android:text="关注"
                         android:textColor="@color/grey_lv_two"
                         android:textSize="16sp" />
                 </RelativeLayout>

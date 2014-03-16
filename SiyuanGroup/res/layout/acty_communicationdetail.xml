@@ -94,7 +94,7 @@
                     android:layout_marginTop="4dp"
                     android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
                     android:textColor="@color/black"
-                    android:textSize="12sp" />
+                    android:textSize="14sp" />
 
                 <com.custom.view.FlowLayout
                     android:id="@+id/flowlayout_content"

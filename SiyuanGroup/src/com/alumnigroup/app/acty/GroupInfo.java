@@ -100,9 +100,12 @@ public class GroupInfo extends BaseActivity {
 						Constants.Action_Issue_Edit)) { // 更新话题修改
 					Issue issue = (Issue) intent.getSerializableExtra("issue");
 					SyncData.updateEditIssue(data_share, adapter_share, issue);
-				}else if(intent.getAction().equals(Constants.Action_Issue_delete)){
-					Issue deleteItem = (Issue)intent.getSerializableExtra("issue");
-					SyncData.updateDeleteIssue(data_share, adapter_share, deleteItem);
+				} else if (intent.getAction().equals(
+						Constants.Action_Issue_delete)) {
+					Issue deleteItem = (Issue) intent
+							.getSerializableExtra("issue");
+					SyncData.updateDeleteIssue(data_share, adapter_share,
+							deleteItem);
 				}
 
 			}
@@ -257,12 +260,12 @@ public class GroupInfo extends BaseActivity {
 									data_share.clear();
 									data_share.addAll(newData_share);
 									adapter_share.notifyDataSetChanged();
-									if(newData_share.size()<10){
+									if (newData_share.size() < 10) {
 										lv_share.setPullLoadEnable(false);
-									}else{
+									} else {
 										lv_share.setPullLoadEnable(true);
 									}
-									
+
 								}
 								lv_share.stopRefresh();
 							}
@@ -298,9 +301,9 @@ public class GroupInfo extends BaseActivity {
 									page_share++;
 									data_share.addAll(newData_share);
 									adapter_share.notifyDataSetChanged();
-									if(newData_share.size()<10){
+									if (newData_share.size() < 10) {
 										lv_share.setPullLoadEnable(false);
-									}else{
+									} else {
 										lv_share.setPullLoadEnable(true);
 									}
 								}
