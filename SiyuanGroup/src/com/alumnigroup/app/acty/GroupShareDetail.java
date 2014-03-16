@@ -300,15 +300,15 @@ public class GroupShareDetail extends BaseActivity {
 
 					@Override
 					public void onOK(Header[] headers, JSONObject obj) {
-						toast("收藏成功");
+						toast("关注成功");
 					}
 
 					@Override
 					public void onFaild(int errorType, int errorCode) {
 						if(errorCode==20506){
-							toast("已收藏");
+							toast("已关注");
 						}else{
-							toast("收藏失败 " +ErrorCode.errorList.get(errorCode));
+							toast("关注失败 " +ErrorCode.errorList.get(errorCode));
 						}
 					}
 				});

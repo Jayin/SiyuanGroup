@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.alumnigroup.app"
-    android:versionCode="17"
-    android:versionName="1.12" >
+    android:versionCode="18"
+    android:versionName="1.13" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -41,6 +41,7 @@
         </activity>
         <activity
             android:name=".acty.Login"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" >
         </activity>
         <activity
@@ -50,8 +51,7 @@
         <activity
             android:name=".acty.Main"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait"
-        >
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name=".acty.Alldynamic"

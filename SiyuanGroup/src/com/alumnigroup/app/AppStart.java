@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
 import com.alumnigroup.app.acty.Login;
 import com.alumnigroup.app.acty.Main;
 import com.alumnigroup.utils.Constants;
@@ -19,17 +18,19 @@ import com.alumnigroup.utils.L;
  * 
  */
 public class AppStart extends BaseActivity {
-
+    private long starttime ;
+    private long waittime = 1500;
 	private BroadcastReceiver mReceiver = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acty_start);
-	    initReceiver();//先后顺序不能变
+		initReceiver();// 先后顺序不能变
 		init();
+		starttime = System.currentTimeMillis();
 	}
-	
+
 	private void initReceiver() {
 		mReceiver = new AppStartReceiver();
 		IntentFilter filter = new IntentFilter();
@@ -41,7 +42,8 @@ public class AppStart extends BaseActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unregisterReceiver(mReceiver);
+		if (mReceiver != null)
+			unregisterReceiver(mReceiver);
 	}
 
 	// 初始化工作
@@ -73,13 +75,22 @@ public class AppStart extends BaseActivity {
 	class AppStartReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-		   String action = intent.getAction();
-		   if(action.equals(Constants.Action_Login_In_Successful)){
-			   L.i("AppStartReceiver-->Login Successfully");
-		   }else{
-			   toast("请检查你的网络");
-		   }
-		   if (checkLoginInfo()) {
+			String action = intent.getAction();
+			if (action.equals(Constants.Action_Login_In_Successful)) {
+				L.i("AppStartReceiver-->Login Successfully");
+			} else {
+//				toast("请检查你的网络");
+				L.i("AppStartReceiver-->Login faild");
+			}
+			long lasttime = System.currentTimeMillis() - starttime;
+			if(waittime>lasttime){
+				try {
+					Thread.sleep(waittime-lasttime);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			if (checkLoginInfo()) {
 				openActivity(Main.class);
 			} else {
 				openActivity(Login.class);

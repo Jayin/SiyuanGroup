@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
@@ -42,6 +43,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	private TextView tv_unreadCount;
 	private boolean isError = false;
 	private ImageView iv_backgroud;
+	Bitmap backgroudBitmap = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +57,10 @@ public class Main extends BaseActivity implements OnClickListener {
 	}
 
 	private void startPolling() {
-		 Intent service =new Intent(getContext(), CoreService.class);
-		 service.setAction(Constants.Action_Start_Receive_UnreadCount);
-		 startService(service);
+		Intent service = new Intent(getContext(), CoreService.class);
+		service.setAction(Constants.Action_Start_Receive_UnreadCount);
+		startService(service);
 	}
-
 
 	// 接收到
 	private void openReceiver() {
@@ -67,7 +68,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_Receive_UnreadCount);// 有未读消息
 		filter.addAction(Constants.Action_Backgroud_switch);// 背景图切换
-		filter.addAction(Constants.Action_User_Login_Out);//用户登出
+		filter.addAction(Constants.Action_User_Login_Out);// 用户登出
 		registerReceiver(mRecevier, filter);
 	}
 
@@ -77,6 +78,8 @@ public class Main extends BaseActivity implements OnClickListener {
 		if (mRecevier != null) {
 			unregisterReceiver(mRecevier);
 		}
+		if (backgroudBitmap != null)
+			backgroudBitmap.recycle();
 	}
 
 	@Override
@@ -128,8 +131,11 @@ public class Main extends BaseActivity implements OnClickListener {
 		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
 		iv_backgroud = (ImageView) _getView(R.id.iv_main_bg);
 		if (AppInfo.getBackgroudPath(getContext()) != null) {
-			iv_backgroud.setImageBitmap(BitmapFactory.decodeFile(AppInfo
-					.getBackgroudPath(getContext())));
+//			 BitmapFactory.Options option = new BitmapFactory.Options();
+//			 option.inSampleSize = 2;
+			backgroudBitmap = BitmapFactory.decodeFile(AppInfo
+					.getBackgroudPath(getContext()));
+			iv_backgroud.setImageBitmap(backgroudBitmap);
 		}
 		initWebView();
 	}
@@ -225,8 +231,9 @@ public class Main extends BaseActivity implements OnClickListener {
 	class MainRecevier extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got unread
-				tv_unreadCount.setVisibility(View.INVISIBLE);															 
+			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got
+																					// unread
+				tv_unreadCount.setVisibility(View.INVISIBLE);
 				if (MessageCache.getUnreadCount(getContext()) > 0) {
 					tv_unreadCount.setText(MessageCache
 							.getUnreadCount(getContext()) + "");
@@ -239,7 +246,8 @@ public class Main extends BaseActivity implements OnClickListener {
 							.setImageBitmap(BitmapFactory.decodeFile(AppInfo
 									.getBackgroudPath(getContext())));
 				}
-			}else if(intent.getAction().equals(Constants.Action_User_Login_Out)){
+			} else if (intent.getAction().equals(
+					Constants.Action_User_Login_Out)) {
 				closeActivity();
 			}
 		}

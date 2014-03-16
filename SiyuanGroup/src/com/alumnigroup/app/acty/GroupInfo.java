@@ -14,7 +14,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -37,10 +36,8 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MGroup;
 import com.alumnigroup.entity.MMemberships;
-import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.utils.L;
@@ -72,9 +69,6 @@ public class GroupInfo extends BaseActivity {
 	private List<Issue> data_share;
 	private GroupShareAPI shareAPI;
 	private BroadcastReceiver mReceiver = null;
-
-	private int item_click = -1;
-	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -328,8 +322,6 @@ public class GroupInfo extends BaseActivity {
 					int position, long id) {
 				if (position - 1 == -1)
 					return;
-				viewClicked = view;
-				item_click = position - 1;
 				Intent intent = new Intent(getContext(), GroupShareDetail.class);
 				intent.putExtra("issue", data_share.get(position - 1));
 				intent.putExtra("group", group);
@@ -516,7 +508,7 @@ public class GroupInfo extends BaseActivity {
 
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
-				toast("申请成功");
+				toast("申请成功,请等待圈主审核");
 			}
 
 			@Override
