@@ -17,13 +17,11 @@ import android.widget.TextView;
 
 import com.alumnigroup.api.MessageAPI;
 import com.alumnigroup.api.RestClient;
-import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.MMessage;
-import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
@@ -226,6 +224,12 @@ public class MessageCenter extends BaseActivity {
 					data_message.get(position).getSendtime(),
 					CalendarUtils.TYPE_timeline));
 			h.tv_unreadCount.setVisibility(View.GONE);
+			
+			if(mm.getSenderid() == 8){ //系统消息
+				h.tv_username.setTextColor(getResources().getColor(R.color.blue_lv_two));
+			}else{
+				h.tv_username.setTextColor(getResources().getColor(R.color.black));
+			}
 			if(mm.getUnreadcount()>0){
 				h.tv_unreadCount.setText(mm.getUnreadcount()+"");
 				h.tv_unreadCount.setVisibility(View.VISIBLE);
