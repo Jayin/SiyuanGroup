@@ -127,6 +127,7 @@ public class DynamicAdapter extends BaseAdapter {
 
 			@Override
 			public void onClick(View v) {
+				 
 				switch (dynamic.getItemtype()) {
 				case Dynamic.Itme_type_user:
 					User user = dynamic.getUser();
@@ -235,7 +236,7 @@ public class DynamicAdapter extends BaseAdapter {
 								context.startActivity(issueIntent);
 							} catch (JSONException e) {
 								e.printStackTrace();
-								Toast.makeText(context, "网络异常，解析错误",
+								Toast.makeText(context, "该话题已删除",
 										Toast.LENGTH_SHORT).show();
 							}
 						}

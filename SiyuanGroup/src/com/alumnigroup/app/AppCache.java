@@ -291,6 +291,17 @@ public class AppCache {
 			setCommunicationAll(context, issue_all);
 		}
 	}
+	
+	/** 删除关注的一个 **/
+	public static void removeAllmemberFollowing(Context context, User remove) {
+		ArrayList<User> followers = getAllmemberFollowers(context);
+		for (int i = 0; i < followers.size(); i++) {
+			if (followers.get(i).getId() == remove.getId()) {
+				followers.remove(i);
+			}
+		}
+		setAllmemberFollowing(context, followers);
+	}
 
 	/** 获得全站会员all列表 */
 	@SuppressWarnings("unchecked")
@@ -307,17 +318,6 @@ public class AppCache {
 	@SuppressWarnings("unchecked")
 	public static ArrayList<User> getAllmemberFollowing(Context context) {
 		return (ArrayList<User>) get(context, Key_Allmember_following);
-	}
-
-	/** 删除关注的一个 **/
-	public static void removeAllmemberFollowing(Context context, User remove) {
-		ArrayList<User> followers = getAllmemberFollowers(context);
-		for (int i = 0; i < followers.size(); i++) {
-			if (followers.get(i).getId() == remove.getId()) {
-				followers.remove(i);
-			}
-		}
-		setAllmemberFollowing(context, followers);
 	}
 
 	/** 保存全站会员follow关注列表 */

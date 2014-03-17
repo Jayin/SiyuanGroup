@@ -316,7 +316,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 									toast("网络异常，解析错误");
 								} else {
 									for (Starring s : stars) {
-										newData_faviour.add((Issue) s.getItem());
+										if(s.getItem()!=null)newData_faviour.add((Issue) s.getItem());
 									}
 									if (newData_faviour.size() == 0) {
 										toast("没有更多");
