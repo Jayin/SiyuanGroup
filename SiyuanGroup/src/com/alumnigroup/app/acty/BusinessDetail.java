@@ -50,6 +50,8 @@ public class BusinessDetail extends BaseActivity {
 	private CocommentAdapter adatper;
 	private BroadcastReceiver mReceiver;
 	private ImageView iv_pic1, iv_pic2, iv_pic3;
+	private int isFavourite = 0;
+	private TextView tv_favourite;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +61,6 @@ public class BusinessDetail extends BaseActivity {
 		initLayout();
 		openReceiver();
 	}
-
-	
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
 			@Override
@@ -97,6 +97,7 @@ public class BusinessDetail extends BaseActivity {
 
 	@Override
 	protected void initData() {
+		isFavourite  =getIntent().getIntExtra("isFavourite",0);
 		c = (Cooperation) getSerializableExtra("cooperation");
 		user = AppInfo.getUser(getContext());
 		api = new BusinessAPI();
@@ -116,6 +117,7 @@ public class BusinessDetail extends BaseActivity {
 		tv_notify = (TextView) _getView(R.id.tv_notify);
 		iv_avatar = (ImageView) _getView(R.id.iv_avatar);
 		tv_createtime =  (TextView) _getView(R.id.tv_createtime);
+		tv_favourite = (TextView)_getView(R.id.tv_favourite);
 
 		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
 		iv_pic2 = (ImageView) _getView(R.id.iv_pic2);
@@ -227,6 +229,12 @@ public class BusinessDetail extends BaseActivity {
 			ImageLoader.getInstance().displayImage(
 					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
 		}
+		
+		if(isFavourite==0){
+			tv_favourite.setText("关注");
+		}else{
+			tv_favourite.setText("取消关注");
+		}
 	}
 
 
@@ -259,7 +267,11 @@ public class BusinessDetail extends BaseActivity {
 			comment();
 			break;
 		case R.id.btn_favourite:
-			favourite();
+			if(tv_favourite.getText().toString().equals("关注")){
+				favourite();
+			}else{
+				unFavourite();
+			}
 			break;
 		case R.id.iv_pic1:
 			intent = new Intent(getContext(), ImageDisplay.class);
@@ -332,6 +344,30 @@ public class BusinessDetail extends BaseActivity {
 						}
 					}
 				});
+	}
+	
+	private  void unFavourite(){
+		StarAPI starapi = new StarAPI();
+		starapi.unStar(StarAPI.Item_type_business, c.getId(), new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("取消关注成功");
+				closeActivity();
+				//send broadcast
+				Intent intent = new Intent(Constants.Action_Bussiness_unfavourite);
+				sendBroadcast(intent);
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				if(20506 == errorCode){ //已收藏
+					toast("已取消关注");
+				}else{
+					toast("取消关注失败 " + ErrorCode.errorList.get(errorCode));
+				}
+			}
+		});
 	}
 
 	class CocommentAdapter extends BaseAdapter {

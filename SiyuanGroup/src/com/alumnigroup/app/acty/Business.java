@@ -80,51 +80,60 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 			@Override
 			public void onReceive(Context context, Intent intent) {
-				Cooperation c = (Cooperation) intent
-						.getSerializableExtra("cooperation");
-				data_clicked.set(item_click, c);
-				((TextView) viewClicked.findViewById(R.id.tv_projectname))
-						.setText(c.getName());
-				((TextView) viewClicked.findViewById(R.id.tv_createtime))
-						.setText(CalendarUtils.getTimeFromat(
-								c.getCreatetime(), CalendarUtils.TYPE_TWO));
-				((TextView) viewClicked.findViewById(R.id.tv_major)).setText(c
-						.getUser().getProfile().getMajor());
-				((TextView) viewClicked.findViewById(R.id.tv_username))
-						.setText(c.getUser().getProfile().getName());
-				((TextView) viewClicked.findViewById(R.id.tv_description))
-						.setText(c.getDescription());
-				((TextView) viewClicked.findViewById(R.id.tv_numComment))
-						.setText(c.getNumComments() + "");
+				if (intent.getAction().equals(Constants.Action_Bussiness_Edit)) {
 
-				ImageView iv_avatar = (ImageView) viewClicked
-						.findViewById(R.id.iv_avater);
-				ImageView iv_status = (ImageView) viewClicked
-						.findViewById(R.id.iv_status);
-				if (c.getUser().getAvatar() != null) {
-					ImageLoader.getInstance().displayImage(
-							RestClient.BASE_URL + c.getUser().getAvatar(),
-							iv_avatar);
-				} else {
-					ImageLoader.getInstance().displayImage(
-							"drawable://" + R.drawable.ic_image_load_normal,
-							iv_avatar);
-				}
+					Cooperation c = (Cooperation) intent
+							.getSerializableExtra("cooperation");
+					data_clicked.set(item_click, c);
+					((TextView) viewClicked.findViewById(R.id.tv_projectname))
+							.setText(c.getName());
+					((TextView) viewClicked.findViewById(R.id.tv_createtime))
+							.setText(CalendarUtils.getTimeFromat(
+									c.getCreatetime(), CalendarUtils.TYPE_TWO));
+					((TextView) viewClicked.findViewById(R.id.tv_major))
+							.setText(c.getUser().getProfile().getMajor());
+					((TextView) viewClicked.findViewById(R.id.tv_username))
+							.setText(c.getUser().getProfile().getName());
+					((TextView) viewClicked.findViewById(R.id.tv_description))
+							.setText(c.getDescription());
+					((TextView) viewClicked.findViewById(R.id.tv_numComment))
+							.setText(c.getNumComments() + "");
 
-				if (c.getStatusid() != 2) {
-					ImageLoader.getInstance().displayImage(
-							"drawable://" + R.drawable.ic_image_status_on,
-							iv_status);
-				} else {
-					ImageLoader.getInstance().displayImage(
-							"drawable://" + R.drawable.ic_image_status_off,
-							iv_status);
+					ImageView iv_avatar = (ImageView) viewClicked
+							.findViewById(R.id.iv_avater);
+					ImageView iv_status = (ImageView) viewClicked
+							.findViewById(R.id.iv_status);
+					if (c.getUser().getAvatar() != null) {
+						ImageLoader.getInstance().displayImage(
+								RestClient.BASE_URL + c.getUser().getAvatar(),
+								iv_avatar);
+					} else {
+						ImageLoader
+								.getInstance()
+								.displayImage(
+										"drawable://"
+												+ R.drawable.ic_image_load_normal,
+										iv_avatar);
+					}
+
+					if (c.getStatusid() != 2) {
+						ImageLoader.getInstance().displayImage(
+								"drawable://" + R.drawable.ic_image_status_on,
+								iv_status);
+					} else {
+						ImageLoader.getInstance().displayImage(
+								"drawable://" + R.drawable.ic_image_status_off,
+								iv_status);
+					}
+				}else if(intent.getAction().equals(Constants.Action_Bussiness_unfavourite)){
+					lv_favourit.startRefresh();
 				}
 
 			}
 		};
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_Bussiness_Edit);
+		filter.addAction(Constants.Action_Bussiness_unfavourite);
 		registerReceiver(mReceiver, filter);
 	}
 
@@ -527,6 +536,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		if (parent == lv_favourit) {
 			intent.putExtra("cooperation", data_favourite.get(position - 1));
 			data_clicked = data_favourite;
+			intent.putExtra("isFavourite", 1);
 		}
 		openActivity(intent);
 	}

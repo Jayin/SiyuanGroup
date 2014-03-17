@@ -16,6 +16,7 @@ import com.google.gson.Gson;
  * @author Jayin Ton
  * 
  */
+@SuppressWarnings("serial")
 public class Cocomment implements Serializable {
 
 	public static Cocomment create_by_json(String json) {

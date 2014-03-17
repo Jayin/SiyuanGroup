@@ -265,11 +265,12 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 									toast("网络异常，解析错误");
 								} else {
 									for (Starring s : stars) {
-										newData_faviour.add((Issue) s.getItem());
+										 if(s.getItem() !=null)newData_faviour.add((Issue) s.getItem());
 									}
 									if (newData_faviour.size() == 0) {
 										toast("还没有收藏任何话题");
 										lv_favourit.setPullLoadEnable(false);
+										data_favourite.clear();
 									} else {
 										page_favourit = 1;
 										data_favourite.clear();
@@ -316,6 +317,10 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 									toast("网络异常，解析错误");
 								} else {
 									for (Starring s : stars) {
+										 if(s==null){
+											 System.out.println("s is null!!");
+											 continue;
+										 }
 										if(s.getItem()!=null)newData_faviour.add((Issue) s.getItem());
 									}
 									if (newData_faviour.size() == 0) {

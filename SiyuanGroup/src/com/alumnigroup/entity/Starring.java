@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.alumnigroup.api.StarAPI;
+import com.google.gson.Gson;
 
 /**
  * 一条收藏记录
@@ -27,24 +29,38 @@ public class Starring implements Serializable {
 			s.setUserid(obj.getInt("userid"));
 			s.setItemtype(obj.getInt("itemtype"));
 			s.setItemid(obj.getInt("itemid"));
-			s.setRemark(obj.getString("remark"));
 			s.setTypename(obj.getString("typename"));
-			if (s.getItemtype() == StarAPI.Item_type_activity) {
-				s.setItem(MActivity.create_by_json(obj.getJSONObject("item")
-						.toString()));
-			} else if (s.getItemtype() == StarAPI.Item_type_business) {
-				s.setItem(Cooperation.create_by_json(obj.getJSONObject("item")
-						.toString()));
-			} else if (s.getItemtype() == StarAPI.Item_type_issue) {
-				s.setItem(Issue.create_by_json(obj.getJSONObject("item")
-						.toString()));
+			try{
+				s.setRemark(obj.getString("remark"));
+			}catch(JSONException e){
+				s.setRemark(null);
 			}
-			if (s.getItem() == null)
-				return null;// 构建item失败
+			System.out.println(obj.toString());
+			if (obj.getJSONObject("item") == null){
+				System.out.println("obj.getJSONObject(item)  = null;");
+				s.setItem(null);
+			}
+			else {
+				if (s.getItemtype() == StarAPI.Item_type_activity) {
+					s.setItem(MActivity.create_by_json(obj
+							.getJSONObject("item").toString()));
+
+				} else if (s.getItemtype() == StarAPI.Item_type_business) {
+					s.setItem(Cooperation.create_by_json(obj.getJSONObject(
+							"item").toString()));
+				} else if (s.getItemtype() == StarAPI.Item_type_issue) {
+					s.setItem(Issue.create_by_json(obj.getJSONObject("item")
+							.toString()));
+				}
+			}
+			// can be null ,因为会删除,item没有了 记录还有
+			// if (s.getItem() == null)
+			// return null;// 构建item失败
 			return s;
 
 		} catch (Exception e) {
-			return null;
+			s.setItem(null);
+			return s;
 		}
 	}
 
