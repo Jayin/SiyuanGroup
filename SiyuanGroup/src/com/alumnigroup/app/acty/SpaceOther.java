@@ -25,6 +25,7 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.CalendarUtils;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.JsonUtils;
 import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.OutoLinefeedLayout;
@@ -455,12 +456,22 @@ public class SpaceOther extends BaseActivity {
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				tvBtnFollowContent.setText("取消关注");
-				AppCache.changeAllmemberAll(getContext(), user);
+//				AppCache.changeAllmemberAll(getContext(), user);
+				//全部数据刷新一次
+				user.setIsfollowed(1);
+				AppCache.chengeAllmember(getContext(), user);
+				Intent intent = new Intent(Constants.Action_User_edit);
+				intent.putExtra("user", user);
+				getContext().sendBroadcast(intent);
 			}
 			
 			@Override
 			public void onFaild(int errorType, int errorCode) {
-				toast("关注失败 "+ErrorCode.errorList.get(errorCode));
+				if(20506 == errorCode){
+					toast("已关注");
+				}else{
+					toast("关注失败 "+ErrorCode.errorList.get(errorCode));
+				}
 				tvBtnFollowContent.setText("关 注");
 			}
 			
@@ -470,34 +481,6 @@ public class SpaceOther extends BaseActivity {
 			}
 		});
 		
-//		api.follow(user.getId(), user.getUsername(),
-//				new AsyncHttpResponseHandler() {
-//
-//					@Override
-//					public void onFinish() {
-//						super.onFinish();
-//						btnFollow.setClickable(true);
-//					}
-//
-//					@Override
-//					public void onFailure(int statusCode, Header[] headers,
-//							byte[] data, Throwable err) {
-//						toast("关注失败");
-//						tvBtnFollowContent.setText("关 注");
-//					}
-//
-//					public void onSuccess(int statusCode, Header[] headers,
-//							byte[] data) {
-//						String json = new String(data);
-//						if (JsonUtils.isOK(json)) {
-//							tvBtnFollowContent.setText("取消关注");
-//							AppCache.changeAllmemberAll(SpaceOther.this, user);
-//						} else {
-//							toast("关注失败");
-//							tvBtnFollowContent.setText("关 注");
-//						}
-//					}
-//				});
 	}
 
 	private void unFollow() {
@@ -509,7 +492,17 @@ public class SpaceOther extends BaseActivity {
 			@Override
 			public void onOK(Header[] headers, JSONObject obj) {
 				tvBtnFollowContent.setText("关 注");
+				//粉丝列表删除
 				AppCache.removeAllmemberFollowing(SpaceOther.this, user);
+				Intent intent = new Intent(Constants.Action_User_unfollow);
+				intent.putExtra("user", user);
+				getContext().sendBroadcast(intent);
+				//全部数据刷新一次
+				user.setIsfollowed(0);
+				AppCache.chengeAllmember(getContext(), user);
+				intent = new Intent(Constants.Action_User_edit);
+				intent.putExtra("user", user);
+				getContext().sendBroadcast(intent);
 			}
 			
 			@Override
@@ -523,32 +516,5 @@ public class SpaceOther extends BaseActivity {
 				btnFollow.setClickable(true);
 			}
 		});
-		
-//		api.unfollow(user.getId(), new AsyncHttpResponseHandler() {
-//
-//			@Override
-//			public void onFinish() {
-//				super.onFinish();
-//				btnFollow.setClickable(true);
-//			}
-//
-//			@Override
-//			public void onFailure(int statusCode, Header[] headers,
-//					byte[] data, Throwable err) {
-//				toast("取消失败");
-//				tvBtnFollowContent.setText("取消关注");
-//			}
-//
-//			public void onSuccess(int statusCode, Header[] headers, byte[] data) {
-//				String json = new String(data);
-//				if (JsonUtils.isOK(json)) {
-//					tvBtnFollowContent.setText("关 注");
-//					AppCache.removeAllmemberFollowing(SpaceOther.this, user);
-//				} else {
-//					toast("取消失败");
-//					tvBtnFollowContent.setText("取消关注");
-//				}
-//			}
-//		});
 	}
 }

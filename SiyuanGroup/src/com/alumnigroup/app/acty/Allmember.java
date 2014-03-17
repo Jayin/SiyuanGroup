@@ -6,7 +6,10 @@ import java.util.List;
 import org.apache.http.Header;
 import org.json.JSONObject;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -22,11 +25,13 @@ import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Follower;
 import com.alumnigroup.entity.Following;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
+import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
 
@@ -56,6 +61,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 			adapter_followers;
 	private User mUser;
 	private FollowshipAPI followshipAPI;
+	private BroadcastReceiver mReceiver = null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +70,36 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		initData();
 		initLayout();
 		initController();
+		openReceiver();
 	}
 
+	private void openReceiver() {
+		mReceiver  = new BroadcastReceiver(){
+			@Override
+			public void onReceive(Context context, Intent intent) {
+				if(intent.getAction().equals(Constants.Action_User_unfollow)){
+					User user = (User)intent.getSerializableExtra("user");
+					SyncData.updateUserDelete(data_following, adapter_following, user);
+				}else if(intent.getAction().equals(Constants.Action_User_edit)){
+					User user = (User)intent.getSerializableExtra("user");
+					SyncData.updateUserEdit(data_allmember, adapter_allmember, user);
+					SyncData.updateUserEdit(data_followers, adapter_followers, user);
+					SyncData.updateUserEdit(data_following, adapter_following, user);
+				}
+			}
+		};
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(Constants.Action_User_unfollow);
+		filter.addAction(Constants.Action_User_edit);
+		registerReceiver(mReceiver, filter);
+	}
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	if(mReceiver != null){
+    		unregisterReceiver(mReceiver);
+    	}
+    }
 	private void initController() {
 		lv_allmember.setPullLoadEnable(true);
 		lv_allmember.setPullRefreshEnable(true);

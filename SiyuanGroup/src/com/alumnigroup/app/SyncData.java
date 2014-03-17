@@ -10,14 +10,17 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.alumnigroup.adapter.IssueAdapter;
+import com.alumnigroup.adapter.MemberAdapter;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.IssuesAPI;
+import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.entity.Cooperation;
 import com.alumnigroup.entity.Issue;
 import com.alumnigroup.entity.MActivity;
 import com.alumnigroup.entity.MGroup;
+import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 
@@ -28,6 +31,41 @@ import com.alumnigroup.utils.Constants;
  * 
  */
 public class SyncData {
+	/**
+	 * 同步一用户信息
+	 * @param context
+	 * @param userId
+	 * @param listener
+	 */
+	public static void SyncUserInfo(final Context context,int userId,final SynDataListener listener ){
+		UserAPI api = new UserAPI();
+		api.view(userId, new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				try {
+					User user = User.create_by_json(obj.getJSONObject("user").toString());
+                    AppCache.chengeAllmember(context, user);
+					Intent intent = new Intent(Constants.Action_User_edit);
+					intent.putExtra("user",user);
+					context.sendBroadcast(intent);
+					if (listener != null)
+						listener.onSuccess(user);
+				} catch (JSONException e) {
+					e.printStackTrace();
+					if (listener != null)
+						listener.onFaild();
+				}
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				if (listener != null)
+					listener.onFaild();
+			}
+		});
+	}
+	
 	/**
 	 * 同步一圈子的信息,并发送修改广播
 	 * 
@@ -218,7 +256,37 @@ public class SyncData {
 		}
 		adapter.notifyDataSetInvalidated();
 	}
-
+	/**
+	 * 更新用户删除
+	 * @param data
+	 * @param adapter
+	 * @param deleteItem
+	 */
+	public static void updateUserDelete(List<User> data,MemberAdapter adapter,User deleteItem){
+		for(int i=0;i<data.size();i++){
+			if(deleteItem.getId()==data.get(i).getId()){
+			     data.remove(i);
+			     break;
+			}
+		}
+		adapter.notifyDataSetInvalidated();
+	}
+	/**
+	 * 更新用户修改
+	 * @param data
+	 * @param adapter
+	 * @param editItem
+	 */
+	public static void updateUserEdit(List<User> data,MemberAdapter adapter,User editItem){
+		for(int i=0;i<data.size();i++){
+			if(editItem.getId()==data.get(i).getId()){
+			     data.set(i, editItem);
+			     break;
+			}
+		}
+		adapter.notifyDataSetChanged();
+	}
+	
 	/**
 	 * 回调接口
 	 * 
@@ -230,5 +298,6 @@ public class SyncData {
 
 		public void onFaild();
 	}
+
 
 }

@@ -26,6 +26,9 @@ public class Constants {
     public static final String Action_Login_In_Faild ="Login_In_Faild";
 	
 	// 广播Action 
+    public static final String Action_User_edit = "Action_User_edit";
+    /** 取消关注*/
+    public static final String Action_User_unfollow= "Action_User_unfollow";
 	/** 话题(包含圈子分享 )发布成功*/
 	public static final String Action_Issue_Comment_Ok = "Issue_Comment_Ok";
 	/** 话题修改*/

@@ -62,7 +62,17 @@ public class AppCache {
 	public static void remove(Context context, String key) {
 		getDataPool(context).remove(key);
 	}
-
+	/**
+	 * 改变全部/粉丝/关注
+	 * @param context
+	 * @param change
+	 */
+	public static void chengeAllmember(Context context, User change){
+		 changeAllmemberAll(context, change);
+		 changeAllmemberFollowers(context, change);
+		 changeAllmemberFollowing(context, change);
+	}
+	
 	/**
 	 * 改变全站会员的一个用户数据
 	 */
@@ -76,6 +86,38 @@ public class AppCache {
 				}
 			}
 			setAllmemberAll(context, all);
+		}
+	}
+	
+	/**
+	 * 改变粉丝，个用户数据
+	 */
+	public static void changeAllmemberFollowers(Context context, User change) {
+		ArrayList<User> followers = getAllmemberFollowers(context);
+		if (followers != null) {
+			for (int i = 0; i < followers.size(); i++) {
+				if (followers.get(i).getId() == change.getId()) {
+					followers.set(i, change);
+					break;
+				}
+			}
+			setAllmemberFollowers(context, followers);
+		}
+	}
+	
+	/**
+	 * 改变关注，个用户数据
+	 */
+	public static void changeAllmemberFollowing(Context context, User change) {
+		ArrayList<User> following = getAllmemberFollowing(context);
+		if (following != null) {
+			for (int i = 0; i < following.size(); i++) {
+				if (following.get(i).getId() == change.getId()) {
+					following.set(i, change);
+					break;
+				}
+			}
+			setAllmemberFollowing(context, following);
 		}
 	}
 
@@ -294,13 +336,21 @@ public class AppCache {
 	
 	/** 删除关注的一个 **/
 	public static void removeAllmemberFollowing(Context context, User remove) {
-		ArrayList<User> followers = getAllmemberFollowers(context);
-		for (int i = 0; i < followers.size(); i++) {
-			if (followers.get(i).getId() == remove.getId()) {
-				followers.remove(i);
+//		ArrayList<User> followers = getAllmemberFollowers(context);
+//		for (int i = 0; i < followers.size(); i++) {
+//			if (followers.get(i).getId() == remove.getId()) {
+//				followers.remove(i);
+//			}
+//		}
+//		setAllmemberFollowing(context, followers);
+		ArrayList<User> following = getAllmemberFollowing(context);
+		for(int i=0;i<following.size();i++){
+			if(following.get(i).getId() == remove.getId()){
+				following.remove(i);
+				break;
 			}
 		}
-		setAllmemberFollowing(context, followers);
+		setAllmemberFollowing(context, following);
 	}
 
 	/** 获得全站会员all列表 */

@@ -73,7 +73,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		openReceiver();
 	}
 	
-
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
 
