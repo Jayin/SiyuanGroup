@@ -13,17 +13,13 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.api.IssuesAPI;
-import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
@@ -32,15 +28,12 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.app.SyncData;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.entity.Issue;
-import com.alumnigroup.entity.MPicture;
 import com.alumnigroup.entity.Starring;
 import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
-import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
-import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
  * 校友交流
@@ -87,12 +80,17 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 					SyncData.updateDeleteIssue(data_all, adapter_all, deleteItem);
 					SyncData.updateDeleteIssue(data_my, adapter_my, deleteItem);
 					SyncData.updateDeleteIssue(data_favourite, adapter_favourite, deleteItem);
+				}else if(intent.getAction().equals(Constants.Action_Issue_unFavourite)){
+					//un fav
+					Issue deleteItem = (Issue)intent.getSerializableExtra("issue");
+					SyncData.updateDeleteIssue(data_favourite, adapter_favourite, deleteItem);
 				}
 			}
 		};
 		IntentFilter filter = new IntentFilter();
 		filter.addAction(Constants.Action_Issue_Edit);
 		filter.addAction(Constants.Action_Issue_delete);
+		filter.addAction(Constants.Action_Issue_unFavourite);
 		registerReceiver(mReceiver, filter);
 	}
 	
@@ -490,6 +488,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		}
 		if (parent == lv_favourit) {
 			intent.putExtra("issue", data_favourite.get(position - 1));
+			intent.putExtra("isFavourite", 1);
 		}
 		openActivity(intent);
 	}

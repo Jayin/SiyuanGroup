@@ -32,6 +32,8 @@ public class Constants {
 	public static final String Action_Issue_Edit = "Action_Issue_Edit";
 	/** 话题删除*/
 	public static final String Action_Issue_delete ="Action_Issue_delete";
+	/** 取消收藏*/
+	public static final String Action_Issue_unFavourite = "Action_Issue_unFavourite";
 	
 	/** 商务合作评论成功*/	
 	public static final String Action_Bussiness_Comment_Ok = "Bussiness_Comment_Ok"; 

@@ -20,6 +20,7 @@ import com.alumnigroup.adapter.CommentAdapter;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
+import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.AppInfo;
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.R;
@@ -45,7 +46,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 public class CommunicationDetail extends BaseActivity {
 	private View btn_back, btn_favourite, btn_comment_visitor,
 			btn_comment_owner, btn_space, btn_delete, btn_edit;
-	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify;
+	private TextView tv_title, tv_body, tv_username, tv_time, tv_notify,tv_favourite;
 	private ImageView iv_avater, iv_pic1;
 	private Issue issue;
 	// private PullAndLoadListView lv_comment;
@@ -56,6 +57,7 @@ public class CommunicationDetail extends BaseActivity {
 	private User user;
 	private View vistor, owner;
 	private BroadcastReceiver mReceiver;
+	private int isFavourite = 0; //用于判断是否已关注 非0为已关注
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,7 @@ public class CommunicationDetail extends BaseActivity {
 			toast("用户信息不存在，请重新登录");
 			closeActivity();
 		}
+		isFavourite = getIntent().getIntExtra("isFavourite", 0);
 		api = new IssuesAPI();
 		data_commet = new ArrayList<Comment>();
 	}
@@ -123,6 +126,7 @@ public class CommunicationDetail extends BaseActivity {
 		tv_title = (TextView) _getView(R.id.item_lv_acty_comminication_title);
 		tv_body = (TextView) _getView(R.id.item_lv_acty_comminication_body);
 		iv_avater = (ImageView) _getView(R.id.acty_communicationdetail_iv_avater);
+		tv_favourite = (TextView)_getView(R.id.tv_favourite);
 		iv_pic1 = (ImageView) _getView(R.id.iv_pic1);
 
 		owner = _getView(R.id.owner);
@@ -226,6 +230,12 @@ public class CommunicationDetail extends BaseActivity {
 				CalendarUtils.TYPE_timeline));
 		tv_title.setText(issue.getTitle());
 		tv_body.setText(issue.getBody());
+		
+		if(isFavourite ==0){
+			tv_favourite.setText("关注");
+		}else{
+			tv_favourite.setText("取消关注");
+		}
 	}
 
 	@Override
@@ -260,7 +270,11 @@ public class CommunicationDetail extends BaseActivity {
 			break;
 		case R.id.acty_communicationdetail_footer_favourite:
 			// 收藏
-			faviourite();
+			 if(tv_favourite.getText().equals("关注")){
+				 favourite();
+			 }else{
+				 unFavourite();
+			 }
 			break;
 
 		case R.id.btn_delete:
@@ -299,7 +313,7 @@ public class CommunicationDetail extends BaseActivity {
 	}
 
 	// 收藏的remark默认为期类型名
-	private void faviourite() {
+	private void favourite() {
 		StarAPI starapi = new StarAPI();
 		starapi.star(StarAPI.Item_type_issue, issue.getId(), "issue",
 				new JsonResponseHandler() {
@@ -318,7 +332,31 @@ public class CommunicationDetail extends BaseActivity {
 						}
 					}
 				});
-
 	}
+	
+    private void unFavourite(){
+    	StarAPI starapi = new StarAPI();
+    	starapi.unStar(StarAPI.Item_type_issue,issue.getId(), new JsonResponseHandler() {
+			
+			@Override
+			public void onOK(Header[] headers, JSONObject obj) {
+				toast("已取消关注");
+				closeActivity();
+				AppCache.deleteIssueFavourite(getContext(), issue);
+				Intent intent = new Intent(Constants.Action_Issue_delete);
+				intent.putExtra("issue", issue);
+				getContext().sendBroadcast(intent);
+			}
+			
+			@Override
+			public void onFaild(int errorType, int errorCode) {
+				if(errorCode==20506){
+					toast("已取消关注");
+				}else{
+					toast("取消关注失败 " +ErrorCode.errorList.get(errorCode));
+				}
+			}
+		});
+    }
 
 }

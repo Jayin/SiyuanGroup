@@ -68,7 +68,7 @@ public class AppCache {
 	 */
 	public static void changeAllmemberAll(Context context, User change) {
 		ArrayList<User> all = getAllmemberAll(context);
-		if(all!=null){
+		if (all != null) {
 			for (int i = 0; i < all.size(); i++) {
 				if (all.get(i).getId() == change.getId()) {
 					all.set(i, change);
@@ -88,7 +88,7 @@ public class AppCache {
 	public static void changeGroupItem(Context context, MGroup change) {
 		ArrayList<MGroup> group_all = getGroupAll(context);
 		ArrayList<MGroup> group_my = getGroupMy(context);
-		if(group_all !=null){
+		if (group_all != null) {
 			for (int i = 0; i < group_all.size(); i++) {
 				MGroup g = group_all.get(i);
 				if (g.getId() == change.getId()) {
@@ -98,7 +98,7 @@ public class AppCache {
 			}
 			setGroupAll(context, group_all);
 		}
-		if(group_my != null){
+		if (group_my != null) {
 			for (int i = 0; i < group_my.size(); i++) {
 				MGroup g = group_my.get(i);
 				if (g.getId() == change.getId()) {
@@ -109,16 +109,18 @@ public class AppCache {
 			setGroupMy(context, group_my);
 		}
 	}
-    /**
-     * 修改一个活动的资料
-     * @param context
-     * @param change
-     */
+
+	/**
+	 * 修改一个活动的资料
+	 * 
+	 * @param context
+	 * @param change
+	 */
 	public static void changeActivityInfo(Context context, MActivity change) {
 		ArrayList<MActivity> acty_all = getActivityAll(context);
 		ArrayList<MActivity> acty_my = getActivityMy(context);
 		ArrayList<MActivity> acty_fav = getActivityFavourite(context);
-		if(acty_all != null){
+		if (acty_all != null) {
 			for (int i = 0; i < acty_all.size(); i++) {
 				MActivity g = acty_all.get(i);
 				if (g.getId() == change.getId()) {
@@ -127,8 +129,8 @@ public class AppCache {
 			}
 			setActivityAll(context, acty_all);
 		}
-		
-		if(acty_my != null){
+
+		if (acty_my != null) {
 			for (int i = 0; i < acty_my.size(); i++) {
 				MActivity g = acty_my.get(i);
 				if (g.getId() == change.getId()) {
@@ -138,7 +140,7 @@ public class AppCache {
 			}
 			setActivityMy(context, acty_my);
 		}
-		if(acty_fav!=null){
+		if (acty_fav != null) {
 			for (int i = 0; i < acty_fav.size(); i++) {
 				MActivity g = acty_fav.get(i);
 				if (g.getId() == change.getId()) {
@@ -149,17 +151,19 @@ public class AppCache {
 			setActivityFavourite(context, acty_fav);
 		}
 	}
+
 	/**
 	 * 修改一个商务合作的资料
+	 * 
 	 * @param context
 	 * @param change
 	 */
-	public static void changeBussinessInfo(Context context,Cooperation change){
+	public static void changeBussinessInfo(Context context, Cooperation change) {
 		ArrayList<Cooperation> b_all = getBusinessAll(context);
 		ArrayList<Cooperation> b_my = getBusinessMy(context);
 		ArrayList<Cooperation> b_fav = getBusinessFavourite(context);
-		
-		if(b_all != null){
+
+		if (b_all != null) {
 			for (int i = 0; i < b_all.size(); i++) {
 				Cooperation g = b_all.get(i);
 				if (g.getId() == change.getId()) {
@@ -168,8 +172,8 @@ public class AppCache {
 			}
 			setBusinessAll(context, b_all);
 		}
-		
-		if(b_my != null){
+
+		if (b_my != null) {
 			for (int i = 0; i < b_my.size(); i++) {
 				Cooperation g = b_my.get(i);
 				if (g.getId() == change.getId()) {
@@ -178,8 +182,8 @@ public class AppCache {
 			}
 			setBusinessMy(context, b_my);
 		}
-		
-		if(b_fav != null){
+
+		if (b_fav != null) {
 			for (int i = 0; i < b_fav.size(); i++) {
 				Cooperation g = b_fav.get(i);
 				if (g.getId() == change.getId()) {
@@ -189,17 +193,19 @@ public class AppCache {
 			setBusinessFavourite(context, b_fav);
 		}
 	}
+
 	/**
 	 * 修改一条话题的信息
+	 * 
 	 * @param context
 	 * @param change
 	 */
-	public static void changeIssueInfo(Context context,Issue change){
+	public static void changeIssueInfo(Context context, Issue change) {
 		ArrayList<Issue> issue_all = getCommunicationAll(context);
 		ArrayList<Issue> issue_my = getCommunicationMy(context);
 		ArrayList<Issue> issue_fav = getCommunicationFavourite(context);
-		
-		if(issue_all != null){
+
+		if (issue_all != null) {
 			for (int i = 0; i < issue_all.size(); i++) {
 				Issue g = issue_all.get(i);
 				if (g.getId() == change.getId()) {
@@ -208,8 +214,8 @@ public class AppCache {
 			}
 			setCommunicationAll(context, issue_all);
 		}
-		
-		if(issue_my != null){
+
+		if (issue_my != null) {
 			for (int i = 0; i < issue_my.size(); i++) {
 				Issue g = issue_my.get(i);
 				if (g.getId() == change.getId()) {
@@ -218,8 +224,8 @@ public class AppCache {
 			}
 			setCommunicationMy(context, issue_my);
 		}
-		
-		if(issue_fav != null){
+
+		if (issue_fav != null) {
 			for (int i = 0; i < issue_fav.size(); i++) {
 				Issue g = issue_fav.get(i);
 				if (g.getId() == change.getId()) {
@@ -229,29 +235,38 @@ public class AppCache {
 			setCommunicationFavourite(context, issue_fav);
 		}
 	}
+
 	/**
 	 * 删除一话题
+	 * 
 	 * @param context
 	 * @param issueId
 	 * @param listener
 	 */
-	public static void deleteIssue(Context context,Issue deleteItem){
-		ArrayList<Issue> issue_all = getCommunicationAll(context);
-		ArrayList<Issue> issue_my = getCommunicationMy(context);
+	public static void deleteIssue(Context context, Issue deleteItem) {
+		deleteIssueAll(context, deleteItem);
+		deleteIssueMy(context, deleteItem);
+		deleteIssueFavourite(context, deleteItem);
+
+	}
+
+	public static void deleteIssueFavourite(Context context, Issue deleteItem) {
 		ArrayList<Issue> issue_fav = getCommunicationFavourite(context);
-		
-		if(issue_all != null){
-			for (int i = 0; i < issue_all.size(); i++) {
-				Issue g = issue_all.get(i);
+		if (issue_fav != null) {
+			for (int i = 0; i < issue_fav.size(); i++) {
+				Issue g = issue_fav.get(i);
 				if (g.getId() == deleteItem.getId()) {
-					issue_all.remove(i);
+					issue_fav.remove(i);
 					break;
 				}
 			}
-			setCommunicationAll(context, issue_all);
+			setCommunicationFavourite(context, issue_fav);
 		}
-		
-		if(issue_my != null){
+	}
+
+	public static void deleteIssueMy(Context context, Issue deleteItem) {
+		ArrayList<Issue> issue_my = getCommunicationMy(context);
+		if (issue_my != null) {
 			for (int i = 0; i < issue_my.size(); i++) {
 				Issue g = issue_my.get(i);
 				if (g.getId() == deleteItem.getId()) {
@@ -261,16 +276,19 @@ public class AppCache {
 			}
 			setCommunicationMy(context, issue_my);
 		}
-		
-		if(issue_fav != null){
-			for (int i = 0; i < issue_fav.size(); i++) {
-				Issue g = issue_fav.get(i);
+	}
+
+	public static void deleteIssueAll(Context context, Issue deleteItem) {
+		ArrayList<Issue> issue_all = getCommunicationAll(context);
+		if (issue_all != null) {
+			for (int i = 0; i < issue_all.size(); i++) {
+				Issue g = issue_all.get(i);
 				if (g.getId() == deleteItem.getId()) {
-					issue_fav.remove(i);
+					issue_all.remove(i);
 					break;
 				}
 			}
-			setCommunicationFavourite(context, issue_fav);
+			setCommunicationAll(context, issue_all);
 		}
 	}
 

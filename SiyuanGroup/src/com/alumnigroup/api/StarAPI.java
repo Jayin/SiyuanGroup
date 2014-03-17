@@ -50,6 +50,18 @@ public class StarAPI {
 		params.add("id", id + "");
 		RestClient.post("/api/starship/unstar", params, responseHandler);
 	}
+	/**
+	 * 取消收藏
+	 * @param itemtype 收藏类型
+	 * @param itemid 资源id
+	 * @param responseHandler
+	 */
+	public void unStar(int itemtype ,int itemid, AsyncHttpResponseHandler responseHandler) {
+		RequestParams params = new RequestParams();
+		params.add("itemtype", itemtype + "");
+		params.add("itemid", itemid + "");
+		RestClient.post("/api/starship/unstar", params, responseHandler);
+	}
 
 	/**
 	 * 获得收藏列表

@@ -177,7 +177,7 @@ public class SyncData {
 		});
 	}
 	/**
-	 * 删除一条issue
+	 * 删除一条issue(全部删除)
 	 * @param context
 	 * @param deleteItem
 	 * @param listener
