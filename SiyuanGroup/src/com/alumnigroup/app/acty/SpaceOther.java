@@ -129,7 +129,7 @@ public class SpaceOther extends BaseActivity {
 							ivPortrait);
 		}
 
-		tvTopName = (TextView) _getView(R.id.acty_space_other_top_tv_name);
+		tvTopName = (TextView) _getView(R.id.acty_space_other_top_tv_name1);
 		tvTopName.setText(user.getProfile().getName());
 
 		tvTopSummary = (TextView) _getView(R.id.acty_space_other_top_tv_leave2visitor);

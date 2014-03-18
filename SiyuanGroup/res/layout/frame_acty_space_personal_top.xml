@@ -23,7 +23,7 @@
         android:background="@drawable/bg_space_other_top_leave_content"
         android:hint="为访客留点什么吧！！"
         android:textColor="@color/white"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
     <ImageView
         android:id="@+id/acty_space_personal_top_iv_portrait"
@@ -39,12 +39,12 @@
         android:id="@+id/acty_space_personal_top_tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/acty_space_personal_top_iv_backgroup"
+        android:layout_alignBottom="@+id/acty_space_personal_top_iv_portrait"
         android:layout_marginBottom="5dp"
         android:layout_marginLeft="5dp"
         android:layout_toRightOf="@+id/acty_space_personal_top_iv_portrait"
         android:text="黄廉温"
-        android:textColor="@color/white"
-        android:textSize="16dp" />
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
 </RelativeLayout>

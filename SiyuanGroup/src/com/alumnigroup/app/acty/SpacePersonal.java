@@ -500,8 +500,8 @@ public class SpacePersonal extends BaseActivity {
 								getImage.putExtra("crop", "true");
 								getImage.putExtra("aspectX", 2);
 								getImage.putExtra("aspectY", 1);
-								getImage.putExtra("outputX", 400);
-								getImage.putExtra("outputY", 200);
+								getImage.putExtra("outputX", 480);
+								getImage.putExtra("outputY", 240);
 								startActivityForResult(getImage, 0);
 							}
 						}

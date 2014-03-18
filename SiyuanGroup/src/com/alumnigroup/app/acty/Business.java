@@ -159,6 +159,8 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							toast("网络异常，解析错误");
 						} else if (newData_all.size() == 0) {
 							toast("还没有人发布项目");
+							data_all.clear();
+							adapter_all.notifyDataSetChanged();
 							lv_all.setPullLoadEnable(false);
 						} else {
 							page_all = 1;
@@ -234,6 +236,8 @@ public class Business extends BaseActivity implements OnItemClickListener {
 							toast("网络异常，解析错误");
 						} else if (newData_myjoin.size() == 0) {
 							toast("你还没有发布任何项目");
+							data_myjoin.clear();
+							adapter_myjoin.notifyDataSetChanged();
 							lv_myjoin.setPullLoadEnable(false);
 						} else {
 							page_myjoin = 1;
@@ -316,6 +320,8 @@ public class Business extends BaseActivity implements OnItemClickListener {
 									}
 									if (newData_faviour.size() == 0) {
 										toast("你还没有收藏任何项目");
+										data_favourite.clear();
+										adapter_favourite.notifyDataSetChanged();
 										lv_favourit.setPullLoadEnable(false);
 									} else {
 										page_favourit = 1;
