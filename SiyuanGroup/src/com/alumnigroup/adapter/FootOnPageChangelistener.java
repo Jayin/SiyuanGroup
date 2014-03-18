@@ -44,11 +44,8 @@ public class FootOnPageChangelistener implements OnPageChangeListener {
 			v.setBackgroundResource(R.color.blue_nav_bg_nomal);
 		}
 		btns.get(positon).setBackgroundResource(R.color.blue_nav_bg_press);
-		if (adapters.get(positon) != null) {
-			if (adapters.get(positon).getCount() == 0) {
-				listviews.get(positon).startRefresh();
-			}
-		}
+		if (listviews != null && listviews.get(positon) != null)
+			listviews.get(positon).startRefresh();
 
 	}
 

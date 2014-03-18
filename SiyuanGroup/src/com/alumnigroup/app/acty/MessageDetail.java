@@ -155,7 +155,7 @@ public class MessageDetail extends BaseActivity {
 					status.add(Sending);
 					adapter.notifyDataSetChanged();
 					lv.setSelection(msgs.size() - 1);
-					debug("onstart---pos-"+position);
+					et_body.setText("");
 				}
 
 				@Override
@@ -164,7 +164,6 @@ public class MessageDetail extends BaseActivity {
 					adapter.notifyDataSetInvalidated();
 					lv.setSelection(msgs.size() - 1);
 					et_body.setText("");
-					debug("on ok---pos-"+position);
 				}
 
 				@Override
@@ -173,7 +172,6 @@ public class MessageDetail extends BaseActivity {
 					adapter.notifyDataSetInvalidated();
 					lv.setSelection(msgs.size() - 1);
 					et_body.setText("");
-					debug("onFaild---pos-"+position);
 				}
 			});
 
