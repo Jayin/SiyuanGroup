@@ -73,13 +73,16 @@ public class MessageDetail extends BaseActivity {
 								int position = 0;
 								ArrayList<MMessage> messages = MMessage
 										.create_by_jsonarray(obj.toString());
+								position=messages.size();
 								for (MMessage m : messages) {
 									msgs.push(m);
 									status.push(Finished);
 								}
 								page++;
 								adapter.notifyDataSetChanged();
-								lv.setSelection(position);
+								 
+									lv.setSelection(position);
+								 
 								lv.stopRefresh();
 							}
 
