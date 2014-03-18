@@ -41,7 +41,7 @@ public class FeedbackDialog extends Dialog {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.dlg_sendmsg);
+		setContentView(R.layout.dlg_feedback);
 		((TextView) findViewById(R.id.tv_title)).setText("反馈");
 		et = (EditText) findViewById(R.id.et_body);
 		radioGroup = (RadioGroup)findViewById(R.id.radiogroup);
