@@ -55,7 +55,7 @@ public class EditKeyword extends BaseActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.acty_edit_keywork);
+		setContentView(R.layout.acty_edit_keyword);
 		initData();
 		initLayout();
 		initKeyWord();

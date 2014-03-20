@@ -56,7 +56,7 @@
 
         <TextView
             style="@style/TextView.setting"
-            android:text="关于校友群" />
+            android:text="检查更新" />
 
         <ImageView style="@style/Setting.imageview" />
     </RelativeLayout>

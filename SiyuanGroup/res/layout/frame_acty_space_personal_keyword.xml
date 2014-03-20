@@ -19,7 +19,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
-            android:text="关键字"
+            android:text="标签"
             android:textColor="#0a6ca2"
             android:textSize="18dp" />
 

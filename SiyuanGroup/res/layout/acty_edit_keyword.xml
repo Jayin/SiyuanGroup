@@ -31,7 +31,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="6dp"
-                    android:text="我的关键字"
+                    android:text="我的标签"
                     android:textColor="@color/blue_lv_third" />
  
                 <com.custom.view.FlowLayout

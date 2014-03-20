@@ -13,8 +13,6 @@
         <ImageView
             android:id="@+id/item_lv_acty_comminication_avatar"
             style="@style/ImageView.avatar"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
             android:layout_marginLeft="8dp"
             android:src="@drawable/ic_image_load_loading" />
 
@@ -50,26 +48,28 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/ll_listView_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="6dp" >
+        android:padding="6dp" 
+        android:layout_marginLeft="60dp">
 
         <TextView
             android:id="@+id/item_lv_acty_comminication_title"
             style="@style/TextView.black"
             android:text="我是标题，我是用来测试的，"
             android:textColor="@color/blue_lv_third"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/item_lv_acty_comminication_body"
             style="@style/TextView.black"
             android:layout_marginTop="4dp"
-            android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。"
+            android:maxLines="8"
+            android:ellipsize="end"
+            android:text="我是内容，我是用来测试的，但是我的内容是可以多有一点字体的。多有一点字体的。多有一点字体的。多有一点字体的。多有一点字体的。多有一点字体的有一点字体的。多有一点字体的有一点字体的。多有一点字体的有一点字体的。多有一点字体的有一点字体的。多有一点字体的有一点字体的。多有一点字体的。"
             android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
         <com.custom.view.FlowLayout
             android:id="@+id/flowlayout_content"
