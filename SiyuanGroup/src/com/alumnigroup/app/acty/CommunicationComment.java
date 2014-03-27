@@ -19,6 +19,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
+import com.alumnigroup.widget.LoadingDialog;
 
 /**
  * 校友交流，评论页面
@@ -31,6 +32,7 @@ public class CommunicationComment extends BaseActivity {
 	private EditText et_content;
 	private IssuesAPI api;
 	private Issue issue;
+	private LoadingDialog loadingdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class CommunicationComment extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		loadingdialog  =new LoadingDialog(getContext());
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_post = _getView(R.id.acty_head_btn_post);
 		btn_mention = _getView(R.id.mention);
@@ -90,6 +93,17 @@ public class CommunicationComment extends BaseActivity {
 				@Override
 				public void onFaild(int errorType, int errorCode) {
                     toast("评论失败 "+ErrorCode.errorList.get(errorCode));
+				}
+				
+				@Override
+				public void onStart() {
+					loadingdialog.setText("发布中...");
+					loadingdialog.show();
+				}
+				
+				@Override
+				public void onFinish() {
+					loadingdialog.dismiss();
 				}
 			});
 			break;

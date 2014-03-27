@@ -19,6 +19,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.EditTextUtils;
 import com.alumnigroup.utils.StringUtils;
+import com.alumnigroup.widget.LoadingDialog;
 
 /**
  * 商务合作 询问页面
@@ -31,6 +32,7 @@ public class BusinessComment extends BaseActivity {
 	private View btn_back, btn_post, btn_mention;
 	private EditText et_content;
 	private BusinessAPI api ;
+	private LoadingDialog loadingdialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,7 @@ public class BusinessComment extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
+		loadingdialog  =new LoadingDialog(getContext());
 		btn_back = _getView(R.id.acty_head_btn_back);
 		btn_post = _getView(R.id.acty_head_btn_post);
 		btn_mention = _getView(R.id.mention);
@@ -75,10 +78,6 @@ public class BusinessComment extends BaseActivity {
 				return;
 			}
 			api.comment(c.getId(), body, new JsonResponseHandler() {
-				@Override
-				public void onStart() {
-					 toast("发布中..");
-				}
 				
 				@Override
 				public void onOK(Header[] headers, JSONObject obj) {
@@ -97,6 +96,17 @@ public class BusinessComment extends BaseActivity {
 				@Override
 				public void onFaild(int errorType, int errorCode) {
 					toast("发布失败 "+ErrorCode.errorList.get(errorCode));
+				}
+				
+				@Override
+				public void onStart() {
+					loadingdialog.setText("发布中...");
+					loadingdialog.show();
+				}
+				
+				@Override
+				public void onFinish() {
+					loadingdialog.dismiss();
 				}
 			});
 			break;
