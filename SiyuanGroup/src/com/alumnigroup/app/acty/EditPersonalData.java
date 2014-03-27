@@ -174,17 +174,20 @@ public class EditPersonalData extends BaseActivity {
 	private void updateProfile() {
 
 		String name = etName.getText().toString();
-
 		String gender = null;
+		int age = 0,grade =0;
 		if (rbtnBoy.isChecked()) {
 			gender = "m";
 		}
 		if (rbtnGril.isChecked()) {
 			gender = "f";
 		}
-
-		int age = Integer.parseInt(etAge.getText().toString());
-		int grade = Integer.parseInt(etGrade.getText().toString());
+        try {
+        	age = Integer.parseInt(etAge.getText().toString());
+        	grade = Integer.parseInt(etGrade.getText().toString());
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		String university = etUniversity.getText().toString();
 		String major = etMajor.getText().toString();
 		String summary = etSummary.getText().toString();

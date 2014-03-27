@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/aa_space_theme" />
+        android:src="@drawable/ic_space_theme_defalut" />
 
     <TextView
         android:id="@+id/acty_space_personal_top_et_leave2visitor"
@@ -21,7 +21,7 @@
         android:layout_alignParentTop="true"
         android:layout_margin="20dp"
         android:background="@drawable/bg_space_other_top_leave_content"
-        android:hint="为访客留点什么吧！！"
+        android:hint="留言"
         android:textColor="@color/white"
         android:textSize="16sp" />
 

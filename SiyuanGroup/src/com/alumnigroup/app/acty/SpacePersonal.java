@@ -113,7 +113,7 @@ public class SpacePersonal extends BaseActivity {
 					RestClient.BASE_URL + myself.getCover(), ivBackground);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal,
+					"drawable://" + R.drawable.ic_space_theme_defalut,
 					ivBackground);
 		}
 
@@ -341,7 +341,7 @@ public class SpacePersonal extends BaseActivity {
 		addPersonalData("性别", myself.getProfile().getGender().equals("m")?"男":"女");
 		addPersonalData("年龄", myself.getProfile().getAge()==0?"保密": myself.getProfile().getAge()+"");
 		addPersonalData("大学", myself.getProfile().getUniversity());
-		addPersonalData("毕业届数", myself.getProfile().getGrade() + "");
+		addPersonalData("届数", myself.getProfile().getGrade() + "");
 		addPersonalData("专业", myself.getProfile().getMajor());
 	}
 
@@ -354,7 +354,7 @@ public class SpacePersonal extends BaseActivity {
 		View convertView = null;
 
 		convertView = inflater.inflate(
-				R.layout.itme_lv_space_other_personaldata, null);
+				R.layout.item_lv_space_other_personaldata, null);
 		TextView tvName = (TextView) convertView
 				.findViewById(R.id.item_lv_space_other_personaldata_name);
 		tvName.setText(name);

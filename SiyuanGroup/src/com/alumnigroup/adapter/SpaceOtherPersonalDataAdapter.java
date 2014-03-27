@@ -59,7 +59,7 @@ public class SpaceOtherPersonalDataAdapter extends BaseAdapter {
 	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		convertView = inflater.inflate(R.layout.itme_lv_space_other_personaldata, null);
+		convertView = inflater.inflate(R.layout.item_lv_space_other_personaldata, null);
 		
 		tvName = (TextView) convertView.findViewById(R.id.item_lv_space_other_personaldata_name);
 		tvValue = (TextView) convertView.findViewById(R.id.item_lv_space_other_personaldata_value);

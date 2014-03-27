@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/aa_space_theme" />
+        android:src="@drawable/ic_space_theme_defalut" />
 
     <TextView
         android:id="@+id/acty_space_other_top_tv_leave2visitor"

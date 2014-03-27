@@ -28,11 +28,11 @@ import com.alumnigroup.widget.LoadingDialog;
  * 
  */
 public class Login extends BaseActivity {
+	private String DefaultUniversity = "陕西财经学院(西交大经济与金融学院)";
 	private ViewFlipper flipper;
 	private EditText et_login_username, et_login_password;
 	private EditText et_reg_username, et_reg_password, et_reg_confirm,
-			et_reg_name, et_reg_email, et_reg_university, et_reg_major,
-			et_reg_summary, et_reg_grade;
+			et_reg_name, et_reg_major;
 	private View btn_login, btn_regitst, btn_ok, btn_cancle;
 	private UserAPI api;
 	private LoadingDialog dialog;
@@ -86,25 +86,17 @@ public class Login extends BaseActivity {
 			if (StringUtils.isEmpty(EditTextUtils.getText(et_reg_confirm))
 					|| StringUtils.isEmpty(EditTextUtils
 							.getText(et_reg_password))
-					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_email))
 					|| StringUtils.isEmpty(EditTextUtils
 							.getText(et_reg_username))
-					|| StringUtils.isEmpty(EditTextUtils
-							.getText(et_reg_university))
+
 					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_major))
-					|| StringUtils.isEmpty(EditTextUtils
-							.getText(et_reg_summary))
-					|| StringUtils.isEmpty(EditTextUtils.getText(et_reg_grade))) {
+					) {
 				toast("输入不能为空 ");
 				return;
 			}
 			if (!EditTextUtils.getText(et_reg_password).equals(
 					EditTextUtils.getTextTrim(et_reg_confirm))) {
 				toast("输入密码不一致!");
-				return;
-			}
-			if (!StringUtils.isEmail(EditTextUtils.getText(et_reg_email))) {
-				toast("邮箱不符合格式！");
 				return;
 			}
 			if (!StringUtils.isNickname(EditTextUtils.getText(et_reg_name))) {
@@ -114,13 +106,9 @@ public class Login extends BaseActivity {
 			String username = EditTextUtils.getText(et_reg_username);
 			String password = EditTextUtils.getText(et_reg_password);
 			String name = EditTextUtils.getText(et_reg_name);
-			String email = EditTextUtils.getText(et_reg_email);
-			int grade = Integer.parseInt(EditTextUtils.getText(et_reg_grade));
-			String university = EditTextUtils.getText(et_reg_university);
 			String major = EditTextUtils.getText(et_reg_major);
-			String summary = EditTextUtils.getText(et_reg_summary);
-			api.regist(username, password, name, email, "m", 0, grade,
-					university, major, summary, new JsonResponseHandler() {
+			api.regist(username, password, name, null, "m", 0, 0,
+					DefaultUniversity, major, null, new JsonResponseHandler() {
 						@Override
 						public void onStart() {
 							dialog.show();
@@ -164,12 +152,9 @@ public class Login extends BaseActivity {
 		et_reg_password = (EditText) _getView(R.id.acty_register_et_password);
 		et_reg_confirm = (EditText) _getView(R.id.acty_register_et_comfirmpassword);
 		et_reg_name = (EditText) _getView(R.id.acty_register_et_name);
-		et_reg_email = (EditText) _getView(R.id.acty_register_et_email);
 
-		et_reg_university = (EditText) _getView(R.id.acty_register_et_university);
+//		et_reg_university = (EditText) _getView(R.id.acty_register_et_university);
 		et_reg_major = (EditText) _getView(R.id.acty_register_et_major);
-		et_reg_summary = (EditText) _getView(R.id.acty_register_et_summary);
-		et_reg_grade = (EditText) _getView(R.id.acty_register_et_grade);
 
 		btn_login = _getView(R.id.acty_login_btn_login);
 		btn_regitst = _getView(R.id.acty_login_btn_regist);
