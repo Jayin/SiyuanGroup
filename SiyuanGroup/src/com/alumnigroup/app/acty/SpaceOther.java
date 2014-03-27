@@ -119,7 +119,7 @@ public class SpaceOther extends BaseActivity {
 					ivBackground);
 		}
 
-		if (user.getCover() != null) {
+		if (user.getAvatar() != null) {
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + user.getAvatar(), ivPortrait);
 		} else {
