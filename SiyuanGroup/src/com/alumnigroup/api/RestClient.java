@@ -14,7 +14,8 @@ import com.loopj.android.http.RequestParams;
  * 
  */
 public class RestClient {
-	public static final String BASE_URL = "http://61.174.8.62";
+	public static final String BASE_URL = "http://61.174.8.62"; // main 
+//	public static final String BASE_URL = "http://61.174.8.62:8088";//test api
 	private static int HTTP_Timeout = 12 * 1000;
 	public static Context context;
 

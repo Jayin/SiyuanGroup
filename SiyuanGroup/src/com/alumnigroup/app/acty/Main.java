@@ -130,13 +130,13 @@ public class Main extends BaseActivity implements OnClickListener {
 		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
 		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
 		iv_backgroud = (ImageView) _getView(R.id.iv_main_bg);
-		if (AppInfo.getBackgroudPath(getContext()) != null) {
-//			 BitmapFactory.Options option = new BitmapFactory.Options();
-//			 option.inSampleSize = 2;
-			backgroudBitmap = BitmapFactory.decodeFile(AppInfo
-					.getBackgroudPath(getContext()));
-			iv_backgroud.setImageBitmap(backgroudBitmap);
-		}
+//		if (AppInfo.getBackgroudPath(getContext()) != null) {
+////			 BitmapFactory.Options option = new BitmapFactory.Options();
+////			 option.inSampleSize = 2;
+//			backgroudBitmap = BitmapFactory.decodeFile(AppInfo
+//					.getBackgroudPath(getContext()));
+//			iv_backgroud.setImageBitmap(backgroudBitmap);
+//		}
 		initWebView();
 	}
 
