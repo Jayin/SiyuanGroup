@@ -1,6 +1,7 @@
 package com.alumnigroup.app.acty;
 
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -24,6 +25,8 @@ import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.CoreService;
 import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
+import com.alumnigroup.app.fragment.MainAll;
+import com.alumnigroup.app.fragment.MainAll.OnMainAllFragmentUpdate;
 import com.alumnigroup.utils.AndroidUtils;
 import com.alumnigroup.utils.Constants;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -35,7 +38,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * @since 2013.12.11;
  * 
  */
-public class Main extends BaseActivity implements OnClickListener {
+public class Main extends BaseActivity implements OnClickListener,
+		OnMainAllFragmentUpdate {
 	private WebView webview;
 	private LinearLayout content;
 	private int width = 0, height = 0;
@@ -54,6 +58,12 @@ public class Main extends BaseActivity implements OnClickListener {
 		checkVerison();
 		startPolling();
 		openReceiver();
+		initActionBar();
+	}
+
+	private void initActionBar() {
+		ActionBar mActionBar = getActionBar();
+		mActionBar.setIcon(R.drawable.icon);
 	}
 
 	private void startPolling() {
@@ -85,14 +95,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		if (MessageCache.getUnreadCount(getContext()) == 0) {
-			tv_unreadCount.setVisibility(View.INVISIBLE);
-		} else {
-			tv_unreadCount.setText(MessageCache.getUnreadCount(getContext())
-					+ "");
-			tv_unreadCount.setVisibility(View.VISIBLE);
-		}
-
+		onUnreadChange(MessageCache.getUnreadCount(getContext()));
 	}
 
 	private void checkVerison() {
@@ -109,35 +112,37 @@ public class Main extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void initLayout() {
-		adapteScreent();
+		// adapteScreent();
 
-		_getView(R.id.frame_main_one_myspace).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_setting).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_message).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_allmember).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_communication).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_activities).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_group).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_business).setOnClickListener(this);
-
-		_getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
-		tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
-		iv_backgroud = (ImageView) _getView(R.id.iv_main_bg);
-//		if (AppInfo.getBackgroudPath(getContext()) != null) {
-////			 BitmapFactory.Options option = new BitmapFactory.Options();
-////			 option.inSampleSize = 2;
-//			backgroudBitmap = BitmapFactory.decodeFile(AppInfo
-//					.getBackgroudPath(getContext()));
-//			iv_backgroud.setImageBitmap(backgroudBitmap);
-//		}
-		initWebView();
+		// _getView(R.id.frame_main_one_myspace).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_setting).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_message).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_allmember).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_communication).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_activities).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_group).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_business).setOnClickListener(this);
+		//
+		// _getView(R.id.frame_main_one_allactivity).setOnClickListener(this);
+		// tv_unreadCount = (TextView) _getView(R.id.tv_unreadcount);
+		// iv_backgroud = (ImageView) _getView(R.id.iv_main_bg);
+		// if (AppInfo.getBackgroudPath(getContext()) != null) {
+		// // BitmapFactory.Options option = new BitmapFactory.Options();
+		// // option.inSampleSize = 2;
+		// backgroudBitmap = BitmapFactory.decodeFile(AppInfo
+		// .getBackgroudPath(getContext()));
+		// iv_backgroud.setImageBitmap(backgroudBitmap);
+		// }
+		// initWebView();
+		getSupportFragmentManager().beginTransaction()
+				.replace(R.id.container, new MainAll(), "MainAll").commit();
 	}
 
 	// 初始化广告栏
@@ -233,12 +238,13 @@ public class Main extends BaseActivity implements OnClickListener {
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got
 																					// unread
-				tv_unreadCount.setVisibility(View.INVISIBLE);
-				if (MessageCache.getUnreadCount(getContext()) > 0) {
-					tv_unreadCount.setText(MessageCache
-							.getUnreadCount(getContext()) + "");
-					tv_unreadCount.setVisibility(View.VISIBLE);
-				}
+//				tv_unreadCount.setVisibility(View.INVISIBLE);
+//				if (MessageCache.getUnreadCount(getContext()) > 0) {
+//					tv_unreadCount.setText(MessageCache
+//							.getUnreadCount(getContext()) + "");
+//					tv_unreadCount.setVisibility(View.VISIBLE);
+//				}
+				onUnreadChange(MessageCache.getUnreadCount(getContext()));
 			} else if (intent.getAction().equals(
 					Constants.Action_Backgroud_switch)) {
 				if (AppInfo.getBackgroudPath(getContext()) != null) {
@@ -251,5 +257,11 @@ public class Main extends BaseActivity implements OnClickListener {
 				closeActivity();
 			}
 		}
+	}
+
+	@Override
+	public void onUnreadChange(int unreadCount) {
+		((MainAll) getSupportFragmentManager().findFragmentByTag("MainAll"))
+				.updateUnreadCount(unreadCount);
 	}
 }

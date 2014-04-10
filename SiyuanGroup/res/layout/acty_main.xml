@@ -1,39 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/container"
+        android:layout_above="@+id/main_foot"
+        android:layout_weight="1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content" >
+    </FrameLayout>
 
-        <ImageView
-            android:id="@+id/iv_main_bg"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-          />
-        <!--   android:src="@drawable/ic_bg_main"  -->
-    </LinearLayout>
+    <include
+        android:id="@+id/main_foot"
+        layout="@layout/acty_main_footer" />
 
-    <LinearLayout
-        android:id="@+id/acty_main_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical" >
-
-        <WebView
-            android:id="@+id/acty_main_webview"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:background="#00000000" />
-
-        <include
-            android:id="@+id/acty_main_content_one"
-            android:layout_margin="8dp"
-            layout="@layout/frame_main_one" />
-    </LinearLayout>
-
-</FrameLayout>
+</LinearLayout>

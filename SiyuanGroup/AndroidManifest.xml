@@ -51,7 +51,8 @@
         <activity
             android:name=".acty.Main"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" >
+            android:screenOrientation="portrait"
+            android:theme="@style/ActivityTheme_ActionBar" >
         </activity>
         <activity
             android:name=".acty.Alldynamic"

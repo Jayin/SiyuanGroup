@@ -9,6 +9,10 @@
     <style name="ActivityTheme_base" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animations.activity</item>
     </style>
+     <style name="ActivityTheme_ActionBar" parent="AppTheme">
+        <item name="android:windowAnimationStyle">@style/Animations.activity</item>
+        <item name="android:windowNoTitle">false</item>
+    </style>
 
     <style name="AcivityTheme_start">
         <item name="android:windowNoTitle">true</item>
