@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@color/white"
     android:scrollbars="none" >
 
     <LinearLayout
@@ -14,13 +14,13 @@
         <WebView
             android:id="@+id/acty_main_webview"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="@dimen/fragment_main_webview_height"
             android:background="#00000000" />
 
         <include
             android:id="@+id/acty_main_content_one"
             android:layout_margin="8dp"
-            layout="@layout/frame_main_one" />
+            layout="@layout/fragment_mainall_sub" />
     </LinearLayout>
 
 </ScrollView>

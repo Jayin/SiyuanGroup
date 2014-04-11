@@ -1,54 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/LinearLayout.allmember_footer"
-    android:orientation="horizontal" >
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    android:background="@android:color/white"
+    android:orientation="vertical" >
 
-    <LinearLayout
-        android:id="@+id/visitor"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="gone" >
-
-        <RelativeLayout
-            android:id="@+id/acty_communicationdetail_footer_comment_visitor"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/item_listview_bg_whitetogrey" >
-
-            <TextView
-                style="@style/TextView.base"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="评论"
-                android:textColor="@color/grey_lv_two"
-                android:textSize="14sp" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/acty_communicationdetail_footer_favourite"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/item_listview_bg_whitetogrey" >
-
-            <TextView
-                android:id="@+id/tv_favourite"
-                style="@style/TextView.base"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="关注"
-                android:textColor="@color/grey_lv_two"
-                android:textSize="14sp" />
-        </RelativeLayout>
-    </LinearLayout>
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_2" />
 
     <LinearLayout
         android:id="@+id/owner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
 
         <RelativeLayout
             android:id="@+id/acty_communicationdetail_footer_comment_owner"
@@ -62,7 +28,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="评论"
+                android:text="发现"
                 android:textColor="@color/grey_lv_two"
                 android:textSize="14sp" />
         </RelativeLayout>
@@ -79,7 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="编辑"
+                android:text="消息"
                 android:textColor="@color/grey_lv_two"
                 android:textSize="14sp" />
         </RelativeLayout>
@@ -96,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="删除"
+                android:text="我的"
                 android:textColor="@color/grey_lv_two"
                 android:textSize="14sp" />
         </RelativeLayout>

@@ -1,0 +1,7 @@
+<resources>
+
+    <dimen name="activity_horizontal_margin">128dp</dimen>
+    <dimen name="main_item_height">100.0dp</dimen>
+    <dimen name="fragment_main_webview_height">100dp</dimen>
+
+</resources>

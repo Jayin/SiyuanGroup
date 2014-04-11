@@ -9,7 +9,8 @@
     <style name="ActivityTheme_base" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animations.activity</item>
     </style>
-     <style name="ActivityTheme_ActionBar" parent="AppTheme">
+
+    <style name="ActivityTheme_ActionBar" parent="AppTheme">
         <item name="android:windowAnimationStyle">@style/Animations.activity</item>
         <item name="android:windowNoTitle">false</item>
     </style>
@@ -44,9 +45,17 @@
         <item name="android:background">@drawable/btn_round_blue</item>
     </style>
 
+    <style name="RelativeLayout.item_main_all">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/main_item_height</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:background">@drawable/btn_item_whit2grey</item>
+    </style>
+
     <style name="ImageView">
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
+        
     </style>
 
     <style name="ImageView.avatar">
