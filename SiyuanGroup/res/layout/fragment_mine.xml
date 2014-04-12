@@ -1,13 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical" >
 
-    <TextView
-        style="@style/TextView.black"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="Mine" />
+    <RelativeLayout
+        android:id="@+id/btn_spacePersonal"
+        style="@style/Setting.relativelayout" >
 
-</RelativeLayout>
+        <TextView
+            style="@style/TextView.setting"
+            android:text="个人空间" />
+
+        <ImageView style="@style/Setting.imageview" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:text="设 置"
+        android:textColor="@color/grey_lv_two"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:background="@drawable/ic_line_2" />
+
+    <RelativeLayout
+        android:id="@+id/acty_setting_btn_changeBackgroud"
+        style="@style/Setting.relativelayout" android:visibility="gone" >
+
+        <TextView
+            style="@style/TextView.setting"
+            android:text="更换背景图" />
+
+        <ImageView style="@style/Setting.imageview" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
+    <RelativeLayout
+        android:id="@+id/acty_setting_btn_introduce"
+        style="@style/Setting.relativelayout" >
+
+        <TextView
+            style="@style/TextView.setting"
+            android:text="功能介绍" />
+
+        <ImageView style="@style/Setting.imageview" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
+    <RelativeLayout
+        android:id="@+id/acty_setting_btn_tickling"
+        style="@style/Setting.relativelayout" >
+
+        <TextView
+            style="@style/TextView.setting"
+            android:text="意见反馈" />
+
+        <ImageView style="@style/Setting.imageview" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
+    <RelativeLayout
+        android:id="@+id/acty_setting_btn_about"
+        style="@style/Setting.relativelayout" >
+
+        <TextView
+            style="@style/TextView.setting"
+            android:text="检查更新" />
+
+        <ImageView style="@style/Setting.imageview" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
+    <RelativeLayout
+        android:id="@+id/acty_setting_btn_quit"
+        style="@style/Setting.relativelayout" >
+
+        <TextView
+            style="@style/TextView.setting"
+            android:text="退出当前账号" />
+    </RelativeLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@drawable/ic_line_1" />
+
+</LinearLayout>

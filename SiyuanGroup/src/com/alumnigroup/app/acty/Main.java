@@ -57,21 +57,6 @@ public class Main extends BaseActivity implements OnClickListener {
 		initActionBar();
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		if (item.getItemId() == R.id.action_settings) {
-			openActivity(Setting.class);
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
 	private void initActionBar() {
 		ActionBar mActionBar = getActionBar();
 		mActionBar.setIcon(R.drawable.icon);

@@ -27,7 +27,11 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.TextView;
-
+/**
+ * 主页面第一页
+ * @author Jayin Ton
+ *
+ */
 public class MainAll extends Fragment implements View.OnClickListener {
 	WebView webview;
 	boolean isError = false;

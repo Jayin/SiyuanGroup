@@ -29,7 +29,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemClickListener;
-
+/**
+ * 消息中心
+ * @author Jayin Ton
+ *
+ */
 public class MessageCenter extends BaseFragment {
 	private XListView lv_message;
 	private ArrayList<MMessage> data_message;
