@@ -17,7 +17,7 @@
         android:orientation="horizontal" >
 
         <RelativeLayout
-            android:id="@+id/acty_communicationdetail_footer_comment_owner"
+            android:id="@+id/btn_main"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -28,13 +28,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="发现"
+                android:text="主要"
                 android:textColor="@color/grey_lv_two"
                 android:textSize="14sp" />
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/btn_edit"
+            android:id="@+id/btn_message"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
@@ -51,7 +51,7 @@
         </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/btn_delete"
+            android:id="@+id/btn_mine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

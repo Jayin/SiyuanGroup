@@ -99,7 +99,7 @@
         android:orientation="horizontal" >
 
         <RelativeLayout
-            android:id="@+id/frame_main_one_myspace"
+            android:id="@+id/frame_main_one_business"
             style="@style/RelativeLayout.item_main_all" >
 
             <LinearLayout
@@ -112,11 +112,11 @@
                     android:id="@+id/frame_main_one_iv1"
                     style="@style/ImageView"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/aa_user" />
+                    android:background="@drawable/ic_img_bussiness" />
 
                 <TextView
                     style="@style/TextView.item_main"
-                    android:text="个人空间" />
+                    android:text="商务合作" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -171,108 +171,6 @@
                 <TextView
                     style="@style/TextView.item_main"
                     android:text="圈  子" />
-            </LinearLayout>
-        </RelativeLayout>
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@drawable/ic_line_1" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="horizontal" >
-
-        <RelativeLayout
-            android:id="@+id/frame_main_one_business"
-            style="@style/RelativeLayout.item_main_all" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/frame_main_one_iv1"
-                    style="@style/ImageView"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_img_bussiness" />
-
-                <TextView
-                    style="@style/TextView.item_main"
-                    android:text="商务合作" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_line_3" />
-
-        <RelativeLayout
-            android:id="@+id/frame_main_one_message"
-            style="@style/RelativeLayout.item_main_all" >
-
-            <TextView
-                android:id="@+id/tv_unreadcount"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="4dp"
-                android:layout_marginTop="4dp"
-                android:background="@drawable/tv_round_red"
-                android:gravity="center"
-                android:text="22+"
-                android:textColor="@color/white"
-                android:textSize="12sp" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/frame_main_one_iv1"
-                    style="@style/ImageView"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_img_message" />
-
-                <TextView
-                    style="@style/TextView.item_main"
-                    android:text="消息中心" />
-            </LinearLayout>
-        </RelativeLayout>
-
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@drawable/ic_line_3" />
-
-        <RelativeLayout
-            android:id="@+id/frame_main_one_setting"
-            style="@style/RelativeLayout.item_main_all" >
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical" >
-
-                <ImageView
-                    android:id="@+id/frame_main_one_iv1"
-                    style="@style/ImageView"
-                    android:layout_gravity="center_horizontal"
-                    android:background="@drawable/ic_img_setting" />
-
-                <TextView
-                    style="@style/TextView.item_main"
-                    android:text="设置" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

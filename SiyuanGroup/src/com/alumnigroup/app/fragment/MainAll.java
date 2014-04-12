@@ -29,32 +29,24 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 public class MainAll extends Fragment implements View.OnClickListener {
-	OnMainAllFragmentUpdate mCallback = null;
 	WebView webview;
-	TextView tv_unreadCount;
 	boolean isError = false;
 
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		try {
-			mCallback = (OnMainAllFragmentUpdate) activity;
-		} catch (ClassCastException e) {
-			throw new ClassCastException(activity.toString()
-					+ " must implement OnMainAllFragmentUpdate");
-		}
+//		try {
+//			mCallback = (OnMainAllFragmentUpdate) activity;
+//		} catch (ClassCastException e) {
+//			throw new ClassCastException(activity.toString()
+//					+ " must implement OnMainAllFragmentUpdate");
+//		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.fragment_main_all, container, false);
-		v.findViewById(R.id.frame_main_one_myspace).setOnClickListener(this);
-
-		v.findViewById(R.id.frame_main_one_setting).setOnClickListener(this);
-
-		v.findViewById(R.id.frame_main_one_message).setOnClickListener(this);
-
 		v.findViewById(R.id.frame_main_one_allmember).setOnClickListener(this);
 
 		v.findViewById(R.id.frame_main_one_communication).setOnClickListener(
@@ -70,7 +62,6 @@ public class MainAll extends Fragment implements View.OnClickListener {
 				.setOnClickListener(this);
 		webview = (WebView) v.findViewById(R.id.acty_main_webview);
 		initWebView();
-		tv_unreadCount = (TextView) v.findViewById(R.id.tv_unreadcount);
 		return v;
 	}
 
@@ -153,16 +144,5 @@ public class MainAll extends Fragment implements View.OnClickListener {
 
 	}
 
-	public void updateUnreadCount(int unreadCount) {
-		if (unreadCount <= 0) {
-			tv_unreadCount.setVisibility(View.INVISIBLE);
-		} else {
-			tv_unreadCount.setText(unreadCount + "");
-			tv_unreadCount.setVisibility(View.VISIBLE);
-		}
-	}
-
-	public interface OnMainAllFragmentUpdate {
-		public void onUnreadChange(int unreadCount);
-	}
+ 
 }
