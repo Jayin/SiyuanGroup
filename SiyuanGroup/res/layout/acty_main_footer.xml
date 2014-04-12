@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="wrap_content"
     android:background="@android:color/white"
     android:orientation="vertical" >
 
@@ -16,56 +16,80 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal" >
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/btn_main"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/item_listview_bg_whitetogrey" >
+            android:background="@drawable/item_listview_bg_whitetogrey"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/iv_main"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_img_discover_namal" />
 
             <TextView
-                style="@style/TextView.base"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="主要"
-                android:textColor="@color/grey_lv_two"
-                android:textSize="14sp" />
-        </RelativeLayout>
+                style="@style/TextView.Footer"
+                android:text="主  要" />
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/btn_message"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/item_listview_bg_whitetogrey" >
+            android:background="@drawable/item_listview_bg_whitetogrey"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
+
+                <ImageView
+                    android:id="@+id/iv_message"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/ic_img_message_namal" />
+
+                <ImageView
+                    android:id="@+id/iv_new"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_alignRight="@+id/iv_unread"
+                    android:layout_alignTop="@+id/iv_unread"
+                    android:layout_marginRight="-10dp"
+                    android:background="@drawable/ic_img_tips_new" />
+            </RelativeLayout>
 
             <TextView
-                style="@style/TextView.base"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="消息"
-                android:textColor="@color/grey_lv_two"
-                android:textSize="14sp" />
-        </RelativeLayout>
+                style="@style/TextView.Footer"
+                android:text="消  息" />
+        </LinearLayout>
 
-        <RelativeLayout
+        <LinearLayout
             android:id="@+id/btn_mine"
             android:layout_width="1dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/item_listview_bg_whitetogrey" >
+            android:background="@drawable/item_listview_bg_whitetogrey"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/iv_my"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:background="@drawable/ic_img_my_namal" />
 
             <TextView
-                style="@style/TextView.base"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="我的"
-                android:textColor="@color/grey_lv_two"
-                android:textSize="14sp" />
-        </RelativeLayout>
+                style="@style/TextView.Footer"
+                android:text="我  的" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

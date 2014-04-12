@@ -14,12 +14,16 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
+
 import com.alumnigroup.app.BaseActivity;
 import com.alumnigroup.app.CoreService;
+import com.alumnigroup.app.MessageCache;
 import com.alumnigroup.app.R;
 import com.alumnigroup.app.fragment.MainAll;
 import com.alumnigroup.app.fragment.MessageCenter;
@@ -39,6 +43,7 @@ public class Main extends BaseActivity implements OnClickListener {
 	ViewPager viewpager;
 	List<Fragment> fragments = new ArrayList<Fragment>();
 	View btn_main, btn_message, btn_mine;
+	ImageView iv_new, iv_message, iv_my, iv_main;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +107,15 @@ public class Main extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// onUnreadChange(MessageCache.getUnreadCount(getContext()));
+		updateUnreadChange(MessageCache.getUnreadCount(getContext()));
+	}
+
+	private void updateUnreadChange(int unreadCount) {
+		if (unreadCount > 0) {
+			iv_new.setVisibility(View.VISIBLE);
+		} else {
+			iv_new.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	private void checkVerison() {
@@ -118,35 +131,66 @@ public class Main extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void initLayout() {
-		// getSupportFragmentManager().beginTransaction()
-		// .replace(R.id.container, new MainAll(), "MainAll").commit();
 		viewpager = (ViewPager) findViewById(R.id.viewpager);
 		fragments.add(new MainAll());
 		fragments.add(new MessageCenter());
 		fragments.add(new Mine());
 		viewpager.setAdapter(new MainFragmentPagerAdapter(
 				getSupportFragmentManager(), fragments));
+		viewpager.setOnPageChangeListener(new MyPageChangeLinster());
 
 		btn_main = _getView(R.id.btn_main);
 		btn_message = _getView(R.id.btn_message);
 		btn_mine = _getView(R.id.btn_mine);
 
+		iv_message = (ImageView) _getView(R.id.iv_message);
+		iv_my = (ImageView) _getView(R.id.iv_my);
+		iv_main = (ImageView) _getView(R.id.iv_main);
+		iv_new = (ImageView) _getView(R.id.iv_new);
+		iv_main.setBackgroundResource(R.drawable.ic_img_discover_pressed);
+
 		btn_main.setOnClickListener(this);
 		btn_message.setOnClickListener(this);
 		btn_mine.setOnClickListener(this);
+
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_main:
-			viewpager.setCurrentItem(0,true);
+			viewpager.setCurrentItem(0, true);
+			changeSelected(0);
 			break;
 		case R.id.btn_message:
-			viewpager.setCurrentItem(1,true);
+			viewpager.setCurrentItem(1, true);
+			changeSelected(1);
 			break;
 		case R.id.btn_mine:
-			viewpager.setCurrentItem(2,true);
+			viewpager.setCurrentItem(2, true);
+			changeSelected(2);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void changeSelected(int selected) {
+		switch (selected) {
+		case 0:
+			iv_main.setBackgroundResource(R.drawable.ic_img_discover_pressed);
+			iv_message.setBackgroundResource(R.drawable.ic_img_message_namal);
+			iv_my.setBackgroundResource(R.drawable.ic_img_my_namal);
+			break;
+		case 1:
+			iv_main.setBackgroundResource(R.drawable.ic_img_discover_namal);
+			iv_message.setBackgroundResource(R.drawable.ic_img_message_pressed);
+			iv_my.setBackgroundResource(R.drawable.ic_img_my_namal);
+			break;
+		case 2:
+			iv_main.setBackgroundResource(R.drawable.ic_img_discover_namal);
+			iv_message.setBackgroundResource(R.drawable.ic_img_message_namal);
+			iv_my.setBackgroundResource(R.drawable.ic_img_my_pressed);
 			break;
 
 		default:
@@ -159,6 +203,7 @@ public class Main extends BaseActivity implements OnClickListener {
 		public void onReceive(Context context, Intent intent) {
 			if (intent.getAction().equals(Constants.Action_Receive_UnreadCount)) {// got
 				// onUnreadChange(MessageCache.getUnreadCount(getContext()));
+				updateUnreadChange(MessageCache.getUnreadCount(getContext()));
 			} else if (intent.getAction().equals(
 					Constants.Action_Backgroud_switch)) {
 				// if (AppInfo.getBackgroudPath(getContext()) != null) {
@@ -190,11 +235,29 @@ public class Main extends BaseActivity implements OnClickListener {
 		public Fragment getItem(int position) {
 			return fragments.get(position);
 		}
-
+   
 		@Override
 		public int getCount() {
 			return fragments.size();
 		}
+	}
+	
+	class MyPageChangeLinster implements OnPageChangeListener{
 
+		@Override
+		public void onPageScrollStateChanged(int arg0) {
+			
+		}
+
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {
+			
+		}
+
+		@Override
+		public void onPageSelected(int position) {
+			changeSelected(position);
+		}
+		
 	}
 }
