@@ -76,7 +76,7 @@ public class MemberAdapter extends BaseAdapter {
 					RestClient.BASE_URL + u.getAvatar(), h.avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
+					"drawable://" + R.drawable.ic_img_avatar_default, h.avatar);
 		}
 
 		h.grade.setText(u.getProfile().getGrade() + "");

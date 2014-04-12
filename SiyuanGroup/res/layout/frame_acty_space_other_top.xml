@@ -21,12 +21,12 @@
         android:background="@drawable/bg_space_other_top_leave_content"
         android:text="    来了，就不要走了，听我的不会错的！！"
         android:textColor="@color/white"
-        android:textSize="16dp" />
+        android:textSize="16sp" />
 
-    <ImageView
+    <com.meg7.widget.CircleImageView
         android:id="@+id/acty_space_other_top_iv_portrait"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:layout_alignLeft="@+id/acty_space_other_top_tv_leave2visitor"
         android:layout_below="@+id/acty_space_other_top_iv_background"
         android:layout_marginTop="-40dp"

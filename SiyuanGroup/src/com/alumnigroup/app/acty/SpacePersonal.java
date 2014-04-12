@@ -123,7 +123,7 @@ public class SpacePersonal extends BaseActivity {
 		} else {
 			ImageLoader.getInstance()
 					.displayImage(
-							"drawable://" + R.drawable.ic_image_load_normal,
+							"drawable://" +R.drawable.ic_img_avatar_default,
 							ivPortrait);
 		}
 		tvUsername.setText(myself.getProfile().getName());

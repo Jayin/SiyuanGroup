@@ -118,14 +118,13 @@ public class SpaceOther extends BaseActivity {
 					"drawable://" + R.drawable.ic_space_theme_defalut,
 					ivBackground);
 		}
-
 		if (user.getAvatar() != null) {
 			ImageLoader.getInstance().displayImage(
 					RestClient.BASE_URL + user.getAvatar(), ivPortrait);
 		} else {
 			ImageLoader.getInstance()
 					.displayImage(
-							"drawable://" + R.drawable.ic_image_load_normal,
+							"drawable://" + R.drawable.ic_img_avatar_default,
 							ivPortrait);
 		}
 
