@@ -611,7 +611,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 								h.avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
-						"drawable://" + R.drawable.ic_image_load_normal,
+						"drawable://" + R.drawable.ic_img_avatar_default,
 						h.avatar);
 			}
 

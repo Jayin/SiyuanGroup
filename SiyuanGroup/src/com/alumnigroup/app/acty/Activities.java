@@ -109,7 +109,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 							RestClient.BASE_URL + a.getAvatar(), iv_avatar);
 				} else {
 					ImageLoader.getInstance().displayImage(
-							"drawable://" + R.drawable.ic_image_load_normal,
+							"drawable://" + R.drawable.ic_img_activity_default,
 							iv_avatar);
 				}
 			}
@@ -566,7 +566,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 						RestClient.BASE_URL + acty.getAvatar(), h.avater);
 			} else {
 				ImageLoader.getInstance().displayImage(
-						"drawable://" + R.drawable.ic_image_load_normal,
+						"drawable://" + R.drawable.ic_img_activity_default,
 						h.avater);
 			}
 			return convertView;

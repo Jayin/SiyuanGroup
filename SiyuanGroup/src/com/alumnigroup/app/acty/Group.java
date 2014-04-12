@@ -96,7 +96,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 							RestClient.BASE_URL + g.getAvatar(), iv_avatar);
 				} else {
 					ImageLoader.getInstance().displayImage(
-							"drawable://" + R.drawable.ic_image_load_normal,
+							"drawable://" + R.drawable.ic_img_group_defalut,
 							iv_avatar);
 				}
 			}
@@ -457,7 +457,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						RestClient.BASE_URL + group.getAvatar(), h.avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
-						"drawable://" + R.drawable.ic_image_load_normal,
+						"drawable://" + R.drawable.ic_img_group_defalut,
 						h.avatar);
 			}
 

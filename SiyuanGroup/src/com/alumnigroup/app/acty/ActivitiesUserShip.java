@@ -13,8 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -224,7 +222,7 @@ public class ActivitiesUserShip extends BaseActivity {
 						RestClient.BASE_URL + u.getAvatar(), h.avatar);
 			} else {
 				ImageLoader.getInstance().displayImage(
-						"drawable://" + R.drawable.ic_image_load_normal,
+						"drawable://" + R.drawable.ic_img_avatar_default,
 						h.avatar);
 			}
 

@@ -45,7 +45,6 @@ public class App extends Application {
 				.discCacheFileCount(100).memoryCacheSize(10 * 1024 * 1024)
 				.defaultDisplayImageOptions(defaultOptions).build();
 		ImageLoader.getInstance().init(config);
-		
 	}
 
 	/**

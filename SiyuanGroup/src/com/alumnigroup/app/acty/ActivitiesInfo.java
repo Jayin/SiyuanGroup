@@ -396,7 +396,7 @@ public class ActivitiesInfo extends BaseActivity {
 					RestClient.BASE_URL + acty.getAvatar(), iv_avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+					"drawable://" + R.drawable.ic_img_activity_default, iv_avatar);
 		}
 
 		tv_name.setText(acty.getName());

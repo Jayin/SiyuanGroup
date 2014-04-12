@@ -90,11 +90,10 @@ public class IssueAdapter extends BaseAdapter{
 							h.avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, h.avatar);
+					"drawable://" + R.drawable.ic_img_avatar_default, h.avatar);
 		}
 		// 暂时1张图片
 		h.pic1.setVisibility(View.GONE);
-		L.i(issue.getNumPictures() + "");
 		if (issue.getPictures() != null && issue.getPictures().size() > 0) {
 			h.pic1.setVisibility(View.VISIBLE);
 			// for (MPicture pic : issue.getPictures()) {

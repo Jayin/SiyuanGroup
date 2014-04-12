@@ -424,7 +424,7 @@ public class GroupInfo extends BaseActivity {
 					RestClient.BASE_URL + group.getAvatar(), iv_avatar);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avatar);
+					"drawable://" + R.drawable.ic_img_group_defalut, iv_avatar);
 		}
 		tv_owner.setText(group.getOwner().getProfile().getName());
 		tv_numMember.setText(group.getNumMembers() + "");

@@ -191,7 +191,7 @@ public class GroupShareDetail extends BaseActivity {
 					iv_avater);
 		} else {
 			ImageLoader.getInstance().displayImage(
-					"drawable://" + R.drawable.ic_image_load_normal, iv_avater);
+					"drawable://" + R.drawable.ic_img_avatar_default, iv_avater);
 		}
 		// 图片
 		final MPicture pic = issue.getPictures() != null && issue.getPictures().size() > 0 ? issue
