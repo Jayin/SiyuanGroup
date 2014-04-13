@@ -60,8 +60,8 @@
                     android:id="@+id/iv_new"
                     android:layout_width="10dp"
                     android:layout_height="10dp"
-                    android:layout_alignRight="@+id/iv_unread"
-                    android:layout_alignTop="@+id/iv_unread"
+                    android:layout_alignRight="@+id/iv_message"
+                    android:layout_alignTop="@+id/iv_message"
                     android:layout_marginRight="-10dp"
                     android:background="@drawable/ic_img_tips_new" />
             </RelativeLayout>
