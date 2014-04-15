@@ -33,12 +33,23 @@
         android:scaleType="centerCrop"
         android:src="@drawable/aa_po" />
 
+    <TextView
+        android:id="@+id/acty_space_other_top_tv_name1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/acty_space_other_top_iv_portrait"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/acty_space_other_top_iv_portrait"
+        android:text="黄廉温"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
     <LinearLayout
         android:id="@+id/acty_space_other_top_btn_add_friend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/acty_space_other_top_tv_name1"
         android:layout_alignRight="@+id/acty_space_other_top_tv_leave2visitor"
-        android:layout_below="@+id/acty_space_other_top_iv_portrait"
         android:background="@drawable/btn_simple_selected"
         android:clickable="true"
         android:orientation="horizontal" >
@@ -52,16 +63,5 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/acty_space_other_top_tv_name1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/acty_space_other_top_iv_portrait"
-        android:layout_marginLeft="15dp"
-        android:layout_toRightOf="@+id/acty_space_other_top_iv_portrait"
-        android:text="黄廉温"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
 
 </RelativeLayout>

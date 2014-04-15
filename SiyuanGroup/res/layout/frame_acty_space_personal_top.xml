@@ -25,15 +25,16 @@
         android:textColor="@color/white"
         android:textSize="16sp" />
 
-    <ImageView
+    <com.meg7.widget.CircleImageView
         android:id="@+id/acty_space_personal_top_iv_portrait"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="84dp"
+        android:layout_height="84dp"
         android:layout_alignLeft="@+id/acty_space_personal_top_et_leave2visitor"
         android:layout_below="@+id/acty_space_personal_top_iv_backgroup"
         android:layout_marginTop="-40dp"
         android:scaleType="centerCrop"
         android:src="@drawable/aa_po" />
+  
 
     <TextView
         android:id="@+id/acty_space_personal_top_tv_name"

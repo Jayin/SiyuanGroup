@@ -58,7 +58,8 @@ public class CalendarUtils {
 						.append(":").append(_formatNmber(pre.get(Calendar.MINUTE)));
 				break;
 			default:
-				sb.append(pre.get(Calendar.YEAR)).append("-").append(pre.get(Calendar.MONTH) + 1).append("-")
+//				sb.append(pre.get(Calendar.YEAR)).append("-").append(pre.get(Calendar.MONTH) + 1).append("-")
+				sb.append(pre.get(Calendar.MONTH) + 1).append("-")
 						.append(pre.get(Calendar.DAY_OF_MONTH)).append(" ")
 						.append(_formatNmber(pre.get(Calendar.HOUR_OF_DAY)))
 						.append(":")

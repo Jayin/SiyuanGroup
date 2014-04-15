@@ -553,8 +553,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			MActivity acty = data.get(position);
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
-			h.starttime.setText("时间:"
-					+ CalendarUtils.getTimeFromat(acty.getStarttime(),
+			h.starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
 							CalendarUtils.TYPE_TWO));
 			h.ownername.setText(acty.getUser().getProfile().getName());
 			h.applyCount.setText(acty.getNumUsership() + "人报名");
