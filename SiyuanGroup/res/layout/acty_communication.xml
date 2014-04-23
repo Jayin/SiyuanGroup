@@ -25,6 +25,5 @@
         android:background="@color/white" >
     </android.support.v4.view.ViewPager>
 
-    <include layout="@layout/acty_communication_footer" />
 
 </LinearLayout>
