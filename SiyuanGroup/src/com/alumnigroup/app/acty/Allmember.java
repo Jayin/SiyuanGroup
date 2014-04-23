@@ -17,8 +17,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.MemberAdapter;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.FollowshipAPI;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.app.AppCache;
@@ -34,6 +34,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 
 /**
  * 全站会员:<br>
@@ -47,13 +48,11 @@ import com.alumnigroup.widget.XListView.IXListViewListener;
  * 
  */
 public class Allmember extends BaseActivity implements OnItemClickListener {
-	private View btn_back, btn_allmenmber, btn_following, btn_followers;// following
-																		// 关注
-																		// ；follower粉丝
+	PagerSlidingTabStrip tabs;
+	private String[] titles ;
 	private XListView lv_allmember, lv_following, lv_followers;
 	private ArrayList<User> data_allmember = null, data_following = null,
 			data_followers = null;
-	private List<View> btns;
 	private ViewPager viewpager;
 	private UserAPI api;
 	private int page_allmember = 0, page_following = 0, page_followers = 0;
@@ -354,6 +353,7 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 	
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_allmember);
 		mUser = AppInfo.getUser(getContext());
 		if (mUser == null) {
 			toast("无用户信息,请重新登录!");
@@ -380,26 +380,12 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initLayout() {
-
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_allmenmber = _getView(R.id.acty_allmember_footer_allmember);
-		btn_following = _getView(R.id.acty_allmember_footer_following);
-		btn_followers = _getView(R.id.acty_allmember_footer_followers);
-
-		btns = new ArrayList<View>();
-		btns.add(btn_allmenmber);
-		btns.add(btn_following);
-		btns.add(btn_followers);
-
-		btn_back.setOnClickListener(this);
-		btn_allmenmber.setOnClickListener(this);
-		btn_following.setOnClickListener(this);
-		btn_followers.setOnClickListener(this);
-
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		initViewPager();
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_allmember_content);
 		View allmember = getLayoutInflater().inflate(
 				R.layout.frame_acty_allmember_allmember, null);
@@ -433,14 +419,11 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		listviews.add(lv_following);
 		listviews.add(lv_followers);
 
-		List<MemberAdapter> adapters = new ArrayList<MemberAdapter>();
-		adapters.add(adapter_allmember);
-		adapters.add(adapter_following);
-		adapters.add(adapter_followers);
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
 		viewpager.setCurrentItem(0);
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
+		
 	}
 
 	@Override
@@ -448,27 +431,6 @@ public class Allmember extends BaseActivity implements OnItemClickListener {
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
-			break;
-		case R.id.acty_allmember_footer_allmember:
-			if (viewpager.getCurrentItem() == 0) {
-				lv_allmember.startRefresh();
-			} else {
-				viewpager.setCurrentItem(0);
-			}
-			break;
-		case R.id.acty_allmember_footer_following:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_following.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1);
-			}
-			break;
-		case R.id.acty_allmember_footer_followers:
-			if (viewpager.getCurrentItem() == 2) {
-				lv_followers.startRefresh();
-			} else {
-				viewpager.setCurrentItem(2);
-			}
 			break;
 		default:
 			break;

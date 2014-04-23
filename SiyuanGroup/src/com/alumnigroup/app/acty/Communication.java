@@ -17,8 +17,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.IssueAdapter;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.IssuesAPI;
 import com.alumnigroup.api.StarAPI;
 import com.alumnigroup.app.AppCache;
@@ -34,6 +34,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 
 /**
  * 校友交流
@@ -42,8 +43,8 @@ import com.alumnigroup.widget.XListView.IXListViewListener;
  * 
  */
 public class Communication extends BaseActivity implements OnItemClickListener {
-	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_post, btn_all, btn_my, btn_favourite;
+	PagerSlidingTabStrip tabs;
+	private String[] titles ;
 	private XListView lv_all, lv_my, lv_favourit;
 	private ViewPager viewpager;
 	private ArrayList<Issue> data_all, data_my, data_favourite;
@@ -353,6 +354,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_allmember);
 		user = AppInfo.getUser(getContext());
 		if (user == null) {
 			toast("无用户信息,请重新登录");
@@ -380,6 +382,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_comunication_content);
 		View all = getLayoutInflater().inflate(
 				R.layout.frame_acty_communication_all, null);
@@ -412,33 +415,15 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		listviews.add(lv_my);
 		listviews.add(lv_favourit);
 
-		List<IssueAdapter> adapters = new ArrayList<IssueAdapter>();
-		adapters.add(adapter_all);
-		adapters.add(adapter_my);
-		adapters.add(adapter_favourite);
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
 	}
 
 	@Override
 	protected void initLayout() {
-
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_post = _getView(R.id.acty_head_btn_post);
-		btn_all = _getView(R.id.acty_comunication_footer_all);
-		btn_my = _getView(R.id.acty_comunication_footer_my);
-		btn_favourite = _getView(R.id.acty_comunication_footer_favourite);
-
-		btns.add(btn_all);
-		btns.add(btn_my);
-		btns.add(btn_favourite);
-
-		btn_back.setOnClickListener(this);
-		btn_post.setOnClickListener(this);
-		btn_all.setOnClickListener(this);
-		btn_my.setOnClickListener(this);
-		btn_favourite.setOnClickListener(this);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
+		_getView(R.id.acty_head_btn_post).setOnClickListener(this);
 
 		initViewPager();
 	}
@@ -452,27 +437,6 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_head_btn_post:
 			// post here
 			openActivity(CommunicationPublish.class);
-			break;
-		case R.id.acty_comunication_footer_all:
-			if (viewpager.getCurrentItem() == 0) {
-				lv_all.startRefresh();
-			} else {
-				viewpager.setCurrentItem(0, true);
-			}
-			break;
-		case R.id.acty_comunication_footer_my:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_my.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1, true);
-			}
-			break;
-		case R.id.acty_comunication_footer_favourite:
-			if (viewpager.getCurrentItem() == 2) {
-				lv_favourit.startRefresh();
-			} else {
-				viewpager.setCurrentItem(2, true);
-			}
 			break;
 		default:
 			break;

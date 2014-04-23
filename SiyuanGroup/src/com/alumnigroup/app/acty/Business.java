@@ -22,7 +22,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.BusinessAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -40,6 +40,7 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -49,8 +50,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class Business extends BaseActivity implements OnItemClickListener {
-	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_all, btn_favourite, btn_myjoin, btn_compose;
+	PagerSlidingTabStrip tabs;
+	private String[] titles ;
 	private ViewPager viewpager;
 	private ArrayList<Cooperation> data_all, data_myjoin, data_favourite;
 	private BusinessAdapter adapter_all, adapter_myjoin, adapter_favourite;
@@ -399,6 +400,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_business);
 		user = AppInfo.getUser(getContext());
 		if (user == null) {
 			toast("无用户信息，请登录");
@@ -423,6 +425,7 @@ public class Business extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_business_content);
 		View all = getLayoutInflater().inflate(R.layout.frame_acty_business,
 				null);
@@ -458,33 +461,16 @@ public class Business extends BaseActivity implements OnItemClickListener {
 		listviews.add(lv_myjoin);
 		listviews.add(lv_favourit);
 
-		List<BusinessAdapter> adapters = new ArrayList<BusinessAdapter>();
-		adapters.add(adapter_all);
-		adapters.add(adapter_myjoin);
-		adapters.add(adapter_favourite);
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
+		
 	}
 
 	@Override
 	protected void initLayout() {
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_all = _getView(R.id.acty_business_footer_all);
-		btn_myjoin = _getView(R.id.acty_business_footer_myjoin);
-		btn_favourite = _getView(R.id.acty_business_footer_favourite);
-		btn_compose = _getView(R.id.acty_head_btn_compose);
-
-		btns.add(btn_all);
-		btns.add(btn_myjoin);
-		btns.add(btn_favourite);
-
-		btn_back.setOnClickListener(this);
-		btn_all.setOnClickListener(this);
-		btn_myjoin.setOnClickListener(this);
-		btn_favourite.setOnClickListener(this);
-		btn_compose.setOnClickListener(this);
-
+		_getView(R.id.acty_head_btn_compose).setOnClickListener(this);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		initViewPager();
 	}
 
@@ -496,27 +482,6 @@ public class Business extends BaseActivity implements OnItemClickListener {
 			break;
 		case R.id.acty_head_btn_compose:
 			openActivity(BusinessPublish.class);
-			break;
-		case R.id.acty_business_footer_all:
-			if (viewpager.getCurrentItem() == 0) {
-				lv_all.startRefresh();
-			} else {
-				viewpager.setCurrentItem(0, true);
-			}
-			break;
-		case R.id.acty_business_footer_myjoin:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_myjoin.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1, true);
-			}
-			break;
-		case R.id.acty_business_footer_favourite:
-			if (viewpager.getCurrentItem() == 2) {
-				lv_favourit.startRefresh();
-			} else {
-				viewpager.setCurrentItem(2, true);
-			}
 			break;
 		default:
 			break;

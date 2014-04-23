@@ -8,11 +8,12 @@ import android.view.ViewGroup;
 
 public class BaseViewPagerAdapter extends PagerAdapter {
 	private List<View> views;
-
-	public BaseViewPagerAdapter(List<View> views) {
+	private String[] titles;
+	public BaseViewPagerAdapter(List<View> views,String[] titles) {
 		this.views = views;
+		this.titles = titles;
 	}
-
+	
 	@Override
 	public int getCount() {
 		return views.size();
@@ -35,4 +36,11 @@ public class BaseViewPagerAdapter extends PagerAdapter {
 		container.addView(views.get(position));
 		return views.get(position);
 	}
+	
+	@Override
+	public CharSequence getPageTitle(int position) {
+		return titles[position];
+	}
+	
+	
 }

@@ -26,6 +26,7 @@ import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.ActivityShareAPI;
 import com.alumnigroup.api.RestClient;
@@ -45,6 +46,7 @@ import com.alumnigroup.utils.CalendarUtils;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -54,13 +56,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class ActivitiesInfo extends BaseActivity {
-	private View btn_back, btn_info, btn_userlist, btn_share, btn_more;
+	PagerSlidingTabStrip tabs;
+	private String[] titles ;
+ 	private View btn_more;
 	private TextView tv_starttime, tv_applyDeadline, tv_money, tv_applyNum,
 			tv_site, tv_description, tv_name, tv_duration;
 	private ImageView iv_avatar;
 	private MActivity acty;
 	private ActivityAPI api;
-	private List<View> btns = new ArrayList<View>();
 	private XListView lv_member, lv_share;
 	private List<User> data_member;
 	private MemberAdapter adapter_member;
@@ -290,6 +293,7 @@ public class ActivitiesInfo extends BaseActivity {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_activity_info);
 		acty = (MActivity) getSerializableExtra("activity");
 		user = AppInfo.getUser(getContext());
 		if (user == null) {
@@ -305,6 +309,7 @@ public class ActivitiesInfo extends BaseActivity {
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_activitiesinfo_content);
 		View info = getLayoutInflater().inflate(
 				R.layout.frame_acty_activitiesinfo_introduce, null);
@@ -332,10 +337,6 @@ public class ActivitiesInfo extends BaseActivity {
 
 		fillInData();
 
-		btns.add(btn_info);
-		btns.add(btn_userlist);
-		btns.add(btn_share);
-
 		List<View> views = new ArrayList<View>();
 		views.add(info);
 		views.add(member);
@@ -351,9 +352,9 @@ public class ActivitiesInfo extends BaseActivity {
 		adapters.add(adapter_member);
 		adapters.add(adapter_share);
 
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
 
 		iv_pic1 = (ImageView) info.findViewById(R.id.iv_pic1);
 		iv_pic2 = (ImageView) info.findViewById(R.id.iv_pic2);
@@ -413,17 +414,9 @@ public class ActivitiesInfo extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		btn_more = _getView(R.id.acty_head_btn_more);
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_info = _getView(R.id.btn_info);
-		btn_userlist = _getView(R.id.btn_userlist);
-		btn_share = _getView(R.id.btn_share);
-
-		btn_more.setOnClickListener(this);
-		btn_back.setOnClickListener(this);
-		btn_info.setOnClickListener(this);
-		btn_userlist.setOnClickListener(this);
-		btn_share.setOnClickListener(this);
+	 btn_more =  _getView(R.id.acty_head_btn_more);
+	 btn_more.setOnClickListener(this);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		initViewPager();
 	}
 
@@ -433,23 +426,6 @@ public class ActivitiesInfo extends BaseActivity {
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
-			break;
-		case R.id.btn_info:
-			viewpager.setCurrentItem(0);
-			break;
-		case R.id.btn_userlist:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_member.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1);
-			}
-			break;
-		case R.id.btn_share:
-			if (viewpager.getCurrentItem() == 2) {
-				lv_share.startRefresh();
-			} else {
-				viewpager.setCurrentItem(2);
-			}
 			break;
 		case R.id.acty_head_btn_more:
 			if (!mPopupWindow.isShowing())

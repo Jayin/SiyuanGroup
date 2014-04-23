@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="校友交流" />
+            android:text="会员交流" />
     </RelativeLayout>
 
     <ImageView

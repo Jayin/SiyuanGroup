@@ -23,7 +23,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.app.AppCache;
@@ -35,6 +35,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -44,8 +45,9 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class Group extends BaseActivity implements OnItemClickListener {
-	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_all, btn_myjoin, btn_more;
+	PagerSlidingTabStrip tabs;
+	private String[] titles;
+	private View btn_more;
 	private XListView lv_all, lv_myjoin;
 	private ViewPager viewpager;
 	private ArrayList<MGroup> data_all, data_myjoin;
@@ -53,9 +55,9 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	private int page_all = 0, page_myjoin = 0;
 	private GroupAPI api;
 	private PopupWindow mPopupWindow;
-	
-    private ArrayList<MGroup> data_clicked = null;
-	private int item_click =-1;
+
+	private ArrayList<MGroup> data_clicked = null;
+	private int item_click = -1;
 	private View viewClicked = null;// 当前点击的item(View),用来更新item用的
 	private BroadcastReceiver mReceiver = null;
 
@@ -85,7 +87,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 						.setText(g.getOwner().getProfile().getName());
 				((TextView) viewClicked
 						.findViewById(R.id.item_lv_acty_group_tv_memberCount))
-						.setText(g.getNumMembers()+"");
+						.setText(g.getNumMembers() + "");
 				((TextView) viewClicked
 						.findViewById(R.id.item_lv_acty_group_tv_description))
 						.setText(g.getDescription());
@@ -268,6 +270,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_group_content);
 		View all = getLayoutInflater().inflate(R.layout.frame_acty_group, null);
 		View myjoin = getLayoutInflater().inflate(R.layout.frame_acty_group,
@@ -291,45 +294,32 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		listviews.add(lv_all);
 		listviews.add(lv_myjoin);
 
-		List<GroupAdapter> adapters = new ArrayList<GroupAdapter>();
-		adapters.add(adapter_all);
-		adapters.add(adapter_myjoin);
-
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
 	}
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_group);
 		api = new GroupAPI();
-		if(AppCache.getGroupAll(getContext())!=null){
-			data_all =AppCache.getGroupAll(getContext());
-		}else{
+		if (AppCache.getGroupAll(getContext()) != null) {
+			data_all = AppCache.getGroupAll(getContext());
+		} else {
 			data_all = new ArrayList<MGroup>();
 		}
-		if(AppCache.getGroupMy(getContext())!=null){
+		if (AppCache.getGroupMy(getContext()) != null) {
 			data_myjoin = AppCache.getGroupMy(getContext());
-		}else{
+		} else {
 			data_myjoin = new ArrayList<MGroup>();
 		}
 	}
 
 	@Override
 	protected void initLayout() {
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_all = _getView(R.id.acty_group_footer_all);
-		btn_myjoin = _getView(R.id.acty_group_footer_myjoin);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		btn_more = _getView(R.id.acty_head_btn_more);
-
-		btns.add(btn_all);
-		btns.add(btn_myjoin);
-
-		btn_back.setOnClickListener(this);
-		btn_all.setOnClickListener(this);
-		btn_myjoin.setOnClickListener(this);
 		btn_more.setOnClickListener(this);
-
 		initViewPager();
 		initPopupWindow();
 	}
@@ -360,20 +350,6 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		case R.id.acty_head_btn_more:
 			mPopupWindow.showAsDropDown(btn_more);
 			break;
-		case R.id.acty_group_footer_all:
-			if (viewpager.getCurrentItem() == 0) {
-				lv_all.startRefresh();
-			} else {
-				viewpager.setCurrentItem(0, true);
-			}
-			break;
-		case R.id.acty_group_footer_myjoin:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_myjoin.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1, true);
-			}
-			break;
 		case R.id.search:
 			mPopupWindow.dismiss();
 			break;
@@ -392,7 +368,7 @@ public class Group extends BaseActivity implements OnItemClickListener {
 		if (position - 1 == -1)
 			return;
 		viewClicked = view;
-		item_click = position-1;
+		item_click = position - 1;
 		Intent intent = new Intent(this, GroupInfo.class);
 		if (parent == lv_all) {
 			intent.putExtra("group", data_all.get(position - 1));
