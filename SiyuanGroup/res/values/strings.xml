@@ -17,12 +17,36 @@
     <string name="header_hint_refresh_time">更新于：</string>
     <string name="footer_hint_load_normal">查看更多</string>
     <string name="footer_hint_load_ready">松开载入更多</string>
-<string name="intruduction"><p>全站会员：在这里你可以查看全部校友信息，看过信息后如果你对该校友感兴趣可以加为好友</p>
-<p>全站动态：在这里你可以看到全站最新的动态，你也可以搜索你喜欢的动态</p>
-<p> 校友交流区：你可以在这个发送自己的微博，如果你想到一个话题，你可以发起话题邀请校友一起讨论，让校友交流更具有针对性</p>
-<p>我的空间：标志性的签名，个性化的标签让你的门面更有特色</p>
-<p>圈子系统: 寻找你的志同道合朋友</p>
-<p>活动系统:增进与统一圈子的朋友感情 </p>
-<p>商务合作:校友之间相互帮助，合作共赢</p></string>
-	<string name="subtitle">合作  共赢  共信</string>
+    <string name="intruduction"><p>全站会员：在这里你可以查看全部校友信息，看过信息后如果你对该校友感兴趣可以加为好友</p><p>全站动态：在这里你可以看到全站最新的动态，你也可以搜索你喜欢的动态</p><p> 校友交流区：你可以在这个发送自己的微博，如果你想到一个话题，你可以发起话题邀请校友一起讨论，让校友交流更具有针对性</p><p>我的空间：标志性的签名，个性化的标签让你的门面更有特色</p><p>圈子系统: 寻找你的志同道合朋友</p><p>活动系统:增进与统一圈子的朋友感情 </p><p>商务合作:校友之间相互帮助，合作共赢</p></string>
+    <string name="subtitle">合作  共赢  共信</string>
+
+    <string-array name="title_allmember">
+        <item>全站</item>
+        <item>关注</item>
+        <item>粉丝</item>
+    </string-array>
+    <string-array name="title_alldymatic">
+        <item>全站动态</item>
+        <item>好友动态</item>
+    </string-array>
+    <string-array name="title_communication">
+        <item>所有</item>
+        <item>我的</item>
+        <item>关注</item>
+    </string-array>
+    <string-array name="title_business">
+        <item>所有</item>
+        <item>我的</item>
+        <item>关注</item>
+    </string-array>
+    <string-array name="title_activity">
+        <item>全部活动</item>
+        <item>我参与的</item>
+        <item>收藏活动</item>
+    </string-array>
+       <string-array name="title_group">
+        <item>全部</item>
+        <item>我的</item>
+    </string-array>
+
 </resources>

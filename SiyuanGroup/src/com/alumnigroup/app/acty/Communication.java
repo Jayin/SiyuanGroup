@@ -34,6 +34,7 @@ import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 
 /**
  * 校友交流
@@ -42,6 +43,8 @@ import com.alumnigroup.widget.XListView.IXListViewListener;
  * 
  */
 public class Communication extends BaseActivity implements OnItemClickListener {
+	PagerSlidingTabStrip tabs;
+	private String[] titles ;
 	private List<View> btns = new ArrayList<View>();
 	private View btn_back, btn_post, btn_all, btn_my, btn_favourite;
 	private XListView lv_all, lv_my, lv_favourit;
@@ -353,6 +356,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_allmember);
 		user = AppInfo.getUser(getContext());
 		if (user == null) {
 			toast("无用户信息,请重新登录");
@@ -380,6 +384,7 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_comunication_content);
 		View all = getLayoutInflater().inflate(
 				R.layout.frame_acty_communication_all, null);
@@ -416,9 +421,10 @@ public class Communication extends BaseActivity implements OnItemClickListener {
 		adapters.add(adapter_all);
 		adapters.add(adapter_my);
 		adapters.add(adapter_favourite);
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
 		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
 				listviews, adapters));
+		tabs.setViewPager(viewpager);
 	}
 
 	@Override

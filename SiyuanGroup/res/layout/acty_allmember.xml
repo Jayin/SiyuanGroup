@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res/com.alumnigroup.app"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
     <include layout="@layout/acty_allmember_header" />
+
+    <com.astuetz.PagerSlidingTabStrip
+        android:id="@+id/tabs"
+        android:layout_width="match_parent"
+        android:layout_height="48dip"
+        android:background="@android:color/white"
+        app:pstsIndicatorColor="#FF3F9FE0"
+        app:pstsIndicatorHeight="4dp"
+        app:pstsShouldExpand="true"
+        android:textSize="15sp" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/acty_allmember_content"
@@ -12,7 +23,5 @@
         android:layout_height="0dp"
         android:layout_weight="1" >
     </android.support.v4.view.ViewPager>
-
-    <include layout="@layout/acty_allmember_footer" />
 
 </LinearLayout>
