@@ -28,7 +28,7 @@
 
                 <TextView
                     style="@style/TextView.item_main"
-                    android:text="全站会员" />
+                    android:text="会员风采" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -55,7 +55,7 @@
 
                 <TextView
                     style="@style/TextView.item_main"
-                    android:text="全站动态" />
+                    android:text="会员动态" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -82,7 +82,7 @@
 
                 <TextView
                     style="@style/TextView.item_main"
-                    android:text="校友交流" />
+                    android:text="交流区" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
@@ -143,7 +143,7 @@
 
                 <TextView
                     style="@style/TextView.item_main"
-                    android:text="服   务" />
+                    android:text="  服    务 " />
             </LinearLayout>
         </RelativeLayout>
 
@@ -170,7 +170,7 @@
 
                 <TextView
                     style="@style/TextView.item_main"
-                    android:text="圈  子" />
+                    android:text="  圈     子" />
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>

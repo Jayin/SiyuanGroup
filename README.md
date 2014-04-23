@@ -23,6 +23,10 @@ depend library
 * AsyncHttpClient
 * universal-image-loader
 * google-gson
+* PagerSlidingTabStrip
+* photoview
+* CustomShapeImageView
+* flowlayout
 
 License
 ===
