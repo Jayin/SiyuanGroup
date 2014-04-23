@@ -13,7 +13,7 @@ import android.view.View.OnClickListener;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
 import com.alumnigroup.adapter.DynamicAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.DynamicAPI;
 import com.alumnigroup.app.AppCache;
 import com.alumnigroup.app.BaseActivity;
@@ -23,6 +23,7 @@ import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 
 /**
  * 全部动态界面
@@ -32,8 +33,9 @@ import com.alumnigroup.widget.XListView.IXListViewListener;
  */
 public class Alldynamic extends BaseActivity implements OnClickListener {
 
-	private View btn_AllDynamic, btn_friendDynamic;
-
+//	private View btn_AllDynamic, btn_friendDynamic;
+	PagerSlidingTabStrip tabs;
+	private String[] titles ;
 	/**
 	 * 显示内容全部动态和好友动态ViewPeger
 	 */
@@ -45,7 +47,6 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	private DynamicAPI api;
 	private int page_all = 0;
 	private int page_myfriend = 0;
-	private List<View> btns;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +59,7 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_alldymatic);
 		api = new DynamicAPI();
 		if (AppCache.getDynamicAll(getContext()) != null) {
 			data_alldynamic = AppCache.getDynamicAll(getContext());
@@ -76,15 +78,6 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 
 	@Override
 	protected void initLayout() {
-		btn_AllDynamic = _getView(R.id.acty_alldynamic_footer_alldynamic);
-		btn_friendDynamic = _getView(R.id.acty_alldynamic_footer_friend_dynamic);
-
-		btns = new ArrayList<View>();
-		btns.add(btn_AllDynamic);
-		btns.add(btn_friendDynamic);
-
-		btn_AllDynamic.setOnClickListener(this);
-		btn_friendDynamic.setOnClickListener(this);
 		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		initViewPager();
 	}
@@ -93,8 +86,10 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 	 * 初始化ViewPager
 	 */
 	private void initViewPager() {
-		View allDynamic, friendDynamic;
+		tabs = (PagerSlidingTabStrip)_getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_alldynamic_vp_content);
+		
+		View allDynamic, friendDynamic;
 		allDynamic = getLayoutInflater().inflate(
 				R.layout.item_lv_acty_alldynamic_content, null);
 		friendDynamic = getLayoutInflater().inflate(
@@ -112,34 +107,14 @@ public class Alldynamic extends BaseActivity implements OnClickListener {
 		listviews.add(lv_AllDynamic);
 		listviews.add(lv_friendDynamic);
 
-		List<DynamicAdapter> adapters = new ArrayList<DynamicAdapter>();
-		adapters.add(adapter_all);
-		adapters.add(adapter_friend);
-
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views,titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
 	}
 
 	@Override
 	public void onClick(View v) {
-		int id = v.getId();
-		switch (id) {
-		case R.id.acty_alldynamic_footer_alldynamic:
-			if (viewpager.getCurrentItem() == 0) {
-				lv_AllDynamic.startRefresh();
-			} else {
-				viewpager.setCurrentItem(0, true);
-			}
-			break;
-
-		case R.id.acty_alldynamic_footer_friend_dynamic:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_friendDynamic.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1, true);
-			}
-			break;
+		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
 			break;

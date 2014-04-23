@@ -21,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.ActivityAPI;
 import com.alumnigroup.api.RestClient;
 import com.alumnigroup.api.StarAPI;
@@ -38,6 +38,7 @@ import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -47,8 +48,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class Activities extends BaseActivity implements OnItemClickListener {
-	private List<View> btns = new ArrayList<View>();
-	private View btn_back, btn_all, btn_favourite, btn_myjoin;
+	PagerSlidingTabStrip tabs;
+	private String[] titles;
 	private XListView lv_all, lv_myjoin, lv_favourit;
 	private ViewPager viewpager;
 	private ArrayList<MActivity> data_all, data_myjoin, data_favourite;
@@ -72,7 +73,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		initController();
 		openReceiver();
 	}
-	
+
 	private void openReceiver() {
 		mReceiver = new BroadcastReceiver() {
 
@@ -80,7 +81,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			public void onReceive(Context context, Intent intent) {
 				MActivity a = (MActivity) intent
 						.getSerializableExtra("activity");
-				data_clicked.set(item_click,a);
+				data_clicked.set(item_click, a);
 				((TextView) viewClicked
 						.findViewById(R.id.item_lv_acty_activities_actyname))
 						.setText(a.getName());
@@ -118,11 +119,11 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		filter.addAction(Constants.Action_ActivityInfo_Edit);
 		registerReceiver(mReceiver, filter);
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		if(mReceiver!=null){
+		if (mReceiver != null) {
 			unregisterReceiver(mReceiver);
 		}
 	}
@@ -381,6 +382,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_activity);
 		DataPool dp = new DataPool(DataPool.SP_Name_User, getContext());
 		user = (User) dp.get(DataPool.SP_Key_User);
 		api = new ActivityAPI();
@@ -409,6 +411,7 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip) _getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_activities_content);
 		View all = getLayoutInflater().inflate(
 				R.layout.frame_acty_activities_all, null);
@@ -441,31 +444,15 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		listviews.add(lv_myjoin);
 		listviews.add(lv_favourit);
 
-		List<ActivitiesAdapter> adapters = new ArrayList<ActivitiesAdapter>();
-		adapters.add(adapter_all);
-		adapters.add(adapter_myjoin);
-		adapters.add(adapter_favourite);
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views, titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
 	}
 
 	@Override
 	protected void initLayout() {
 
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_all = _getView(R.id.acty_activities_footer_all);
-		btn_myjoin = _getView(R.id.acty_activities_footer_myjoin);
-		btn_favourite = _getView(R.id.acty_activities_footer_favourite);
-
-		btns.add(btn_all);
-		btns.add(btn_myjoin);
-		btns.add(btn_favourite);
-
-		btn_back.setOnClickListener(this);
-		btn_all.setOnClickListener(this);
-		btn_myjoin.setOnClickListener(this);
-		btn_favourite.setOnClickListener(this);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 
 		initViewPager();
 	}
@@ -475,27 +462,6 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 		switch (v.getId()) {
 		case R.id.acty_head_btn_back:
 			closeActivity();
-			break;
-		case R.id.acty_activities_footer_all:
-			if (viewpager.getCurrentItem() == 0) {
-				lv_all.startRefresh();
-			} else {
-				viewpager.setCurrentItem(0, true);
-			}
-			break;
-		case R.id.acty_activities_footer_myjoin:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_myjoin.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1, true);
-			}
-			break;
-		case R.id.acty_activities_footer_favourite:
-			if (viewpager.getCurrentItem() == 2) {
-				lv_favourit.startRefresh();
-			} else {
-				viewpager.setCurrentItem(2, true);
-			}
 			break;
 
 		default:
@@ -553,8 +519,8 @@ public class Activities extends BaseActivity implements OnItemClickListener {
 			MActivity acty = data.get(position);
 			h.actyName.setText(acty.getName());
 			h.site.setText(acty.getSite());
-			h.starttime.setText(CalendarUtils.getTimeFromat(acty.getStarttime(),
-							CalendarUtils.TYPE_TWO));
+			h.starttime.setText(CalendarUtils.getTimeFromat(
+					acty.getStarttime(), CalendarUtils.TYPE_TWO));
 			h.ownername.setText(acty.getUser().getProfile().getName());
 			h.applyCount.setText(acty.getNumUsership() + "人报名");
 			h.status.setImageResource(acty.getStatus().getId() == 1 ? R.drawable.ic_image_status_on

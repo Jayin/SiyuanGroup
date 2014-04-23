@@ -40,13 +40,23 @@
         <item>关注</item>
     </string-array>
     <string-array name="title_activity">
-        <item>全部活动</item>
-        <item>我参与的</item>
-        <item>收藏活动</item>
-    </string-array>
-       <string-array name="title_group">
         <item>全部</item>
         <item>我的</item>
+        <item>收藏</item>
+    </string-array>
+    <string-array name="title_activity_info">
+        <item>简介</item>
+        <item>参加名单</item>
+        <item>讨论</item>
+    </string-array>
+    <string-array name="title_group">
+        <item>全部</item>
+        <item>我的</item>
+    </string-array>
+    <string-array name="title_group_info">
+        <item>简介</item>
+        <item>成员</item>
+        <item>讨论</item>
     </string-array>
 
 </resources>

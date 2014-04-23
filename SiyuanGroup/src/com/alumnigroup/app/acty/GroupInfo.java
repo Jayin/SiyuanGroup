@@ -16,15 +16,14 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.alumnigroup.adapter.BaseViewPagerAdapter;
-import com.alumnigroup.adapter.FootOnPageChangelistener;
 import com.alumnigroup.adapter.IssueAdapter;
 import com.alumnigroup.adapter.MemberAdapter;
+import com.alumnigroup.adapter.MyOnPageChangeListener;
 import com.alumnigroup.api.GroupAPI;
 import com.alumnigroup.api.GroupShareAPI;
 import com.alumnigroup.api.RestClient;
@@ -40,9 +39,9 @@ import com.alumnigroup.entity.User;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.DataPool;
-import com.alumnigroup.utils.L;
 import com.alumnigroup.widget.XListView;
 import com.alumnigroup.widget.XListView.IXListViewListener;
+import com.astuetz.PagerSlidingTabStrip;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 /**
@@ -52,13 +51,14 @@ import com.nostra13.universalimageloader.core.ImageLoader;
  * 
  */
 public class GroupInfo extends BaseActivity {
+	PagerSlidingTabStrip tabs;
+	private String[] titles;
 	private MGroup group;
-	private View btn_back, btn_info, btn_member, btn_share, btn_more;
+	private View btn_more;
 	private TextView tv_owner, tv_numMember, tv_description, tv_groupName;
 	private ImageView iv_avatar;
 	private User user;
 	private ViewPager viewpager;
-	private List<View> btns = new ArrayList<View>();
 	private GroupAPI api;
 	private List<User> data_user;
 	private MemberAdapter adapter_member;
@@ -332,6 +332,7 @@ public class GroupInfo extends BaseActivity {
 
 	@Override
 	protected void initData() {
+		titles = getResources().getStringArray(R.array.title_group_info);
 		api = new GroupAPI();
 		group = (MGroup) getSerializableExtra("group");
 		DataPool dp = new DataPool(DataPool.SP_Name_User, this);
@@ -348,21 +349,15 @@ public class GroupInfo extends BaseActivity {
 
 	@Override
 	protected void initLayout() {
-		btn_back = _getView(R.id.acty_head_btn_back);
-		btn_info = _getView(R.id.acty_groupinfo_footer_groupInfo);
-		btn_member = _getView(R.id.acty_groupinfo_footer_groupMenber);
-		btn_share = _getView(R.id.acty_groupinfo_footer_groupShare);
+		_getView(R.id.acty_head_btn_back).setOnClickListener(this);
 		btn_more = _getView(R.id.acty_head_btn_more);
-
-		btn_back.setOnClickListener(this);
-		btn_info.setOnClickListener(this);
-		btn_member.setOnClickListener(this);
-		btn_share.setOnClickListener(this);
 		btn_more.setOnClickListener(this);
+
 		initViewPager();
 	}
 
 	private void initViewPager() {
+		tabs = (PagerSlidingTabStrip) _getView(R.id.tabs);
 		viewpager = (ViewPager) _getView(R.id.acty_group_content);
 		View info = getLayoutInflater().inflate(
 				R.layout.frame_acty_groupinfo_groupinfo, null);
@@ -386,15 +381,6 @@ public class GroupInfo extends BaseActivity {
 		iv_avatar = (ImageView) info
 				.findViewById(R.id.frame_acty_groupinfo_groupinfo_iv_avater);
 
-		btns.add(btn_info);
-		btns.add(btn_member);
-		btns.add(btn_share);
-		L.i(user.getId() + "");
-		// // 不是圈子拥有者
-		// if (user.getId() != group.getOwner().getId()) {
-		// btn_deleteGroup.setVisibility(View.GONE);
-		// btn_edit.setVisibility(View.INVISIBLE);
-		// }
 		fillInData();
 
 		List<View> views = new ArrayList<View>();
@@ -407,14 +393,9 @@ public class GroupInfo extends BaseActivity {
 		listviews.add(lv_member);
 		listviews.add(lv_share);
 
-		List<BaseAdapter> adapters = new ArrayList<BaseAdapter>();
-		adapters.add(null);
-		adapters.add(adapter_member);
-		adapters.add(adapter_share);
-
-		viewpager.setAdapter(new BaseViewPagerAdapter(views));
-		viewpager.setOnPageChangeListener(new FootOnPageChangelistener(btns,
-				listviews, adapters));
+		viewpager.setAdapter(new BaseViewPagerAdapter(views, titles));
+		tabs.setViewPager(viewpager);
+		tabs.setOnPageChangeListener(new MyOnPageChangeListener(listviews));
 
 	}
 
@@ -441,23 +422,6 @@ public class GroupInfo extends BaseActivity {
 			break;
 		case R.id.acty_head_btn_compose:
 			toast("compose");
-			break;
-		case R.id.acty_groupinfo_footer_groupInfo:
-			viewpager.setCurrentItem(0);
-			break;
-		case R.id.acty_groupinfo_footer_groupMenber:
-			if (viewpager.getCurrentItem() == 1) {
-				lv_member.startRefresh();
-			} else {
-				viewpager.setCurrentItem(1);
-			}
-			break;
-		case R.id.acty_groupinfo_footer_groupShare:
-			if (viewpager.getCurrentItem() == 2) {
-				lv_share.startRefresh();
-			} else {
-				viewpager.setCurrentItem(2);
-			}
 			break;
 		case R.id.acty_head_btn_more:
 			mPopupWindow.showAsDropDown(btn_more);

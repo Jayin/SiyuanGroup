@@ -14,10 +14,6 @@ public class BaseViewPagerAdapter extends PagerAdapter {
 		this.titles = titles;
 	}
 	
-	public BaseViewPagerAdapter(List<View> views) {
-		this.views = views;
-	}
-
 	@Override
 	public int getCount() {
 		return views.size();
