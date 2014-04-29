@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">商协会</string>
+    <string name="app_name">校友录</string>
     <string name="action_settings">设置</string>
     <!-- pull to fresh! -->
     <string name="xpull_to_refresh_pull_label">下拉刷新</string>
