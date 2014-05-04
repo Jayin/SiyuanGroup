@@ -20,9 +20,11 @@ import com.alumnigroup.api.MessageAPI;
 import com.alumnigroup.api.UserAPI;
 import com.alumnigroup.api.VersionAPI;
 import com.alumnigroup.app.acty.AppUpdate;
+import com.alumnigroup.app.acty.Main;
 import com.alumnigroup.entity.ErrorCode;
 import com.alumnigroup.imple.JsonResponseHandler;
 import com.alumnigroup.utils.AndroidUtils;
+import com.alumnigroup.utils.BaseNotification;
 import com.alumnigroup.utils.Constants;
 import com.alumnigroup.utils.L;
 
@@ -173,12 +175,21 @@ public class CoreService extends Service {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				final int mCount = count;
+				final int mCount = MessageCache.getUnreadCount(getApplicationContext());
 				// send broadcast after getting all messages
-				MessageCache.setUnreadCount(getApplicationContext(), count);
-				Intent intent = new Intent(Constants.Action_Receive_UnreadCount);
-				intent.putExtra("count", mCount);
-				sendBroadcast(intent);
+				if(mCount != count && count>mCount){
+					MessageCache.setUnreadCount(getApplicationContext(), count);
+					Intent intent = new Intent(Constants.Action_Receive_UnreadCount);
+					intent.putExtra("count", count);
+					sendBroadcast(intent);
+					
+					BaseNotification nf = new BaseNotification(getApplicationContext());
+					nf.setContentText(count+"条未读消息");
+					nf.setContentIntent(PendingIntent.getActivity(getApplicationContext(), 0, new Intent(getApplicationContext(), Main.class), PendingIntent.FLAG_UPDATE_CURRENT));
+					nf.setNotificationID(1);
+					nf.show();
+				}
+				
 			}
 
 			@Override

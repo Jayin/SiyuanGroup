@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.app.ActionBar;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -15,8 +16,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -28,6 +27,7 @@ import com.alumnigroup.app.R;
 import com.alumnigroup.app.fragment.MainAll;
 import com.alumnigroup.app.fragment.MessageCenter;
 import com.alumnigroup.app.fragment.Mine;
+import com.alumnigroup.utils.BaseNotification;
 import com.alumnigroup.utils.Constants;
 
 /**
