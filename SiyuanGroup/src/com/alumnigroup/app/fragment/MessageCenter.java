@@ -52,9 +52,6 @@ public class MessageCenter extends BaseFragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		if(lv_message!=null){
-			lv_message.startRefresh();
-		}
 	}
 
 	@Override
@@ -64,6 +61,9 @@ public class MessageCenter extends BaseFragment {
 				.inflate(R.layout.fragment_messagecenter, container, false);
 		lv_message = (XListView) v.findViewById(R.id.lv_messages);
 		initCotroller();
+		if(lv_message!=null){
+			lv_message.startRefresh();
+		}
 		return v;
 	}
 	private void initCotroller() {
