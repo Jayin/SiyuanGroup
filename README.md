@@ -1,4 +1,4 @@
-SiyuanGroup
+SiyuanGroup ![license](http://img.shields.io/badge/license-MIT-brightgreen.svg)
 ===========
 
 SiyuanGroup is committed to create a new social space for the alumni .
@@ -28,10 +28,7 @@ depend library
 * CustomShapeImageView
 * flowlayout
 
-License
-===
-MIT
-![](https://github-camo.global.ssl.fastly.net/a4f4cf5a41c494bf9a619d2f650d2c35b3433235/687474703a2f2f6f63746f6465782e6769746875622e636f6d2f696d616765732f6f6b616c2d656c746f6361742e6a7067)
+ 
 
 
 
